@@ -299,7 +299,7 @@ function markTime()
 			//viewMazal.setText("מנחה - " + text);
 		//}			
 	}
-	return;
+	//return;
 	document.getElementById("HebrewText2").style.color = "#878787";
 	document.getElementById("HebrewText4").style.color = "#878787";
 
