@@ -24,37 +24,37 @@ function Tefila(tefilaNetz = false)
 	//console.log(curr_hour);
 	if(curr_hour >= birkutHashahar && curr_hour < patachEliyaou)
 	{
-		console.log(1);
+		//console.log(1);
 		var secLeft = SecLeft(curr_hour,patachEliyaou);
 		BirkutHashahar(secLeft);
 	}
 	else if(curr_hour >= patachEliyaou && curr_hour < korbanot)
 	{
-		console.log(2);
+		//console.log(2);
 		var secLeft = SecLeft(curr_hour,korbanot);
 		PatachEliyaou(secLeft);
 	}
 	else if(curr_hour >= korbanot && curr_hour < psokeiDzimra)
 	{
-		console.log(3);
+		//console.log(3);
 		var secLeft = SecLeft(curr_hour,psokeiDzimra);
 		Korbanot(secLeft);
 	}
 	else if(curr_hour >= psokeiDzimra && curr_hour < yozerOr)
 	{
-		console.log(4);
+		//console.log(4);
 		var secLeft = SecLeft(curr_hour,yozerOr);
 		PsokeiDzimra(secLeft);
 	}
 	else if(curr_hour >= yozerOr && curr_hour < kriyahtShema)
 	{
-		console.log(5);
+		//console.log(5);
 		var secLeft = SecLeft(curr_hour,kriyahtShema);
 		YozerOr(secLeft);
 	}
 	else if(curr_hour >= kriyahtShema && curr_hour < publicSunrise)
 	{
-		console.log(6);
+		//console.log(6);
 		var secLeft = SecLeft(curr_hour,publicSunrise);
 		KriyahtShema(secLeft);
 	}

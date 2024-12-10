@@ -13,12 +13,12 @@ function hebrewclock()
 	var sunset = zmanit_hour[4];
 	var sunset_tommorow = zmanit_hour[5];
 	
-	console.log("zmanit_hour[0] :" + zmanit_hour[0]);
-	console.log("zmanit_hour[1] :" + zmanit_hour[1]);
-	console.log("zmanit_hour[2] :" + zmanit_hour[2]);
-	console.log("zmanit_hour[3] :" + zmanit_hour[3]);
-	console.log("zmanit_hour[4] :" + zmanit_hour[4]);
-	console.log("zmanit_hour[5] :" + zmanit_hour[5]);
+	//console.log("zmanit_hour[0] :" + zmanit_hour[0]);
+	//console.log("zmanit_hour[1] :" + zmanit_hour[1]);
+	//console.log("zmanit_hour[2] :" + zmanit_hour[2]);
+	//console.log("zmanit_hour[3] :" + zmanit_hour[3]);
+	//console.log("zmanit_hour[4] :" + zmanit_hour[4]);
+	//console.log("zmanit_hour[5] :" + zmanit_hour[5]);
 	
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
