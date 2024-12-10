@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hebrew Giving</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body >
+
+<div class="container mt-3" style="margin-top: 1rem!important;">
+  <!-- Button to Open the Modal -->
+<center>
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+	Hebrew Giving
+  </button>
+</center>
+
+
+  <!-- The Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header"> 
+          	<button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Hebrew Giving</h4>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p style="display: inline-block; width: 248px;">Bank income</p><input id="income"  />
+          <br/>
+          <p style="display: inline-block; width: 248px;">Bank expense</p><input id="expense"/>
+          <hr>
+          <p style="display: inline-block; width: 248px;">Savings</p><input readonly id="savings" onclick="calculateSavings();"/>          
+          <hr>
+          <p href="#" data-toggle="tooltip" title="Addressed to choen person only" style="display: inline-block; width: 248px;" >T'ruma G'dola</p><input readonly id="truma" />
+          <br/>
+          <p href="#" data-toggle="tooltip" title="Addressed to Levi" style="display: inline-block; width: 248px;" >Mahaser Rishon</p><input readonly id="mahaser_01"/>
+		  <br/> 
+          <p href="#" data-toggle="tooltip" title="Levi must give to choen" style="display: inline-block; width: 248px;" >T'rumat Mahaser</p><input readonly id="mahaser_01__truma" />
+          <br/>
+          <p href="#" data-toggle="tooltip" title="Mahaser sheni spended at Jerusalem only around 1,2,4,5 la'Shmita / Mahaser ani being spended everywhere around 3,6 la'Shmita" style="display: inline-block; width: 248px;" >Mahaser Sheni/Ani</p><input readonly id="mahaser_02"/>          
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+	function calculateSavings()
+	{
+		var income = document.getElementById("income").value;
+		income = income.replace(",","");
+
+		var expense = document.getElementById("expense").value;
+		expense = expense.replace(",","");
+
+		document.getElementById("savings").value = (parseFloat(income) - parseFloat(expense)) * 1.00; 		
+		document.getElementById("truma").value = document.getElementById("savings").value * (1/60) 
+		document.getElementById("mahaser_01").value = (document.getElementById("savings").value - document.getElementById("truma").value)/10;
+		document.getElementById("mahaser_01__truma").value = document.getElementById("mahaser_01").value * (1/10) 
+		document.getElementById("mahaser_02").value = (document.getElementById("savings").value - document.getElementById("truma").value - document.getElementById("mahaser_01").value)/10;	
+	}
+	
+	$(document).ready(function()
+	{
+		$('[data-toggle="tooltip"]').tooltip();   
+	});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111266340-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-111266340-1');
+	</script>
+	
+  <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+  </script>
+
+	<meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">
+  <link rel="stylesheet" type="text/css" href="../../../../shared/css/stylesheet.css" id="commercial_css">    
+	<title>תוכנה לריפוי מחלה</title>	
+</head>
+<style>
+#myProgress {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #0000FF;
+}
+
+#myProgress1 {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar1 {
+  width: 1%;
+  height: 30px;
+  background-color: #FF0000;
+}
+
+</style>
+<body dir="rtl">
+
+<h1>אמירת אותיות השם המלא בפרק קי"ט ע"י 
+<a id="cellphone1">הצדיק/ה</a></h1>
+
+<div id="myProgress">
+  <div id="myBar"></div>
+</div>
+
+<br>
+<button id="stop" onclick="move()">בוצע</button> 
+
+
+<h1>אמירת אותיות השם המלא בפרק קי"ט ע"י</h1>
+<table style="text-align: center; font-size: 32px;">
+  <tr>
+    <th style="width:413px"> 
+      <p title="לנשים נשואות - חודש הלידה של הבעל---|||---לרווקות או בנים עד גיל 18 - חודש הלידה של אבא---|||---ליתומות - חודש הלידה שלהן">חודש הלידה</p>
+    </th>	
+    <th style="width:200px">
+      נשיא
+    </th>
+    <th>
+      עיסוק
+    </th>
+  </tr>
+  <tr>
+	<th colspan="3"><hr/></th>
+  <tr/>
+  <tr> 
+    <td> 
+      אב
+    </td>
+    <td>
+      <a id="cellphone2" href="tel:+972545604438">אבא</a> 
+    </td>
+    <td>
+      קידום תעסוקתי
+    </td>
+  </tr></table>
+
+<div id="myProgress1">
+  <div id="myBar1"></div>
+</div>
+
+<br>
+<button id="stop" onclick="move1()">בוצע</button> 
+
+<br><br><br><br>
+<button id="stop" style="direction:center; dir:center;" onclick="finish_pzalms()">סיימנו</button> 
+
+
+<script>
+flag = 0;
+flag1 = 0;
+
+
+/*
+var x1 = document.getElementById("cellphone1").href;
+var y1 = document.getElementById("cellphone2").href;
+
+x1.href = cellphone1;
+if(lbhour <= 12)
+	y1.href="tel:+972587401735";
+else`
+	y1.href="tel:+972527401735";
+*/
+
+function move() {
+  flag=1;
+  var elem = document.getElementById("myBar");   
+  var width = 1;
+  var id = setInterval(frame, 10);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++; 
+      elem.style.width = width + '%'; 
+    }
+  }
+}
+
+function move1() {
+  if (flag == 0)
+	return;
+  flag1 = 1;
+  var elem = document.getElementById("myBar1");   
+  var width = 1;
+  var id = setInterval(frame, 10);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++; 
+      elem.style.width = width + '%'; 
+    }  
+  }
+}
+
+
+function finish_pzalms() 
+{
+	if(flag1 == 1)
+    {
+		var win = window.open('../../moon.html', '_blank');
+		win.focus();
+	}
+}
+
+
+</script>
+
+</body>
+</html>
