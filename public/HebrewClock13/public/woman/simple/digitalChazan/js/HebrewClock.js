@@ -45,7 +45,7 @@ function hebrewclock()
 	var minute;// = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
 	var second;// = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
 	
-	console.log(sunrise);
+	//console.log(sunrise);
 	
 	if(sunset > sunrise && curr_hour < sunset)
 	{

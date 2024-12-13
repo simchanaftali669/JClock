@@ -138,8 +138,8 @@ function monthsperyeararr(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9,
 			date_str = "ליל ";
 		};
 		
-		console.log(curr_hour);
-		console.log(sunrise);
+		//console.log(curr_hour);
+		//console.log(sunrise);
 		if(curr_hour<sunrise)
 			date_str = "ליל ";
 		

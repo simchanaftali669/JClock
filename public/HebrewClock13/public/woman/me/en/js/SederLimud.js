@@ -11,7 +11,7 @@ function sederLimud()
 {
 	var url = document.location.href;
 	
-	console.log(url);
+	//console.log(url);
 	if(url.includes("jewish") || url.includes("cristian") || url.includes("islam"))
 	{
 		if(lbHour == 12)//jewish
@@ -42,7 +42,7 @@ function sederLimud()
     //var showSefer = false;
     //var showParasha = false;
 
-	console.log(lbHour);
+	////console.log(lbHour);
 	
 	
     if((lbHour%3 + 1) == 1)
@@ -75,7 +75,7 @@ function sederLimud()
 		showSefer = false;
 		showParasha = true;
     }
-	console.log('ss');
+	//console.log('ss');
 	if(!url.includes("jewish") && !url.includes("cristian") && !url.includes("islam"))
 	{
 		showMasechet = true;

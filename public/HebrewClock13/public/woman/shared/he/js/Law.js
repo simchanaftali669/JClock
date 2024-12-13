@@ -50,10 +50,10 @@ function initCommercials()
         //commercial <= name of the commercial in const object.
         //cSlots <= array of all commercial schedule time inside specific region.
 
-        console.log(commercial + " " + String(commercials[commercial]));
+        //console.log(commercial + " " + String(commercials[commercial]));
         var commercial_request = String(commercials[commercial]);
         var cSlots = commercial_request.split("+");
-        console.log(cSlots)
+		//console.log(cSlots)
         for(let cSlot of cSlots)
         {
             var regionValue = cSlot.slice(2,4);
@@ -61,9 +61,9 @@ function initCommercials()
             var timeValue = cSlot.slice(13,15);
             var priority = cSlot.slice(19,23);   
 
-            console.log("source - regionValue: " + regionValue)
-            console.log("source - dayValue: " + regionValue)
-            console.log("source - timeValue: " + regionValue)
+            //console.log("source - regionValue: " + regionValue)
+            //console.log("source - dayValue: " + regionValue)
+            //console.log("source - timeValue: " + regionValue)
 
             //cases of all regions/days/time or all of part of them.
             if(regionValue == "xx" && dayValue.includes("x") && timeValue == "xx")
@@ -131,7 +131,7 @@ function initCommercials()
                     {
                         dayIdxValue = "0" + dayIdx;
                         var timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
-                        console.log("source - regionValue: " + regionValue)
+                        //console.log("source - regionValue: " + regionValue)
                         insertCommercialsIntoSlot(commercial,regionValue,dayIdxValue,timeIdxValue,priority)
                     }
                 }
@@ -177,12 +177,12 @@ function initCommercials()
 
 function insertCommercialsIntoSlot(commercial,regionValue,dayValue,timeValue,priority)
 {
-    console.log("regionValue: " + regionValue)
+	//console.log("regionValue: " + regionValue)
 
     //string of 6 characters ==> {rrddtt};
     var regionAtDayTime = regionValue + dayValue + timeValue;
 
-    console.log("push: " + regionAtDayTime)
+    //console.log("push: " + regionAtDayTime)
     for(var i= Number(priority); i>0 ; i--)
         cInRegionAtTime.get(regionAtDayTime).push(commercial);
 }
@@ -194,7 +194,7 @@ var commercial = commercials.Breslev;
 //need to decide if i want an omer be different between 
 function commercialFunction()
 {
-    console.log("shevetLocation: " + shevetLocation + "; hebrewday: " + hebrewday + "; lbHour:" + lbHour)
+    //console.log("shevetLocation: " + shevetLocation + "; hebrewday: " + hebrewday + "; lbHour:" + lbHour)
     //need to know which omer and which shevetLocation
     //need to get the list of commercials in this {region,omer} slot.
     regionValue = (Number(shevetLocation) <= 9) ? "0" + Number(shevetLocation) : shevetLocation;
@@ -205,13 +205,13 @@ function commercialFunction()
     var regionAtDayTime = regionValue + dayValue + timeValue;
 
     cList = cInRegionAtTime.get(regionAtDayTime);
-    console.log(regionAtDayTime);
-    console.log(cList);
+    //console.log(regionAtDayTime);
+    //console.log(cList);
 
     var randomNumber = Math.floor(Math.random() * cList.length);    ; // 0 or 1
     var commercial = cList[randomNumber];
 
-    console.log(commercial);
+    //console.log(commercial);
     commercialInitFunction(commercial);
 }
 

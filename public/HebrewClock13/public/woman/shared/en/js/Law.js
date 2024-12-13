@@ -50,10 +50,10 @@ function initCommercials()
         //commercial <= name of the commercial in const object.
         //cSlots <= array of all commercial schedule time inside specific region.
 
-        console.log(commercial + " " + String(commercials[commercial]));
+        //console.log(commercial + " " + String(commercials[commercial]));
         var commercial_request = String(commercials[commercial]);
         var cSlots = commercial_request.split("+");
-        console.log(cSlots)
+        //console.log(cSlots)
         for(let cSlot of cSlots)
         {
             var regionValue = cSlot.slice(2,4);
@@ -61,9 +61,9 @@ function initCommercials()
             var timeValue = cSlot.slice(13,15);
             var priority = cSlot.slice(19,23);   
 
-            console.log("source - regionValue: " + regionValue)
-            console.log("source - dayValue: " + regionValue)
-            console.log("source - timeValue: " + regionValue)
+            //console.log("source - regionValue: " + regionValue)
+            //console.log("source - dayValue: " + regionValue)
+            //console.log("source - timeValue: " + regionValue)
 
             //cases of all regions/days/time or all of part of them.
             if(regionValue == "xx" && dayValue.includes("x") && timeValue == "xx")

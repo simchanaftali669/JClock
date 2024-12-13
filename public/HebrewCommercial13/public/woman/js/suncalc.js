@@ -342,7 +342,7 @@ SunCalc.getMoonTimes = function (date, lat, lng, inUTC) {
     if (rise) result.rise = hoursLater(t, rise);
     if (set) result.set = hoursLater(t, set);
 
-	console.log("result.rise: " + result.rise );
+	//console.log("result.rise: " + result.rise );
 	
 
     if (!rise && !set) result[ye > 0 ? 'alwaysUp' : 'alwaysDown'] = true;

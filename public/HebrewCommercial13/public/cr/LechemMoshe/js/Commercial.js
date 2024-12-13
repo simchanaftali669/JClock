@@ -198,7 +198,7 @@ function commercialFunction()
     //string of 6 characters ==> {rrddtt};
     var regionAtDayTime = regionValue + dayValue + timeValue;
     cList = cInRegionAtTime.get(regionAtDayTime);
-    console.log(cList.length);
+    //console.log(cList.length);
 
     var randomNumber = Math.floor(Math.random() * cList.length);    ; // 0 or 1
     var commercial = cList[randomNumber];
