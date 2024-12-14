@@ -136,21 +136,21 @@ function sederLimud(learningMethod)
 
 	if(learningMethod == 'Automate')
 	{
-		if(lbHour >= 10 && lbHour < 11)
+		if(lbHour >= 12 && lbHour < 13)
 		{
 			if(!url.includes("personal"))
 			{
 				document.location.href = "../../marrige/en/index.html" + religionOnlyParm;
 			}				
 		}
-		else if(lbHour >= 11 && lbHour < 12)
+		else if(lbHour >= 13 && lbHour < 14)
 		{
 			if(!url.includes("personal"))
 			{
 				document.location.href = "../../marrige/en/index.html" + religionOnlyParm;
 			}				
 		}
-		else if(lbHour >= 12 && lbHour < 13)
+		else if(lbHour >= 14 && lbHour < 15)
 		{
 			if(!url.includes("yovel"))
 			{
@@ -158,7 +158,7 @@ function sederLimud(learningMethod)
 				document.location.href = "./index.html?period=yovel&hebrewDay=" + yovelMazal[0] + "&hebrewHour=" + yovelMazal[1] + "&hebrewChelek=" + yovelMazal[2] + location + religionAndParm;			
 			}
 		}
-		if(lbHour >= 13 && lbHour < 14)
+		else if(lbHour >= 15 && lbHour < 16)
 		{
 			if(!url.includes("year"))
 			{
@@ -166,13 +166,17 @@ function sederLimud(learningMethod)
 				document.location.href = "./index.html?period=year&hebrewDay=" + yearlMazal[0] + "&hebrewHour=" + yearlMazal[1] + "&hebrewChelek=" + yearlMazal[2] + location + religionAndParm;	
 			}
 		}
-		if(lbHour >= 14 && lbHour < 15)
+		else if(lbHour >= 16 && lbHour < 17)
 		{
 			if(!url.includes("month"))
 			{
 				let monthMazal = getCurrentMazal("month");
 				document.location.href = "./index.html?period=month&hebrewDay=" + monthMazal[0] + "&hebrewHour=" + monthMazal[1] + "&hebrewChelek=" + monthMazal[2] + location + religionAndParm;		
 			}			
+		}
+		else
+		{
+			document.location.href = "../../simple/index.html?" + location;		
 		}
 	}
 	
