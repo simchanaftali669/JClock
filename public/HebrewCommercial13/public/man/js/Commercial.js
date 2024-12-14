@@ -4,8 +4,8 @@
 var cInRegionAtTime = new Map();
 const commercials = 
 {
-    Soteria: 's_xx#d_xx__h_xx__p_0001+',
-    Breslev: 's_xx#d_xx__h_xx__p_0001+',
+    Soteria: 's_xx#d_xx__h_xx__p_0001+s_xx#d_07__h_10__p_0001+s_xx#d_07__h_11__p_0001',
+    Breslev: 's_xx#d_xx__h_xx__p_0001+s_xx#d_07__h_10__p_0001+s_xx#d_07__h_11__p_0001',
  
     Drink_01: 's_xx#d_02__h_14__p_0360+s_xx#d_04__h_15__p_0360+s_xx#d_05__h_12__p_0360+s_xx#d_06__h_16__p_0360+s_xx#d_07__h_13__p_0360+s_xx#d_01__h_03__p_0360+s_xx#d_02__h_00__p_0360+s_xx#d_02__h_07__p_0360+s_xx#d_03__h_04__p_0360+s_xx#d_04__h_01__p_0360+s_xx#d_04__h_08__p_0360+s_xx#d_05__h_05__p_0360+s_xx#d_06__h_02__p_0360+s_xx#d_06__h_09__p_0360+s_xx#d_06__h_23__p_0360+s_xx#d_07__h_06__p_0360+s_xx#d_07__h_20__p_0360+',
 	Drink_02: 's_xx#d_02__h_15__p_0360+s_xx#d_03__h_12__p_0360+s_xx#d_04__h_16__p_0360+s_xx#d_04__h_09__p_0360+s_xx#d_05__h_13__p_0360+s_xx#d_07__h_14__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_21__p_0360+',   
