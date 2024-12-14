@@ -223,7 +223,7 @@ function setmazal() {
 
 
 
-		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[Number(shevetHour)] + " שב" + shevet2[Number(shevetHour)];
+		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[shevetHour] + " שב" + shevet2[shevetHour];
 		document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
 
  

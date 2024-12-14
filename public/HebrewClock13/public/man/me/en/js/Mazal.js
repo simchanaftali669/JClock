@@ -194,7 +194,7 @@ function setmazal() {
         var shevet1 = ["Dummy","Yehuda", "Yissachar", "Zevulun", "Reuven", "Shimon", "Gad", "Ephraim","Menashe","Benjamin","Dan","Asher","Naftali(Levi)"];
         var shevet2 = ["Dummy","Reuven", "Shimon", "Levi","Yehuda","Dan","Naftali","Gad","Asher","Yissachar", "Zevulun","Yosef","Benjamin"];
   
-		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[shevetHour] + " שב" + shevet2[shevetHour];
+		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[shevetHour] + " in " + shevet2[shevetHour];
         document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
 		//document.getElementById("Shevet__mida_" + shevetHour_str).value = shevet__mida1[x] + " in " + shevet__mida2[x];
         //document.getElementById("Shevet__mida_" + shevetHour_str).style.display = "unset"
