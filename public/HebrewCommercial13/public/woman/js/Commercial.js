@@ -299,7 +299,7 @@ function commercialInitFunction(commercial)
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_01");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 		
-		case "Meet_02":
+		case "Meet_01":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_01");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 	
