@@ -22,6 +22,9 @@ const commercials =
 	Eat_05: 's_xx#d_02__h_17__p_0360+s_xx#d_01__h_06__p_0360+s_xx#d_02__h_03__p_0360+s_xx#d_03__h_00__p_0360+s_xx#d_03__h_07__p_0360+s_xx#d_04__h_04__p_0360+s_xx#d_05__h_01__p_0360+s_xx#d_05__h_08__p_0360+s_xx#d_06__h_05__p_0360+s_xx#d_07__h_02__p_0360+s_xx#d_07__h_09__p_0360+s_xx#d_07__h_23__p_0360+',
 	Eat_06: 's_xx#d_07__h_17__p_0360+s_xx#d_01__h_00__p_0360+s_xx#d_01__h_07__p_0360+s_xx#d_02__h_04__p_0360+s_xx#d_03__h_01__p_0360+s_xx#d_04__h_05__p_0360+s_xx#d_05__h_02__p_0360+s_xx#d_05__h_09__p_0360+s_xx#d_05__h_23__p_0360+s_xx#d_06__h_06__p_0360+s_xx#d_07__h_03__p_0360+s_xx#d_07__h_17__p_0360+',
 	Eat_07: 's_xx#d_05__h_17__p_0360+s_xx#d_01__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_02__h_05__p_0360+s_xx#d_03__h_02__p_0360+s_xx#d_03__h_09__p_0360+#d_03__h_09__p_0360+#d_03__h_23__p_0360+s_xx#d_04__h_06__p_0360+s_xx#d_05__h_03__p_0360+s_xx#d_06__h_00__p_0360+s_xx#d_06__h_07__p_0360+s_xx#d_07__h_04__p_0360+s_xx#d_07__h_18__p_0360+'
+
+	Meet_02: 's_xx#d_06__h_17__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_21__p_0360+',
+	
 };
 
 
@@ -64,10 +67,10 @@ function initCommercials()
         //commercial <= name of the commercial in const object.
         //cSlots <= array of all commercial schedule time inside specific region.
 
-        ////console.log(commercial + " " + String(commercials[commercial]));
+        //console.log(commercial + " " + String(commercials[commercial]));
         var commercial_request = String(commercials[commercial]);
         var cSlots = commercial_request.split("+");
-        ////console.log(cSlots)
+        //console.log(cSlots)
         for(let cSlot of cSlots)
         {
             var regionValue = cSlot.slice(2,4);
@@ -75,9 +78,9 @@ function initCommercials()
             var timeValue = cSlot.slice(13,15);
             var priority = cSlot.slice(19,23);   
 
-            ////console.log("source - regionValue: " + regionValue)
-            ////console.log("source - dayValue: " + regionValue)
-            ////console.log("source - timeValue: " + regionValue)
+            //console.log("source - regionValue: " + regionValue)
+            //console.log("source - dayValue: " + regionValue)
+            //console.log("source - timeValue: " + regionValue)
 
             //cases of all regions/days/time or all of part of them.
             if(regionValue == "xx" && dayValue.includes("x") && timeValue == "xx")
@@ -145,7 +148,7 @@ function initCommercials()
                     {
                         dayIdxValue = "0" + dayIdx;
                         var timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
-                        ////console.log("source - regionValue: " + regionValue)
+                        //console.log("source - regionValue: " + regionValue)
                         insertCommercialsIntoSlot(commercial,regionValue,dayIdxValue,timeIdxValue,priority)
                     }
                 }
@@ -191,12 +194,12 @@ function initCommercials()
 
 function insertCommercialsIntoSlot(commercial,regionValue,dayValue,timeValue,priority)
 {
-    ////console.log("regionValue: " + regionValue)
+    //console.log("regionValue: " + regionValue)
 
     //string of 6 characters ==> {rrddtt};
     var regionAtDayTime = regionValue + dayValue + timeValue;
 
-    ////console.log("push: " + regionAtDayTime)
+    //console.log("push: " + regionAtDayTime)
     for(var i= Number(priority); i>0 ; i--)
         cInRegionAtTime.get(regionAtDayTime).push(commercial);
 }
@@ -208,7 +211,7 @@ var commercial = commercials.Breslev;
 //need to decide if i want an omer be different between 
 function commercialFunction()
 {
-    ////console.log("shevetLocation: " + shevetLocation + "; hebrewday: " + hebrewday + "; lbHour:" + lbHour)
+    //console.log("shevetLocation: " + shevetLocation + "; hebrewday: " + hebrewday + "; lbHour:" + lbHour)
     //need to know which omer and which shevetLocation
     //need to get the list of commercials in this {region,omer} slot.
     regionValue = (Number(shevetLocation) <= 9) ? "0" + Number(shevetLocation) : shevetLocation;
@@ -223,7 +226,7 @@ function commercialFunction()
     var randomNumber = Math.floor(Math.random() * cList.length);    ; // 0 or 1
     var commercial = cList[randomNumber];
 
-    ////console.log(commercial);
+    //console.log(commercial);
     commercialInitFunction(commercial);
 }
 
@@ -294,6 +297,10 @@ function commercialInitFunction(commercial)
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_01");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 		
+		case "Meet_02":
+            document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_01");
+            //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
+        break; 	
 		case "Drink_01":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Drink_01");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
@@ -302,6 +309,10 @@ function commercialInitFunction(commercial)
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_02");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 		
+		case "Meet_02":
+            document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_02");
+            //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
+        break; 	
 		case "Drink_02":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Drink_02");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
@@ -310,6 +321,10 @@ function commercialInitFunction(commercial)
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_03");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 		
+		case "Meet_03":
+            document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_03");
+            //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
+        break; 	
 		case "Drink_03":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Drink_03");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
@@ -317,7 +332,11 @@ function commercialInitFunction(commercial)
 		case "Eat_04":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_04");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
-        break; 		
+        break; 	
+		case "Meet_04":
+            document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_04");
+            //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
+        break;		
 		case "Drink_04":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Drink_04");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
@@ -326,6 +345,10 @@ function commercialInitFunction(commercial)
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_05");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 		
+		case "Meet_05":
+            document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_05");
+            //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
+        break;
 		case "Drink_05":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Drink_05");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
@@ -334,6 +357,10 @@ function commercialInitFunction(commercial)
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_06");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 		
+		case "Meet_06":
+            document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_06");
+            //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
+        break;
 		case "Drink_06":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Drink_06");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
@@ -342,6 +369,10 @@ function commercialInitFunction(commercial)
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Eat_07");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 		
+		case "Meet_04":
+            document.getElementById("commercial").querySelector(".day").setAttribute("id","Meet_07");
+            //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
+        break;
 		case "Drink_07":
             document.getElementById("commercial").querySelector(".day").setAttribute("id","Drink_07");
             //document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
