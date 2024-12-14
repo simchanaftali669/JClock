@@ -80,6 +80,8 @@ function setmazal() {
         x = (2 + clockHour) % 7;
 
     resetShevetHour();
+	gender= genders.MARRIED;
+	
 	//{מזל_יום,מזל_שעה}
     if(gender == genders.MALE)
     {
@@ -175,9 +177,16 @@ function setmazal() {
 			x = 12;
 		
         var shevetHour = x;
-        shevetHour_str = shevetHour;
-        if(shevetHour < 10)
-            shevetHour_str= "0" + shevetHour;
+		
+		//Offset is Real - 5785-09-13
+		shevetHour =- 2;
+		if(shevetHour<=0)
+			shevetHour+=12;
+		
+		//Offset is Real - 5785-09-13
+		shevetHour = shevetHour + 2;
+		if(shevetHour>=13)
+			shevetHour-=12;
 
 		var shevet__mida1 = ["Dummy","Thought", "Confidence", "Surrender", "Faith", "Willingness", "Self_Control", "Relationship(give)","Relationship(receive)","Majesty", "Connection","Truth-Balance","Love(Wisdom)"];
         var shevet__mida2 = ["Dummy","Faith", "Willingness", "Wisdom","Thought","connection","Love", "Self_Control","Truth-Balance", "Confidence", "Surrender","Relationship","Majesty",];

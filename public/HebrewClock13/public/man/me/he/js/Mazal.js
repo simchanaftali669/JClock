@@ -89,6 +89,7 @@ function setmazal() {
         x = (2 + clockHour) % 7;
 
     resetShevetHour();
+	gender= genders.MARRIED;
 	
 	//{מזל_יום,מזל_שעה}
     if(gender == genders.MALE)
@@ -204,7 +205,13 @@ function setmazal() {
 		if(birthHour == 12 || birthHour == 24)
 			x = 12;
 		
-        var shevetHour = x;
+        var shevetHour = Number(x);
+
+		//Offset is Real - 5785-09-13
+		shevetHour = shevetHour + 2;
+		if(shevetHour>=13)
+			shevetHour-=12;
+
         shevetHour_str = shevetHour;
         if(shevetHour < 10)
             shevetHour_str= "0" + shevetHour;
