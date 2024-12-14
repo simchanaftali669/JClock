@@ -1,10 +1,11 @@
 # UseCase
-1. (HebrewCommercial13 X HebrewClock13) X 2:
--  https://JClock126.web.app
-2. HebrewCommercial13 X 2:
+
+1. HebrewCommercial13 X 2:
 -  https://jclock126.web.app/HebrewCommercial13/public/family
-3. HebrewClock13 X 2 only:
+2. HebrewClock13 X 2 only:
 -  https://jclock126.web.app/HebrewClock13/public/family
+3. (HebrewCommercial13 X HebrewClock13) X 2:
+-  https://JClock126.web.app
 
 # HebrewCommercial13
 
