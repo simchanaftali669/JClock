@@ -80,7 +80,7 @@ function setmazal() {
         x = (2 + clockHour) % 7;
 
     resetShevetHour();
-	gender= genders.MARRIED;
+	gender = genders.MARRIED;
 	
 	//{מזל_יום,מזל_שעה}
     if(gender == genders.MALE)
@@ -176,7 +176,7 @@ function setmazal() {
 		if(birthHour == 12 || birthHour == 24)
 			x = 12;
 		
-        var shevetHour = x;
+        var shevetHour = Number(x);
 		
 		//Offset is Real - 5785-09-13
 		shevetHour = shevetHour + 2;
@@ -187,12 +187,14 @@ function setmazal() {
         if(shevetHour < 10)
             shevetHour_str= "0" + shevetHour;
 
+		console.log(shevetHour_str);
+
 		var shevet__mida1 = ["Dummy","Thought", "Confidence", "Surrender", "Faith", "Willingness", "Self_Control", "Relationship(give)","Relationship(receive)","Majesty", "Connection","Truth-Balance","Love(Wisdom)"];
         var shevet__mida2 = ["Dummy","Faith", "Willingness", "Wisdom","Thought","connection","Love", "Self_Control","Truth-Balance", "Confidence", "Surrender","Relationship","Majesty",];
         var shevet1 = ["Dummy","Yehuda", "Yissachar", "Zevulun", "Reuven", "Shimon", "Gad", "Ephraim","Menashe","Benjamin","Dan","Asher","Naftali(Levi)"];
         var shevet2 = ["Dummy","Reuven", "Shimon", "Levi","Yehuda","Dan","Naftali","Gad","Asher","Yissachar", "Zevulun","Yosef","Benjamin"];
   
-        document.getElementById("Shevet_" + shevetHour_str).value = shevet1[x] + " in " + shevet2[x];
+		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[shevetHour] + " שב" + shevet2[shevetHour];
         document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
 		//document.getElementById("Shevet__mida_" + shevetHour_str).value = shevet__mida1[x] + " in " + shevet__mida2[x];
         //document.getElementById("Shevet__mida_" + shevetHour_str).style.display = "unset"
