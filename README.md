@@ -1,8 +1,5 @@
 # UseCase
-1. with user location -->
-https://hebrewcommercial.web.app/family
-
-2. without user location(just need to be the same timezone as your clock)-->  https://hebrewcommercial.web.app/family?latitude=31.7768514&longitude=35.2331664
+https://JClock.web.app
 
 
 # HebrewCommercial13
