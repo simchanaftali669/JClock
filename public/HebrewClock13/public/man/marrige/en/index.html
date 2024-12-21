@@ -50,16 +50,25 @@
 <script>
 	function get_marrige_essential()
 	{
-    var marrigeTime = marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
-    if(marrigeTime != null)
-      document.location.href = "../../me/en/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal";  
-    else
-    {  
-      alert("The ID doesn't exist in the database");
-	  document.location.href='https://birthcalculator.web.app/';
-      //document.location.href = "../../me/en/index.html";  
-    }
-  }
+		var url_obj = new URL(document.location.href);
+		var lon = url_obj.searchParams.get("longitude");        
+		var lat = url_obj.searchParams.get("latitude");
+	
+		var location = "";
+		if(lon)
+			location = "&longitude=" + lon + "&latitude=" + lat; 
+	
+		
+		var marrigeTime = marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
+		if(marrigeTime != null)
+		  document.location.href = "../../me/en/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location;  
+		else
+		{  
+		  alert("The ID doesn't exist in the database");
+		  document.location.href='https://birthcalculator.web.app/';
+		  //document.location.href = "../../me/en/index.html";  
+		}
+	  }
 	$(document).ready(function()
 	{
 		$('[data-toggle="tooltip"]').tooltip();   

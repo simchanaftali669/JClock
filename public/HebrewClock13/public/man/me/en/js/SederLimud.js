@@ -140,14 +140,14 @@ function sederLimud(learningMethod)
 		{
 			if(!url.includes("personal"))
 			{
-				document.location.href = "../../marrige/en/index.html" + religionOnlyParm;
+				document.location.href = "../../marrige/en/index.html" + location + religionOnlyParm;
 			}				
 		}
 		else if(lbHour >= 13 && lbHour < 14)
 		{
 			if(!url.includes("personal"))
 			{
-				document.location.href = "../../marrige/en/index.html" + religionOnlyParm;
+				document.location.href = "../../marrige/en/index.html" + location + religionOnlyParm;
 			}				
 		}
 		else if(lbHour >= 14 && lbHour < 15)
@@ -184,11 +184,11 @@ function sederLimud(learningMethod)
 	{
 		if(learningMethod == "Woman" || period.includes("Woman"))
 		{
-			document.location.href = "../../marrige/en/index.html" + religionOnlyParm;
+			document.location.href = "../../marrige/en/index.html" + location + religionOnlyParm;
 		}				
 		else if(learningMethod == "Man" || period.includes("Man"))
 		{
-			document.location.href = "../../marrige/en/index.html" + religionOnlyParm;
+			document.location.href = "../../marrige/en/index.html" + location + religionOnlyParm;
 		}				
 		else if(learningMethod == "Yovel" || period.includes("Jubilee"))
 		{

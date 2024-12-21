@@ -51,9 +51,17 @@
 <script>
 	function get_marrige_essential()
 	{
+		var url_obj = new URL(document.location.href);
+		var lon = url_obj.searchParams.get("longitude");        
+		var lat = url_obj.searchParams.get("latitude");
+	
+		var location = "";
+		if(lon)
+			location = "&longitude=" + lon + "&latitude=" + lat; 
+	
         var marrigeTime = marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
         if(marrigeTime != null)
-            document.location.href = "../../me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal"; 
+            document.location.href = "../../me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location; 
         else
         {
             alert("תעודת הזהות לא קיימת במערכת");
