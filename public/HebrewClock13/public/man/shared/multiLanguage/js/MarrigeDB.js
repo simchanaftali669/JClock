@@ -1,6 +1,6 @@
 //{ID : husband ID, hebrewDay: married man/woman hebrew day of born, hebrewHour: married man/woman hebrew hour of the day/night (1-24)
 var marrigeDB = [
-				// {ID : "חנה לאה ביליג", hebrewDay: 06, hebrewHour: 22},   
+				 {ID : "חנה לאה ביליג", hebrewDay: 06, hebrewHour: 09},   
                  {ID : "נפתלי ביליג", hebrewDay: 05, hebrewHour: 03},  
 				 {ID : "Naftali Bilig", hebrewDay: 05, hebrewHour: 03},				 
 				 {ID : "אוריה עליה ביליג", hebrewDay: 06, hebrewHour: 21}, 
