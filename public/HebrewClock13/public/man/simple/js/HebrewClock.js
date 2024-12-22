@@ -312,7 +312,7 @@ function markTime()
 	else if(curr_hour < sunset && 
 			curr_hour > sunrise/*curr_hour.toDouble() > sunrise_hour.toDouble()*/ )
 	{
-		document.getElementById("Minute").style.color = "#FF0000";
+		document.getElementById("Minute").style.color = "#A6230E";
 	}
 
 
@@ -332,7 +332,7 @@ function markTime()
 		//document.getElementById("HebrewText2").style.color = "#5DBCD2";
 		//document.getElementById("Minute").style.color = "#5DBCD2";
 		//document.getElementById("HebrewText4").style.color = "#00FF00";
-		document.getElementById("Second").style.color = "#00FF00";
+		document.getElementById("Second").style.color = "#84C45E";
 	}
 	else if(curr_hour > asr )
 	{
@@ -340,7 +340,7 @@ function markTime()
 		//document.getElementById("HebrewText2").style.color = "#5DBCD2";
 		//document.getElementById("Minute").style.color = "#5DBCD2";
 		//document.getElementById("HebrewText4").style.color = "#00FF00";
-		document.getElementById("Second").style.color = "#FFFF00";
+		document.getElementById("Second").style.color = "#BA8D1A";
 	}
 		//if(curr_hour.toDouble() < sunrise_hour.toDouble() || lbHour.toNumber() < 6)
 		//{ 
