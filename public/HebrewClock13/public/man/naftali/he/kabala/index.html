@@ -262,9 +262,36 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 
 
     //---get Location and activate the clock---
+     //---get Location and activate the clock---
     function getLocation()
     {
-        if (navigator.geolocation)
+        var url = new URL(document.location.href);
+        var lon = url.searchParams.get("longitude");        
+        var lat = url.searchParams.get("latitude");        
+        
+		offset = url.searchParams.get("offset");
+		if(!offset)
+			offset = 0;
+		
+		if(lon)
+		{				
+			longitude = lon;
+			latitude = lat;
+
+			set_dst();
+			set_default_date();
+			list_pos();
+			hebrewclock();
+			oTimerclock();
+			
+			//genderInitFunction();
+			setmazal();
+			
+			//נחלה
+			setShevet();
+			commercialFunction();
+		}
+        else if (navigator.geolocation)
         {
             navigator.geolocation.getCurrentPosition(showPosition);
         }
