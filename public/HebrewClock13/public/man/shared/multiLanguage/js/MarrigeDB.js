@@ -21,9 +21,11 @@ var marrigeDB = [
 				 {ID : "אופיר כהן", hebrewDay: 04, hebrewHour: 20},					 
 				 {ID : "מאיר גזית", hebrewDay: 07, hebrewHour: 20},
 				 {ID : "חיים הדר אליהו", hebrewDay: 07, hebrewHour: 10},
+				 
 			     
 				 //נשיא
-				 {ID : "יזהר לב", hebrewDay: 05, hebrewHour: 14}
+				 {ID : "יזהר לב", hebrewDay: 05, hebrewHour: 14},
+				 {ID : "Littlepeach", hebrewDay: 04, hebrewHour: 02}
 				 
 				// {ID : "יסקה צופיה ביליג", hebrewDay: 06, hebrewHour: 12}  
                 ]
