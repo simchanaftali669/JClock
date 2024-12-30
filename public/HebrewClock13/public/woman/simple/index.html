@@ -59,7 +59,7 @@
             <table style="width:850px;">
                     <input class ="clock" id="Hour" type="text" value = "11" onclick="openSpecialHebrewClock();" />
                     <input class ="clock" id="HebrewText2" type="text" value = ":" onclick="openSpecialHebrewGiving();" />
-                    <input class ="clock" id="Minute" type="text" value = "1079" onclick="openSpecialHebrewClock();"/><!--onclick="openSpecialChristianClock();"/>-->
+                    <input class ="clock" id="Minute" type="text" value = "1079" onclick="openSpecialChristianClock();"/><!--onclick="openSpecialChristianClock();"/>-->
                     <input class ="clock" id="HebrewText4" type="text" value = ":" onclick="openSpecialHebrewGiving();"/>
                     <input class ="clock" id="Second" type="text" value = "75" onclick="openSpecialHebrewClock();"/><!--onclick="openSpecialMuslimClock();"-->
             </table>
@@ -277,11 +277,25 @@
 
     function openSpecialChristianClock()
     {
+		var url = new URL(document.location.href);
+        var lon = url.searchParams.get("longitude");        
+        var lat = url.searchParams.get("latitude");
+		
         var userLang = navigator.language || navigator.userLanguage; 
-        if (userLang = "he") 
-            window.location.href = "../it/he/kabala/index.html";
-        else
-            window.location.href = "../it/en/kabala/index.html";
+		if (userLang == "he")
+		{
+			if(lon)
+				window.location.href = "../me/he/kabala/index.html?latitude=" + lat + "&longitude="+ lon;
+			else
+				window.location.href = "../me/he/kabala/index.html";
+		}
+		else
+		{
+			if(lon)
+				window.location.href = "../it/en/kabala/index.html?latitude=" + lat + "&longitude="+ lon;
+			else
+				window.location.href = "../it/en/kabala/index.html";
+		}	
     }
 	
 	function yovelMazalCalculator()

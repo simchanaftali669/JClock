@@ -163,13 +163,11 @@ function doit() {
         //console.log("curr_hour: " + curr_hour);
         //console.log("sunset_hour " + sunset_hour);
 
-        var mazal_ordered = ["לבנה","שבתאי","צדק","מאדים","חמה","נגה","כוכב"];
+        var mazal_ordered = ["Moon","Saturn","Jupiter","Mars","Sun","Venus","Mercury"];
         var mazal_night_01 = [6,2,5,1,4,7,3];
         var mazal_day_01 = [4,7,3,6,2,5,1];
 
         //var 
-
-
         var isNight = curr_hour > sunset_hour || curr_hour < sunrise_hour;
         var isDay = !isNight;
 
@@ -181,12 +179,12 @@ function doit() {
             var hour_value = document.getElementById("hour_" + parseInt(i+1) + "__value");
             if(isDay)
             {
-                hour_label.value = "תפילת " + mazal_ordered[(mazal_day_01[hebrewday-1] + i)%7];
+                hour_label.value = mazal_ordered[(mazal_day_01[hebrewday-1] + i)%7] + " Pray";
                 hour_value.value = timeadj(s2 + shaa_zmanit_day*parseInt(i), ampm);
             }
             else
             {
-                hour_label.value = "תפילת " + mazal_ordered[(mazal_night_01[hebrewday-1] + i)%7];
+                hour_label.value = mazal_ordered[(mazal_night_01[hebrewday-1] + i)%7] + " Pray";
                 hour_value.value = timeadj(s1 + shaa_zmanit_night*parseInt(i), ampm);
             }
 

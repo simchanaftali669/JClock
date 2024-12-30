@@ -58,7 +58,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
             <button onclick="myFunction()" class="dropbtn"></button>
             <!-- <button onclick="genderFunction()" class="gender married"></button> -->
             <button onclick="englishFunction()" class="hebrew_btn"></button>
-            <button onclick = "religionFunction()" class="religion cristianity"></button>
+            <button class="religion cristianity"></button>
             <div id="myDropdown" class="dropdown-content">
 			<a href="../../../me/he/cristian/index.html" id="hourly__learning">לימוד עצמי</a>			
 <!--                <a href="../../../mo-ed/he/index.html" style="cursor: pointer;">שינוי מקום ותאריך</a>  
@@ -286,9 +286,33 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     //---get Location and activate the clock---
     function getLocation()
     {
-        if (navigator.geolocation)
+		var url = new URL(document.location.href);
+        var lon = url.searchParams.get("longitude");        
+        var lat = url.searchParams.get("latitude");
+		birthHour = url.searchParams.get("hour");
+	
+		if(lon && lat && !birthHour)		
+		{
+			longitude = lon ? lon : position.coords.longitude;
+			latitude = lat ? lat : position.coords.latitude; 
+
+			set_dst();
+			set_default_date();
+			list_pos();
+			hebrewclock();
+			oTimerclock();
+			
+			//genderInitFunction();
+			setmazal();
+			
+			//נחלה
+			setShevet();
+			//commercialFunction();
+			return;
+		}
+        else if (navigator.geolocation)
         {
-            navigator.geolocation.getCurrentPosition(showPosition);
+            navigator.geolocation.getCurrentPosition(showPosition,showError);
         }
     }
 

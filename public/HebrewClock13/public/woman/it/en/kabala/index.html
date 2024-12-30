@@ -10,8 +10,6 @@
 
 	  gtag('config', 'UA-30684949-2');
 	</script>
-    <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-    </script> 
     <title>pray schedule</title>  
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">    
     <link rel="stylesheet" type="text/css" href="../../../shared/css/stylesheet.css" id="commercial_css">    
@@ -47,12 +45,12 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 		// Initialize Firebase Analytics.
 		firebase.analytics().logEvent('זמני תפילה לנוצרים');
 	</script>
-    <div id="container" onclick="pause()">
+    <div id="container">
         <div class="dropdown" ondblclick="shevetFunction()">
             <button onclick="myFunction()" class="dropbtn"></button>
             <button onclick="englishFunction()" class="english_btn"></button>
             <!-- <button onclick="genderFunction()" class="gender married"></button> -->
-            <button onclick = "religionFunction()" class="religion cristianity"></button>
+            <button onclick = "" class="religion cristianity"></button>
             <div id="myDropdown" class="dropdown-content">		
 				<a href="../../../me/en/cristian/index.html" id="hourly__learning">Self learning</a>			
 <!--                <a href="../../../mo-ed/en/index.html" style="cursor: pointer;">Choose date at location</a>  
@@ -166,7 +164,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     <script type="text/javascript" src="../js/Location.js"></script>
 
 <script type="text/javascript">
-
+	
     //public variables
     var longitude, latitude;  //current geo location
     var latd = -1, latm = 0;  // lat on earth
@@ -223,9 +221,34 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     //---get Location and activate the clock---
     function getLocation()
     {
-        if (navigator.geolocation)
+		var url = new URL(document.location.href);
+        var lon = url.searchParams.get("longitude");        
+        var lat = url.searchParams.get("latitude");
+		birthHour = url.searchParams.get("hour");
+	
+		if(lon && lat && !birthHour)		
+		{
+			longitude = lon ? lon : position.coords.longitude;
+			latitude = lat ? lat : position.coords.latitude; 
+
+			set_dst();
+			set_default_date();
+			list_pos();
+			hebrewclock();
+			oTimerclock();
+			
+			genderInitFunction();
+			setmazal();
+			
+			//נחלה
+			setShevet();
+			//commercialFunction();
+			
+			return;
+		}
+        else if (navigator.geolocation)
         {
-            navigator.geolocation.getCurrentPosition(showPosition);
+            navigator.geolocation.getCurrentPosition(showPosition,showError);
         }
     }
 

@@ -19,9 +19,20 @@ window.onclick = function (event) {
     }
 }
 
-function englishFunction()
+function englishFunction(x=1)
 {
-	window.location.href= "../../he/kabala/index.html";
+	var url_obj = new URL(document.location.href);
+	var lon = url_obj.searchParams.get("longitude");        
+	var lat = url_obj.searchParams.get("latitude");
+
+	var location = "";
+	if(lon)
+		var location = "?longitude=" + lon + "&latitude=" + lat;
+
+	if(x==1)
+		window.location.href= "../../he/kabala/index.html" + location;
+	else
+		window.location.href= "../../he/kabala/guide.html" + location;
 }
 
 

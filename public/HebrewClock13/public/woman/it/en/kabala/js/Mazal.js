@@ -35,7 +35,7 @@ function setmazal() {
 
     hebrewday = day;
 
-    var day_mida = ["חסד", "גבורה", "תפארת", "נצח", "הוד", "יסוד", "מלכות"];
+    var day_mida = ["Netzach", "Chesed", "Gvura", "Tife'ret", "Hod", "Yesod", "Malcut"];
     var x = 0;
     if (day == 1)
         x = (5 + clockHour) % 7;
@@ -52,6 +52,7 @@ function setmazal() {
     if (day == 7)
         x = (2 + clockHour) % 7;
       
+	gender == genders.MARRIED
     //{מזל_יום,מזל_שעה}
     if(gender == genders.MALE)
     {
@@ -109,7 +110,7 @@ function setmazal() {
 
     set_mazal_url();
 
-    music_offset();
+    //music_offset();
 }
 
 function music_offset()

@@ -70,6 +70,7 @@ function setmazal() {
     if (day == 7)
         x = (2 + clockHour) % 7;
 
+	gender = genders.MARRIED;
 
 	//{מזל_יום,מזל_שעה}
     if(gender == genders.MALE)
@@ -175,6 +176,7 @@ function setmazal() {
 
 function music_offset()
 {
+	return;
 	if (lbHour < 12)
 	{
 		if (lbHour < 10) // 0==>2, 1==>3, 2==>4, 3==>5, 4==>6, 5==>7, 6==>8, 7==>9, 8==>10, 9==>11

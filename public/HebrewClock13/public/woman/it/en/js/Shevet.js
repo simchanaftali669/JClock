@@ -130,35 +130,35 @@ function setShevet()
 		var ephraim = 34;
 		
 		if(gad <= latitude && latitude < gad_shimon)
-			i.style.backgroundImage = "url('pic/shevet/01/06.png')";	
+			i.style.backgroundImage = "url('pic/shevet/02/06.png')";	
 		if(gad_shimon <= latitude && latitude < shimon_reuven)
-			i.style.backgroundImage = "url('pic/shevet/01/05.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/05.png')";
 		if(shimon_reuven <= latitude && latitude < reuven_zevulun)
-			i.style.backgroundImage = "url('pic/shevet/01/04.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/04.png')";
 		if(reuven_zevulun <= latitude && latitude < zevulun_yissachar)
-			i.style.backgroundImage = "url('pic/shevet/01/03.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/03.png')";
 		if(zevulun_yissachar <= latitude && latitude < yissachar_yeuda)
-			i.style.backgroundImage = "url('pic/shevet/01/02.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/02.png')";
 	    if(yissachar_yeuda <= latitude && latitude < yehuda_naftali)
-			i.style.backgroundImage = "url('pic/shevet/01/01.png')";		
+			i.style.backgroundImage = "url('pic/shevet/02/01.png')";		
 		else if( yehuda_naftali <= latitude && latitude < naftali_asher)
-			i.style.backgroundImage = "url('pic/shevet/01/13.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/13.png')";
 		else if( naftali_asher <= latitude && latitude < asher_dan)
-			i.style.backgroundImage = "url('pic/shevet/01/11.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/11.png')";
 		else if( asher_dan <= latitude && latitude < dan_benjamin)
-			i.style.backgroundImage = "url('pic/shevet/01/10.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/10.png')";
 		else if( dan_benjamin <= latitude && latitude < benjamin_menashe)
-			i.style.backgroundImage = "url('pic/shevet/01/09.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/09.png')";
 		else if( benjamin_menashe <= latitude && latitude < menashe_ephraim)
-			i.style.backgroundImage = "url('pic/shevet/01/08.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/08.png')";
 		else if( menashe_ephraim <= latitude && latitude < ephraim)
-			i.style.backgroundImage = "url('pic/shevet/01/07.png')";
+			i.style.backgroundImage = "url('pic/shevet/02/07.png')";
 		
 	}	
 	else //חוץ לארץ
 	{
 		i.style.backgroundColor = "black"; 
-		i.style.backgroundImage = "url('pic/shevet/01/13.png')";
+		i.style.backgroundImage = "url('pic/shevet/02/13.png')";
 	}	
 
 }

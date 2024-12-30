@@ -1,5 +1,6 @@
 ﻿function genderInitFunction()
 {
+	return;
 	var genderElement = document.getElementsByClassName("gender")[0];
 	var boy_friend__learning__Element = document.getElementById("yearly__learning");
 	var girl_friend__learning__Element = document.getElementById("monthly__learning");

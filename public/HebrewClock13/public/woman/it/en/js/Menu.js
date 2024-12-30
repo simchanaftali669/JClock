@@ -21,8 +21,16 @@ window.onclick = function (event) {
 
 function englishFunction(x=1)
 {
+		var url_obj = new URL(document.location.href);
+	var lon = url_obj.searchParams.get("longitude");        
+	var lat = url_obj.searchParams.get("latitude");
+
+	var location = "";
+	if(lon)
+		var location = "?longitude=" + lon + "&latitude=" + lat;
+
 	if(x==1)
-		window.location.href= "../he/index.html";
+		window.location.href= "../he/index.html" + location;
 	else
-		window.location.href= "../he/guide.html";
+		window.location.href= "../he/guide.html" + location;	
 }
