@@ -1,32 +1,34 @@
 ﻿//Commercial_manually
 //need to set each commercial publish keys based on it goal
 //s is "shevetLocation", d is "day of week" between 1-7, h is "hour" between 00 and 23, p meaning is "priority" counter set from min 0001 to max 1080 
+//hour: xx ==> 0-23; dd==>23-9 || 12-18; ee==>23-9 || 17 ; em==> 23-9
+
 var cInRegionAtTime = new Map();
 const commercials = 
 {
     Soteria: 's_xx#d_xx__h_xx__p_0001+s_xx#d_07__h_10__p_0001+s_xx#d_07__h_11__p_0001',
     Breslev: 's_xx#d_xx__h_xx__p_0001+s_xx#d_07__h_10__p_0001+s_xx#d_07__h_11__p_0001',
  
-    Drink_01: 's_xx#d_02__h_14__p_0360+s_xx#d_04__h_15__p_0360+s_xx#d_05__h_12__p_0360+s_xx#d_06__h_16__p_0360+s_xx#d_07__h_13__p_0360+s_xx#d_01__h_03__p_0360+s_xx#d_02__h_00__p_0360+s_xx#d_02__h_07__p_0360+s_xx#d_03__h_04__p_0360+s_xx#d_04__h_01__p_0360+s_xx#d_04__h_08__p_0360+s_xx#d_05__h_05__p_0360+s_xx#d_06__h_02__p_0360+s_xx#d_06__h_09__p_0360+s_xx#d_06__h_23__p_0360+s_xx#d_07__h_06__p_0360+s_xx#d_07__h_13__p_0360+s_xx#d_07__h_20__p_0360+',
-	Drink_02: 's_xx#d_02__h_15__p_0360+s_xx#d_03__h_12__p_0360+s_xx#d_04__h_16__p_0360+s_xx#d_04__h_09__p_0360+s_xx#d_05__h_13__p_0360+s_xx#d_07__h_14__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_14__p_0360+s_xx#d_07__h_21__p_0360+',   
-	Drink_03: 's_xx#d_01__h_12__p_0360+s_xx#d_02__h_16__p_0360+s_xx#d_03__h_13__p_0360+s_xx#d_05__h_14__p_0360+s_xx#d_07__h_15__p_0360+s_xx#d_01__h_05__p_0360+s_xx#d_02__h_02__p_0360+s_xx#d_02__h_09__p_0360+s_xx#d_03__h_06__p_0360+s_xx#d_04__h_03__p_0360+s_xx#d_05__h_00__p_0360+s_xx#d_05__h_07__p_0360+s_xx#d_06__h_04__p_0360+s_xx#d_07__h_01__p_0360+s_xx#d_07__h_08__p_0360+s_xx#d_07__h_15__p_0360+s_xx#d_07__h_22__p_0360+',
-    Drink_04: 's_xx#d_01__h_16__p_0360+s_xx#d_02__h_13__p_0360+s_xx#d_04__h_00__p_0360+s_xx#d_04__h_14__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_06__h_08__p_0360+s_xx#d_06__h_15__p_0360+s_xx#d_01__h_02__p_0360+s_xx#d_01__h_09__p_0360+s_xx#d_01__h_23__p_0360+s_xx#d_02__h_06__p_0360+s_xx#d_03__h_03__p_0360+s_xx#d_04__h_07__p_0360+s_xx#d_05__h_04__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_07__h_05__p_0360+s_xx#d_07__h_12__p_0360+s_xx#d_07__h_19__p_0360+',
-	Drink_05: 's_xx#d_01__h_13__p_0360+s_xx#d_03__h_14__p_0360+s_xx#d_05__h_15__p_0360+s_xx#d_06__h_12__p_0360+s_xx#d_07__h_16__p_0360+s_xx#d_01__h_06__p_0360+s_xx#d_02__h_03__p_0360+s_xx#d_03__h_00__p_0360+s_xx#d_03__h_07__p_0360+s_xx#d_04__h_04__p_0360+s_xx#d_05__h_01__p_0360+s_xx#d_05__h_08__p_0360+s_xx#d_06__h_05__p_0360+s_xx#d_07__h_02__p_0360+s_xx#d_07__h_09__p_0360+s_xx#d_07__h_16__p_0360+s_xx#d_07__h_23__p_0360+',
-	Drink_06: 's_xx#d_01__h_14__p_0360+s_xx#d_03__h_15__p_0360+s_xx#d_04__h_12__p_0360+s_xx#d_05__h_16__p_0360+s_xx#d_06__h_13__p_0360+s_xx#d_01__h_00__p_0360+s_xx#d_01__h_07__p_0360+s_xx#d_02__h_04__p_0360+s_xx#d_03__h_01__p_0360+s_xx#d_04__h_05__p_0360+s_xx#d_05__h_02__p_0360+s_xx#d_05__h_09__p_0360+s_xx#d_05__h_23__p_0360+s_xx#d_06__h_06__p_0360+s_xx#d_07__h_03__p_0360+',
-	Drink_07: 's_xx#d_01__h_15__p_0360+s_xx#d_02__h_12__p_0360+s_xx#d_03__h_16__p_0360+s_xx#d_04__h_06__p_0360+s_xx#d_04__h_13__p_0360+s_xx#d_06__h_14__p_0360+s_xx#d_01__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_02__h_05__p_0360+s_xx#d_03__h_02__p_0360+s_xx#d_03__h_09__p_0360+#d_03__h_09__p_0360+#d_03__h_23__p_0360+s_xx#d_04__h_06__p_0360+s_xx#d_05__h_03__p_0360+s_xx#d_06__h_00__p_0360+s_xx#d_06__h_07__p_0360+s_xx#d_xx__h_18__p_0360+s_xx#d_xx__h_19__p_0360+s_xx#d_xx__h_20__p_0360+s_xx#d_xx__h_21__p_0360+s_xx#d_xx__h_22__p_0360+s_xx#d_06__h_18__p_0360+s_xx#d_06__h_19__p_0360+s_xx#d_06__h_20__p_0360+s_xx#d_06__h_21__p_0360+s_xx#d_06__h_22__p_0360+s_xx#d_07__h_04__p_0360+s_xx#d_07__h_18__p_0360+',	
+    Drink_01: 's_xx#d_01__h_dd__p_0360+s_xx#d_02__h_14__p_0360+s_xx#d_04__h_15__p_0360+s_xx#d_05__h_12__p_0360+s_xx#d_06__h_16__p_0360+s_xx#d_07__h_13__p_0360+s_xx#d_01__h_03__p_0360+s_xx#d_02__h_00__p_0360+s_xx#d_02__h_07__p_0360+s_xx#d_03__h_04__p_0360+s_xx#d_04__h_01__p_0360+s_xx#d_04__h_08__p_0360+s_xx#d_05__h_05__p_0360+s_xx#d_06__h_02__p_0360+s_xx#d_06__h_09__p_0360+s_xx#d_06__h_23__p_0360+s_xx#d_07__h_06__p_0360+s_xx#d_07__h_13__p_0360+s_xx#d_07__h_20__p_0360+',
+	Drink_02: 's_xx#d_02__h_dd__p_0360+s_xx#d_02__h_15__p_0360+s_xx#d_03__h_12__p_0360+s_xx#d_04__h_16__p_0360+s_xx#d_04__h_09__p_0360+s_xx#d_05__h_13__p_0360+s_xx#d_07__h_14__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_14__p_0360+s_xx#d_07__h_21__p_0360+',   
+	Drink_03: 's_xx#d_03__h_dd__p_0360+s_xx#d_01__h_12__p_0360+s_xx#d_02__h_16__p_0360+s_xx#d_03__h_13__p_0360+s_xx#d_05__h_14__p_0360+s_xx#d_07__h_15__p_0360+s_xx#d_01__h_05__p_0360+s_xx#d_02__h_02__p_0360+s_xx#d_02__h_09__p_0360+s_xx#d_03__h_06__p_0360+s_xx#d_04__h_03__p_0360+s_xx#d_05__h_00__p_0360+s_xx#d_05__h_07__p_0360+s_xx#d_06__h_04__p_0360+s_xx#d_07__h_01__p_0360+s_xx#d_07__h_08__p_0360+s_xx#d_07__h_15__p_0360+s_xx#d_07__h_22__p_0360+',
+    Drink_04: 's_xx#d_04__h_dd__p_0360+s_xx#d_01__h_16__p_0360+s_xx#d_02__h_13__p_0360+s_xx#d_04__h_00__p_0360+s_xx#d_04__h_14__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_06__h_08__p_0360+s_xx#d_06__h_15__p_0360+s_xx#d_01__h_02__p_0360+s_xx#d_01__h_09__p_0360+s_xx#d_01__h_23__p_0360+s_xx#d_02__h_06__p_0360+s_xx#d_03__h_03__p_0360+s_xx#d_04__h_07__p_0360+s_xx#d_05__h_04__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_07__h_05__p_0360+s_xx#d_07__h_12__p_0360+s_xx#d_07__h_19__p_0360+',
+	Drink_05: 's_xx#d_05__h_dd__p_0360+s_xx#d_01__h_13__p_0360+s_xx#d_03__h_14__p_0360+s_xx#d_05__h_15__p_0360+s_xx#d_06__h_12__p_0360+s_xx#d_07__h_16__p_0360+s_xx#d_01__h_06__p_0360+s_xx#d_02__h_03__p_0360+s_xx#d_03__h_00__p_0360+s_xx#d_03__h_07__p_0360+s_xx#d_04__h_04__p_0360+s_xx#d_05__h_01__p_0360+s_xx#d_05__h_08__p_0360+s_xx#d_06__h_05__p_0360+s_xx#d_07__h_02__p_0360+s_xx#d_07__h_09__p_0360+s_xx#d_07__h_16__p_0360+s_xx#d_07__h_23__p_0360+',
+	Drink_06: 's_xx#d_06__h_dd__p_0360+s_xx#d_01__h_14__p_0360+s_xx#d_03__h_15__p_0360+s_xx#d_04__h_12__p_0360+s_xx#d_05__h_16__p_0360+s_xx#d_06__h_13__p_0360+s_xx#d_01__h_00__p_0360+s_xx#d_01__h_07__p_0360+s_xx#d_02__h_04__p_0360+s_xx#d_03__h_01__p_0360+s_xx#d_04__h_05__p_0360+s_xx#d_05__h_02__p_0360+s_xx#d_05__h_09__p_0360+s_xx#d_05__h_23__p_0360+s_xx#d_06__h_06__p_0360+s_xx#d_07__h_03__p_0360+',
+	Drink_07: 's_xx#d_07__h_dd__p_0360+s_xx#d_01__h_15__p_0360+s_xx#d_02__h_12__p_0360+s_xx#d_03__h_16__p_0360+s_xx#d_04__h_06__p_0360+s_xx#d_04__h_13__p_0360+s_xx#d_06__h_14__p_0360+s_xx#d_01__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_02__h_05__p_0360+s_xx#d_03__h_02__p_0360+s_xx#d_03__h_09__p_0360+#d_03__h_09__p_0360+#d_03__h_23__p_0360+s_xx#d_04__h_06__p_0360+s_xx#d_05__h_03__p_0360+s_xx#d_06__h_00__p_0360+s_xx#d_06__h_07__p_0360+s_xx#d_xx__h_18__p_0360+s_xx#d_xx__h_19__p_0360+s_xx#d_xx__h_20__p_0360+s_xx#d_xx__h_21__p_0360+s_xx#d_xx__h_22__p_0360+s_xx#d_06__h_18__p_0360+s_xx#d_06__h_19__p_0360+s_xx#d_06__h_20__p_0360+s_xx#d_06__h_21__p_0360+s_xx#d_06__h_22__p_0360+s_xx#d_07__h_04__p_0360+s_xx#d_07__h_18__p_0360+',	
 		
-	Eat_01: 's_xx#d_01__h_17__p_0360+s_xx#d_01__h_03__p_0360+s_xx#d_02__h_00__p_0360+s_xx#d_02__h_07__p_0360+s_xx#d_03__h_04__p_0360+s_xx#d_04__h_01__p_0360+s_xx#d_04__h_08__p_0360+s_xx#d_05__h_05__p_0360+s_xx#d_06__h_02__p_0360+s_xx#d_06__h_09__p_0360+s_xx#d_06__h_23__p_0360+s_xx#d_07__h_06__p_0360+s_xx#d_07__h_20__p_0360+',
-	Eat_02: 's_xx#d_06__h_17__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_09__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_21__p_0360+',
-	Eat_03: 's_xx#d_04__h_17__p_0360+s_xx#d_01__h_05__p_0360+s_xx#d_02__h_02__p_0360+s_xx#d_02__h_09__p_0360+s_xx#d_03__h_06__p_0360+s_xx#d_04__h_03__p_0360+s_xx#d_05__h_00__p_0360+s_xx#d_05__h_07__p_0360+s_xx#d_06__h_04__p_0360+s_xx#d_07__h_01__p_0360+s_xx#d_07__h_08__p_0360+s_xx#d_07__h_22__p_0360+',
-	Eat_04: 's_xx#d_03__h_17__p_0360+s_xx#d_01__h_02__p_0360+s_xx#d_01__h_09__p_0360+s_xx#d_01__h_23__p_0360+s_xx#d_02__h_06__p_0360+s_xx#d_03__h_03__p_0360+s_xx#d_04__h_00__p_0360+s_xx#d_04__h_07__p_0360+s_xx#d_05__h_04__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_06__h_08__p_0360+s_xx#d_07__h_05__p_0360+s_xx#d_07__h_19__p_0360+',
-	Eat_05: 's_xx#d_02__h_17__p_0360+s_xx#d_01__h_06__p_0360+s_xx#d_02__h_03__p_0360+s_xx#d_03__h_00__p_0360+s_xx#d_03__h_07__p_0360+s_xx#d_04__h_04__p_0360+s_xx#d_05__h_01__p_0360+s_xx#d_05__h_08__p_0360+s_xx#d_06__h_05__p_0360+s_xx#d_07__h_02__p_0360+s_xx#d_07__h_09__p_0360+s_xx#d_07__h_23__p_0360+',
-	Eat_06: 's_xx#d_07__h_17__p_0360+s_xx#d_01__h_00__p_0360+s_xx#d_01__h_07__p_0360+s_xx#d_02__h_04__p_0360+s_xx#d_03__h_01__p_0360+s_xx#d_04__h_05__p_0360+s_xx#d_05__h_02__p_0360+s_xx#d_05__h_09__p_0360+s_xx#d_05__h_23__p_0360+s_xx#d_06__h_06__p_0360+s_xx#d_07__h_03__p_0360+s_xx#d_07__h_17__p_0360+',
-	Eat_07: 's_xx#d_05__h_17__p_0360+s_xx#d_01__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_02__h_05__p_0360+s_xx#d_03__h_02__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_23__p_0360+s_xx#d_04__h_06__p_0360+s_xx#d_05__h_03__p_0360+s_xx#d_06__h_00__p_0360+s_xx#d_06__h_07__p_0360+s_xx#d_07__h_04__p_0360+s_xx#d_07__h_18__p_0360+',
+	Eat_01: 's_xx#d_01__h_ee__p_0360+s_xx#d_01__h_17__p_0360+s_xx#d_01__h_03__p_0360+s_xx#d_02__h_00__p_0360+s_xx#d_02__h_07__p_0360+s_xx#d_03__h_04__p_0360+s_xx#d_04__h_01__p_0360+s_xx#d_04__h_08__p_0360+s_xx#d_05__h_05__p_0360+s_xx#d_06__h_02__p_0360+s_xx#d_06__h_09__p_0360+s_xx#d_06__h_23__p_0360+s_xx#d_07__h_06__p_0360+s_xx#d_07__h_20__p_0360+',
+	Eat_02: 's_xx#d_02__h_ee__p_0360+s_xx#d_06__h_17__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_09__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_21__p_0360+',
+	Eat_03: 's_xx#d_03__h_ee__p_0360+s_xx#d_04__h_17__p_0360+s_xx#d_01__h_05__p_0360+s_xx#d_02__h_02__p_0360+s_xx#d_02__h_09__p_0360+s_xx#d_03__h_06__p_0360+s_xx#d_04__h_03__p_0360+s_xx#d_05__h_00__p_0360+s_xx#d_05__h_07__p_0360+s_xx#d_06__h_04__p_0360+s_xx#d_07__h_01__p_0360+s_xx#d_07__h_08__p_0360+s_xx#d_07__h_22__p_0360+',
+	Eat_04: 's_xx#d_04__h_ee__p_0360+s_xx#d_03__h_17__p_0360+s_xx#d_01__h_02__p_0360+s_xx#d_01__h_09__p_0360+s_xx#d_01__h_23__p_0360+s_xx#d_02__h_06__p_0360+s_xx#d_03__h_03__p_0360+s_xx#d_04__h_00__p_0360+s_xx#d_04__h_07__p_0360+s_xx#d_05__h_04__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_06__h_08__p_0360+s_xx#d_07__h_05__p_0360+s_xx#d_07__h_19__p_0360+',
+	Eat_05: 's_xx#d_05__h_ee__p_0360+s_xx#d_02__h_17__p_0360+s_xx#d_01__h_06__p_0360+s_xx#d_02__h_03__p_0360+s_xx#d_03__h_00__p_0360+s_xx#d_03__h_07__p_0360+s_xx#d_04__h_04__p_0360+s_xx#d_05__h_01__p_0360+s_xx#d_05__h_08__p_0360+s_xx#d_06__h_05__p_0360+s_xx#d_07__h_02__p_0360+s_xx#d_07__h_09__p_0360+s_xx#d_07__h_23__p_0360+',
+	Eat_06: 's_xx#d_06__h_ee__p_0360+s_xx#d_07__h_17__p_0360+s_xx#d_01__h_00__p_0360+s_xx#d_01__h_07__p_0360+s_xx#d_02__h_04__p_0360+s_xx#d_03__h_01__p_0360+s_xx#d_04__h_05__p_0360+s_xx#d_05__h_02__p_0360+s_xx#d_05__h_09__p_0360+s_xx#d_05__h_23__p_0360+s_xx#d_06__h_06__p_0360+s_xx#d_07__h_03__p_0360+s_xx#d_07__h_17__p_0360+',
+	Eat_07: 's_xx#d_07__h_ee__p_0360+s_xx#d_05__h_17__p_0360+s_xx#d_01__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_02__h_05__p_0360+s_xx#d_03__h_02__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_23__p_0360+s_xx#d_04__h_06__p_0360+s_xx#d_05__h_03__p_0360+s_xx#d_06__h_00__p_0360+s_xx#d_06__h_07__p_0360+s_xx#d_07__h_04__p_0360+s_xx#d_07__h_18__p_0360+',
 
-	Meet_02: 's_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_09__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_21__p_0360+',
-	Meet_04: 's_xx#d_01__h_02__p_0360+s_xx#d_01__h_09__p_0360+s_xx#d_01__h_23__p_0360+s_xx#d_02__h_06__p_0360+s_xx#d_03__h_03__p_0360+s_xx#d_04__h_00__p_0360+s_xx#d_04__h_07__p_0360+s_xx#d_05__h_04__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_06__h_08__p_0360+s_xx#d_07__h_05__p_0360+s_xx#d_07__h_19__p_0360+',
-	Meet_05: 's_xx#d_01__h_06__p_0360+s_xx#d_02__h_03__p_0360+s_xx#d_03__h_00__p_0360+s_xx#d_03__h_07__p_0360+s_xx#d_04__h_04__p_0360+s_xx#d_05__h_01__p_0360+s_xx#d_05__h_08__p_0360+s_xx#d_06__h_05__p_0360+s_xx#d_07__h_02__p_0360+s_xx#d_07__h_09__p_0360+s_xx#d_07__h_23__p_0360+',
-	Meet_07: 's_xx#d_01__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_02__h_05__p_0360+s_xx#d_03__h_02__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_23__p_0360+s_xx#d_04__h_06__p_1080+s_xx#d_05__h_03__p_0360+s_xx#d_06__h_00__p_0360+s_xx#d_06__h_07__p_0360+s_xx#d_07__h_04__p_0360+s_xx#d_07__h_18__p_0360+'
+	Meet_02: 's_xx#d_02__h_em__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_02__h_01__p_0360+s_xx#d_02__h_08__p_0360+s_xx#d_03__h_05__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_02__p_0360+s_xx#d_04__h_09__p_0360+s_xx#d_04__h_23__p_0360+s_xx#d_05__h_06__p_0360+s_xx#d_01__h_04__p_0360+s_xx#d_06__h_03__p_0360+s_xx#d_07__h_00__p_0360+s_xx#d_07__h_07__p_0360+s_xx#d_07__h_21__p_0360+',
+	Meet_04: 's_xx#d_04__h_em__p_0360+s_xx#d_01__h_02__p_0360+s_xx#d_01__h_09__p_0360+s_xx#d_01__h_23__p_0360+s_xx#d_02__h_06__p_0360+s_xx#d_03__h_03__p_0360+s_xx#d_04__h_00__p_0360+s_xx#d_04__h_07__p_0360+s_xx#d_05__h_04__p_0360+s_xx#d_06__h_01__p_0360+s_xx#d_06__h_08__p_0360+s_xx#d_07__h_05__p_0360+s_xx#d_07__h_19__p_0360+',
+	Meet_05: 's_xx#d_05__h_em__p_0360+s_xx#d_01__h_06__p_0360+s_xx#d_02__h_03__p_0360+s_xx#d_03__h_00__p_0360+s_xx#d_03__h_07__p_0360+s_xx#d_04__h_04__p_0360+s_xx#d_05__h_01__p_0360+s_xx#d_05__h_08__p_0360+s_xx#d_06__h_05__p_0360+s_xx#d_07__h_02__p_0360+s_xx#d_07__h_09__p_0360+s_xx#d_07__h_23__p_0360+',
+	Meet_07: 's_xx#d_07__h_em__p_0360+s_xx#d_01__h_01__p_0360+s_xx#d_01__h_08__p_0360+s_xx#d_02__h_05__p_0360+s_xx#d_03__h_02__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_09__p_0360+s_xx#d_03__h_23__p_0360+s_xx#d_04__h_06__p_1080+s_xx#d_05__h_03__p_0360+s_xx#d_06__h_00__p_0360+s_xx#d_06__h_07__p_0360+s_xx#d_07__h_04__p_0360+s_xx#d_07__h_18__p_0360+'
 };
 
 
@@ -128,6 +130,51 @@ function initCommercials()
                         regionIdxValue = (regionIdx <= 9) ? "0" + regionIdx : String(regionIdx);
                         timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
                         insertCommercialsIntoSlot(commercial,regionIdxValue,dayValue,timeIdxValue,priority);
+                    }
+                }
+            }
+            else if(regionValue == "xx" && !dayValue.includes("x") && timeValue == "dd")
+            {
+                for(var regionIdx = 1; regionIdx<=12; regionIdx++)
+                {
+                    for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+                    {
+						if(timeIdx == 23 || timeIdx <=9 || (timeIdx >=12 && timeIdx <= 17))
+						{							
+							regionIdxValue = (regionIdx <= 9) ? "0" + regionIdx : String(regionIdx);
+							timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
+							insertCommercialsIntoSlot(commercial,regionIdxValue,dayValue,timeIdxValue,priority);
+						}
+                    }
+                }
+            }
+            else if(regionValue == "xx" && !dayValue.includes("x") && timeValue == "ee")
+            {
+                for(var regionIdx = 1; regionIdx<=12; regionIdx++)
+                {
+                    for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+                    {
+						if(timeIdx == 23 || timeIdx <=9 || timeIdx == 17)
+						{							
+							regionIdxValue = (regionIdx <= 9) ? "0" + regionIdx : String(regionIdx);
+							timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
+							insertCommercialsIntoSlot(commercial,regionIdxValue,dayValue,timeIdxValue,priority);
+						}
+                    }
+                }
+            }
+            else if(regionValue == "xx" && !dayValue.includes("x") && timeValue == "em")
+            {
+                for(var regionIdx = 1; regionIdx<=12; regionIdx++)
+                {
+                    for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+                    {
+						if(timeIdx == 23 || timeIdx <=9)
+						{							
+							regionIdxValue = (regionIdx <= 9) ? "0" + regionIdx : String(regionIdx);
+							timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
+							insertCommercialsIntoSlot(commercial,regionIdxValue,dayValue,timeIdxValue,priority);
+						}
                     }
                 }
             }
