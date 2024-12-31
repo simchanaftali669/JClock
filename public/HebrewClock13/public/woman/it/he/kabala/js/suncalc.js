@@ -311,13 +311,16 @@ SunCalc.getMoonTimes = function (date, lat, lng, inUTC) {
 
 function convertDateTimeToFloat(date)
 {
-	//console.log(date);
+	////console.log(date);
 	var h = date.getHours();
     var m = date.getMinutes();
     var s = date.getSeconds();
 	var milisec = date.getMilliseconds();
 	var floatDate = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);	
 	floatDate = floatDate/(1000 * 3600);
-
+	
+	if(floatDate >= 24)
+		floatDate -= 24;
+	
 	return floatDate;
 }

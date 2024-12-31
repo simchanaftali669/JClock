@@ -148,15 +148,15 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 			<img class="day" />
         </div>
 
-    <script type="text/javascript" src="js/Menu.js"></script>
+    <script type="text/javascript" src="./js/Menu.js"></script>
     <script type="text/javascript" src="../js/HebrewClock.js"></script>
     <script type="text/javascript" src="../js/Gender.js"></script>
     <script type="text/javascript" src="../../../shared/en/js/Commercial.js"></script>
 	<script type="text/javascript" src="../js/Religion.js"></script>
-    <script type="text/javascript" src="js/Mazal.js"></script>
-    <script type="text/javascript" src="js/SunCalc.js"></script>
-    <script type="text/javascript" src="js/Times.js"></script>
-    <script type="text/javascript" src="js/Shevet.js"></script>
+    <script type="text/javascript" src="../js/Mazal.js"></script>
+    <script type="text/javascript" src="./js/SunCalc.js"></script>
+    <script type="text/javascript" src="../js/Times.js"></script>
+    <script type="text/javascript" src="./js/Shevet.js"></script>
     <script type="text/javascript" src="../js/SunTime.js"></script>
     <script type="text/javascript" src="../js/TimeAdj.js"></script>
     <script type="text/javascript" src="../js/Dst.js"></script>
@@ -164,7 +164,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     <script type="text/javascript" src="../js/Location.js"></script>
 
 <script type="text/javascript">
-	
+	console.log("enter");
     //public variables
     var longitude, latitude;  //current geo location
     var latd = -1, latm = 0;  // lat on earth
@@ -234,7 +234,9 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 			set_dst();
 			set_default_date();
 			list_pos();
+			console.log("before");
 			hebrewclock();
+			console.log("after");
 			oTimerclock();
 			
 			genderInitFunction();
