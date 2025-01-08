@@ -13,7 +13,7 @@ function hebrewDayOffset()
 		return -1;
 	
 	if((hebrewday == hebrewday_man) &&
-	   ((lbHour > lbHour_man) || (lbHour == lbHour_man && lbMinute > lbMinute_man)))
+	   ((lbHour > lbHour4Man) || (lbHour == lbHour4Man && lbMinute > lbMinute4Man)))
 		return -1;
 	
 	return 0;

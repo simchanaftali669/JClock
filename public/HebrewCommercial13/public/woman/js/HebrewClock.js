@@ -280,7 +280,7 @@ function clock() {
 
 function display_time()
 {
-	    //---dispaying the clock---
+	//---dispaying the clock---
     if (lbSecond < 10)
         document.getElementById("Second").value = "0" + lbSecond;
     else
