@@ -21,17 +21,17 @@ function hebrewclock_man()
 
 	if(true || birthHour == null)
     {
-		let h = date.getHours();
-		let m = date.getMinutes();
-		let s = date.getSeconds();
-		let milisec = date.getMilliseconds();
+		h = date.getHours();
+		m = date.getMinutes();
+		s = date.getSeconds();
+		milisec = date.getMilliseconds();
 	}
 	else
 	{
-		let h = birthHour;
-		let m = birthMin;
-		let s = 0;
-		let milisec = 0;		
+		h = birthHour;
+		m = birthMin;
+		s = 0;
+		milisec = 0;		
 	}
 	let curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
 	
@@ -53,11 +53,11 @@ function hebrewclock_man()
 		second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
 	    
 		lbHour4Man = hour+12;
-		document.getElementById("Hour").value = hour;
+		//document.getElementById("Hour").value = hour;
 		lbMinute4Man = minute;
-		document.getElementById("Minute").value = lbMinute4Man;
+		//document.getElementById("Minute").value = lbMinute4Man;
 		lbSecond4Man = second;
-		document.getElementById("Second").value = lbSecond4Man;
+		//document.getElementById("Second").value = lbSecond4Man;
 	}
 	//case 2:
 	//moonrise at 06:57 and moonset at 17:17
@@ -72,11 +72,11 @@ function hebrewclock_man()
 		second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
 	    
 		lbHour4Man = hour;
-		document.getElementById("Hour").value = hour;
+		//document.getElementById("Hour").value = hour;
 		lbMinute4Man = minute;
-		document.getElementById("Minute").value = lbMinute4Man;
+		//document.getElementById("Minute").value = lbMinute4Man;
 		lbSecond4Man = second;
-		document.getElementById("Second").value = lbSecond4Man;
+		//document.getElementById("Second").value = lbSecond4Man;
 	}
 	//case 3:
 	//moonrise at 06:57 and moonset at 17:17
@@ -91,11 +91,11 @@ function hebrewclock_man()
 		second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
 	    
 		lbHour4Man = hour;
-		document.getElementById("Hour").value = hour;
+		//document.getElementById("Hour").value = hour;
 		lbMinute4Man = minute;
-		document.getElementById("Minute").value = lbMinute4Man;
+		//document.getElementById("Minute").value = lbMinute4Man;
 		lbSecond4Man = second;
-		document.getElementById("Second").value = lbSecond4Man;
+		//document.getElementById("Second").value = lbSecond4Man;
 	}
 	//month days 07-23	
 	//moonrise at 13:05 and moonset at 00:00
@@ -110,11 +110,11 @@ function hebrewclock_man()
 		second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
 	    
 		lbHour4Man = hour;
-		document.getElementById("Hour").value = hour;
+		//document.getElementById("Hour").value = hour;
 		lbMinute4Man = minute;
-		document.getElementById("Minute").value = lbMinute4Man;
+		//document.getElementById("Minute").value = lbMinute4Man;
 		lbSecond4Man = second;
-		document.getElementById("Second").value = lbSecond4Man;
+		//document.getElementById("Second").value = lbSecond4Man;
 	}
 	//case 2:
 	//moonrise at 13:05 and moonset at 00:00
@@ -129,11 +129,11 @@ function hebrewclock_man()
 		second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
 	    
 		lbHour4Man = hour + 12;
-		document.getElementById("Hour").value = hour;
+		//document.getElementById("Hour").value = hour;
 		lbMinute4Man = minute;
-		document.getElementById("Minute").value = lbMinute4Man;
+		//document.getElementById("Minute").value = lbMinute4Man;
 		lbSecond4Man = second;
-		document.getElementById("Second").value = lbSecond4Man;
+		//document.getElementById("Second").value = lbSecond4Man;
 	}
 	//case 3:
 	//moonrise at 13:05 and moonset at 00:00
@@ -148,11 +148,11 @@ function hebrewclock_man()
 		second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
 	    
 		lbHour4Man = hour +12 ;
-		document.getElementById("Hour").value = hour;
+		//document.getElementById("Hour").value = hour;
 		lbMinute4Man = minute;
-		document.getElementById("Minute").value = lbMinute4Man;
+		//document.getElementById("Minute").value = lbMinute4Man;
 		lbSecond4Man = second;
-		document.getElementById("Second").value = lbSecond4Man;		
+		//document.getElementById("Second").value = lbSecond4Man;		
 	}
 }
 

@@ -5,8 +5,10 @@ function hebrewDayOffset()
 	setmazal_man();
 
 	
-	//console.log(lbHour);
-	//console.log(lbHour_man);
+	//console.log("lbHour - " + lbHour);
+	//console.log("lbHour4Man - " + lbHour4Man);
+	
+	//consolge.log(hebrewday_man)
 	
 	//Man is leading
 	if((hebrewday > hebrewday_man) || (hebrewday == 1 && hebrewday_man == 7))
