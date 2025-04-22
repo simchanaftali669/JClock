@@ -21,6 +21,23 @@ html, body {
 	border: none; /* Remove border for seamless look */
 }
 
+#current_location {
+    position: fixed;
+    top: 350px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    background-color: #6c757d; /* אפור bootstrap */
+    color: white; /* טקסט לבן */
+    border: none; /* ללא גבול */
+}
+
+#current_location:hover {
+    background-color: #5a6268; /* אפור כהה יותר ב-hover */
+}
 
 #commercial
 {

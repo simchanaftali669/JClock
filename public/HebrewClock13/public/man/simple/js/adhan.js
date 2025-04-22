@@ -340,13 +340,14 @@
 
         // Methods
 
-        this.hourAngle = function(angle, afterTransit) {
-            return Astronomical.correctedHourAngle(this.approxTransit, angle, this.observer, afterTransit, this.solar.apparentSiderealTime,
-                this.solar.rightAscension, this.prevSolar.rightAscension, this.nextSolar.rightAscension,
-                this.solar.declination, this.prevSolar.declination, this.nextSolar.declination);
-        };
+		this.hourAngle = function(angle, afterTransit) {
+			return Astronomical.correctedHourAngle(this.approxTransit, angle, this.observer, afterTransit, this.solar.apparentSiderealTime,
+				this.solar.rightAscension, this.prevSolar.rightAscension, this.nextSolar.rightAscension,
+				this.solar.declination, this.prevSolar.declination, this.nextSolar.declination);
+		};
 
         this.afternoon = function(shadowLength) {
+			//console.log("this.solar.declination : " + this.solar.declination);
             // TODO source shadow angle calculation
             var tangent = Math.abs(this.observer.latitude - this.solar.declination);
             var inverse = shadowLength + Math.tan(degreesToRadians(tangent));

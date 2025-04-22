@@ -13,6 +13,7 @@
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
     <title>Hebrew Commercial</title> 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">
 	<link rel="stylesheet" type="text/css" href="css/commercialstylesheet.css" id="commercial_css"> 
     <meta charset="UTF-8">
@@ -21,15 +22,53 @@
     <meta name="author" content="simchanaftali Bilig">
 </head>
 
-<body id="youtube" onclick="showBackground();">
+<body>
 	
 	<div id="iframe-container">
 		<iframe id="commercial_woman" src="../woman/simple/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
+			<button 
+				class="btn btn-lg rounded-pill shadow" 
+				onclick="updateLocation()" 
+				id="current_location">
+			</button>
 		<iframe id="commercial_man" src="../man/simple/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
 	</div>
 
 	
 <script type="text/javascript">
+
+	//return;
+	let userLang = navigator.language || navigator.userLanguage; 
+	if (userLang.includes("he")) 
+		document.getElementById("current_location").innerText  = "מיקום נוכחי";
+	else
+		document.getElementById("current_location").innerText  = "current location";		
+	
+	function updateLocation() 
+	{
+		if (navigator.geolocation) 
+		{
+			navigator.geolocation.getCurrentPosition(function(position) 
+			{
+				var newLat = position.coords.latitude;
+				var newLng = position.coords.longitude;
+
+				var womanIframe = document.getElementById("commercial_woman");
+				var manIframe = document.getElementById("commercial_man");
+
+				womanIframe.src = "../woman/simple/index.html?latitude=" + newLat + "&longitude=" + newLng;
+				manIframe.src = "../man/simple/index.html?latitude=" + newLat + "&longitude=" + newLng;
+				
+			}, function(error) {
+				alert("שגיאה בקבלת מיקום: " + error.message);
+			});
+		} 
+		else 
+		{
+			alert("הדפדפן לא תומך ב-GPS");
+		}
+	}
+	
 
     //public variables
     var longitude, latitude;  //current geo location
