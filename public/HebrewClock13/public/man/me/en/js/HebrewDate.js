@@ -123,7 +123,7 @@ function countHebrewMonths(fromDate, toDate, period) {
     let fromHebrew = getHebrewDate(fromDate);
     
 	let toHebrew = getHebrewDate(toDate);
-	if(toHebrew.date == "30");
+	if(toHebrew.date == "30")
 	{
 		toDate.setDate(toDate.getDate()+1);
 		toHebrew = getHebrewDate(toDate);
@@ -576,6 +576,9 @@ function hebrewDate(inputDateOrYear, inputMonth, inputDate, inputLang) {
     }
 
     SdnToHebrew(GregorianToSdn(inputYear, inputMonth, inputDate));
+
+    if (mpy[(hebrewYear - 1) % 19] !== 13 && hebrewMonth >= 8)
+        hebrewMonth--;
 
 	if(inputLang == "English")
 		return {
