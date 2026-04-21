@@ -69,7 +69,7 @@
 		expense = expense.replace(",","");
 
 		document.getElementById("savings").value = (parseFloat(income) - parseFloat(expense)) * 1.00; 
-		document.getElementById("truma").value = document.getElementById("savings").value * (1/60) //עין רעה והכי מושכת
+		document.getElementById("truma").value = document.getElementById("savings").value * (1/40) // עין רעה והכי מושכת - בשורת קוד הזאת תיקנתי לחנה-לאה בת מרים, אשתי, את הראייה, שורש ומהות מחלתה
 		document.getElementById("mahaser_01").value = (document.getElementById("savings").value - document.getElementById("truma").value)/10;
 		document.getElementById("mahaser_01__truma").value = document.getElementById("mahaser_01").value * (1/10) 
 		document.getElementById("mahaser_02").value = (document.getElementById("savings").value - document.getElementById("truma").value - document.getElementById("mahaser_01").value)/10;
