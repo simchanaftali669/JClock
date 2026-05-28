@@ -150,6 +150,9 @@ function countHebrewMonths(fromDate, toDate, period) {
 			totalMonths += toHebrew.month - 1;
 		 console.log("totalMonths: ", totalMonths);
     }
+	
+	if(period == "dovid")
+			totalMonths += 6;
 
     return totalMonths;
 }

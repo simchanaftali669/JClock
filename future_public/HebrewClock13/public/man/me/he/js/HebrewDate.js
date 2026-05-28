@@ -118,41 +118,44 @@ function getHebrewDate(gregorianDate) {
     return hebrewDate(gregorianDate.getFullYear(), gregorianDate.getMonth() + 1, gregorianDate.getDate(), "English");
 }
 
-// Function to calculate the number of Hebrew months between two Hebrew dates
-function countHebrewMonths(fromDate, toDate, period) {
-    let fromHebrew = getHebrewDate(fromDate);
-	let toHebrew = getHebrewDate(toDate);
-	if(toHebrew.date == "ל'")
-	{
-		toDate.setDate(toDate.getDate()+1);
-		toHebrew = getHebrewDate(toDate);
+	// Function to calculate the number of Hebrew months between two Hebrew dates
+	function countHebrewMonths(fromDate, toDate, period) {
+		let fromHebrew = getHebrewDate(fromDate);
+		let toHebrew = getHebrewDate(toDate);
+		if(toHebrew.date == "ל'")
+		{
+			toDate.setDate(toDate.getDate()+1);
+			toHebrew = getHebrewDate(toDate);
+		}
+
+		if(period == "yovel")
+			toHebrew.year = toHebrew.year - toHebrew.year%49 + 1
+
+		let totalMonths = 0;
+
+		if (fromHebrew.year === toHebrew.year) {
+			totalMonths = fromHebrew.month - toHebrew.month;
+		} else {
+			// Count the months remaining in the first year
+			totalMonths += (isHebrewLeapYear(fromHebrew.year) ? 13 : 12);// - fromHebrew.month;
+			console.log("totalMonths: ", totalMonths);
+			// Count the months in the years between the first and last year
+			for (let year = fromHebrew.year + 1; year < toHebrew.year; year++) {
+				totalMonths += isHebrewLeapYear(year) ? 13 : 12;
+			}
+			 console.log("totalMonths: ", totalMonths);
+			 console.log("toHebrew.month: ", toHebrew.month);
+			// Count the months in the last year
+			if(period == "month")
+				totalMonths += toHebrew.month - 1;
+			 console.log("totalMonths: ", totalMonths);
+		}
+
+		if(period == "dovid")
+			totalMonths += 6;
+
+		return totalMonths;
 	}
-
-	if(period == "yovel")
-		toHebrew.year = toHebrew.year - toHebrew.year%49 + 1
-
-    let totalMonths = 0;
-
-    if (fromHebrew.year === toHebrew.year) {
-        totalMonths = fromHebrew.month - toHebrew.month;
-    } else {
-        // Count the months remaining in the first year
-        totalMonths += (isHebrewLeapYear(fromHebrew.year) ? 13 : 12);// - fromHebrew.month;
-        console.log("totalMonths: ", totalMonths);
-		// Count the months in the years between the first and last year
-        for (let year = fromHebrew.year + 1; year < toHebrew.year; year++) {
-            totalMonths += isHebrewLeapYear(year) ? 13 : 12;
-        }
-		 console.log("totalMonths: ", totalMonths);
-		 console.log("toHebrew.month: ", toHebrew.month);
-        // Count the months in the last year
-        if(period == "month")
-			totalMonths += toHebrew.month - 1;
-		 console.log("totalMonths: ", totalMonths);
-    }
-
-    return totalMonths;
-}
 
 
 	function getCurrentMazal(period)

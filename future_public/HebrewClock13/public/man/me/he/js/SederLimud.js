@@ -203,7 +203,12 @@ function sederLimud(learningMethod)
 		{
 			let monthMazal = getCurrentMazal("month");
 			document.location.href = "./index.html?period=month&hebrewDay=" + monthMazal[0] + "&hebrewHour=" + monthMazal[1] + "&hebrewChelek=" + monthMazal[2] + location + religionAndParm;		
-		}				
+		}		
+		else if(learningMethod == "Dovid" || period.includes("Dovid"))
+		{
+			let monthMazal = getCurrentMazal("dovid");
+			document.location.href = "./index.html?period=dovid&hebrewDay=" + monthMazal[0] + "&hebrewHour=" + monthMazal[1] + "&hebrewChelek=" + monthMazal[2] + location + religionAndParm;		
+		}			
 	}
 	
 	showMasechet = true;
