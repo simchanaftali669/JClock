@@ -1,1 +1,0 @@
-use this apk for activate locally without internet connection
