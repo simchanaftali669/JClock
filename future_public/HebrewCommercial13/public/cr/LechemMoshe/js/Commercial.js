@@ -1,6 +1,6 @@
 ﻿//Commercial_manually
 //need to set each commercial publish keys based on it goal
-//s is "shevetLocation", d is "day of week" between 1-7, h is "hour" between 00 and 23, p meaning is "priority" counter set from min 0001 to max 1080 
+//s is "shevetLocation", d is "day of week" between 1-7, h is "hour" between 01 and 24, p meaning is "priority" counter set from min 0001 to max 1080 
 var cInRegionAtTime = new Map();
 const commercials = 
 {"Soteria":"s_xx#d_xx__h_xx__p_1+","IDF":"s_xx#d_xx__h_xx__p_1+"};
@@ -17,7 +17,7 @@ function initMap()
     {
         for(var dayIdx=1; dayIdx<=7; dayIdx++)
         {
-            for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+            for(var timeIdx = 1; timeIdx<=24; timeIdx++)
             {
                 regionIdxValue = (regionIdx <= 9) ? "0" + regionIdx : String(regionIdx);
                 dayIdxValue = "0" + dayIdx;
@@ -69,7 +69,7 @@ function initCommercials()
                         if(dayIdx == 6 && dayValue == "0x" )//"0x means 01-05 only, not 06"
                             break;
                             
-                        for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+                        for(var timeIdx = 1; timeIdx<=24; timeIdx++)
                         {
                             regionIdxValue = (regionIdx <= 9) ? "0" + regionIdx : String(regionIdx);
                             dayIdxValue = "0" + dayIdx;
@@ -98,7 +98,7 @@ function initCommercials()
             {
                 for(var regionIdx = 1; regionIdx<=12; regionIdx++)
                 {
-                    for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+                    for(var timeIdx = 1; timeIdx<=24; timeIdx++)
                     {
                         regionIdxValue = (regionIdx <= 9) ? "0" + regionIdx : String(regionIdx);
                         timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
@@ -121,7 +121,7 @@ function initCommercials()
                     if(dayIdx == 6 && dayValue == "0x" )//"0x means 01-05 only, not 06"
                         break;
 
-                    for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+                    for(var timeIdx = 1; timeIdx<=24; timeIdx++)
                     {
                         dayIdxValue = "0" + dayIdx;
                         var timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
@@ -144,7 +144,7 @@ function initCommercials()
             else if(regionValue != "xx" && dayValue != "xx" && timeValue == "xx")
             {
 
-                for(var timeIdx = 0; timeIdx<=23; timeIdx++)
+                for(var timeIdx = 1; timeIdx<=24; timeIdx++)
                 {
                     var timeIdxValue = (timeIdx <= 9) ? "0" + timeIdx : String(timeIdx);
                     insertCommercialsIntoSlot(commercial,regionValue,dayValue,timeIdxValue,priority)
@@ -193,7 +193,8 @@ function commercialFunction()
     //need to get the list of commercials in this {region,omer} slot.
     regionValue = (Number(shevetLocation) <= 9) ? "0" + Number(shevetLocation) : shevetLocation;
     dayValue = "0" + hebrewday;
-    timeValue = (lbHour <= 9) ? "0" + lbHour : String(lbHour);
+    var commercialHour = Number(lbHour) + 1;
+    timeValue = (commercialHour <= 9) ? "0" + commercialHour : String(commercialHour);
  
     //string of 6 characters ==> {rrddtt};
     var regionAtDayTime = regionValue + dayValue + timeValue;

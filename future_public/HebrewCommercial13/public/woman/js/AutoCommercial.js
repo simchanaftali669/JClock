@@ -84,18 +84,11 @@ function createCommercialSlots(hours, priority)
 {
 	var slots = '';
 
-	for(var region = 1; region <= 12; region++)
+	for(var hourIdx = 0; hourIdx < hours.length; hourIdx++)
 	{
-		for(var day = 1; day <= 6; day++)
-		{
-			for(var hourIdx = 0; hourIdx < hours.length; hourIdx++)
-			{
-				slots += 's_' + twoDigits(region) +
-					'#d_' + twoDigits(day) +
-					'__h_' + twoDigits(hours[hourIdx]) +
-					'__p_' + priority + '+';
-			}
-		}
+		slots += 's_xx#d_xx' +
+			'__h_' + twoDigits(hours[hourIdx]) +
+			'__p_' + priority + '+';
 	}
 
 	return slots;
@@ -103,22 +96,22 @@ function createCommercialSlots(hours, priority)
 
 function getAllHours()
 {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 }
 
 function getEatHours()
 {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 19, 20, 21, 22, 23];
+	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23, 24];
 }
 
 function getDrinkHours()
 {
-	return [12, 13, 14, 15, 16, 17];
+	return [13, 14, 15, 16, 17, 18];
 }
 
 function getMeetHours()
 {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 19, 20, 21, 22, 23];
+	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 21, 22, 23, 24];
 }
 
 function twoDigits(value)

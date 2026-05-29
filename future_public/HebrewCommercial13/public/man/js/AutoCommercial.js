@@ -96,22 +96,22 @@ function createCommercialSlots(hours, priority)
 
 function getAllHours()
 {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 }
 
 function getEatHours()
 {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 19, 20, 21, 22, 23];
+	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23, 24];
 }
 
 function getDrinkHours()
 {
-	return [12, 13, 14, 15, 16, 17];
+	return [13, 14, 15, 16, 17, 18];
 }
 
 function getMeetHours()
 {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 19, 20, 21, 22, 23];
+	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 21, 22, 23, 24];
 }
 
 function twoDigits(value)
