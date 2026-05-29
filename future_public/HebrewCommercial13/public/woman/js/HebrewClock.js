@@ -297,34 +297,47 @@ function markTime()
 
 function ReCalcCommercialToPeriod(intialize)
 {
+	var commercialHour = getCommercialPeriodHour();
+	var commercialMinute = getCommercialPeriodMinute();
+
 	if(intialize)
 	{
 	//תחילת הלילה לדעת ר' יהודה
-	if((lbHour >= 22 && lbMinute >= 810) ||
-	   (lbHour >= 23) ||
-	   (lbHour >= 0 && lbHour < 6))
+	if((commercialHour >= 22 && commercialMinute >= 810) ||
+	   (commercialHour >= 23) ||
+	   (commercialHour >= 0 && commercialHour < 6))
 		ReCalcCommercial("yovel");
 	//חצות הלילה
-	else if(lbHour >= 6 && lbHour < 12)
+	else if(commercialHour >= 6 && commercialHour < 12)
 		ReCalcCommercial("Dovid");
 	// זריחה
-	else if(lbHour >= 12 && lbHour <= 18)
+	else if(commercialHour >= 12 && commercialHour < 18)
 		ReCalcCommercial("month");
 	// חצות היום
-	else if(lbHour > 18)
+	else if(commercialHour >= 18)
 		ReCalcCommercial("year");		
 	}
 	
 	//תחילת הלילה לדעת ר' יהודה
-	if(lbHour == 22 && lbMinute == 810)
+	if(commercialHour == 22 && commercialMinute == 810)
 		ReCalcCommercial("yovel");
 	//חצות הלילה
-	else if(lbHour == 6 && lbMinute == 0)
+	else if(commercialHour == 6 && commercialMinute == 0)
 		ReCalcCommercial("Dovid");
 	// זריחה
-	else if(lbHour == 12 && lbMinute == 0)
+	else if(commercialHour == 12 && commercialMinute == 0)
 		ReCalcCommercial("month");
 	// חצות היום
-	else if(lbHour == 18 && lbMinute == 0)
+	else if(commercialHour == 18 && commercialMinute == 0)
 		ReCalcCommercial("year");
+}
+
+function getCommercialPeriodHour()
+{
+	return Number(lbHour);
+}
+
+function getCommercialPeriodMinute()
+{
+	return Number(lbMinute);
 }

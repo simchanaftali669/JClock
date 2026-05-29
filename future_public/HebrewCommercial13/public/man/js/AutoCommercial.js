@@ -8,7 +8,7 @@ function ReCalcCommercial(period)
 	var normalizedPeriod = String(period).toLowerCase();
 	var mazal = getCurrentMazal(normalizedPeriod);
 	var hebrewDay = Number(mazal[0]);
-	var hebrewHour = Number(mazal[1]);
+	var hebrewHour = getMoladHourForMazal(mazal[1], normalizedPeriod);
 	var hourMazal = calculateMazal(hebrewDay, hebrewHour);
 	var nextCommercials = buildCommercialsByMolad(hebrewDay, hourMazal);
 
@@ -83,12 +83,16 @@ function applyCommercials(nextCommercials)
 function createCommercialSlots(hours, priority)
 {
 	var slots = '';
+	var days = ['xx', '07'];
 
 	for(var hourIdx = 0; hourIdx < hours.length; hourIdx++)
 	{
-		slots += 's_xx#d_xx' +
-			'__h_' + twoDigits(hours[hourIdx]) +
-			'__p_' + priority + '+';
+		for(var dayIdx = 0; dayIdx < days.length; dayIdx++)
+		{
+			slots += 's_xx#d_' + days[dayIdx] +
+				'__h_' + twoDigits(hours[hourIdx]) +
+				'__p_' + priority + '+';
+		}
 	}
 
 	return slots;
@@ -106,7 +110,7 @@ function getEatHours()
 
 function getDrinkHours()
 {
-	return [13, 14, 15, 16, 17, 18];
+	return getAllHours();
 }
 
 function getMeetHours()
@@ -118,6 +122,21 @@ function twoDigits(value)
 {
 	value = Number(value);
 	return value <= 9 ? '0' + value : String(value);
+}
+
+function getMoladHourForMazal(displayHour, period)
+{
+	if(period == 'month' || period == 'year')
+		return Number(displayHour);
+
+	var moladHour = Number(displayHour) - 1;
+
+	if(moladHour == 0)
+		moladHour = 1;
+	else if(moladHour < 0)
+		moladHour += 24;
+
+	return moladHour;
 }
 
 function calculateMazal(hebrewDay, hebrewHour)
