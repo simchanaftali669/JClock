@@ -192,10 +192,10 @@ function setmazal() {
 
 		console.log(shevetHour_str);
 
-		var shevet__mida1 = ["Dummy","Thought", "Confidence", "Surrender", "Faith", "Willingness", "Self_Control", "Relationship(give)","Relationship(receive)","Majesty", "Connection","Truth-Balance","Love(Wisdom)"];
-        var shevet__mida2 = ["Dummy","Faith", "Willingness", "Wisdom","Thought","connection","Love", "Self_Control","Truth-Balance", "Confidence", "Surrender","Relationship","Majesty",];
-        var shevet1 = ["Dummy","Yehuda", "Yissachar", "Zevulun", "Reuven", "Shimon", "Gad", "Ephraim","Menashe","Benjamin","Dan","Asher","Naftali(Levi)"];
-        var shevet2 = ["Dummy","Reuven", "Shimon", "Levi","Yehuda","Dan","Naftali","Gad","Asher","Yissachar", "Zevulun","Yosef","Benjamin"];
+		var shevet__mida2 = ["Dummy","Thought", "Confidence", "Surrender", "Faith", "Willingness", "Self_Control", "Relationship(give)","Relationship(receive)","Majesty", "Connection","Truth-Balance","Love(Wisdom)"];
+        var shevet__mida1 = ["Dummy","Faith", "Willingness", "Wisdom","Thought","connection","Love", "Self_Control","Truth-Balance", "Confidence", "Surrender","Relationship","Majesty",];
+        var shevet2 = ["Dummy","Yehuda", "Yissachar", "Zevulun", "Reuven", "Shimon", "Gad", "Ephraim","Menashe","Benjamin","Dan","Asher","Naftali(Levi)"];
+        var shevet1 = ["Dummy","Reuven", "Shimon", "Levi","Yehuda","Dan","Naftali","Gad","Asher","Yissachar", "Zevulun","Yosef","Benjamin"];
   
 		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[shevetHour] + " in " + shevet2[shevetHour];
         document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
