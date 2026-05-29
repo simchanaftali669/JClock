@@ -137,6 +137,7 @@ function hebrewclock()
 		document.getElementById("Second").value = lbSecond;		
 	}
 
+	ReCalcCommercialToPeriod(true);
 	display_time();
 	markTime();
 	
@@ -292,4 +293,38 @@ function markTime()
 		document.getElementById("Text4").style.color = "#5DBCD2";
 		document.getElementById("Second").style.color = "#5DBCD2";	
 	}
+}
+
+function ReCalcCommercialToPeriod(intialize)
+{
+	if(intialize)
+	{
+	//תחילת הלילה לדעת ר' יהודה
+	if((lbHour >= 22 && lbMinute >= 810) ||
+	   (lbHour >= 23) ||
+	   (lbHour >= 0 && lbHour < 6))
+		ReCalcCommercial("yovel");
+	//חצות הלילה
+	else if(lbHour >= 6 && lbHour < 12)
+		ReCalcCommercial("Dovid");
+	// זריחה
+	else if(lbHour >= 12 && lbHour <= 18)
+		ReCalcCommercial("month");
+	// חצות היום
+	else if(lbHour > 18)
+		ReCalcCommercial("year");		
+	}
+	
+	//תחילת הלילה לדעת ר' יהודה
+	if(lbHour == 22 && lbMinute == 810)
+		ReCalcCommercial("yovel");
+	//חצות הלילה
+	else if(lbHour == 6 && lbMinute == 0)
+		ReCalcCommercial("Dovid");
+	// זריחה
+	else if(lbHour == 12 && lbMinute == 0)
+		ReCalcCommercial("month");
+	// חצות היום
+	else if(lbHour == 18 && lbMinute == 0)
+		ReCalcCommercial("year");
 }

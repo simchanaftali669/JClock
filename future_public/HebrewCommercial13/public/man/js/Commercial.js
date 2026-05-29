@@ -4,6 +4,8 @@
 //hour: xx ==> 0-23; dd==>23-9 || 12-18; ee==>23-9 || 17 ; em==> 23-9
 
 var cInRegionAtTime = new Map();
+
+/*
 const commercials = 
 {
     Drink_01: 's_xx#d_xx__h_06__p_0720+s_xx#d_xx__h_07__p_0720+s_xx#d_xx__h_08__p_0720+s_xx#d_xx__h_09__p_0720+s_xx#d_xx__h_10__p_0720+s_xx#d_xx__h_11__p_0720+s_xx#d_xx__h_19__p_0720+s_xx#d_xx__h_20__p_0720+s_xx#d_xx__h_21__p_0720+s_xx#d_xx__h_22__p_0720+s_xx#d_xx__h_23__p_0720+s_xx#d_xx__h_24__p_0720+',
@@ -30,7 +32,7 @@ const commercials =
 	Meet_05: '',
 	Meet_07: ''
 };
-
+*/
 
 //d_xx ==> xx means 01-06
 //d_0x ==> 0x means 01-05

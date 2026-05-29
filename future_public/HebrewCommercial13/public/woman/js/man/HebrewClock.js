@@ -212,8 +212,16 @@ function display_time4Man()
 	
 }
 
-function markTime()
-{	
+function setClockPartColor(elementId, color)
+{
+	var element = document.getElementById(elementId);
+
+	if(element)
+		element.style.color = color;
+}
+
+function markTimeMan()
+{
 	//console.log("curr_hour: " + curr_hour);
 	//console.log("tzeit: " + tzeit);
 	//console.log("misheyakir: " + misheyakir);
@@ -223,20 +231,24 @@ function markTime()
 	if(curr_hour > tzeit  || 
 	   curr_hour < misheyakir)
 	{
-		document.getElementById("Hour").style.color = "#878787";
-		document.getElementById("HebrewText2").style.color = "#878787";
-		document.getElementById("Minute").style.color = "#878787";
-		document.getElementById("HebrewText4").style.color = "#878787";
-		document.getElementById("Second").style.color = "#878787";
+		setClockPartColor("Hour", "#878787");
+		setClockPartColor("HebrewText2", "#878787");
+		setClockPartColor("Text2", "#878787");
+		setClockPartColor("Minute", "#878787");
+		setClockPartColor("HebrewText4", "#878787");
+		setClockPartColor("Text4", "#878787");
+		setClockPartColor("Second", "#878787");
 	}
 	else if(curr_hour < sunset && 
 			curr_hour > misheyakir/*curr_hour.toDouble() > sunrise_hour.toDouble()*/ )
 	{
-		document.getElementById("Hour").style.color = "#5DBCD2";
-		document.getElementById("HebrewText2").style.color = "#5DBCD2";
-		document.getElementById("Minute").style.color = "#5DBCD2";
-		document.getElementById("HebrewText4").style.color = "#5DBCD2";
-		document.getElementById("Second").style.color = "#5DBCD2";
+		setClockPartColor("Hour", "#5DBCD2");
+		setClockPartColor("HebrewText2", "#5DBCD2");
+		setClockPartColor("Text2", "#5DBCD2");
+		setClockPartColor("Minute", "#5DBCD2");
+		setClockPartColor("HebrewText4", "#5DBCD2");
+		setClockPartColor("Text4", "#5DBCD2");
+		setClockPartColor("Second", "#5DBCD2");
 
 
 		//if(curr_hour.toDouble() < sunrise_hour.toDouble() || lbHour4Man.toNumber() < 6)
@@ -251,8 +263,10 @@ function markTime()
 		//}			
 	}
 	//return;
-	document.getElementById("HebrewText2").style.color = "#878787";
-	document.getElementById("HebrewText4").style.color = "#878787";
+	setClockPartColor("HebrewText2", "#878787");
+	setClockPartColor("Text2", "#878787");
+	setClockPartColor("HebrewText4", "#878787");
+	setClockPartColor("Text4", "#878787");
 
 
 	if(curr_hour > sunset  || 
