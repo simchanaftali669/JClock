@@ -1,12 +1,15 @@
 # JClock
 
-JClock is a Firebase-hosted collection of Hebrew clock, schedule, and related
-calendar tools. The public site combines HebrewClock13 with HebrewCommercial13
-and includes additional static pages such as schedules and mahasrot pages.
+JClock is a Jerusalem-based Hebrew clock and calendar site. It presents Hebrew
+time, calendar information, schedules, and related tools in one Firebase-hosted
+static site.
 
 By default, JClock is centered on Jerusalem. Users can also choose or allow their
-current location so the clock and time-based calculations can reflect where they
+current location so the clock and time-based calculations reflect where they
 are.
+
+The main JClock page combines the Hebrew clock display with the commercial and
+schedule views used by the site.
 
 The project is shared so people can use, study, and preserve the Hebrew time and
 calendar information it contains.
@@ -14,14 +17,14 @@ calendar information it contains.
 ## Live Pages
 
 - Main site: https://jclock126.web.app
-- HebrewClock13 family view: https://jclock126.web.app/HebrewClock13/public/family
-- HebrewCommercial13 family view: https://jclock126.web.app/HebrewCommercial13/public/family
+- Hebrew clock view: https://jclock126.web.app/HebrewClock13/public/family
+- Commercial display view: https://jclock126.web.app/HebrewCommercial13/public/family
 - Hebrew schedule: https://jclock126.web.app/HebrewSchedule13/public
 
 ## Project Structure
 
 - `public/` - Firebase Hosting root.
-- `public/index.html` - Main JClock page that embeds HebrewClock13 and HebrewCommercial13.
+- `public/index.html` - Main JClock page.
 - `public/HebrewClock13/` - Hebrew clock pages and assets.
 - `public/HebrewCommercial13/` - Hebrew commercial display subproject.
 - `public/HebrewSchedule13/` - Hebrew schedule pages.
