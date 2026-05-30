@@ -21,6 +21,11 @@ designed to calculate solar and lunar positions and times. This project focuses
 on bug fixes and enhancements to better serve developers and communities relying
 on precise astronomical calculations.
 
+The project uses SunCalc-based code as the foundation for calculating the sun
+and moon times used by JClock. The lunar-time calculations were adapted and
+corrected as part of this project so they can better support the Hebrew clock,
+calendar, and schedule use cases.
+
 ## Motivation
 
 This project was improved to honor the connection between technology and
@@ -30,6 +35,8 @@ the values of innovation and divine guidance.
 ## Key Features
 
 - Accurate solar and lunar position calculations.
+- Moon-time calculations based on the SunCalc library, with project-specific
+  corrections and improvements.
 - Bug fixes and optimizations to the original SunCalc library.
 - Support for additional use cases and configurations.
 
