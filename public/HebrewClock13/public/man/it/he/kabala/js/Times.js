@@ -166,23 +166,42 @@ function doit() {
         var isNight = curr_hour > sunset_hour || curr_hour < sunrise_hour;
         var isDay = !isNight;
 
-        //console.log(hebrewday);
-        for(var i=0; i<=11 ; i++)
-        {
-            //console.log("entered")
-            var hour_label = document.getElementById("hour_" + parseInt(i+1) + "__label");
-            var hour_value = document.getElementById("hour_" + parseInt(i+1) + "__value");
-            if(isDay)
-            {
-                hour_label.value = "תפילת " + mazal_ordered[(mazal_day_01[hebrewday-1] + i)%7];
-                hour_value.value = timeadj(s2 + shaa_zmanit_day*parseInt(i), ampm);
-            }
-            else
-            {
-                hour_label.value = "תפילת " + mazal_ordered[(mazal_night_01[hebrewday-1] + i)%7];
-                hour_value.value = timeadj(s1 + shaa_zmanit_night*parseInt(i), ampm);
-            }
+        ensureScheduleHourRows(36);
 
+        var currentHebrewDay = normalizeHebrewDay(hebrewday || (today.getDay() + 1));
+        var sunrise_yasterdate = time_yasterday[2];
+        var scheduleSegments;
+
+        if (isDay) {
+            scheduleSegments = [
+                { start: sunset_yasterdate, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay },
+                { start: sunrise, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay },
+                { start: sunset, hourLength: Math.abs((sunrise_tommorow + (24 - sunset)) / 12), isDay: false, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1) }
+            ];
+        }
+        else if (curr_hour > sunset_hour) {
+            scheduleSegments = [
+                { start: sunrise, hourLength: Math.abs((sunset - sunrise) / 12), isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay - 1) },
+                { start: sunset, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay },
+                { start: sunrise_tommorow, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay }
+            ];
+        }
+        else {
+            scheduleSegments = [
+                { start: sunrise_yasterdate, hourLength: Math.abs((sunset_yasterdate - sunrise_yasterdate) / 12), isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay - 1) },
+                { start: sunset_yasterdate, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay },
+                { start: sunrise, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay }
+            ];
+        }
+
+        for (var segmentIndex = 0; segmentIndex < scheduleSegments.length; segmentIndex++) {
+            renderScheduleSegment(
+                (segmentIndex * 12) + 1,
+                scheduleSegments[segmentIndex],
+                mazal_ordered,
+                mazal_day_01,
+                mazal_night_01
+            );
         }
 
 
@@ -236,4 +255,103 @@ function doit() {
 
     return hour;
 
+}
+
+function ensureScheduleHourRows(totalHours) {
+    for (var i = 13; i <= totalHours; i++) {
+        if (document.getElementById("hour_" + i + "__value")) {
+            continue;
+        }
+
+        var previousIndex = document.getElementById("hour_" + (i - 1) + "_idx");
+        if (!previousIndex) {
+            return;
+        }
+
+        var row = document.createElement("div");
+        row.style.textAlign = "center";
+
+        var valueInput = document.createElement("input");
+        valueInput.id = "hour_" + i + "__value";
+        valueInput.className = "zmanim_hour";
+        valueInput.type = "text";
+
+        var labelInput = document.createElement("input");
+        labelInput.id = "hour_" + i + "__label";
+        labelInput.className = "zmanim_text";
+        labelInput.type = "text";
+
+        var indexInput = document.createElement("input");
+        indexInput.id = "hour_" + i + "_idx";
+        indexInput.className = "zmanim_index";
+        indexInput.type = "text";
+        indexInput.value = "(" + i + ")";
+
+        row.appendChild(valueInput);
+        row.appendChild(labelInput);
+        row.appendChild(indexInput);
+
+        previousIndex.parentNode.insertAdjacentElement("afterend", row);
+    }
+}
+
+function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalNight) {
+    var mazalStart = segment.isDay ? mazalDay[segment.hebrewDay - 1] : mazalNight[segment.hebrewDay - 1];
+
+    if (!segment.isDay) {
+        renderNightStartDay(startRow, segment.hebrewDay);
+    }
+
+    for (var i = 0; i < 12; i++) {
+        var rowNumber = startRow + i;
+        var hourLabel = document.getElementById("hour_" + rowNumber + "__label");
+        var hourValue = document.getElementById("hour_" + rowNumber + "__value");
+        var hourIndex = document.getElementById("hour_" + rowNumber + "_idx");
+
+        if (!hourLabel || !hourValue) {
+            continue;
+        }
+
+        hourLabel.value = "תפילת " + mazalOrdered[(mazalStart + i) % 7];
+        hourValue.value = timeadj(segment.start + (segment.hourLength * i), ampm);
+        if (hourIndex) {
+            hourIndex.value = "(" + (i + 1) + ")";
+        }
+    }
+}
+
+function renderNightStartDay(startRow, hebrewDay) {
+    var firstHour = document.getElementById("hour_" + startRow + "__value");
+    if (!firstHour || !firstHour.parentNode) {
+        return;
+    }
+
+    var separatorId = "night_start_day_" + startRow;
+    var separator = document.getElementById(separatorId);
+
+    if (!separator) {
+        var row = document.createElement("div");
+        row.style.textAlign = "center";
+
+        separator = document.createElement("input");
+        separator.id = separatorId;
+        separator.className = "zmanim_text";
+        separator.type = "text";
+        separator.readOnly = true;
+        separator.style.width = "650px";
+
+        row.appendChild(separator);
+        firstHour.parentNode.insertAdjacentElement("beforebegin", row);
+    }
+
+    separator.value = getHebrewWeekdayName(hebrewDay);
+}
+
+function getHebrewWeekdayName(hebrewDay) {
+    var weekdays = ["יום ראשון", "יום שני", "יום שלישי", "יום רביעי", "יום חמישי", "יום שישי", "שבת"];
+    return weekdays[normalizeHebrewDay(hebrewDay) - 1];
+}
+
+function normalizeHebrewDay(day) {
+    return ((day - 1) % 7 + 7) % 7 + 1;
 }
