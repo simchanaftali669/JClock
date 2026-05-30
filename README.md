@@ -1,29 +1,68 @@
-# UseCase
+# JClock
 
-1. HebrewCommercial13 X 2:
--  https://jclock126.web.app/HebrewCommercial13/public/family
-2. HebrewClock13 X 2 only:
--  https://jclock126.web.app/HebrewClock13/public/family
-3. (HebrewCommercial13 X HebrewClock13) X 2:
--  https://JClock126.web.app
+JClock is a Firebase-hosted collection of Hebrew clock, schedule, and related
+calendar tools. The public site combines HebrewClock13 with HebrewCommercial13
+and includes additional static pages such as schedules and mahasrot pages.
 
-# HebrewCommercial13
+By default, JClock is centered on Jerusalem. Users can also choose or allow their
+current location so the clock and time-based calculations can reflect where they
+are.
 
-## About the Project
-HebrewCommercial13 is a modified and improved version of the SunCalc library, designed to calculate solar and lunar positions and times. This project focuses on bug fixes and enhancements to better serve developers and communities relying on precise astronomical calculations.
+The project is shared so people can use, study, and preserve the Hebrew time and
+calendar information it contains.
 
-## Motivation
-This project was improved to honor the connection between technology and spiritual wisdom. I aim to share tools that help the community while reflecting the values of innovation and divine guidance.
+## Live Pages
 
-## Key Features
-- Accurate solar and lunar position calculations.
-- Bug fixes and optimizations to the original SunCalc library.
-- Support for additional use cases and configurations.
+- Main site: https://jclock126.web.app
+- HebrewClock13 family view: https://jclock126.web.app/HebrewClock13/public/family
+- HebrewCommercial13 family view: https://jclock126.web.app/HebrewCommercial13/public/family
+- Hebrew schedule: https://jclock126.web.app/HebrewSchedule13/public
 
-## Acknowledgments
-This project is based on the original [SunCalc](https://github.com/mourner/suncalc) library by Vladimir Agafonkin, licensed under the BSD-2-Clause License. All modifications and improvements were made by Naftali Bilig.
+## Project Structure
+
+- `public/` - Firebase Hosting root.
+- `public/index.html` - Main JClock page that embeds HebrewClock13 and HebrewCommercial13.
+- `public/HebrewClock13/` - Hebrew clock pages and assets.
+- `public/HebrewCommercial13/` - Hebrew commercial display subproject.
+- `public/HebrewSchedule13/` - Hebrew schedule pages.
+- `temp_public/` - Temporary/static pages that are not the active Firebase Hosting root.
+- `firebase.json` - Firebase Hosting configuration.
+- `apphosting.yaml` - Firebase App Hosting/Cloud Run settings.
+
+## Local Use
+
+This is a static site. To preview it locally, serve the repository's `public`
+directory with any static file server, then open the local URL in a browser.
+
+For example:
+
+```sh
+firebase emulators:start --only hosting
+```
+
+or:
+
+```sh
+npx serve public
+```
+
+## Deployment
+
+Firebase Hosting is configured to publish the `public` directory:
+
+```sh
+firebase deploy --only hosting
+```
 
 ## License
-This project is licensed under the BSD-2-Clause License. See the [LICENSE](LICENSE) file for details.
+
+The source code and original project materials are licensed under the BSD
+2-Clause License. See [LICENSE](LICENSE).
+
+BSD 2-Clause keeps the code open and easy to reuse while requiring preservation
+of the copyright notice and license terms.
+
+Third-party libraries, logos, images, and other externally sourced assets remain
+under their own licenses or usage terms where applicable.
 
 
