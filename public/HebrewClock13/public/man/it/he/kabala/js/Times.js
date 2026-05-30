@@ -348,7 +348,7 @@ function renderNightStartDay(startRow, hebrewDay) {
 }
 
 function getHebrewWeekdayName(hebrewDay) {
-    var weekdays = ["יום ראשון", "יום שני", "יום שלישי", "יום רביעי", "יום חמישי", "יום שישי", "שבת"];
+    var weekdays = ["ליל ראשון", "ליל שני", "ליל שלישי", "ליל רביעי", "ליל חמישי", "ליל שישי", "ליל שבת"];
     return weekdays[normalizeHebrewDay(hebrewDay) - 1];
 }
 
