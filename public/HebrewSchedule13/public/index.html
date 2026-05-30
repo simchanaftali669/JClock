@@ -91,6 +91,12 @@
       grid-template-columns: 1fr 1fr;
     }
 
+    .button-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+
     .secondary {
       border: 1px solid var(--accent);
       background: #fff0c7;
@@ -139,6 +145,10 @@
       .location-row {
         grid-template-columns: 1fr;
       }
+
+      .button-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -148,6 +158,8 @@
     <p id="description">בחר תאריך, שעה ומיקום לפתיחת יומן JClock.</p>
 
     <form id="schedule-form">
+      <button class="secondary" id="language-toggle" type="button">English</button>
+
       <label>
         <span id="date-label">תאריך</span>
         <input id="date" type="date" required>
@@ -170,7 +182,10 @@
         </label>
       </div>
 
-      <button class="secondary" id="current-location" type="button">השתמש במיקום הנוכחי</button>
+      <div class="button-row">
+        <button class="secondary" id="current-location" type="button">השתמש במיקום הנוכחי</button>
+        <button class="secondary" id="jerusalem-location" type="button">השתמש במיקום ירושלים</button>
+      </div>
       <p id="status" aria-live="polite"></p>
       <button class="primary" id="open-button" type="submit">פתח יומן</button>
     </form>
@@ -193,9 +208,12 @@
         latitude: "קו רוחב",
         longitude: "קו אורך",
         currentLocation: "השתמש במיקום הנוכחי",
+        jerusalemLocation: "השתמש במיקום ירושלים",
+        languageToggle: "English",
         open: "פתח יומן",
         locating: "מאתר מיקום...",
         locationReady: "המיקום הנוכחי נבחר.",
+        jerusalemReady: "מיקום ירושלים נבחר.",
         locationUnavailable: "לא ניתן לקבל מיקום. נשארים עם ירושלים.",
         target: "../../HebrewClock13/public/man/it/he/kabala/index.html"
       },
@@ -209,9 +227,12 @@
         latitude: "Latitude",
         longitude: "Longitude",
         currentLocation: "Use current location",
+        jerusalemLocation: "Use Jerusalem location",
+        languageToggle: "עברית",
         open: "Open Schedule",
         locating: "Finding location...",
         locationReady: "Current location selected.",
+        jerusalemReady: "Jerusalem location selected.",
         locationUnavailable: "Location is unavailable. Jerusalem remains selected.",
         target: "../../HebrewClock13/public/man/it/en/kabala/index.html"
       }
@@ -231,7 +252,9 @@
     document.getElementById("time-label").textContent = text.time;
     document.getElementById("latitude-label").textContent = text.latitude;
     document.getElementById("longitude-label").textContent = text.longitude;
+    document.getElementById("language-toggle").textContent = text.languageToggle;
     document.getElementById("current-location").textContent = text.currentLocation;
+    document.getElementById("jerusalem-location").textContent = text.jerusalemLocation;
     document.getElementById("open-button").textContent = text.open;
 
     const dateInput = document.getElementById("date");
@@ -245,6 +268,13 @@
     timeInput.value = formatTime(now);
     latitudeInput.value = JERUSALEM.latitude;
     longitudeInput.value = JERUSALEM.longitude;
+
+    document.getElementById("language-toggle").addEventListener("click", () => {
+      const nextLanguage = language === "he" ? "en" : "he";
+      const params = new URLSearchParams(window.location.search);
+      params.set("lang", nextLanguage);
+      window.location.href = `${window.location.pathname}?${params.toString()}`;
+    });
 
     document.getElementById("current-location").addEventListener("click", () => {
       status.className = "";
@@ -264,6 +294,13 @@
         },
         showLocationError
       );
+    });
+
+    document.getElementById("jerusalem-location").addEventListener("click", () => {
+      latitudeInput.value = JERUSALEM.latitude;
+      longitudeInput.value = JERUSALEM.longitude;
+      status.className = "";
+      status.textContent = text.jerusalemReady;
     });
 
     document.getElementById("schedule-form").addEventListener("submit", event => {
