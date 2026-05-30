@@ -97,6 +97,19 @@
       grid-template-columns: 1fr 1fr;
     }
 
+    .map-panel {
+      display: grid;
+      gap: 10px;
+    }
+
+    #map {
+      width: 100%;
+      height: 320px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff0c7;
+    }
+
     .secondary {
       border: 1px solid var(--accent);
       background: #fff0c7;
@@ -182,6 +195,15 @@
         </label>
       </div>
 
+      <div class="map-panel">
+        <label>
+          <span id="place-label">חיפוש מקום</span>
+          <input id="place-search" type="text">
+        </label>
+        <button class="secondary" id="place-search-button" type="button">חפש במפה</button>
+        <div id="map"></div>
+      </div>
+
       <div class="button-row">
         <button class="secondary" id="current-location" type="button">השתמש במיקום הנוכחי</button>
         <button class="secondary" id="jerusalem-location" type="button">השתמש במיקום ירושלים</button>
@@ -207,6 +229,10 @@
         time: "שעה",
         latitude: "קו רוחב",
         longitude: "קו אורך",
+        place: "חיפוש מקום",
+        placePlaceholder: "לדוגמה: הכותל המערבי",
+        searchPlace: "חפש במפה",
+        placeNotFound: "לא נמצא מקום מתאים.",
         currentLocation: "השתמש במיקום הנוכחי",
         jerusalemLocation: "השתמש במיקום ירושלים",
         languageToggle: "English",
@@ -226,6 +252,10 @@
         time: "Time",
         latitude: "Latitude",
         longitude: "Longitude",
+        place: "Find location",
+        placePlaceholder: "For example: Western Wall",
+        searchPlace: "Search map",
+        placeNotFound: "No matching place was found.",
         currentLocation: "Use current location",
         jerusalemLocation: "Use Jerusalem location",
         languageToggle: "עברית",
@@ -252,6 +282,9 @@
     document.getElementById("time-label").textContent = text.time;
     document.getElementById("latitude-label").textContent = text.latitude;
     document.getElementById("longitude-label").textContent = text.longitude;
+    document.getElementById("place-label").textContent = text.place;
+    document.getElementById("place-search").placeholder = text.placePlaceholder;
+    document.getElementById("place-search-button").textContent = text.searchPlace;
     document.getElementById("language-toggle").textContent = text.languageToggle;
     document.getElementById("current-location").textContent = text.currentLocation;
     document.getElementById("jerusalem-location").textContent = text.jerusalemLocation;
@@ -261,13 +294,52 @@
     const timeInput = document.getElementById("time");
     const latitudeInput = document.getElementById("latitude");
     const longitudeInput = document.getElementById("longitude");
+    const placeSearchInput = document.getElementById("place-search");
     const status = document.getElementById("status");
+    let map;
+    let marker;
+    let geocoder;
+    let placesService;
+    let placeAutocomplete;
 
     const now = new Date();
     dateInput.value = formatDate(now);
     timeInput.value = formatTime(now);
     latitudeInput.value = JERUSALEM.latitude;
     longitudeInput.value = JERUSALEM.longitude;
+
+    window.initMap = function() {
+      const initialLocation = getSelectedLocation();
+      geocoder = new google.maps.Geocoder();
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: initialLocation,
+        zoom: 13
+      });
+      placesService = new google.maps.places.PlacesService(map);
+      marker = new google.maps.Marker({
+        draggable: true,
+        map,
+        position: initialLocation
+      });
+
+      marker.addListener("dragend", () => {
+        setSelectedLocation(marker.getPosition());
+      });
+
+      placeAutocomplete = new google.maps.places.Autocomplete(placeSearchInput, {
+        fields: ["formatted_address", "geometry", "name"]
+      });
+      placeAutocomplete.bindTo("bounds", map);
+      placeAutocomplete.addListener("place_changed", () => {
+        const place = placeAutocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) {
+          searchPlace();
+          return;
+        }
+
+        applyGoogleLocation(place.geometry.location, place.formatted_address || place.name);
+      });
+    };
 
     document.getElementById("language-toggle").addEventListener("click", () => {
       const nextLanguage = language === "he" ? "en" : "he";
@@ -287,8 +359,7 @@
 
       navigator.geolocation.getCurrentPosition(
         position => {
-          latitudeInput.value = position.coords.latitude;
-          longitudeInput.value = position.coords.longitude;
+          updateLocation(position.coords.latitude, position.coords.longitude);
           status.className = "";
           status.textContent = text.locationReady;
         },
@@ -297,10 +368,17 @@
     });
 
     document.getElementById("jerusalem-location").addEventListener("click", () => {
-      latitudeInput.value = JERUSALEM.latitude;
-      longitudeInput.value = JERUSALEM.longitude;
+      updateLocation(JERUSALEM.latitude, JERUSALEM.longitude);
       status.className = "";
       status.textContent = text.jerusalemReady;
+    });
+
+    document.getElementById("place-search-button").addEventListener("click", searchPlace);
+    placeSearchInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        searchPlace();
+      }
     });
 
     document.getElementById("schedule-form").addEventListener("submit", event => {
@@ -336,11 +414,87 @@
     }
 
     function showLocationError() {
-      latitudeInput.value = JERUSALEM.latitude;
-      longitudeInput.value = JERUSALEM.longitude;
+      updateLocation(JERUSALEM.latitude, JERUSALEM.longitude);
       status.className = "error";
       status.textContent = text.locationUnavailable;
     }
+
+    function searchPlace() {
+      const address = placeSearchInput.value.trim();
+      if (!address) {
+        return;
+      }
+
+      if (placesService) {
+        placesService.findPlaceFromQuery(
+          {
+            query: address,
+            fields: ["formatted_address", "geometry", "name"]
+          },
+          (results, placesStatus) => {
+            if (placesStatus === google.maps.places.PlacesServiceStatus.OK && results[0] && results[0].geometry) {
+              applyGoogleLocation(results[0].geometry.location, results[0].formatted_address || results[0].name);
+              return;
+            }
+
+            geocodeAddress(address);
+          }
+        );
+        return;
+      }
+
+      geocodeAddress(address);
+    }
+
+    function geocodeAddress(address) {
+      if (!geocoder) {
+        return;
+      }
+
+      geocoder.geocode({ address }, (results, geocodeStatus) => {
+        if (geocodeStatus !== "OK" || !results[0]) {
+          status.className = "error";
+          status.textContent = text.placeNotFound;
+          return;
+        }
+
+        const location = results[0].geometry.location;
+        applyGoogleLocation(location, results[0].formatted_address);
+      });
+    }
+
+    function applyGoogleLocation(location, label) {
+      updateLocation(location.lat(), location.lng());
+      status.className = "";
+      status.textContent = label || text.locationReady;
+    }
+
+    function getSelectedLocation() {
+      return {
+        lat: Number(latitudeInput.value),
+        lng: Number(longitudeInput.value)
+      };
+    }
+
+    function setSelectedLocation(location) {
+      latitudeInput.value = location.lat();
+      longitudeInput.value = location.lng();
+    }
+
+    function updateLocation(latitude, longitude) {
+      latitudeInput.value = latitude;
+      longitudeInput.value = longitude;
+
+      if (!map || !marker) {
+        return;
+      }
+
+      const location = getSelectedLocation();
+      marker.setPosition(location);
+      map.setCenter(location);
+      map.setZoom(15);
+    }
   </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuCtGQgL9XzjoxMPog_YewcPqKlEmPXy4&libraries=places&callback=initMap"></script>
 </body>
 </html>
