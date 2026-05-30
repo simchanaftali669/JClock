@@ -16,10 +16,10 @@ calendar information it contains.
 
 ## Live Pages
 
-- Main site: https://jclock126.web.app
-- Hebrew clock view: https://jclock126.web.app/HebrewClock13/public/family
-- Commercial display view: https://jclock126.web.app/HebrewCommercial13/public/family
-- Hebrew schedule: https://jclock126.web.app/HebrewSchedule13/public
+- Main site: https://JClock.net
+- Hebrew clock view: https://JClock.net/HebrewClock13/public/family
+- Commercial display view: https://JClock.net/HebrewCommercial13/public/family
+- Hebrew schedule: https://JClock.net/HebrewSchedule13/public
 
 ## Project Structure
 
