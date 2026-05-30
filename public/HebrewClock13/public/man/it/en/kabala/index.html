@@ -158,6 +158,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 	<script type="text/javascript" src="../js/Religion.js"></script>
     <script type="text/javascript" src="js/Mazal.js"></script>
     <script type="text/javascript" src="js/Times.js"></script>
+    <script type="text/javascript" src="js/Schedule.js"></script>
     <script type="text/javascript" src="js/Shevet.js"></script>
     <script type="text/javascript" src="../js/SunTime.js"></script>
     <script type="text/javascript" src="../js/TimeAdj.js"></script>
@@ -228,7 +229,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
         var lat = url.searchParams.get("latitude");
 		birthHour = url.searchParams.get("hour");
 	
-		if(lon && lat && !birthHour)
+		if(lon && lat)
 		{
 		    longitude = lon ? lon : position.coords.longitude;
 			latitude = lat ? lat : position.coords.latitude; 
@@ -243,6 +244,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 			
 			//genderInitFunction();
 			setmazal();
+			scheduleFunction();
 			
 			//נחלה
 			setShevet();
@@ -278,6 +280,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
         
         //genderInitFunction();
         setmazal();
+        scheduleFunction();
 		
         //נחלה
         setShevet();

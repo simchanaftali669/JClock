@@ -275,7 +275,8 @@
         longitude: longitudeInput.value,
         latitude: latitudeInput.value,
         hour,
-        minute
+        minute,
+        isSchedule: "true"
       });
 
       window.location.href = `${text.target}?${params.toString()}`;
