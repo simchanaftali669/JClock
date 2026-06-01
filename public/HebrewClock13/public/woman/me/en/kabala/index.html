@@ -38,16 +38,16 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 	</script>
 
     <div id="container" onclick="pause()">
+		<div id="city-name"> </div>
         <div class="dropdown" ondblclick="shevetFunction()">
             <button onclick="myFunction()" class="dropbtn"></button>
             <button onclick="englishFunction()" class="english_btn"></button>
             <!--<button onclick="genderFunction()" class="gender married"></button>--> 
             <!--<button onclick = "religionFunction()" class="religion jewish"></button>-->
             <div id="myDropdown" class="dropdown-content">
-				<a href="https://digitalchazan.web.app/woman">Morning Pray</a>
 				<!--<a href="../jewish/index.html" id="hourly__learning">Self learning</a>-->
 				<a href="https://birthcalculator.web.app/en/index.html" id="hourly__learning">Calculating the Self Learning</a>
-				<a href="../../../../man/marrige/en/index.html" id="hourly__learning">Self Learning</a>
+				<a href="../../../marrige/en/index.html" id="hourly__learning">Self Learning</a>
                 <!-- <a href="../islam/index.html" id="monthly__learning">Learning with Muslim</a> -->
                 <!-- <a href="../cristian/index.html" id="yearly__learning">Learning with Christian</a> -->
                 <!-- <a href="../jewish/index.html" id="Jubilee__learning">Learning with Jew</a>                 -->
@@ -65,7 +65,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 			<table/>
         </div>
         <div style = "text-align:center;">
-           <button id="stop" onclick="stop()" />Pray
+           <button id="stop" onclick="stop()" />Stop
         </div>
         <br />
         <br />
@@ -87,7 +87,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
         </div>
         <div style="text-align:center;">
 <!--			<input id="dawn" class="zmanit_hour" type="text" value="00:0000"/>-->
-            <input id="Text15" class="zmanim_text" type="text" value="Netz Halevana" />
+            <input id="Text15" class="zmanim_text" type="text" value="Netz Hachama" />
 			<input id="sunrise" class="zmanim_hour" type="text" />
 		</div>
         <div style = "text-align:center;">
@@ -135,24 +135,24 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 			<input id="Text12" class="zmanim_text" type="text" value="Rabinu Tam" />
             <input id="tziet_tam" class="zmanim_hour" type="text" />
         </div>
-		<div style="text-align:center;" onclick="openSecret();"> 
+		<div style="text-align:center;" onclick="openSecret();"> <!--onclick="openSecret();"-->
 <!--			<input id="dawn" class="zmanit_hour" type="text" value="06:0000"/>-->
 			<input id="Text12" class="zmanim_text" type="text" value="Chatzot Halyla" />
             <input id="chatzot_layla" class="zmanim_hour" type="text" />
         </div>
-		
+		<!--
         <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px;">
 			<img class="day" />
         </div>
+		-->
     </div>
     <script type="text/javascript" src="../../../shared/en/js/Geolocation.js"></script>
     <script type="text/javascript" src="js/Menu.js"></script>
-    <script type="text/javascript" src="../js/HebrewClock.js"></script>
+    <script type="text/javascript" src="js/HebrewClock.js"></script>
     <script type="text/javascript" src="../js/Gender.js"></script>
     <script type="text/javascript" src="../js/Religion.js"></script>
     <script type="text/javascript" src="../../../shared/en/js/Commercial.js"></script>
     <script type="text/javascript" src="js/Mazal.js"></script>
-	<script type="text/javascript" src="js/suncalc.js"></script>
     <script type="text/javascript" src="js/Times.js"></script>
     <script type="text/javascript" src="js/Shevet.js"></script>
     <script type="text/javascript" src="../js/SunTime.js"></script>
@@ -222,12 +222,16 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     {
 		var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");        
-        if(lat)
-        {
-			longitude = lon ? lon : position.coords.longitude;
-			latitude = lat ? lat : position.coords.latitude;
+        var lat = url.searchParams.get("latitude");
+		birthHour = url.searchParams.get("hour");
+	
+		if(lon && lat && !birthHour)
+		{
+		    longitude = lon ? lon : position.coords.longitude;
+			latitude = lat ? lat : position.coords.latitude; 
 
+			console.log("manual location");
+			
 			set_dst();
 			set_default_date();
 			list_pos();
@@ -240,6 +244,8 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 			//נחלה
 			setShevet();
 			commercialFunction();
+				
+			return;
 		}
         else if (navigator.geolocation)
         {

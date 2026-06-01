@@ -10,8 +10,6 @@
 
 	  gtag('config', 'UA-30684949-2');
 	</script>
-    <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-    </script>
     <title>Self Learning</title>  
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">    
     <link rel="stylesheet" type="text/css" href="../../shared/css/stylesheet.css" id="commercial_css">    
@@ -23,6 +21,7 @@
 
 <body>
     <div id="container" ondblclick="pause()">
+		<div id="city-name"> </div>
         <div class="dropdown" ondblclick="shevetFunction()">
 			<button onclick="myFunction()" class="dropbtn"></button>
 			<button onclick="englishFunction()" class="english_btn"></button>
@@ -36,6 +35,13 @@
                 <a href="cristian/index.html" id="yearly__learning">Learning with Christian</a>
 				<a href="jewish/index.html" id="Jubilee__learning">Learning with Jew</a>-->
 				<a href="kabala/index.html">Pray Schedule</a>
+				<a onclick="sederLimud('Automate');" id="Automate__learning">Ha'Schedule Limud</a>				
+				<a onclick="sederLimud('Dovid');" id="hourly__learning">Chaztot Limud</a>
+				<a onclick="sederLimud('Month');" id="yearly__learning">Morning learning</a>
+				<a onclick="sederLimud('Year');" id="monthly__learning">AfterNoon learning</a>
+				<a onclick="sederLimud('Jubilee');" id="yovel__learning">Night learning</a>
+				<a href="../../../../../BirthCalculator/public/en/index.html" id="hourly__learning">Calculate Personal learning</a>
+
 <!--				<a href="guide.html">Manual</a>-->
 			</div>
         </div>
@@ -50,6 +56,9 @@
         </div>
         <div style="text-align:center; margin-bottom:10px;">
             <button id="stop" onclick="stop()" />Stop
+        </div>
+        <div style="text-align:center; margin-bottom:10px;">  
+            <input style="display: none; font-weight: bold;" class="day" id="Mazal"  type="text" value = "" onclick="openMidaInNewTab(1);"/>
         </div>
         <div style = "text-align:center; margin-bottom:10px;">
             <input style="display: none; font-weight: bold;" class="day" id="Shevet_01"  type="text" value = "" onclick="openMidaInNewTab(0);" ondblclick = "window.open('tel:+972543517530')"/>
@@ -76,7 +85,6 @@
             <input style="display: none; font-weight: bold;" class="day" id="Shevet__mida_11"  type="text" value = "" onclick="window.open('tel:+972587401735')" ondblclick = "window.open('tel:+972543517530')"/>
             <input style="display: none; font-weight: bold;" class="day" id="Shevet_12"  type="text" value = "" onclick="openMidaInNewTab(0);" ondblclick= "window.open('tel:+972527401735')"/>
             <input style="display: none; font-weight: bold;" class="day" id="Shevet__mida_12"  type="text" value = "" onclick="window.open('tel:+972587401735')" ondblclick = "window.open('tel:+972543517530')"/>
-            <input style="display: none; font-weight: bold;" class="day" id="Mazal"  type="text" value = "" onclick="openMidaInNewTab(1);"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
             <input class="day" id="Masechet"  type="text" value="" onclick="openMasechetInNewTab();" />
@@ -87,13 +95,18 @@
         <div style="text-align:center; margin-bottom:10px;">
             <input class="day" id="Parasha" type="text" value="" onclick="openParashaInNewTab();" />
         </div>
+		<!--
         <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px;">
 			<img class="day" />
         </div>
         <br />
         <br />
+		-->
     </div>
 
+    <script type="text/javascript" src="js/Religion.js"></script>
+	<script type="text/javascript" src="../../simple/js/suncalc.js"></script>
+    <script type="text/javascript" src="js/HebrewDate.js"></script>
     <script type="text/javascript" src="../../shared/en/js/Geolocation.js"></script>
     <script type="text/javascript" src="js/Menu.js"></script>
     <script type="text/javascript" src="js/HebrewClock.js"></script>
@@ -131,6 +144,8 @@
     var sunsetM;
     var sunsetS;
 
+	var birthDay,birthHour;
+
     var tz = (new Date().getTimezoneOffset() / -60); //current time zone
 
     var month, day, year;       //curren date
@@ -143,9 +158,9 @@
 	
     var oTimer;                 //event for the running clock
 
+	var sunrise;
+
     var hebrewday;
-	var birthDay;
-	var birthHour;
     var lbHour = 23;           //hour of the clock called also sha'a
     var lbHourClock;            //hour for displaying
     var lbMinute = 1075;       //minute of the clock called also chelek
@@ -181,35 +196,44 @@
 		var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
+		birthHour = url.searchParams.get("hour");
 	
-		if(lon && lat)
+		if(lon && lat && !birthHour)
 		{
-		    longitude = lon;
-			latitude = lat;
+		    longitude = lon ? lon : position.coords.longitude;
+			latitude = lat ? lat : position.coords.latitude; 
 
+			console.log("manual location");
+			
 			birthDay = url.searchParams.get("hebrewDay");
 			birthHour = url.searchParams.get("hebrewHour");
 
+
+			religionFunction();			
 			set_dst();
 			set_default_date();
 			list_pos();
 			hebrewclock();
 			oTimerclock();
+			//tora learning
+			//genderInitFunction();
 			setmazal();
 			setMasechet();
 			setSefer();
 			setParasha();
-			sederLimud();
+			sederLimud('Dummy');
 			
+			//נחלה
 			setShevet();
 			commercialFunction();
 				
 			return;
 		}
-        if (navigator.geolocation)
+        else if (navigator.geolocation)
         {
             navigator.geolocation.getCurrentPosition(showPosition,showError);
         }
+
     }
 
     function showPosition(position)
@@ -224,7 +248,7 @@
 
         longitude = lon ? lon : position.coords.longitude;
         latitude = lat ? lat : position.coords.latitude;
-
+		
 		birthDay = url.searchParams.get("hebrewDay");
 		birthHour = url.searchParams.get("hebrewHour");
 
@@ -235,11 +259,11 @@
 		oTimerclock();
         //tora learning
         //genderInitFunction();
-        setmazal();
+		setmazal();
         setMasechet();
         setSefer();
         setParasha();
-        sederLimud();
+		sederLimud('Dummy' );
 		
 		//נחלה
         setShevet();

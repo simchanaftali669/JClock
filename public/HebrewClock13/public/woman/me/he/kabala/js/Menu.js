@@ -19,23 +19,15 @@ window.onclick = function (event) {
     }
 }
 
-function englishFunction(x=1)
+function englishFunction()
 {
-	var url = new URL(document.location.href);
-    var marrigeHour = url.searchParams.get("hebrewHour");
-    var marrigeDay = url.searchParams.get("hebrewDay");
-	var lon = url.searchParams.get("longitude");        
-	var lat = url.searchParams.get("latitude");
+	var url_obj = new URL(document.location.href);
+	var lon = url_obj.searchParams.get("longitude");        
+	var lat = url_obj.searchParams.get("latitude");
 
 	var location = "";
 	if(lon)
-		var location = "longitude=" + lon + "&latitude=" + lat;
+		var location = "?longitude=" + lon + "&latitude=" + lat;
 
-    if(x==1)
-        if(marrigeDay)
-        {
-            window.location.href= "../../en/kabala/index.html?hebrewDay=" + marrigeDay + "&hebrewHour=" + marrigeHour + "&" + location;
-        }
-        else
-            window.location.href= "../../en/kabala/index.html" + "?" + location;
+	window.location.href= "../../en/kabala/index.html" + location;
 }

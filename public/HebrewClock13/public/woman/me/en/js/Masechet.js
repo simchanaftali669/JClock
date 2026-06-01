@@ -35,7 +35,15 @@ function setMasechet()
 		Hour = lbHour + 1;
 	else
 		Hour = lbHour - 12 + 1;
-    Hour = marrigeHour ? (parseInt(marrigeHour)%12) : Hour; // = sefer_offset();
+    
+	if(marrigeHour)
+		if(marrigeHour == 12)
+			Hour = 12;
+		else
+			Hour = (parseInt(marrigeHour)%12);
+
+	if(Hour == 0)
+		Hour+=1;
 
 	var ShabatHour = lbHour + 1;
     ShabatHour = marrigeHour ? (parseInt(marrigeHour)) : ShabatHour; // = sefer_offset();
@@ -95,6 +103,9 @@ function setMasechet()
                     break;
                 case (11):
                     document.getElementById("Masechet").value = "Bikurim";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "Brachot";
                     break;
                 default:
                     document.getElementById("Masechet").value = "Freedom";
@@ -168,6 +179,21 @@ function setMasechet()
                 case (7):
                     document.getElementById("Masechet").value = "Kidushin";
                     break;
+                case (8):
+                    document.getElementById("Masechet").value = "Yevamot";
+                    break;
+                case (9):
+                    document.getElementById("Masechet").value = "K'tuvot";
+                    break;
+                case (10):
+                    document.getElementById("Masechet").value = "Nedarim";
+                    break;
+                case (11):
+                    document.getElementById("Masechet").value = "Nazir";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "Sotah";
+                    break;
                 default:
                     document.getElementById("Masechet").value = "Freedom";
                     break;
@@ -205,6 +231,12 @@ function setMasechet()
                     break;
                 case (10):
                     document.getElementById("Masechet").value = "Horayot";
+                    break;
+                case (11):
+                    document.getElementById("Masechet").value = "Baba kama";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "Baba metzia";
                     break;
                 default:
                     document.getElementById("Masechet").value = "Freedom";
@@ -246,6 +278,9 @@ function setMasechet()
                     break;
                 case (11):
                     document.getElementById("Masechet").value = "Kinnim";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "Zevachim";
                     break;
                 default:
                     document.getElementById("Masechet").value = "Freedom";

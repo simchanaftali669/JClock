@@ -295,7 +295,7 @@ body
 
 .dropdown {
     background-color:#FA9519;
-    background-image:url('../../pic/menu_text.png');
+    /*background-image:url('../../pic/menu_text.png');*/
     background-repeat:no-repeat;
     background-position:center;
     position:center;
@@ -324,6 +324,18 @@ body
 .dropdown a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+#city-name
+{
+	position: fixed;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: xxx-large;
+	color: white;
+	padding: 10px; /* Optional: to add some padding */
+	z-index: 1000; /* Ensure it is above other elements */
+}
 
 @media screen and (max-width: 850px)
 {
@@ -356,3 +368,4 @@ body
         width:150px;
     }
 }
+	

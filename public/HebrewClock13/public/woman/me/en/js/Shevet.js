@@ -1,6 +1,29 @@
-﻿var shevetLocation = "12";
-function setShevetLocation()
+﻿function getCityName(latitude, longitude) 
 {
+            const apiKey = 'AIzaSyDuCtGQgL9XzjoxMPog_YewcPqKlEmPXy4';
+            const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}&language=en`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const results = data.results;
+                    if (results.length > 0) {
+                        const addressComponents = results[0].address_components;
+                        const cityComponent = addressComponents.find(component => component.types.includes('locality'));
+                        const city = cityComponent ? cityComponent.long_name : 'Unknown city';
+                        console.log(city);
+						document.getElementById('city-name').innerText = `${city}`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+}
+
+
+
+var shevetLocation = "12";
+function setShevetLocation()
+{	
 	if(latitude>= 29 && latitude<=34)
 	{
 		var gad = 29;
@@ -70,50 +93,66 @@ function shevetFunction()
 		var ephraim = 34;
 		
 		if(gad <= latitude && latitude < gad_shimon)
-			win = window.open('https://en.wikipedia.org/wiki/Gad_(son_of_Jacob)', '_blank');		
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%92%D7%93', '_blank');		
 		if(gad_shimon <= latitude && latitude < shimon_reuven)
-			win = window.open('https://en.wikipedia.org/wiki/Simeon_(son_of_Jacob)', '_blank');
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%A9%D7%9E%D7%A2%D7%95%D7%9F', '_blank');
 		if(shimon_reuven <= latitude && latitude < reuven_zevulun)
-			win = window.open('https://en.wikipedia.org/wiki/Reuben_(son_of_Jacob)', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%A8%D7%90%D7%95%D7%91%D7%9F', '_blank');	
 		if(reuven_zevulun <= latitude && latitude < zevulun_yissachar)
-			win = window.open('https://en.wikipedia.org/wiki/Zebulun', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%96%D7%91%D7%95%D7%9C%D7%95%D7%9F', '_blank');	
 		if(zevulun_yissachar <= latitude && latitude < yissachar_yeuda)
-			win = window.open('https://en.wikipedia.org/wiki/Issachar', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%99%D7%A9%D7%A9%D7%9B%D7%A8', '_blank');	
 	    if(yissachar_yeuda <= latitude && latitude < yehuda_naftali)
-			win = window.open('https://en.wikipedia.org/wiki/Tribe_of_Judah', '_blank');			
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%99%D7%94%D7%95%D7%93%D7%94', '_blank');			
 		else if( yehuda_naftali <= latitude && latitude < naftali_asher)
-			win = window.open('https://en.wikipedia.org/wiki/Naphtali', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%A0%D7%A4%D7%AA%D7%9C%D7%99', '_blank');	
 		else if( naftali_asher <= latitude && latitude < asher_dan)
-			win = window.open('https://en.wikipedia.org/wiki/Asher', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%90%D7%A9%D7%A8', '_blank');	
 		else if( asher_dan <= latitude && latitude < dan_benjamin)
-			win = window.open('https://en.wikipedia.org/wiki/Dan_(son_of_Jacob)', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%93%D7%9F', '_blank');	
 		else if( dan_benjamin <= latitude && latitude < benjamin_menashe)
-			win = window.open('https://en.wikipedia.org/wiki/Benjamin', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%91%D7%A0%D7%99%D7%9E%D7%99%D7%9F', '_blank');	
 		else if( benjamin_menashe <= latitude && latitude < menashe_ephraim)
-			win = window.open('https://en.wikipedia.org/wiki/Manasseh_(tribal_patriarch)', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%9E%D7%A0%D7%A9%D7%94', '_blank');	
 		else if( menashe_ephraim <= latitude && latitude < ephraim)
-			win = window.open('https://en.wikipedia.org/wiki/Ephraim', '_blank');	
+			win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%90%D7%A4%D7%A8%D7%99%D7%9D', '_blank');	
 		
 	}	
 	else //חוץ לארץ
 	{
-		win = window.open('https://en.wikipedia.org/wiki/Naphtali', '_blank');	
+		win = window.open('https://he.wikipedia.org/wiki/%D7%A9%D7%91%D7%98_%D7%A0%D7%A4%D7%AA%D7%9C%D7%99', '_blank');	
 	}
 	win.focus();
 }
 
 function setShevet() 
 {
+	//getCityName(latitude, longitude);
+	
 	setShevetLocation();
     var x = document.getElementsByClassName("dropdown");
 	var i = x[0];
-	//latitude
+	//longitude
+	//i.style.backgroundColor = "#0070c0"; //blue
+	//return;
 	
 	if(latitude>= 29 && latitude<=34)
 	{
-		i.style.backgroundColor = "black"; 
-		i.style.backgroundImage = "url('pic/menu_text.png')";
-		
+		var religionPic = "04";
+		i.style.backgroundColor = "#0070c0"; //blue
+
+		switch(religion)
+		{
+			case religions.MUSLIM:
+				religionPic = "03";
+				i.style.backgroundColor = "#00b050"; //green
+				break;
+			case religions.CRISTIANITY:
+				religionPic = "02";
+				i.style.backgroundColor = "red"; //blue
+				break;
+		}
+
 		
 		var gad = 29;
 		var gad_shimon = 29 + (25/60);  
@@ -130,35 +169,34 @@ function setShevet()
 		var ephraim = 34;
 		
 		if(gad <= latitude && latitude < gad_shimon)
-			i.style.backgroundImage = "url('pic/shevet/01/06.png')";	
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/06.png')";	
 		if(gad_shimon <= latitude && latitude < shimon_reuven)
-			i.style.backgroundImage = "url('pic/shevet/01/05.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/05.png')";
 		if(shimon_reuven <= latitude && latitude < reuven_zevulun)
-			i.style.backgroundImage = "url('pic/shevet/01/04.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/04.png')";
 		if(reuven_zevulun <= latitude && latitude < zevulun_yissachar)
-			i.style.backgroundImage = "url('pic/shevet/01/03.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/03.png')";
 		if(zevulun_yissachar <= latitude && latitude < yissachar_yeuda)
-			i.style.backgroundImage = "url('pic/shevet/01/02.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/02.png')";
 	    if(yissachar_yeuda <= latitude && latitude < yehuda_naftali)
-			i.style.backgroundImage = "url('pic/shevet/01/01.png')";		
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/01.png')";		
 		else if( yehuda_naftali <= latitude && latitude < naftali_asher)
-			i.style.backgroundImage = "url('pic/shevet/01/13.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/13.png')";
 		else if( naftali_asher <= latitude && latitude < asher_dan)
-			i.style.backgroundImage = "url('pic/shevet/01/11.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/11.png')";
 		else if( asher_dan <= latitude && latitude < dan_benjamin)
-			i.style.backgroundImage = "url('pic/shevet/01/10.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/10.png')";
 		else if( dan_benjamin <= latitude && latitude < benjamin_menashe)
-			i.style.backgroundImage = "url('pic/shevet/01/09.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/09.png')";
 		else if( benjamin_menashe <= latitude && latitude < menashe_ephraim)
-			i.style.backgroundImage = "url('pic/shevet/01/08.png')";
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/08.png')";
 		else if( menashe_ephraim <= latitude && latitude < ephraim)
-			i.style.backgroundImage = "url('pic/shevet/01/07.png')";
-		
+			i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/07.png')";
 	}	
 	else //חוץ לארץ
 	{
-		i.style.backgroundColor = "black"; 
-		i.style.backgroundImage = "url('pic/shevet/01/13.png')";
+		i.style.backgroundColor = "#0070c0"; //blue
+		i.style.backgroundImage = "url('./pic/shevet/" + religionPic + "/13.png')";
 	}	
 
 }

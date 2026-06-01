@@ -52,10 +52,11 @@ function setmazal() {
     var marrigeDay = url.searchParams.get("hebrewDay");
 
     hebrewday = marrigeDay ? parseInt(marrigeDay) : day;
-	gender = marrigeDay ? genders.FEMALE : gender;
+	gender = marrigeDay ? genders.MARRIED : gender;
 	day = hebrewday;
 
-    //hebrewday
+
+    //hebrewday	
     //lbHourClock
     var Hour; // = masechet_offset();
     if (lbHour < 12)
@@ -65,14 +66,12 @@ function setmazal() {
     Hour = marrigeHour ? (parseInt(marrigeHour)-1) : Hour; // = sefer_offset();
 	clockHour = Hour;
 
-	console.log(day);
-    console.log(clockHour);
 	//var url = new URL(document.location.href);
     //var marrigeDay = url.searchParams.get("hebrewday");
 
     //hebrewday = marrigeDay ? marrigeDay : day;
  
-    var day_mida = ["חסד", "גבורה", "תפארת", "נצח", "הוד", "יסוד", "מלכות"];
+    var day_mida = [ "חסד", "גבורה", "תפארת","נצח", "הוד", "יסוד", "מלכות"];
     var x = 0;
     if (day == 1)
         x = (5 + clockHour) % 7;
@@ -89,8 +88,8 @@ function setmazal() {
     if (day == 7)
         x = (2 + clockHour) % 7;
 
-	console.log(x);
     resetShevetHour();
+	gender= genders.MARRIED;
 	
 	//{מזל_יום,מזל_שעה}
     if(gender == genders.MALE)
@@ -155,70 +154,87 @@ function setmazal() {
         }
     }
 	//{מזל_שעה,מזל_יום}
-    else if(gender == genders.FEMALE)
+    if(gender ^ genders.FEMALE)
     { 
-        document.getElementById("Mazal").style.display = "unset";
-        switch (x) {
-            case (0):
-                document.getElementById("Mazal").value = "חסד" + " שב" + day_mida[day - 1];
-                document.body.style.backgroundImage = "url('pic/1.jpg";
-                omer = ((day - 1) * 7) + 1;
-                break;
-            case (1):
-                document.getElementById("Mazal").value = "גבורה" + " שב" + day_mida[day - 1];
-                document.body.style.backgroundImage = "url('pic/2.jpg";
-                omer = ((day - 1) * 7) + 2;
-                break;
-            case (2):
-                document.getElementById("Mazal").value = "תפארת" + " שב" + day_mida[day - 1];
-                document.body.style.backgroundImage = "url('pic/3.jpg";
-                omer = ((day - 1) * 7) + 3;
-                break;
-            case (3):
-                document.getElementById("Mazal").value = "נצח" + " שב" + day_mida[day - 1];
-                document.body.style.backgroundImage = "url('pic/4.jpg";
-                omer = ((day - 1) * 7) + 4;
-                break;
-            case (4):
-                document.getElementById("Mazal").value = "הוד" + " שב" + day_mida[day - 1];
-                document.body.style.backgroundImage = "url('pic/5.jpg";
-                omer = ((day - 1) * 7) + 5;
-                break;
-            case (5):
-                document.getElementById("Mazal").value = "יסוד" + " שב" + day_mida[day - 1];
-                document.body.style.backgroundImage = "url('pic/6.jpg";
-                omer = ((day - 1) * 7) + 6;
-                break;
-            case (6):
-                document.getElementById("Mazal").value = "מלכות" + " שב" + day_mida[day - 1];
-                document.body.style.backgroundImage = "url('pic/7.jpg";
-                omer = ((day - 1) * 7) + 7;
-                break;
-            default:
-                break;
-        }
+		document.getElementById("Mazal").style.display = "unset";
+		switch (x) 
+		{
+			case (0):
+				document.getElementById("Mazal").value = "נצח" + " שב" + day_mida[day - 1];
+				document.body.style.backgroundImage = "url('pic/4.jpg')";
+				omer = ((day - 1) * 7) + 4;
+				break;
+			case (1):
+				document.getElementById("Mazal").value = "חסד" + " שב" + day_mida[day - 1];
+				document.body.style.backgroundImage = "url('pic/1.jpg')";
+				omer = ((day - 1) * 7) + 1;
+				break;
+			case (2):
+				document.getElementById("Mazal").value = "גבורה" + " שב" + day_mida[day - 1];
+				document.body.style.backgroundImage = "url('pic/2.jpg')";
+				omer = ((day - 1) * 7) + 2;
+				break;
+			case (3):
+				document.getElementById("Mazal").value = "תפארת" + " שב" + day_mida[day - 1];
+				document.body.style.backgroundImage = "url('pic/3.jpg')";
+				omer = ((day - 1) * 7) + 3;
+				break;
+			case (4):
+				document.getElementById("Mazal").value = "הוד" + " שב" + day_mida[day - 1];
+				document.body.style.backgroundImage = "url('pic/5.jpg')";
+				omer = ((day - 1) * 7) + 5;
+				break;
+			case (5):
+				document.getElementById("Mazal").value = "יסוד" + " שב" + day_mida[day - 1];
+				document.body.style.backgroundImage = "url('pic/6.jpg')";
+				omer = ((day - 1) * 7) + 6;
+				break;
+			case (6):
+				document.getElementById("Mazal").value = "מלכות" + " שב" + day_mida[day - 1];
+				document.body.style.backgroundImage = "url('pic/7.jpg')";
+				omer = ((day - 1) * 7) + 7;
+				break;
+			default:
+				break;
+		}
     }
     //{נושא השעה - שבט}
-    else if(gender == genders.MARRIED)
+    if(gender == genders.MARRIED)
     {				
-        x = clockHour % 12;
+        x = (birthHour % 12);
+		if(birthHour == 12 || birthHour == 24)
+			x = 12;
+		
+        var shevetHour = Number(x);
 
-        var shevetHour = x+1;
+		//Offset is Real - 5785-09-13
+		//not feel real - 5785-10-08
+		//Conclustion - offset is Real - 5785-11-03
+		//shevetHour = shevetHour + 2;
+		//if(shevetHour>=13)
+		//	shevetHour-=12;
+		//final -> offset doesn't needed. 5786-01-25
+
         shevetHour_str = shevetHour;
         if(shevetHour < 10)
             shevetHour_str= "0" + shevetHour;
 
-        var shevet__mida1 = ["בינה", "נצח", "הוד", "אמונה", "רצון", "גבורה", "יסוד משפיע","יסוד מקבל","מלכות","דעת","תפארת","חסד-חכמה"];
-        var shevet__mida2 = ["אמונה","רצון","חכמה","בינה","דעת","חסד","גבורה","תפארת","נצח","הוד","יסוד","מלכות"];
-		var shevet1 = ["יהודה", "יששכר", "זבולון", "ראובן", "שמעון", "גד", "אפרים","מנשה","בנימין","דן","אשר","נפתלי-לוי"];
-		var shevet2 = ["ראובן", "שמעון", "לוי", "יהודה","דן","נפתלי","גד","אשר","יששכר","זבולון","יוסף","בנימין"];
+        var shevet__mida1 = ["Dummy","בינה", "נצח", "הוד", "אמונה", "רצון", "גבורה", "יסוד משפיע","יסוד מקבל","מלכות","דעת","תפארת","חסד-חכמה"];
+        var shevet__mida2 = ["Dummy","אמונה","רצון","חכמה","בינה","דעת","חסד","גבורה","תפארת","נצח","הוד","יסוד","מלכות"];
+		var shevet2 = ["Dummy","יהודה", "יששכר", "זבולון", "ראובן", "שמעון", "גד", "אפרים","מנשה","בנימין","דן","אשר","נפתלי-לוי"];
+		var shevet1 = ["Dummy","ראובן", "שמעון", "לוי", "יהודה","דן","נפתלי","גד","אשר","יששכר","זבולון","יוסף","בנימין"];
 
-        
-        document.getElementById("Shevet_" + shevetHour_str).value = shevet1[x] + " שב" + shevet2[x];
-        document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
+
+
+		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[shevetHour] + " שב" + shevet2[shevetHour];
+		document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
+
+ 
+        //document.getElementById("Shevet_" + shevetHour_str).value = shevet1[x] + " שב" + shevet2[x];
+        //document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
 		document.getElementById("Shevet__mida_" + shevetHour_str).value = shevet__mida1[x] + " שב" + shevet__mida2[x];
-        document.getElementById("Shevet__mida_" + shevetHour_str).style.display = "unset"
-		document.body.style.backgroundImage = "url('pic/7.jpg')";
+        //document.getElementById("Shevet__mida_" + shevetHour_str).style.display = "unset"
+		//document.body.style.backgroundImage = "url('pic/7.jpg')";
 				
 
     }
@@ -229,6 +245,52 @@ function setmazal() {
 	//music_offset();
 }
 
+function setMazal()
+{
+	x = (birthHour % 12);
+	document.getElementById("Mazal").style.display = "unset";
+	switch (x) 
+	{
+		case (0):
+			document.getElementById("Mazal").value = "חסד" + " שב" + day_mida[day - 1];
+			document.body.style.backgroundImage = "url('pic/1.jpg";
+			omer = ((day - 1) * 7) + 1;
+			break;
+		case (1):
+			document.getElementById("Mazal").value = "גבורה" + " שב" + day_mida[day - 1];
+			document.body.style.backgroundImage = "url('pic/2.jpg";
+			omer = ((day - 1) * 7) + 2;
+			break;
+		case (2):
+			document.getElementById("Mazal").value = "תפארת" + " שב" + day_mida[day - 1];
+			document.body.style.backgroundImage = "url('pic/3.jpg";
+			omer = ((day - 1) * 7) + 3;
+			break;
+		case (3):
+			document.getElementById("Mazal").value = "נצח" + " שב" + day_mida[day - 1];
+			document.body.style.backgroundImage = "url('pic/4.jpg";
+			omer = ((day - 1) * 7) + 4;
+			break;
+		case (4):
+			document.getElementById("Mazal").value = "הוד" + " שב" + day_mida[day - 1];
+			document.body.style.backgroundImage = "url('pic/5.jpg";
+			omer = ((day - 1) * 7) + 5;
+			break;
+		case (5):
+			document.getElementById("Mazal").value = "יסוד" + " שב" + day_mida[day - 1];
+			document.body.style.backgroundImage = "url('pic/6.jpg";
+			omer = ((day - 1) * 7) + 6;
+			break;
+		case (6):
+			document.getElementById("Mazal").value = "מלכות" + " שב" + day_mida[day - 1];
+			document.body.style.backgroundImage = "url('pic/7.jpg";
+			omer = ((day - 1) * 7) + 7;
+			break;
+		default:
+			break;
+	}
+
+}
 
 function resetShevetHour()
 {
@@ -342,7 +404,7 @@ function set_mida_url()
 
 
 function set_mazal_url() 
-{
+{	
     switch (omer) 
 	{
         case (1):

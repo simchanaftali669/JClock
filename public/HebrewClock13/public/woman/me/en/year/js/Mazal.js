@@ -37,7 +37,7 @@ function setmazal() {
 
     hebrewday = day;
 
-    var day_mida = ["Chesed", "Gevurah", "Tipheret", "Netzach", "Hod", "Yesod", "Malchut"];
+    var day_mida = ["Netzach", "Chesed", "Gvura", "Tife'ret", "Hod", "Yesod", "Malcut"];
     var x = 0;
     if (day == 1)
         x = (5 + clockHour) % 7;

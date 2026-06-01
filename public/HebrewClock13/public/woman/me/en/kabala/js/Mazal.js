@@ -31,7 +31,7 @@ function setmazal() {
 
     hebrewday = day;
 
-    var day_mida = ["חסד", "גבורה", "תפארת", "נצח", "הוד", "יסוד", "מלכות"];
+    var day_mida = ["נצח", "חסד", "גבורה", "תפארת", "הוד", "יסוד", "מלכות"];
     var x = 0;
     if (day == 1)
         x = (5 + clockHour) % 7;
@@ -105,7 +105,7 @@ function setmazal() {
 
     set_mazal_url();
 
-    //music_offset();
+    music_offset();
 }
 
 function music_offset()

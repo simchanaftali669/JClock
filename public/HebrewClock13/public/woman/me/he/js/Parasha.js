@@ -34,16 +34,18 @@ function setParasha()
 		Hour = lbHour + 1;
 	else
 		Hour = lbHour - 12 + 1;
-    Hour = marrigeHour ? (parseInt(marrigeHour)%12) : Hour; // = sefer_offset();
+    
+	if(marrigeHour)
+		if(marrigeHour == 12)
+			Hour = 12;
+		else
+			Hour = (parseInt(marrigeHour)%12);
 
-//	var day = hebrewday;
-	
-	//ויהי ערב
-//	if (lbHour >= 22)
-//		day = day+1;
-	
-//	if (day == 8)
-//		day = 1;
+	if(Hour == 0)
+		Hour+=1;
+
+	var ShabatHour = lbHour + 1;
+    ShabatHour = marrigeHour ? (parseInt(marrigeHour)) : ShabatHour; // = sefer_offset();
 	
     switch(hebrewday)
     {
@@ -94,9 +96,11 @@ function setParasha()
                     document.getElementById("Parasha").value = "ויגש";
                     parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%92%D7%A9/";
                     break;
-                default:
+                case (12):
                     document.getElementById("Parasha").value = "ויחי";
                     parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%97%D7%99/";
+                    break;
+                default:
                     break;
             }
             break;
@@ -148,7 +152,8 @@ function setParasha()
                     parasha_url = "https://haravelon.co.il/tag/%D7%A4%D7%A7%D7%95%D7%93%D7%99/";
                     break;
                 case (12):
-                    document.getElementById("Parasha").value = "חופש";
+                    document.getElementById("Parasha").value = "שמות";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A9%D7%9E%D7%95%D7%AA/";
                     break;
                 default:
                     break;
@@ -197,8 +202,21 @@ function setParasha()
                     document.getElementById("Parasha").value = "בחוקותי";
                     parasha_url = "https://haravelon.co.il/tag/%D7%91%D7%97%D7%95%D7%A7%D7%95%D7%AA%D7%99/";
                     break;
-                default:
-                    document.getElementById("Parasha").value = "חופש";
+                case (9):
+                    document.getElementById("Parasha").value = "ויקרא";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%A7%D7%A8%D7%90/";
+                    break;
+                case (10):
+                    document.getElementById("Parasha").value = "צו";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A6%D7%95/";
+                    break;
+                case (11):
+                    document.getElementById("Parasha").value = "שמיני";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A9%D7%9E%D7%99%D7%A0%D7%99/";
+                    break;
+                case (12):
+                    document.getElementById("Parasha").value = "תזריע";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%AA%D7%96%D7%A8%D7%99%D7%A2/";
                     break;
             }
             break;
@@ -244,6 +262,14 @@ function setParasha()
                 case (10):
                     document.getElementById("Parasha").value = "מסעי";
                     parasha_url = "https://haravelon.co.il/tag/%D7%9E%D7%A1%D7%A2%D7%99/";
+                    break;
+                case (11):
+                    document.getElementById("Parasha").value = "במדבר";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%91%D7%9E%D7%93%D7%91%D7%A8/";
+                    break;
+                case (12):
+                    document.getElementById("Parasha").value = "נשא";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A0%D7%A9%D7%90/";
                     break;
                 default:
                     document.getElementById("Parasha").value = "חופש";
@@ -297,28 +323,132 @@ function setParasha()
                     document.getElementById("Parasha").value = "וזאת הברכה";
                     parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%96%D7%90%D7%AA-%D7%94%D7%91%D7%A8%D7%9B%D7%94/";
                     break;
+                case (12):
+                    document.getElementById("Parasha").value = "דברים";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%93%D7%91%D7%A8%D7%99%D7%9D/";
+                    break;
                 default:
-                    document.getElementById("Parasha").value = "חופש";
+                    document.getElementById("Parasha").value = "ואתחנן";
                     break;
             }
             break;
         case (6):
-            switch (Hour) 
-			{
+            switch(Hour)
+            {
+                case (1):
+                    document.getElementById("Parasha").value = "בראשית";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%91%D7%A8%D7%90%D7%A9%D7%99%D7%AA/";
+                    break;
+                case (2):
+                    document.getElementById("Parasha").value = "נח";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A0%D7%97/";
+                    break;
+                case (3):
+                    document.getElementById("Parasha").value = "לך לך";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%9C%D7%9A-%D7%9C%D7%9A/";
+                    break;
+                case (4):
+                    document.getElementById("Parasha").value = "וירא";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%A8%D7%90/";
+                    break;
+                case (5):
+                    document.getElementById("Parasha").value = "חיי שרה";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%97%D7%99%D7%99-%D7%A9%D7%A8%D7%94/";
+                    break;
+                case (6):
+                    document.getElementById("Parasha").value = "תולדות";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%AA%D7%95%D7%9C%D7%93%D7%95%D7%AA/";
+                    break;
+                case (7):
+                    document.getElementById("Parasha").value = "ויצא";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%A6%D7%90/";
+                    break;
+                case (8):
+                    document.getElementById("Parasha").value = "וישלח";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%A9%D7%9C%D7%97/";
+                    break;
+                case (9):
+                    document.getElementById("Parasha").value = "וישב";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%A9%D7%91/";
+                    break;
+                case (10):
+                    document.getElementById("Parasha").value = "מקץ";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%9E%D7%A7%D7%A5/";
+                    break;
+                case (11):
+                    document.getElementById("Parasha").value = "ויגש";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%92%D7%A9/";
+                    break;
+                case (12):
+                    document.getElementById("Parasha").value = "ויחי";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%97%D7%99/";
+                    break;
                 default:
-                    document.getElementById("Parasha").value = "חופש";
                     break;
             }
             break;
         case (7):
-            switch (Hour) 
-			{
+            switch (Hour)
+            {
+                case (1):
+                    document.getElementById("Parasha").value = "שמות";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A9%D7%9E%D7%95%D7%AA/";
+                    break;
+                case (2):
+                    document.getElementById("Parasha").value = "וארא";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%90%D7%A8%D7%90/";
+                    break;
+                case (3):
+                    document.getElementById("Parasha").value = "בא";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%91%D7%90/";
+                    break;
+                case (4):
+                    document.getElementById("Parasha").value = "בשלח";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%91%D7%A9%D7%9C%D7%97/";
+                    break;
+                case (5):
+                    document.getElementById("Parasha").value = "יתרו";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%99%D7%AA%D7%A8%D7%95/";
+                    break;
+                case (6):
+                    document.getElementById("Parasha").value = "משפטים";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%9E%D7%A9%D7%A4%D7%98%D7%99%D7%9D/";
+                    break;
+                case (7):
+                    document.getElementById("Parasha").value = "תרומה";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%AA%D7%A8%D7%95%D7%9E%D7%94/";
+                    break;
+                case (8):
+                    document.getElementById("Parasha").value = "תצווה";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%AA%D7%A6%D7%95%D7%94/";
+                    break;
+                case (9):
+                    document.getElementById("Parasha").value = "כי תשא";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%9B%D7%99-%D7%AA%D7%A9%D7%90/";
+                    break;
+                case (10):
+                    document.getElementById("Parasha").value = "ויקהל";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%95%D7%99%D7%A7%D7%94%D7%9C/";
+                    break;
+                case (11):
+                    document.getElementById("Parasha").value = "פקודי";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A4%D7%A7%D7%95%D7%93%D7%99/";
+                    break;
+                case (12):
+                    document.getElementById("Parasha").value = "שמות";
+                    parasha_url = "https://haravelon.co.il/tag/%D7%A9%D7%9E%D7%95%D7%AA/";
+                    break;
                 default:
-                    document.getElementById("Parasha").value = "חופש";
                     break;
             }
             break;
         default:
             break;
     }
+	
+	var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+	if(iOS)
+		 parasha_url = 'https://apps.apple.com/us/app/shnayim/id1296709500';
+	else
+		 parasha_url = 'https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra';
 }

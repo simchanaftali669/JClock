@@ -41,6 +41,9 @@ function setMasechet()
 			Hour = 12;
 		else
 			Hour = (parseInt(marrigeHour)%12);
+	
+	if(Hour == 0)
+		Hour+=1;
 
 	var ShabatHour = lbHour + 1;
     ShabatHour = marrigeHour ? (parseInt(marrigeHour)) : ShabatHour; // = sefer_offset();
@@ -95,6 +98,9 @@ function setMasechet()
                     break;
                 case (11):
                     document.getElementById("Masechet").value = "ביכורים";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "ברכות";
                     break;
                 default:
                     document.getElementById("Masechet").value = "חופש";
@@ -168,6 +174,21 @@ function setMasechet()
                 case (7):
                     document.getElementById("Masechet").value = "קידושין";
                     break;
+                case (8):
+                    document.getElementById("Masechet").value = "יבמות";
+                    break;
+                case (9):
+                    document.getElementById("Masechet").value = "כתובות";
+                    break;
+                case (10):
+                    document.getElementById("Masechet").value = "נדרים";
+                    break;
+                case (11):
+                    document.getElementById("Masechet").value = "נזיר";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "סוטה";
+                    break;
                 default:
                     document.getElementById("Masechet").value = "חופש";
                     break;
@@ -205,6 +226,12 @@ function setMasechet()
                     break;
                 case (10):
                     document.getElementById("Masechet").value = "הוריות";
+                    break;
+                case (11):
+                    document.getElementById("Masechet").value = "בבא קמא";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "בבא מציעא";
                     break;
                 default:
                     document.getElementById("Masechet").value = "חופש";
@@ -246,6 +273,9 @@ function setMasechet()
                     break;
                 case (11):
                     document.getElementById("Masechet").value = "קנים";
+                    break;
+                case (12):
+                    document.getElementById("Masechet").value = "זבחים";
                     break;
                 default:
                     document.getElementById("Masechet").value = "חופש";

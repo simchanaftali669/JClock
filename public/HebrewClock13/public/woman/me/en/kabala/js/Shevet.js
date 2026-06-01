@@ -1,4 +1,25 @@
-﻿var shevetLocation = "12";
+﻿function getCityName(latitude, longitude) 
+{
+            const apiKey = 'AIzaSyDuCtGQgL9XzjoxMPog_YewcPqKlEmPXy4';
+            const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}&language=en`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const results = data.results;
+                    if (results.length > 0) {
+                        const addressComponents = results[0].address_components;
+                        const cityComponent = addressComponents.find(component => component.types.includes('locality'));
+                        const city = cityComponent ? cityComponent.long_name : 'Unknown city';
+                        console.log(city);
+						document.getElementById('city-name').innerText = `${city}`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+}
+
+var shevetLocation = "12";
 function setShevetLocation()
 {
 	if(latitude>= 29 && latitude<=34)
@@ -104,10 +125,14 @@ function shevetFunction()
 
 function setShevet() 
 {
+	//getCityName(latitude, longitude);
+	
 	setShevetLocation();
     var x = document.getElementsByClassName("dropdown");
 	var i = x[0];
 	//longitude
+	i.style.backgroundColor = "#0070c0"; //blue
+	//return;
 	
 	if(latitude>= 29 && latitude<=34)
 	{

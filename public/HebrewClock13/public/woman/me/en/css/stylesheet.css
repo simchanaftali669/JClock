@@ -15,22 +15,23 @@ body
 {
     background-position:center;
 }
-/*#Hour
+/*
+#Hour
 {
     font-size:xx-large; 
     width:50px; 
     text-align:center;
-}*/
+}
 #Text2
 {
 }
-/*#Minute
+#Minute
 {
-}*/
+}
 #Text4
 {
 }
-/*#Second
+#Second
 {
     font-size:xx-large; 
     width:40px; 
@@ -48,7 +49,7 @@ body
                 font-size:xx-large;
             }
 .zmanim_hour {
-                width:50px; 
+                width:80px; 
                 text-align:center; 
                 font-size:xx-large;
             }
@@ -62,7 +63,7 @@ body
 {
     text-align:center;
     /*font-size: 150px;*/
-    width: 80px;
+    width: 100px;
     font-family:Comic Sans MS;
 }
 #Text2
@@ -76,7 +77,7 @@ body
 {
     text-align:center;
     /*font-size: 150px;*/
-    width: 150px;
+    width: 200px;
     font-family:Comic Sans MS;
 }
 #Text4
@@ -90,7 +91,7 @@ body
 {
     text-align:center;
     /*font-size: 150px;*/
-    width: 80px;
+    width: 100px;
     font-family:Comic Sans MS;
 }
 .clock
@@ -136,13 +137,13 @@ body
     width:200px; 
 }
 .zmanim_text {
-                width:180px; 
+                width:360px; 
                 text-align:center; 
                 font-size:40px;
                 color:#0070c0; /*blue*/
             }
 .zmanim_hour {
-                width:150px; 
+                width:175px; 
                 text-align:center; 
                 font-size:40px;
                 font-family:Comic Sans MS;
@@ -295,7 +296,7 @@ body
 
 .dropdown {
     background-color:#FA9519;
-    background-image:url('../pic/menu_text.png');
+    /*background-image:url('../pic/menu_text.png');*/
     background-repeat:no-repeat;
     background-position:center;
     position:center;
@@ -324,3 +325,16 @@ body
 .dropdown a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+#city-name
+{
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: xxx-large;
+	color: white;
+	padding: 10px; /* Optional: to add some padding */
+	z-index: 1000; /* Ensure it is above other elements */
+}
+	

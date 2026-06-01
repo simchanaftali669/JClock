@@ -12,9 +12,9 @@
 	</script>
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
-    <title>Muslim</title>  
-    <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" id="thecss">
-    <link rel="stylesheet" type="text/css" href="../../../shared/css/stylesheet.css" id="commercial_css">       
+    <title>Limud based on Yovel</title>  
+    <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" id="thecss">    
+    <link rel="stylesheet" type="text/css" href="../../../shared/css/stylesheet.css" id="commercial_css">    
     <meta charset="UTF-8">
     <meta name="description" content="hebrew clock that showing the sun clock in order to Sanctify the month">
     <meta name="keywords" content="HebrewClock,kidush levana,moon,sunclock, hebrew time,
@@ -27,17 +27,17 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
     <div id="container" ondblclick="pause()">
         <div class="dropdown" ondblclick="shevetFunction()">
             <button onclick="myFunction()" class="dropbtn"></button>
-            <button class="gender female disable"></button>
+            <!--<button class="gender married disable"></button>-->
             <button onclick="englishFunction()" class="english_btn"></button>
-            <button onclick="pause()" class="refresh_btn refresh_btn_islam"></button>
+            <button onclick="pause()" class="refresh_btn refresh_btn_jewish"></button>
             <div id="myDropdown" class="dropdown-content">
- <!--               <a href="../index.html" id="hourly__learning">Self learning</a>
-                <a href="index.html" id="monthly__learning">Learning with Muslim</a>
+<!--                <a href="../index.html" id="hourly__learning">Self learning</a>
+                <a href="../islam/index.html" id="monthly__learning">Learning with Muslim</a>
                 <a href="../cristian/index.html" id="yearly__learning">Learning with Christian</a>
-				<a href="../jewish/index.html" id="Jubilee__learning">Learning with Jew</a>-->
-                <a href="../../../is/en/kabala/index.html">Pray Schedule</a>
+				<a href="index.html" id="Jubilee__learning">Learning with Jew</a>-->
+                <a href="../kabala/index.html">Pray Schedule</a>
 <!--                <a href="../guide.html">Manual</a>
-                <a href="./chosen_story.html">Story of the month</a>-->
+                <a href="./chosen_story.html">Story of the Yovel</a>-->
             </div>
         </div>
 		<div style = "text-align:center; margin-bottom:10px; ">
@@ -53,24 +53,25 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
             <!--<button id="stop" onclick="stop()" />Stop-->
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-			<input style="font-weight: bold;" class="month" id="Mazal" type="text" value="Yis'as'char in Shi'mon"/>
-            <input style="font-weight: bold;" class="month" id="Mazal" type="text" value="Chesed in Gevura" onclick="openMidaInNewTab(1);" ondblclick="openMidaInNewTab(0);" />
+           <input style="font-weight: bold;" class="yovel" id="Mazal" type="text" value="Revuen In Judea" onclick="openMidaInNewTab(0);"  ondblclick = "window.open('tel:+972542267262')"/>
+		   <input style="font-weight: bold;" class="yovel" id="Mazal" type="text" value="Hod In Gevura" onclick="openMidaInNewTab(1);" ondblclick="openMidaInNewTab(0);" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="month" id="Masechet" type="text" value="Eiruvin" onclick="openMasechetInNewTab();"/>
+            <input class="yovel" id="Masechet" type="text" value="Shka'lim" onclick="openMasechetInNewTab();"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="month" id="Sefer" type="text" value="Te'hilim" onclick="openSeferInNewTab();"/>
+            <input class="yovel" id="Sefer" type="text" value="Ba'mid'bar"  onclick="openSeferInNewTab();"/>
         </div>
-		<div style="text-align:center; margin-bottom:10px;">
-            <input class="month" id="Parasha" type="text" value="Va'era" onclick="openParashaInNewTab();" />
+        <div style="text-align:center; margin-bottom:10px;">
+            <input class="yovel" id="Parasha" type="text" value="Beshalach" onclick="openParashaInNewTab();" />
         </div>
+
         <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px;">
 			<img class="day" />
         </div>
+        <br />
+        <br />
 
-        <br />
-        <br />
     </div> 
 
     <script type="text/javascript" src="js/Menu.js"></script>
@@ -130,23 +131,13 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
 
     getLocation();  //activate the clock
 
-    //link to mazal information
-    function openMidaInNewTab(x) {
-        var win;
-        if (x == 1)
-            win = window.open(mazal_url, '_blank');
-        else if (x == 0)
-            win = window.open(mida_url, '_blank');
-        win.focus();
-    }
-
-    //link to mazal information
-    function openMidaInNewTab(x) {
+     //link to mazal information
+     function openMidaInNewTab(x) {
         var win;
         if (x == 1)
             win = window.open(mazal_url, '_blank');
         else if(x == 0)
-            win = window.open("https://www.youtube.com/watch?v=X2dIIZY0cLI&list=PLFtAIQdzOs6SLU01c1II5RZpBFUv76WSk&index=12", '_blank');
+            win = window.open("https://www.youtube.com/watch?v=GElRmNCTGqU&list=PLFtAIQdzOs6SLU01c1II5RZpBFUv76WSk&index=10", '_blank');
         win.focus();
     }
 
@@ -155,27 +146,26 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
         var win;
         var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if(iOS)
-			win = window.open('https://apps.apple.com/us/app/kehati/id1059791961', '_blank');
+            win = window.open('https://apps.apple.com/us/app/kehati/id1059791961', '_blank');
         else
-			win = window.open('https://play.google.com/store/apps/details?id=com.nocker.kehati', '_blank');
+		    win = window.open('https://play.google.com/store/apps/details?id=com.nocker.kehati', '_blank');
         win.focus();
     }
-    
     function openSeferInNewTab() 
     {
         var win;
 		//win = window.open('https://www.929.org.il/lang/en/today', '_blank');
-		win = window.open('https://www.929.org.il/lang/en/page/188', '_blank');
-        win.focus();
+        win = window.open('https://www.929.org.il/lang/en/page/118', '_blank');
+	    win.focus();
     }
 
     function openParashaInNewTab() {
         var win;
-         var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-         if(iOS)
-             win = window.open('https://apps.apple.com/us/app/shnayim/id1296709500', '_blank');
-         else
-             win = window.open('https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra', '_blank');
+        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if(iOS)
+            win = window.open('https://apps.apple.com/us/app/shnayim/id1296709500', '_blank');
+        else
+            win = window.open('https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra', '_blank');
         win.focus();
     }
 
@@ -207,8 +197,9 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
         list_pos();
         hebrewclock();
         oTimerclock();
+
         setmazal();
-        //sederLimud();
+        sederLimud();
         
         //נחלה
         setShevet();

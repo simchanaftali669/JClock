@@ -3,12 +3,10 @@
 
     var zmanit_hour = doit();       //get the 24 shaaotzmaniot
     
-	var sunrise_yasterday = zmanit_hour[0];
+	var sunset_yasterdate = zmanit_hour[0];
 	var sunrise = zmanit_hour[1];
-	var sunrise_tommorow = zmanit_hour[2];
-	var sunset_yasterday = zmanit_hour[3];
-	var sunset = zmanit_hour[4];
-	var sunset_tommorow = zmanit_hour[5];
+	var sunset = zmanit_hour[2];
+	var sunrise_tommorow = zmanit_hour[3];
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
     
@@ -24,8 +22,8 @@
 	var curr_hour = curr_hour/(1000 * 3600);
 
 	
-	//moonrise before moonset
-	if(sunset > sunrise && curr_hour < sunset)
+	//day
+	if(curr_hour > sunrise && curr_hour < sunset)
 	{
 		var length = sunset - sunrise;
 		var curr_hour_offset = curr_hour - sunrise;
@@ -41,23 +39,8 @@
 		lbSecond = second;
 		document.getElementById("Second").value = lbSecond;
 	}
-	if(sunset > sunrise && curr_hour < sunrise)
-	{
-		var length = sunrise + 24 - sunset_yasterday;
-		var curr_hour_offset = curr_hour + 24 - sunset_yasterday;
-		
-		var hour = Math.floor(12* (curr_hour_offset/length));
-		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
-		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
-	    
-		lbHour = hour;
-		document.getElementById("Hour").value = hour;
-		lbMinute = minute;
-		document.getElementById("Minute").value = lbMinute;
-		lbSecond = second;
-		document.getElementById("Second").value = lbSecond;
-	}
-	if(sunset > sunrise && curr_hour > sunset)
+	//night before 00:00
+	else if( curr_hour > sunset)
 	{
 		var length = sunrise_tommorow + 24 - sunset;
 		var curr_hour_offset = curr_hour - sunset;
@@ -73,11 +56,11 @@
 		lbSecond = second;
 		document.getElementById("Second").value = lbSecond;
 	}
-	//moonset before moonrise
-	if(sunset < sunrise && curr_hour < sunrise)
+	//night after 00:00
+	else if(curr_hour < sunrise)
 	{
-		var length = sunrise - sunset;
-		var curr_hour_offset = curr_hour - sunset;
+		var length = sunrise + 24 - sunset_yasterdate;
+		var curr_hour_offset = curr_hour + 24 - sunset_yasterdate;
 		
 		var hour = Math.floor(12* (curr_hour_offset/length));
 		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
@@ -90,42 +73,10 @@
 		lbSecond = second;
 		document.getElementById("Second").value = lbSecond;
 	}
-	if(sunset < sunrise && curr_hour < sunset)
-	{
-		var length = sunset + 24 - sunrise_yasterday;
-		var curr_hour_offset = curr_hour + 24 - sunrise_yasterday;
-		
-		var hour = Math.floor(12* (curr_hour_offset/length));
-		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
-		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
-	    
-		lbHour = hour + 12;
-		document.getElementById("Hour").value = hour;
-		lbMinute = minute;
-		document.getElementById("Minute").value = lbMinute;
-		lbSecond = second;
-		document.getElementById("Second").value = lbSecond;
-	}
-	if(sunset < sunrise && curr_hour > sunrise)
-	{
-		var length = sunset_tommorow + 24 - sunrise;
-		var curr_hour_offset = curr_hour - sunrise;
-		
-		var hour = Math.floor(12* (curr_hour_offset/length));
-		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
-		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
-	    
-		lbHour = hour + 12;
-		document.getElementById("Hour").value = hour;
-		lbMinute = minute;
-		document.getElementById("Minute").value = lbMinute;
-		lbSecond = second;
-		document.getElementById("Second").value = lbSecond;
-	}
 	display_time();
 	var url = document.location.href;
 	//if(url.includes("yovel") || url.includes("year") || url.includes("month"))
-	sederLimud("Dummy");
+	//sederLimud("Dummy");
 
 	if(lbMinute == 0)
 	{
@@ -136,7 +87,7 @@
         //setParasha();
 		var url = document.location.href;
 		//if(url.includes("yovel") || url.includes("year") || url.includes("month"))
-		sederLimud("Automate");
+		//sederLimud("Automate");
         commercialFunction();
     }
     

@@ -21,5 +21,13 @@ window.onclick = function (event) {
 
 function englishFunction()
 {
-	window.location.href= "../../en/islam/index.html";
+	var url_obj = new URL(document.location.href);
+	var lon = url_obj.searchParams.get("longitude");        
+	var lat = url_obj.searchParams.get("latitude");
+
+	var location = "";
+	if(lon)
+		var location = "?longitude=" + lon + "&latitude=" + lat;
+	
+	window.location.href= "../../en/yovel/index.html" + location;
 }
