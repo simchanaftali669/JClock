@@ -47,10 +47,13 @@
   
 </div>
 
-<script type="text/javascript" src="../../shared/multiLanguage/js/MarrigeDB.js"></script>
 <script>
-	function get_marrige_essential()
+	async function get_marrige_essential()
 	{
+        //var response = await fetch("https://bind-me.net/marrigeDB");
+        ar response = await fetch("https://jclock126-db.web.app/marrigeDB");
+		var data = await response.json();
+        var marrigeDB = data.marrigeDB || data;
         var marrigeTime = marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
         if(marrigeTime != null)
             document.location.href = "../../me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour; 

@@ -46,9 +46,8 @@
   
 </div>
 
-<script type="text/javascript" src="../../shared/multiLanguage/js/MarrigeDB.js"></script>
 <script>
-	function get_marrige_essential()
+	async function get_marrige_essential()
 	{
 		var url_obj = new URL(document.location.href);
 		var lon = url_obj.searchParams.get("longitude");        
@@ -58,7 +57,9 @@
 		if(lon)
 			location = "&longitude=" + lon + "&latitude=" + lat; 
 	
-		
+		var response = await fetch("https://bind-me.net/marrigeDB");
+		var data = await response.json();
+		var marrigeDB = data.marrigeDB || data;
 		var marrigeTime = marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
 		if(marrigeTime != null)
 		  document.location.href = "../../me/en/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location;  
