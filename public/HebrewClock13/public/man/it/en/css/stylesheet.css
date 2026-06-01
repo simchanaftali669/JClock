@@ -329,3 +329,35 @@ body
 .dropdown a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+@media screen and (max-width: 850px)
+{
+    #Hour
+    {
+        width: 80px;
+    }
+
+    #Minute
+    {
+        width: 150px;
+    }
+
+    #Second
+    {
+        width: 80px;
+    }
+
+    .clock
+    {
+        font-size:60px;
+    }
+
+    .zmanim_text {
+        width:180px;
+        font-size:40px;
+    }
+
+    .zmanim_hour {
+        width:150px;
+    }
+}

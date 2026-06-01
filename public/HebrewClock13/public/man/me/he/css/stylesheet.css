@@ -48,7 +48,7 @@ body
                 font-size:xx-large;
             }
 .zmanim_hour {
-                width:50px; 
+                width:80px; 
                 text-align:center; 
                 font-size:xx-large;
             }
@@ -62,7 +62,7 @@ body
 {
     text-align:center;
     /*font-size: 150px;*/
-    width: 80px;
+    width: 100px;
     font-family:Comic Sans MS;
 }
 #Text2
@@ -76,7 +76,7 @@ body
 {
     text-align:center;
     /*font-size: 150px;*/
-    width: 150px;
+    width: 200px;
     font-family:Comic Sans MS;
 }
 #Text4
@@ -90,14 +90,14 @@ body
 {
     text-align:center;
     /*font-size: 150px;*/
-    width: 80px;
+    width: 100px;
     font-family:Comic Sans MS;
 }
 .clock
 {
     color:black; 
     text-align:center;
-    font-size:60px;  
+    font-size:80px;  
 }
 .day
 {
@@ -136,13 +136,13 @@ body
     width:200px; 
 }
 .zmanim_text {
-                width:180px; 
+                width:360px; 
                 text-align:center; 
-                font-size:40px;
+                font-size:36px;
                 color:#0070c0; /*blue*/
             }
 .zmanim_hour {
-                width:150px; 
+                width:175px; 
                 text-align:center; 
                 font-size:36px;
                 font-family:Comic Sans MS;
@@ -365,4 +365,36 @@ body
 select {
     font-size: 16px !important;
     height: 60px !important;;
+}
+
+@media screen and (max-width: 850px)
+{
+    #Hour
+    {
+        width: 80px;
+    }
+
+    #Minute
+    {
+        width: 150px;
+    }
+
+    #Second
+    {
+        width: 80px;
+    }
+
+    .clock
+    {
+        font-size:60px;
+    }
+
+    .zmanim_text {
+        width:180px;
+        font-size:40px;
+    }
+
+    .zmanim_hour {
+        width:150px;
+    }
 }
