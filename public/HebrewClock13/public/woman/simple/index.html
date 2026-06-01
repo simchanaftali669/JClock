@@ -67,7 +67,7 @@
 			<div>
 				<center>
 				<div> 
-					<a id="Mazal" style="cursor:pointer;" style="text-decoration: unset;"></a><!-- onclick="openSederLimud();" style="text-decoration: unset;"></a>-->
+					<a id="Mazal" style="cursor:pointer; text-decoration: unset;" onclick="openSederLimud();"></a>
 				</div>
 				<div class="circular" style="display:none";>
 					<div class="inner"></div>
@@ -353,11 +353,19 @@
 	
 	function openSederLimud()
 	{
+		let isPersonalMazal = "&period=personal";
+		var url = new URL(document.location.href);
+		if(url.searchParams.get("hour") == null)
+			isPersonalMazal = "";
+
+        var lon = url.searchParams.get("longitude");        
+        var lat = url.searchParams.get("latitude");
+		var location = lon ? "&latitude=" + lat + "&longitude=" + lon : "";
         var userLang = navigator.language || navigator.userLanguage; 
-        if (userLang = "he") 
-            window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);
+        if (userLang.includes("he")) 
+            window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;
         else
-            window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);	
+            window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;	
 	}
     </script>
 

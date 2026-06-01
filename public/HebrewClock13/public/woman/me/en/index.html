@@ -144,6 +144,8 @@
     var oTimer;                 //event for the running clock
 
     var hebrewday;
+	var birthDay;
+	var birthHour;
     var lbHour = 23;           //hour of the clock called also sha'a
     var lbHourClock;            //hour for displaying
     var lbMinute = 1075;       //minute of the clock called also chelek
@@ -176,6 +178,34 @@
     //---get Location and activate the clock---
     function getLocation()
     {
+		var url = new URL(document.location.href);
+        var lon = url.searchParams.get("longitude");        
+        var lat = url.searchParams.get("latitude");
+	
+		if(lon && lat)
+		{
+		    longitude = lon;
+			latitude = lat;
+
+			birthDay = url.searchParams.get("hebrewDay");
+			birthHour = url.searchParams.get("hebrewHour");
+
+			set_dst();
+			set_default_date();
+			list_pos();
+			hebrewclock();
+			oTimerclock();
+			setmazal();
+			setMasechet();
+			setSefer();
+			setParasha();
+			sederLimud();
+			
+			setShevet();
+			commercialFunction();
+				
+			return;
+		}
         if (navigator.geolocation)
         {
             navigator.geolocation.getCurrentPosition(showPosition,showError);
@@ -195,6 +225,9 @@
         longitude = lon ? lon : position.coords.longitude;
         latitude = lat ? lat : position.coords.latitude;
 
+		birthDay = url.searchParams.get("hebrewDay");
+		birthHour = url.searchParams.get("hebrewHour");
+
         set_dst();
         set_default_date();
         list_pos();
@@ -202,11 +235,11 @@
 		oTimerclock();
         //tora learning
         //genderInitFunction();
-		setmazal();
+        setmazal();
         setMasechet();
         setSefer();
         setParasha();
-        //sederLimud();
+        sederLimud();
 		
 		//נחלה
         setShevet();
