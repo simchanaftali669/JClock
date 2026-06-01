@@ -21,32 +21,29 @@ window.onclick = function (event) {
 
 function englishFunction(x=1)
 {
-	var url_obj = new URL(document.location.href);
-	var lon = url_obj.searchParams.get("longitude");        
-	var lat = url_obj.searchParams.get("latitude");
-
-	var location = "";
-	if(lon)
-		var location = "?longitude=" + lon + "&latitude=" + lat;
-
 	if(x==1)
-		window.location.href= "../../en/kabala/index.html" + location;
+		window.location.href= "../../en/kabala/index.html" + getCurrentQueryString();
 	else
-		window.location.href= "../../en/kabala/guide.html" + location;
+		window.location.href= "../../en/kabala/guide.html" + getCurrentQueryString();
 }
 
+function getCurrentQueryString()
+{
+	var url_obj = new URL(document.location.href);
+	return url_obj.search + url_obj.hash;
+}
 
 function englishScheduleFunction()
 {
-	window.location.href= "../../en/kabala/schedule.html";
+	window.location.href= "../../en/kabala/schedule.html" + getCurrentQueryString();
 }
 
 function englishInternalSportFunction()
 {
-	window.location.href= "../../en/kabala/internal_sport.html";
+	window.location.href= "../../en/kabala/internal_sport.html" + getCurrentQueryString();
 }
 
 function englishExternalSportFunction()
 {
-	window.location.href= "../../en/kabala/external_sport.html";
+	window.location.href= "../../en/kabala/external_sport.html" + getCurrentQueryString();
 }

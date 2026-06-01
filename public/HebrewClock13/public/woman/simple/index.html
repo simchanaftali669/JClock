@@ -283,25 +283,47 @@
     function openSpecialChristianClock()
     {
 		var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");
+        var queryString = getClockQueryString(url);
 		
         var userLang = navigator.language || navigator.userLanguage; 
 		if (userLang == "he")
 		{
-			if(lon)
-				window.location.href = "../it/he/kabala/index.html?latitude=" + lat + "&longitude="+ lon;
-			else
-				window.location.href = "../it/he/kabala/index.html";
+			window.location.href = "../it/he/kabala/index.html" + queryString;
 		}
 		else
 		{
-			if(lon)
-				window.location.href = "../it/en/kabala/index.html?latitude=" + lat + "&longitude="+ lon;
-			else
-				window.location.href = "../it/en/kabala/index.html";
+			window.location.href = "../it/en/kabala/index.html" + queryString;
 		}	
     }
+
+	function getClockQueryString(url)
+	{
+		var date = new Date();
+		var hour = birthHour == null ? date.getHours() : birthHour;
+		var min = birthMin == null ? date.getMinutes() : birthMin;
+		var year = birthYear == null ? date.getFullYear() : birthYear;
+		var month = birthMonth == null ? date.getMonth() + 1 : birthMonth;
+		var day = birthDay == null ? date.getDate() : birthDay;
+		var gmt = birthGMT == null ? (new Date().getTimezoneOffset() / -60) : birthGMT;
+		var params = new URLSearchParams(url.search);
+		if(!params.get("latitude"))
+			params.set("latitude", latitude);
+		if(!params.get("longitude"))
+			params.set("longitude", longitude);
+		if(!params.get("hour"))
+			params.set("hour", hour);
+		if(!params.get("min"))
+			params.set("min", min);
+		if(!params.get("year"))
+			params.set("year", year);
+		if(!params.get("month"))
+			params.set("month", month);
+		if(!params.get("day"))
+			params.set("day", day);
+		if(!params.get("gmt"))
+			params.set("gmt", gmt);
+		return "?" + params.toString();
+	}
 	
 	function yovelMazalCalculator()
 	{

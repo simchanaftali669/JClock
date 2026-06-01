@@ -215,15 +215,16 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 	<script type="text/javascript" src="../js/Gender.js"></script>
 	<script type="text/javascript" src="../js/Religion.js"></script>
     <script type="text/javascript" src="../../../shared/he/js/Commercial.js"></script>
-    <script type="text/javascript" src="./js/Mazal.js"></script>
-    <script type="text/javascript" src="./js/SunCalc.js"></script>
-    <script type="text/javascript" src="./js/Times.js"></script>
+    <script type="text/javascript" src="./js/Mazal.js?v=3"></script>
+    <script type="text/javascript" src="./js/suncalc.js"></script>
+    <script type="text/javascript" src="./js/Times.js?v=3"></script>
     <script type="text/javascript" src="./js/Shevet.js"></script>
     <script type="text/javascript" src="../js/SunTime.js"></script>
     <script type="text/javascript" src="../js/TimeAdj.js"></script>
     <script type="text/javascript" src="../js/Dst.js"></script>
     <script type="text/javascript" src="../js/Dates.js"></script>
     <script type="text/javascript" src="../js/Location.js"></script>
+    <script type="text/javascript" src="../../../simple/js/HebrewDate.js"></script>
 
 <script type="text/javascript">
 
@@ -261,6 +262,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     var lbHourClock;            //hour for displaying
     var lbMinute = 1075;       //minute of the clock called also chelek
     var lbSecond = 70;         //second of the clock called also re'ga
+	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
     var audio;
     var omer;
     var mazal_url;
@@ -289,9 +291,14 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 		var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
+		birthYear = url.searchParams.get("year");
+		birthMonth = url.searchParams.get("month");
+		birthDay = url.searchParams.get("day");
 		birthHour = url.searchParams.get("hour");
+		birthMin = url.searchParams.get("min");
+		birthGMT = url.searchParams.get("gmt");
 	
-		if(lon && lat && !birthHour)		
+		if(lon && lat)		
 		{
 			longitude = lon ? lon : position.coords.longitude;
 			latitude = lat ? lat : position.coords.latitude; 

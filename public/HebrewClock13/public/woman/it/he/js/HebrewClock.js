@@ -26,7 +26,7 @@ function hebrewclock()
     var date = new Date();
 
 	var h,m,s,milisec;
-	if(birthHour == null)
+	if(true)//birthHour == null)
     {
 		var h = date.getHours();
 		var m = date.getMinutes();
@@ -272,7 +272,7 @@ function display_time()
 	var date = new Date();
 
 	var h,m,s
-	if(birthHour == null)
+	if(true)//birthHour == null)
     {
 		var h = date.getHours();
 		var m = date.getMinutes();
