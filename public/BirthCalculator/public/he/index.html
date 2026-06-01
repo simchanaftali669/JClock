@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>מחשבון המרה לשעה עברית</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../shared/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <style>
+  /* Set the size of the div element that contains the map */
+  #map {
+	height: 400px;  /* The height is 400 pixels */
+	width: 100%;  /* The width is the width of the web page */
+   }
+  .map-panel {
+	display: grid;
+	gap: 10px;
+  }
+  .map-actions {
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 1fr 1fr;
+  }
+  .gender-toggle {
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 1fr 1fr;
+	margin-bottom: 14px;
+  }
+  .gender-option {
+	min-height: 44px;
+	border: 2px solid transparent;
+	border-radius: 6px;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+  }
+  .gender-option.male {
+	background: #5dbcd2;
+  }
+  .gender-option.female {
+	background: #CA2C92;
+  }
+  .gender-option.selected {
+	border: 2px dashed #000;
+  }
+  #location-status {
+	min-height: 20px;
+	margin: 0;
+	font-size: 14px;
+  }
+  #location-status.error {
+	color: #a94442;
+  }
+  @media (max-width: 480px) {
+	.map-actions {
+	  grid-template-columns: 1fr;
+	}
+	.gender-toggle {
+	  grid-template-columns: 1fr;
+	}
+  }
+  </style>
+</head>
+<body >
+
+<div class="container mt-3">
+  <!-- Button to Open the Modal -->
+<center>
+	<button id="btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+   		מחשבון המרה לשעה עברית
+  	</button>
+</center>
+
+  <!-- The Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          	<button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">מחשבון המרה לשעה עברית</h4>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body" style="direction:rtl;!important;">
+			
+			<!--<p href="#" data-toggle="tooltip" title="מגדר"  style="display: inline-block; width: 248px;">מגדר:</p></br>
+			<label class="radio-inline"><input type="radio" checked name="gender" value="Male" data-toggle="toggle"> זכר </label>
+			<label class="radio-inline"><input type="radio" name="gender" value="Female" data-toggle="toggle"> נקבה </label> 
+		   <hr/>-->
+			<p href="#" data-toggle="tooltip" title="בחירת בן או בת" style="display: inline-block; width: 248px;">בן / בת</p>
+			<div class="gender-toggle" role="group" aria-label="בחירת בן או בת">
+				<button type="button" class="gender-option male selected" data-gender="man" aria-pressed="true">בן</button>
+				<button type="button" class="gender-option female" data-gender="woman" aria-pressed="false">בת</button>
+			</div>
+			<p href="#" data-toggle="tooltip" title="בחירת המיקום"  style="display: inline-block; width: 248px;">בחירת המיקום</p>
+			<div class="map-panel">
+				<input id="place-search" type="text" class="form-control" placeholder="לדוגמה: הכותל המערבי">
+				<div class="map-actions">
+					<button type="button" id="place-search-button" class="btn btn-info">חפש במפה</button>
+					<button type="button" id="current-location" class="btn btn-default">השתמש במיקום הנוכחי</button>
+				</div>
+				<p id="location-status" aria-live="polite"></p>
+				<div id="map"></div>
+			</div>
+			<!-- <iframe style="width:100%; height:450px;" src="location.html"></iframe>-->
+			<!--
+			<p href="#" data-toggle="tooltip" title="קו רוחב"  style="display: inline-block; width: 248px;">קו רוחב</p><input id="latitude" value="30"/>		  
+			</br>
+			<p href="#" data-toggle="tooltip" title="קו אורך" style="display: inline-block; width: 248px;">קו אורך</p><input id="longitude"  value="32"/>
+			-->
+		  <hr/>
+			<p href="#" data-toggle="tooltip" title="תאריך חילוני"  style="display: inline-block; width: 248px;">תאריך לידה</p><input type="date" id="dateOfBirth" class="form-control" data-toggle="datepicker"> 
+			<p href="#" data-toggle="tooltip" title="שעה חילונית"  style="display: inline-block; width: 248px;">שעת לידה</p><input type="time" id="hourOfBirth" class="form-control" data-toggle="timepicker"> 
+			<br>
+			<p href="#" data-toggle="tooltip" title="ישראל בחורף +2 ובקיץ +3" style="display: inline-block; width: 248px;" onclick="window.open('https://www.timeanddate.com/time/change/israel/jerusalem','_blank')">GMT</p><input type="number" id="GMT"  value="3"/>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+		  <div type="button" class="btn btn-success" onclick="calculateHebrewHour();">חשב</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+	var selectedGender = "man";
+
+	function selectGender(gender) {
+		selectedGender = gender;
+		document.querySelectorAll('.gender-option').forEach(function(button) {
+			var isSelected = button.getAttribute('data-gender') === gender;
+			button.classList.toggle('selected', isSelected);
+			button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+		});
+	}
+
+	document.getElementById('btn').click();
+
+	function calculateHebrewHour()
+	{		
+		var latitude = marker.position.lat();
+		var longitude = marker.position.lng();
+		var hourStr = document.getElementById('hourOfBirth').value;
+		var hour = Number(hourStr.split(':')[0]);
+		var min = Number(hourStr.split(':')[1]);
+		var dateStr = document.getElementById('dateOfBirth').value;
+		var year = Number(dateStr.split('-')[0]);
+		var month = Number(dateStr.split('-')[1]);
+		var day = Number(dateStr.split('-')[2]);
+		var gmt = document.getElementById('GMT').value;
+		var gender = selectedGender;
+		
+		
+		//document.location.href = "https://hebrewclock13.web.app/man/simple/index.html?latitude=30&longitude=32&hour=20&min=43&year=1987&month=3&day=4&gmt=3";
+		document.location.href = "../../../HebrewClock13/public/"+ gender + "/simple/index.html?latitude=" + latitude + 
+																					"&longitude=" + longitude +
+																					"&hour=" + hour + 
+																					"&min=" + min + 
+																					"&year=" + year + 
+																					"&month=" + month + 
+																					"&day=" + day + 
+																					"&gmt=" + gmt;
+	}
+
+	$(document).ready(function()
+	{
+		$('[data-toggle="tooltip"]').tooltip();   
+	});
+
+	document.querySelectorAll('.gender-option').forEach(function(button) {
+		button.addEventListener('click', function() {
+			selectGender(button.getAttribute('data-gender'));
+		});
+	});
+
+	var marker;
+	var map;
+	var geocoder;
+	var placesService;
+	var placeAutocomplete;
+	var latitude = 31.7768514;
+	var longitude = 35.2331664;
+	var placeSearchInput = document.getElementById('place-search');
+	var locationStatus = document.getElementById('location-status');
+
+	function initMap() {
+	  var initialLocation = {lat: latitude, lng: longitude};
+
+	  geocoder = new google.maps.Geocoder();
+	  map = new google.maps.Map(document.getElementById('map'), {zoom: 13, center: initialLocation});
+	  placesService = new google.maps.places.PlacesService(map);
+	  marker = new google.maps.Marker({draggable: true, position: initialLocation, map: map});
+
+	  marker.addListener('dragend', function() {
+	    setSelectedLocation(marker.getPosition().lat(), marker.getPosition().lng());
+	  });
+
+	  placeAutocomplete = new google.maps.places.Autocomplete(placeSearchInput, {
+	    fields: ['formatted_address', 'geometry', 'name']
+	  });
+	  placeAutocomplete.bindTo('bounds', map);
+	  placeAutocomplete.addListener('place_changed', function() {
+	    var place = placeAutocomplete.getPlace();
+	    if (!place.geometry || !place.geometry.location) {
+	      searchPlace();
+	      return;
+	    }
+
+	    applyGoogleLocation(place.geometry.location, place.formatted_address || place.name);
+	  });
+
+	  getLocation();
+	}
+
+	function getLocation() {
+	  if (!navigator.geolocation) {
+	    showLocationError();
+	    return;
+	  }
+
+	  navigator.geolocation.getCurrentPosition(function(position) {
+	    updateLocation(position.coords.latitude, position.coords.longitude);
+	    locationStatus.className = '';
+	    locationStatus.textContent = 'המיקום הנוכחי נבחר.';
+	  }, showLocationError);
+	}
+
+	document.getElementById('current-location').addEventListener('click', function() {
+	  locationStatus.className = '';
+	  locationStatus.textContent = 'מאתר מיקום...';
+	  getLocation();
+	});
+
+	document.getElementById('place-search-button').addEventListener('click', searchPlace);
+	placeSearchInput.addEventListener('keydown', function(event) {
+	  if (event.key === 'Enter') {
+	    event.preventDefault();
+	    searchPlace();
+	  }
+	});
+
+	function searchPlace() {
+	  var address = placeSearchInput.value.trim();
+	  if (!address) {
+	    return;
+	  }
+
+	  if (placesService) {
+	    placesService.findPlaceFromQuery(
+	      {
+	        query: address,
+	        fields: ['formatted_address', 'geometry', 'name']
+	      },
+	      function(results, placesStatus) {
+	        if (placesStatus === google.maps.places.PlacesServiceStatus.OK && results[0] && results[0].geometry) {
+	          applyGoogleLocation(results[0].geometry.location, results[0].formatted_address || results[0].name);
+	          return;
+	        }
+
+	        geocodeAddress(address);
+	      }
+	    );
+	    return;
+	  }
+
+	  geocodeAddress(address);
+	}
+
+	function geocodeAddress(address) {
+	  if (!geocoder) {
+	    return;
+	  }
+
+	  geocoder.geocode({ address: address }, function(results, geocodeStatus) {
+	    if (geocodeStatus !== 'OK' || !results[0]) {
+	      locationStatus.className = 'error';
+	      locationStatus.textContent = 'לא נמצא מקום מתאים.';
+	      return;
+	    }
+
+	    applyGoogleLocation(results[0].geometry.location, results[0].formatted_address);
+	  });
+	}
+
+	function applyGoogleLocation(location, label) {
+	  updateLocation(location.lat(), location.lng());
+	  locationStatus.className = '';
+	  locationStatus.textContent = label || 'המיקום נבחר.';
+	}
+
+	function setSelectedLocation(selectedLatitude, selectedLongitude) {
+	  latitude = selectedLatitude;
+	  longitude = selectedLongitude;
+	}
+
+	function updateLocation(selectedLatitude, selectedLongitude) {
+	  setSelectedLocation(selectedLatitude, selectedLongitude);
+
+	  if (!map || !marker) {
+	    return;
+	  }
+
+	  var location = {lat: Number(latitude), lng: Number(longitude)};
+	  marker.setPosition(location);
+	  map.setCenter(location);
+	  map.setZoom(15);
+	}
+
+	function showLocationError() {
+	  locationStatus.className = 'error';
+	  locationStatus.textContent = 'לא ניתן לקבל מיקום. נשארים עם ירושלים.';
+	}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcXPNQH8H9c_xeTxH9yT1OKPoM5e_YU4I&libraries=places&callback=initMap">
+    
+    </script>
+
+</body>
+</html>
