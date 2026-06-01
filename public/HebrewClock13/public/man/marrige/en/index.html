@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://bind-me.net/MarrigeDB.js"></script>
 </head>
 <body >
 
@@ -57,10 +58,13 @@
 		if(lon)
 			location = "&longitude=" + lon + "&latitude=" + lat; 
 	
-		var response = await fetch("https://bind-me.net/marrigeDB");
-		var data = await response.json();
-		var marrigeDB = data.marrigeDB || data;
-		var marrigeTime = marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
+		if(!Array.isArray(window.marrigeDB))
+		{
+			alert("Could not load the marriage database.");
+			return;
+		}
+
+		var marrigeTime = window.marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
 		if(marrigeTime != null)
 		  document.location.href = "../../me/en/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location;  
 		else
