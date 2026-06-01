@@ -2,8 +2,29 @@
 function setmazal() 
 {
 	
-	var date = new Date();
+	var date;
+	if(birthYear == null)
+		date = new Date();
+	else
+		date = new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
+	
+	var h,m,s;
+	if(birthHour == null)
+	{
+		h = date.getHours();
+		m = date.getMinutes();
+		s = date.getSeconds();
+	}
+	else
+	{
+		h = Number(birthHour);
+		m = Number(birthMin);
+		s = 0;
+	}
+	
 	var userLang = navigator.language || navigator.userLanguage;	
+	var originalTzeit = tzeit;
+	tzeit = 25;
 	
 	if (userLang.includes("he")) 
 	{
@@ -15,33 +36,29 @@ function setmazal()
 		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(),"English");
 		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'];
 	}
+	tzeit = originalTzeit;
 		
 	document.body.style.backgroundImage = "url('pic/7.jpg')";
 	
 	//return;
-
-    var date = new Date();
-
-    var h = date.getHours();
-    var m = date.getMinutes();
-    var s = date.getSeconds();
-
-
 
     var day = date.getDay() + 1;
     var clockHour = lbHour;
     if (clockHour == 24)
         clockHour = 0;
 
-    if ((h == sunsetH && m == sunsetM && s >= sunsetS) ||    // אחרי שקיעה
-        (h == sunsetH && m > sunsetM) ||
-        (h > sunsetH)
-       )
-        if ((h == 23 && m == 23 && s <= 59) ||    // לפני חצות
-            (h == 23 && m < 59) ||
-            (h < 23)
-           )
-            day = day + 1;
+	if(birthHour == null)
+	{
+		if ((h == sunsetH && m == sunsetM && s >= sunsetS) ||    // אחרי שקיעה
+			(h == sunsetH && m > sunsetM) ||
+			(h > sunsetH)
+		   )
+			if ((h == 23 && m == 23 && s <= 59) ||    // לפני חצות
+				(h == 23 && m < 59) ||
+				(h < 23)
+			   )
+				day = day + 1;
+	}
 
 
     //document.getElementById("test").value = h > sunsetH;
@@ -50,7 +67,8 @@ function setmazal()
         day = 1;
 
     hebrewday = day;
-	hebrewday += hebrewDayOffset();
+	if(birthHour == null)
+		hebrewday += hebrewDayOffset();
 	
 	if(hebrewday == 0)
 		hebrewday = 7;

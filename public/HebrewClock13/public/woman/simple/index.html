@@ -179,9 +179,14 @@
 		var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
+		birthYear = url.searchParams.get("year");
+		birthMonth = url.searchParams.get("month");
+		birthDay = url.searchParams.get("day");
 		birthHour = url.searchParams.get("hour");
+		birthMin = url.searchParams.get("min");
+		birthGMT = url.searchParams.get("gmt");
 	
-		if(lon && lat && !birthHour)		
+		if(lon && lat)		
 		{
 			longitude = lon ? lon : position.coords.longitude;
 			latitude = lat ? lat : position.coords.latitude; 
