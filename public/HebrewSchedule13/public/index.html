@@ -97,6 +97,39 @@
       grid-template-columns: 1fr 1fr;
     }
 
+    .gender-panel {
+      display: grid;
+      gap: 7px;
+      font-weight: 700;
+    }
+
+    .gender-toggle {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .gender-option {
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 9px 11px;
+    }
+
+    .gender-option.male {
+      background: #5dbcd2;
+    }
+
+    .gender-option.female {
+      background: #CA2C92;
+    }
+
+    .gender-option.selected {
+      outline: 2px dashed #000;
+      outline-offset: -5px;
+    }
+
     .map-panel {
       display: grid;
       gap: 10px;
@@ -162,6 +195,10 @@
       .button-row {
         grid-template-columns: 1fr;
       }
+
+      .gender-toggle {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -172,6 +209,14 @@
 
     <form id="schedule-form">
       <button class="secondary" id="language-toggle" type="button">English</button>
+
+      <div class="gender-panel">
+        <span id="gender-label">בן / בת</span>
+        <div class="gender-toggle" role="group" aria-labelledby="gender-label">
+          <button type="button" class="gender-option male selected" data-gender="man" aria-pressed="true" id="boy-button">בן</button>
+          <button type="button" class="gender-option female" data-gender="woman" aria-pressed="false" id="girl-button">בת</button>
+        </div>
+      </div>
 
       <label>
         <span id="date-label">תאריך</span>
@@ -229,6 +274,9 @@
         time: "שעה",
         latitude: "קו רוחב",
         longitude: "קו אורך",
+        gender: "בן / בת",
+        boy: "בן",
+        girl: "בת",
         place: "חיפוש מקום",
         placePlaceholder: "לדוגמה: הכותל המערבי",
         searchPlace: "חפש במפה",
@@ -241,7 +289,7 @@
         locationReady: "המיקום הנוכחי נבחר.",
         jerusalemReady: "מיקום ירושלים נבחר.",
         locationUnavailable: "לא ניתן לקבל מיקום. נשארים עם ירושלים.",
-        target: "../../HebrewClock13/public/man/it/he/kabala/index.html"
+        target: "../../HebrewClock13/public/{gender}/it/he/kabala/index.html"
       },
       en: {
         lang: "en",
@@ -252,6 +300,9 @@
         time: "Time",
         latitude: "Latitude",
         longitude: "Longitude",
+        gender: "Boy / Girl",
+        boy: "Boy",
+        girl: "Girl",
         place: "Find location",
         placePlaceholder: "For example: Western Wall",
         searchPlace: "Search map",
@@ -264,7 +315,7 @@
         locationReady: "Current location selected.",
         jerusalemReady: "Jerusalem location selected.",
         locationUnavailable: "Location is unavailable. Jerusalem remains selected.",
-        target: "../../HebrewClock13/public/man/it/en/kabala/index.html"
+        target: "../../HebrewClock13/public/{gender}/it/en/kabala/index.html"
       }
     };
 
@@ -282,6 +333,9 @@
     document.getElementById("time-label").textContent = text.time;
     document.getElementById("latitude-label").textContent = text.latitude;
     document.getElementById("longitude-label").textContent = text.longitude;
+    document.getElementById("gender-label").textContent = text.gender;
+    document.getElementById("boy-button").textContent = text.boy;
+    document.getElementById("girl-button").textContent = text.girl;
     document.getElementById("place-label").textContent = text.place;
     document.getElementById("place-search").placeholder = text.placePlaceholder;
     document.getElementById("place-search-button").textContent = text.searchPlace;
@@ -301,6 +355,7 @@
     let geocoder;
     let placesService;
     let placeAutocomplete;
+    let selectedGender = "man";
 
     const now = new Date();
     dateInput.value = formatDate(now);
@@ -373,6 +428,12 @@
       status.textContent = text.jerusalemReady;
     });
 
+    document.querySelectorAll(".gender-option").forEach(button => {
+      button.addEventListener("click", () => {
+        selectGender(button.getAttribute("data-gender"));
+      });
+    });
+
     document.getElementById("place-search-button").addEventListener("click", searchPlace);
     placeSearchInput.addEventListener("keydown", event => {
       if (event.key === "Enter") {
@@ -397,8 +458,18 @@
         isSchedule: "true"
       });
 
-      window.location.href = `${text.target}?${params.toString()}`;
+      const target = text.target.replace("{gender}", selectedGender);
+      window.location.href = `${target}?${params.toString()}`;
     });
+
+    function selectGender(gender) {
+      selectedGender = gender;
+      document.querySelectorAll(".gender-option").forEach(button => {
+        const isSelected = button.getAttribute("data-gender") === gender;
+        button.classList.toggle("selected", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+      });
+    }
 
     function formatDate(date) {
       const year = date.getFullYear();
