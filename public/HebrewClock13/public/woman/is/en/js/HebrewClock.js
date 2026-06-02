@@ -188,8 +188,7 @@ function hebrewclock()
 		setmazal();	
 	}
 	
-	if(curr_hour >= sunrise-1 &&  curr_hour < sunrise)
-		window.location.href = "https://digitalchazan.web.app/woman";
+	// Keep the prayer schedule on this page when prayer time approaches.
 	
 	//else if(parseInt(document.getElementById("Hour").value) == 11)
 	//{

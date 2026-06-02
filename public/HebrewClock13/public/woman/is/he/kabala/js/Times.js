@@ -1,4 +1,4 @@
-﻿//set the sunset and sunrise
+﻿//set the moonset and moonrise
 function doit() {
 
     var nsi, ewi;
@@ -30,42 +30,105 @@ function doit() {
     tomorrow.setDate(today.getDate() + 1);
 
 
-   //the time of yasterday
-    var time_yasterday = [0, 0, 0, 0];
-	
-	time_yasterday[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).rise);
-	time_yasterday[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).set);	
-    //time_yasterday = suntime(yasterday.getDate(), yasterday.getMonth() +1, yasterday.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
+    function hours(date) {
+        return convertDateTimeToFloat(date);
+    }
 
-    //the time of the current day
-    var time_today = [0, 0, 0, 0];
-    //time_today = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
-	time_today[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(today, latitude, longitude).rise);
-	time_today[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(today, latitude, longitude).set);	
+    function hoursBetween(start, end) {
+        return (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+    }
 
-    //the time of the next day
-    var time_tommorow = [0, 0, 0, 0];
-    //time_tommorow = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
-	time_tommorow[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).rise);
-	time_tommorow[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).set);	
+    function moonEvents(type, centerDate) {
+        var events = [];
 
+        for (var offset = -7; offset <= 7; offset++) {
+            var moonDate = new Date(centerDate.getTime());
+            moonDate.setDate(centerDate.getDate() + offset);
 
-    if (time_today[1] == 0) {
-        sunrise_yasterday = time_yasterday[2];
-        sunrise = time_today[2];
-        sunrise_tommorow = time_tommorow[2];
-        sunset_yasterday = time_yasterday[3];
-        sunset = time_today[3];
-        sunset_tommorow = time_tommorow[3];
-		
-		hour[0] = sunrise_yasterday;
-		hour[1] = sunrise;
-		hour[2] = sunrise_tommorow;
-		hour[3] = sunset_yasterday;
-		hour[4] = sunset;
-		hour[5] = sunset_tommorow;
+            var moonTimes = SunCalc.getMoonTimes(moonDate, latitude, longitude);
+            if (moonTimes[type])
+                events.push(moonTimes[type]);
+        }
 
-        shaa_zmanit = (sunset - sunrise) / 12;
+        events.sort(function(a, b) { return a.getTime() - b.getTime(); });
+        return events;
+    }
+
+    function previousEvent(events, date) {
+        var previous = null;
+
+        for (var index = 0; index < events.length; index++) {
+            if (events[index].getTime() <= date.getTime())
+                previous = events[index];
+            else
+                break;
+        }
+
+        return previous;
+    }
+
+    function nextEvent(events, date) {
+        for (var index = 0; index < events.length; index++) {
+            if (events[index].getTime() > date.getTime())
+                return events[index];
+        }
+
+        return null;
+    }
+
+    function setTime(id, value) {
+        var element = document.getElementById(id);
+        if (element)
+            element.value = value;
+    }
+
+    function setMoonTime(id, start, offsetHours) {
+        var date = new Date(start.getTime() + offsetHours * 60 * 60 * 1000);
+        setTime(id, timeadj(hours(date), ampm));
+    }
+
+    var moonRises = moonEvents("rise", today);
+    var moonSets = moonEvents("set", today);
+    var now = new Date();
+
+    var lastMoonrise = previousEvent(moonRises, now);
+    var nextMoonrise = nextEvent(moonRises, now);
+    var lastMoonset = previousEvent(moonSets, now);
+    var setAfterLastMoonrise = lastMoonrise ? nextEvent(moonSets, lastMoonrise) : null;
+    var isMoonDay = lastMoonrise && setAfterLastMoonrise &&
+        lastMoonrise.getTime() <= now.getTime() &&
+        now.getTime() < setAfterLastMoonrise.getTime();
+
+    var scheduleMoonrise = isMoonDay ? lastMoonrise : nextMoonrise;
+    var scheduleMoonset = scheduleMoonrise ? nextEvent(moonSets, scheduleMoonrise) : null;
+    var nextScheduleMoonrise = scheduleMoonset ? nextEvent(moonRises, scheduleMoonset) : null;
+    var previousScheduleMoonrise = scheduleMoonrise ? previousEvent(moonRises, new Date(scheduleMoonrise.getTime() - 1)) : null;
+    var nextScheduleMoonset = scheduleMoonset ? nextEvent(moonSets, scheduleMoonset) : null;
+
+    if (scheduleMoonrise && scheduleMoonset && lastMoonset) {
+        var displaySunrise = hours(scheduleMoonrise);
+        var displaySunset = hours(scheduleMoonset);
+        var displayPreviousSunrise = previousScheduleMoonrise ? hours(previousScheduleMoonrise) : displaySunrise;
+        var displayNextSunrise = nextScheduleMoonrise ? hours(nextScheduleMoonrise) : displaySunrise;
+        var lastMoonsetHour = hours(lastMoonset);
+        var displayNextSunset = nextScheduleMoonset ? hours(nextScheduleMoonset) : displaySunset;
+        var nowHour = hours(now);
+        var nightBeforeMidnight = !isMoonDay && nowHour > lastMoonsetHour;
+
+        sunrise = nightBeforeMidnight && lastMoonrise ? hours(lastMoonrise) : displaySunrise;
+        sunrise_tommorow = nightBeforeMidnight ? displaySunrise : displayNextSunrise;
+        sunset_yasterdate = lastMoonsetHour;
+        sunset = nightBeforeMidnight ? lastMoonsetHour : displaySunset;
+        sunset_tommorow = displaySunset;
+
+        shaa_zmanit = Math.abs(hoursBetween(scheduleMoonrise, scheduleMoonset) / 12);
+
+        hour[0] = displayPreviousSunrise;
+        hour[1] = displaySunrise;
+        hour[2] = displayNextSunrise;
+        hour[3] = lastMoonsetHour;
+        hour[4] = displaySunset;
+        hour[5] = displayNextSunset;
 
 
         //using current time in the computer to adjust the right secdule...
@@ -75,118 +138,67 @@ function doit() {
         var h = date.getHours();
         var minute = date.getMinutes();
         var s = date.getSeconds();
-		var m = date.getMilliseconds();
-        var curr_hour = m + (s*1000) + (minute*60*1000) + (h*60*60*1000); 
+        var m = date.getMilliseconds();
+        var curr_hour = m + (s*1000) + (minute*60*1000) + (h*60*60*1000);
 
         var str = timeadj1(sunset);
         var sunsetArray = str.split(":");
         sunsetH = sunsetArray[0];
         sunsetM = sunsetArray[1];
         sunsetS = sunsetArray[2];
-		sunsetMili = sunsetArray[3];
+        sunsetMili = sunsetArray[3];
         var sunset_hour =  parseInt(sunsetMili) + parseInt((sunsetS*1000)) + parseInt((sunsetM*60*1000)) + parseInt((sunsetH*60*60*1000));
-		//-----------------------------------------------------------------
+        //-----------------------------------------------------------------
 
         //document.getElementById("Masechet").value = shaa_zmanit_night;
-        var state_of_day = 0; // 0 == curr_hour < sunset_hour 
+        var state_of_day = 0; // 0 == curr_hour < sunset_hour
         //legnth of the shaa zmanit - night
         //if (h > sunsetH || (h == sunsetH && minute > sunsetM) || (h == sunsetH && minute == sunsetM && s > sunsetS))
-	    if(curr_hour > sunset_hour)
-			state_of_day = 1;
-		
-		//document.getElementById("Sefer").value = sunrise_tommorow; 
-		if(curr_hour > sunset_hour)
-			shaa_zmanit_night = Math.abs((sunrise_tommorow + (24 - sunset)) / 12);
-        else
-            shaa_zmanit_night = Math.abs((sunrise + (24 - sunset_yasterdate)) / 12);
-//        hour[25] = shaa_zmanit_night;
-		
-        //legnth of the shaa zmanit - day
         if(curr_hour > sunset_hour)
-			shaa_zmanit_day = Math.abs((sunset_tommorow - sunrise_tommorow) / 12);
-        else
-			shaa_zmanit_day = Math.abs((sunset - sunrise) / 12);
+            state_of_day = 1;
+
+        shaa_zmanit_night = Math.abs(hoursBetween(lastMoonset, scheduleMoonrise) / 12);
+        shaa_zmanit_day = shaa_zmanit;
+//        hour[25] = shaa_zmanit_night;
+//        hour[26] = shaa_zmanit_day;
+
 
         //seconds of shaa zmanit
 //        hour[27] = Math.floor(shaa_zmanit_night * 3600.0 + 0.5);   //night
 //        hour[28] = Math.floor(shaa_zmanit_day * 3600.0 + 0.5);      //day
         //----------------------
-		
-		//mili seconds of shaa zmanit
-//		hour[29] = Math.floor(shaa_zmanit_night * 3600.0 * 1000);   //night
-//		hour[30] = Math.floor(shaa_zmanit_day * 3600.0 * 1000);      //day
+
+        //mili seconds of shaa zmanit
+//        hour[29] = Math.floor(shaa_zmanit_night * 3600.0 * 1000);   //night
+//        hour[30] = Math.floor(shaa_zmanit_day * 3600.0 * 1000);      //day
 
         //insert an array of shaot_zmaniot
         var s1, s2,s3,s4;
-        if (curr_hour > sunset_hour) {
-            s1 = sunset;
-            s2 = sunrise_tommorow;
-			s3 = sunset_tommorow;
-        }
-        else {
-            s1 = sunset_yasterdate;
-            s2 = sunrise;
-			s3 = sunset
-        }
+        s1 = sunset_yasterdate;
+        s2 = displaySunrise;
+        s3 = displaySunset;
 
 /*
-        for (i = 0,s4=s1; i <= 11; i++, s4 += shaa_zmanit_night) 
-		{
+        for (i = 0,s4=s1; i <= 11; i++, s4 += shaa_zmanit_night)
+        {
             hour[i] = timeadj1(s4);
         }
-		
-		for (i = 12,s4=s2; i <= 23; i++, s4 += shaa_zmanit_day) 
-		{
+
+        for (i = 12,s4=s2; i <= 23; i++, s4 += shaa_zmanit_day)
+        {
 
             hour[i] = timeadj1(s4);
         }
         //------------------------------
 */
 
-		document.getElementById("dawn").value = timeadj(s2 - (72/60), ampm);
-		//document.getElementById("misheyakir").value = timeadj(s2 - (50/60), ampm);
-		document.getElementById("sunrise").value = timeadj(s2, ampm);
-        //document.getElementById("shema").value = timeadj(s2 + shaa_zmanit_day * 3, ampm);
-        //document.getElementById("tefila").value = timeadj(s2 + shaa_zmanit_day * 4, ampm);
-        document.getElementById("chatzot_yom").value = timeadj(s2 + shaa_zmanit_day*6 , ampm);
-        //document.getElementById("mincha_gedola").value = timeadj(s2 + shaa_zmanit_day*6.5 , ampm);
-        document.getElementById("mincha_ketana").value = timeadj(s2 + shaa_zmanit_day*9.5 , ampm);
-		//document.getElementById("plag_mincha").value = timeadj(s2 + shaa_zmanit_day*10.75 , ampm);
-		document.getElementById("sunset").value = timeadj(s3, ampm);
-		//document.getElementById("tziet").value = timeadj(s3 + (18/60), ampm);
-		document.getElementById("tziet_tam").value = timeadj(s3 + (72/60), ampm);
-		//document.getElementById("chatzot_layla").value = timeadj(s3 + shaa_zmanit_night*6, ampm);		
-
-
-		var time;
-		
-		//עלות השחר
-		if( curr_hour > sunset_hour )
-			time = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 106, 6, lngd, lngm, ewi, latd, latm, nsi, adj);
-		else
-			time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 106, 6, lngd, lngm, ewi, latd, latm, nsi, adj);
-        
-        if (time[1] == 0)
-			document.getElementById("dawn").value = timeadj(time[2], ampm);
-
-		// //משיכיר
-		// if( curr_hour > sunset_hour )
-		// 	time = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 101, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
-        // else
-		// 	time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 101, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
-		
-		// if (time[1] == 0)
-		// 	document.getElementById("misheyakir").value = timeadj(time[2], ampm);
-
-		// //צאת הכוכבים
-		// if( curr_hour > sunset_hour )
-		// 	time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 96, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
-        // else
-		// 	time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 96, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
-		
-		// if (time[1] == 0)
-        //     document.getElementById("tziet").value = timeadj(time[3], ampm);
-        
+        // Lunar parallel of the Islamic prayer schedule.
+        setMoonTime("dawn", scheduleMoonrise, -72/60);
+        setMoonTime("sunrise", scheduleMoonrise, 0);
+        setMoonTime("chatzot_yom", scheduleMoonrise, shaa_zmanit_day*6);
+        setMoonTime("mincha_ketana", scheduleMoonrise, shaa_zmanit_day*9.5);
+        setMoonTime("sunset", scheduleMoonset, 0);
+        setMoonTime("tziet_tam", scheduleMoonset, 72/60);
     }
 
 
