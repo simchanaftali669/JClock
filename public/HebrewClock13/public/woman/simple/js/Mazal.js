@@ -22,56 +22,30 @@ function setmazal()
 		s = 0;
 	}
 	
+	var day = getDisplayHebrewDay(date, h, m, s);
+	hebrewday = day;
+	var isNight = isDisplayNight(h, m, s);
+	
 	var userLang = navigator.language || navigator.userLanguage;	
-	var originalTzeit = tzeit;
-	tzeit = 25;
 	
 	if (userLang.includes("he")) 
 	{
 		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(), "Hebrew");
-		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " ב" + hebrew_month_name['month_name'];
+		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " ב" + hebrew_month_name['month_name'] + ", " + getHebrewDayLabel(hebrewday, isNight);
 	}
 	else
 	{
 		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(),"English");
-		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'];
+		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'] + ", " + getEnglishDayLabel(hebrewday, isNight);
 	}
-	tzeit = originalTzeit;
 		
 	document.body.style.backgroundImage = "url('pic/7.jpg')";
 	
 	//return;
 
-    var day = date.getDay() + 1;
     var clockHour = lbHour;
     if (clockHour == 24)
         clockHour = 0;
-
-	if(birthHour == null)
-	{
-		if ((h == sunsetH && m == sunsetM && s >= sunsetS) ||    // אחרי שקיעה
-			(h == sunsetH && m > sunsetM) ||
-			(h > sunsetH)
-		   )
-			if ((h == 23 && m == 23 && s <= 59) ||    // לפני חצות
-				(h == 23 && m < 59) ||
-				(h < 23)
-			   )
-				day = day + 1;
-	}
-
-
-    //document.getElementById("test").value = h > sunsetH;
-
-    if (day == 8)
-        day = 1;
-
-    hebrewday = day;
-	if(birthHour == null)
-		hebrewday += hebrewDayOffset();
-	
-	if(hebrewday == 0)
-		hebrewday = 7;
 
 	//console.log("hebrewday: " + hebrewday);
 	//console.log("clockHour: " + clockHour);
@@ -158,4 +132,69 @@ function paintText(p_color)
 		clockInputs[i].style.color = p_color;
 }
 
+function getDisplayHebrewDay(date, h, m, s)
+{
+	var displayDay = date.getDay() + 1;
+	
+	if(birthHour == null)
+	{
+		if ((h == sunsetH && m == sunsetM && s >= sunsetS) ||
+			(h == sunsetH && m > sunsetM) ||
+			(h > sunsetH))
+			displayDay = displayDay + 1;
+	}
+	
+	if(displayDay == 8)
+		displayDay = 1;
+	
+	return displayDay;
+}
 
+function isDisplayNight(h, m, s)
+{
+	var currHour = Number(h) + (Number(m) / 60) + (Number(s) / 3600);
+	var sunsetHour = Number(sunsetH) + (Number(sunsetM) / 60) + (Number(sunsetS) / 3600);
+	
+	if(currHour >= sunsetHour)
+		return true;
+	
+	if(typeof publicSunrise != "undefined" && currHour < Number(publicSunrise))
+		return true;
+	
+	return false;
+}
+
+function getHebrewDayLabel(dayNumber, isNight)
+{
+	return (isNight ? "ליל " : "יום ") + getHebrewDayName(dayNumber);
+}
+
+function getHebrewDayName(dayNumber)
+{
+	var hebrewDayNames = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+	return hebrewDayNames[dayNumber - 1];
+}
+
+function getEnglishDayLabel(dayNumber, isNight)
+{
+	return getEnglishDayName(dayNumber) + (isNight ? " night" : " day");
+}
+
+function getEnglishDayName(dayNumber)
+{
+	var englishDayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	return englishDayNames[dayNumber - 1];
+}
+
+function getMazalHebrewDay()
+{
+	var mazalDay = hebrewday + hebrewDayOffset();
+	
+	if(mazalDay == 0)
+		mazalDay = 7;
+	
+	if(mazalDay == 8)
+		mazalDay = 1;
+	
+	return mazalDay;
+}

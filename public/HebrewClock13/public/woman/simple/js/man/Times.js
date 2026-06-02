@@ -24,7 +24,7 @@ function doit_man() {
     var hour = []; //29
 
 	var yasterday,today,tomorrow;
-	if(true || birthYear == null)
+	if(birthYear == null)
 	{
 		yasterday = new Date();
 		today = new Date();
@@ -80,7 +80,7 @@ function doit_man() {
         var date = new Date();
 
 		var h,minute,s,m;
-		if(true || birthHour == null)
+		if(birthHour == null)
 		{
 			h = date.getHours();
 			minute = date.getMinutes();

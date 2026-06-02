@@ -10,12 +10,14 @@ function hebrewDayOffset()
 	
 	//consolge.log(hebrewday_man)
 	
-	//Man is leading
-	if((hebrewday > hebrewday_man) || (hebrewday == 1 && hebrewday_man == 7))
+	var dayDiffFromMan = (hebrewday - hebrewday_man + 7) % 7;
+	var womanMoonTime = (Number(lbHour) * 1080) + Number(lbMinute);
+	var manSunTime = (Number(lbHour4Man) * 1080) + Number(lbMinute4Man);
+	
+	if(dayDiffFromMan == 1)
 		return -1;
 	
-	if((hebrewday == hebrewday_man) &&
-	   ((lbHour > lbHour4Man) || (lbHour == lbHour4Man && lbMinute > lbMinute4Man)))
+	if(dayDiffFromMan == 0 && womanMoonTime > manSunTime)
 		return -1;
 	
 	return 0;

@@ -1,10 +1,24 @@
 ﻿//mazal of the hour
 function setmazal_man() {
-    var date = new Date();
+    var date;
+	if(birthYear == null)
+		date = new Date();
+	else
+		date = new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
 
-    var h = date.getHours();
-    var m = date.getMinutes();
-    var s = date.getSeconds();
+    var h, m, s;
+	if(birthHour == null)
+	{
+		h = date.getHours();
+		m = date.getMinutes();
+		s = date.getSeconds();
+	}
+	else
+	{
+		h = Number(birthHour);
+		m = Number(birthMin);
+		s = 0;
+	}
 
 
 

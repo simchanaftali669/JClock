@@ -344,10 +344,11 @@
 		if(birthHour)
 		{
 			var userLang = navigator.language || navigator.userLanguage; 
+			var mazalHebrewDay = getMazalHebrewDay();
 			if (userLang = "he") 
-				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);
+				window.location.href = "../me/he/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1);
 			else
-				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);		
+				window.location.href = "../me/en/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1);		
 		}
 	}
 	
@@ -361,11 +362,12 @@
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
 		var location = lon ? "&latitude=" + lat + "&longitude=" + lon : "";
+		var mazalHebrewDay = getMazalHebrewDay();
         var userLang = navigator.language || navigator.userLanguage; 
         if (userLang.includes("he")) 
-            window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;
+            window.location.href = "../me/he/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;
         else
-            window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;	
+            window.location.href = "../me/en/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;	
 	}
     </script>
 
