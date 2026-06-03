@@ -72,17 +72,17 @@ function setmazal()
 	{
 		case (1):
 			//document.getElementById("Mazal").setAttribute("ondblclick" ,"window.open('tel:+972527401735')");
-			//document.getElementById("Mazal").innerText = day_mida[day - 1];
-			paintText("#5DBCD2");
+			paintText("#2D8DA1");
 			//document.body.style.backgroundImage = "url('pic/1.jpg')";
-			//omer = ((day - 1) * 7) + 1;
+			//document.getElementById("Mazal").innerText = day_mida[day - 1];
+			omer = ((day - 1) * 7) + 1;
 			break;
 		case (2):
 			//document.getElementById("Mazal").setAttribute("href","tel:+972587401735");
 			//document.getElementById("Mazal").innerText = day_mida[day - 1];
 			paintText("#A6230E");
 			//document.body.style.backgroundImage = "url('pic/2.jpg')";
-			//omer = ((day - 1) * 7) + 2;
+			omer = ((day - 1) * 7) + 2;
 			break;
 		case (3):
 			//document.getElementById("Mazal").setAttribute("ondblclick" ,"window.open('tel:+972527401735')");
@@ -90,7 +90,7 @@ function setmazal()
 			//document.getElementById("Mazal").innerText = day_mida[day - 1];
 			paintText("#815AA8")
 			//document.body.style.backgroundImage = "url('pic/3.jpg')";
-			//omer = ((day - 1) * 7) + 3;
+			omer = ((day - 1) * 7) + 3;
 			break;
 		case (0):
 			//document.getElementById("Mazal").setAttribute("href","tel:+972587401735");
@@ -188,7 +188,7 @@ function getEnglishDayName(dayNumber)
 
 function getMazalHebrewDay()
 {
-	var mazalDay = hebrewday + hebrewDayOffset();
+	var mazalDay = hebrewday;// + hebrewDayOffset();
 	
 	if(mazalDay == 0)
 		mazalDay = 7;
