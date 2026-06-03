@@ -166,6 +166,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 
     //public variables
     var longitude, latitude;  //current geo location
+	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
     var lat = 0, lng = 0;     // sun's location
@@ -224,7 +225,12 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 		var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
+		birthYear = url.searchParams.get("year");
+		birthMonth = url.searchParams.get("month");
+		birthDay = url.searchParams.get("day");
 		birthHour = url.searchParams.get("hour");
+		birthMin = url.searchParams.get("min");
+		birthGMT = url.searchParams.get("gmt");
 	
 		if(lon && lat && !birthHour)
 		{
@@ -258,7 +264,13 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     {
         var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");        
+        var lat = url.searchParams.get("latitude");
+		birthYear = url.searchParams.get("year");
+		birthMonth = url.searchParams.get("month");
+		birthDay = url.searchParams.get("day");
+		birthHour = url.searchParams.get("hour");
+		birthMin = url.searchParams.get("min");
+		birthGMT = url.searchParams.get("gmt");
         if(lat)
         {
             //tz = https://maps.googleapis.com/maps/api/timezone/outputFormat?parameters
