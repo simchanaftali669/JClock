@@ -12,18 +12,30 @@
     
     var date = new Date();
 
-    var h = date.getHours();
-    var m = date.getMinutes();
-    var s = date.getSeconds();
-	var milisec = date.getMilliseconds();
+	var h,m,s,milisec;
+	if(birthHour == null)
+    {
+		h = date.getHours();
+		m = date.getMinutes();
+		s = date.getSeconds();
+		milisec = date.getMilliseconds();
+	}
+	else
+	{
+		h = birthHour;
+		m = birthMin;
+		s = 0;
+		milisec = 0;
+	}
 
 	var curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
 	
 	var curr_hour = curr_hour/(1000 * 3600);
 
+	var isNight = true;
 	
-	//day
-	if(curr_hour > sunrise && curr_hour < sunset)
+	//moonrise before moonset: day
+	if(sunset > sunrise && curr_hour >= sunrise && curr_hour < sunset)
 	{
 		var length = sunset - sunrise;
 		var curr_hour_offset = curr_hour - sunrise;
@@ -38,26 +50,10 @@
 		document.getElementById("Minute").value = lbMinute;
 		lbSecond = second;
 		document.getElementById("Second").value = lbSecond;
+		isNight = false;
 	}
-	//night before 00:00
-	else if( curr_hour > sunset)
-	{
-		var length = sunrise_tommorow + 24 - sunset;
-		var curr_hour_offset = curr_hour - sunset;
-		
-		var hour = Math.floor(12* (curr_hour_offset/length));
-		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
-		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
-
-		lbHour = hour;
-		document.getElementById("Hour").value = lbHour;
-		lbMinute = minute;
-		document.getElementById("Minute").value = lbMinute;
-		lbSecond = second;
-		document.getElementById("Second").value = lbSecond;
-	}
-	//night after 00:00
-	else if(curr_hour < sunrise)
+	//moonrise before moonset: night before sunrise
+	else if(sunset > sunrise && curr_hour < sunrise)
 	{
 		var length = sunrise + 24 - sunset_yasterdate;
 		var curr_hour_offset = curr_hour + 24 - sunset_yasterdate;
@@ -72,8 +68,82 @@
 		document.getElementById("Minute").value = lbMinute;
 		lbSecond = second;
 		document.getElementById("Second").value = lbSecond;
+		isNight = true;
+	}
+	//moonrise before moonset: night after moonset
+	else if(sunset > sunrise && curr_hour >= sunset)
+	{
+		var length = sunrise_tommorow + 24 - sunset;
+		var curr_hour_offset = curr_hour - sunset;
+		
+		var hour = Math.floor(12* (curr_hour_offset/length));
+		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
+		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
+
+		lbHour = hour;
+		document.getElementById("Hour").value = lbHour;
+		lbMinute = minute;
+		document.getElementById("Minute").value = lbMinute;
+		lbSecond = second;
+		document.getElementById("Second").value = lbSecond;
+		isNight = true;
+	}
+	//moonset before moonrise: night
+	else if(sunset < sunrise && curr_hour >= sunset && curr_hour < sunrise)
+	{
+		var length = sunrise - sunset;
+		var curr_hour_offset = curr_hour - sunset;
+		
+		var hour = Math.floor(12* (curr_hour_offset/length));
+		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
+		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
+		
+		lbHour = hour;
+		document.getElementById("Hour").value = lbHour;
+		lbMinute = minute;
+		document.getElementById("Minute").value = lbMinute;
+		lbSecond = second;
+		document.getElementById("Second").value = lbSecond;
+		isNight = true;
+	}
+	//moonset before moonrise: day before moonset
+	else if(sunset < sunrise && curr_hour < sunset)
+	{
+		var length = sunset + 24 - sunrise;
+		var curr_hour_offset = curr_hour + 24 - sunrise;
+		
+		var hour = Math.floor(12* (curr_hour_offset/length));
+		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
+		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
+	    
+		lbHour = hour + 12;
+		document.getElementById("Hour").value = hour;
+		lbMinute = minute;
+		document.getElementById("Minute").value = lbMinute;
+		lbSecond = second;
+		document.getElementById("Second").value = lbSecond;
+		isNight = false;
+	}
+	//moonset before moonrise: day after moonrise
+	else if(sunset < sunrise && curr_hour >= sunrise)
+	{
+		var length = sunset + 24 - sunrise;
+		var curr_hour_offset = curr_hour - sunrise;
+		
+		var hour = Math.floor(12* (curr_hour_offset/length));
+		var minute = Math.floor(12 * 1080 * (curr_hour_offset / length)) - hour*1080;
+		var second = Math.floor(12 * 1080 * 76 * (curr_hour_offset / length)) - (hour * 1080 * 76) - (minute * 76);
+	    
+		lbHour = hour + 12;
+		document.getElementById("Hour").value = hour;
+		lbMinute = minute;
+		document.getElementById("Minute").value = lbMinute;
+		lbSecond = second;
+		document.getElementById("Second").value = lbSecond;
+		isNight = false;
 	}
 	display_time();
+	markTime(isNight);
 	
 	var url = document.location.href;
 	//if(url.includes("yovel") || url.includes("year") || url.includes("month"))
@@ -192,4 +262,12 @@ function offset()
        lbHourClock = lbHour + 2;
     else // 22 ==> 0, 23==> 1, 24==>2
        lbHourClock = lbHour + 2 - 24;		
+}
+
+function markTime(moonSleep)
+{
+	var color = moonSleep ? "#878787" : "";
+	var clockInputs = document.getElementsByClassName("clock");
+	for(var i = 0; i < clockInputs.length; i++)
+		clockInputs[i].style.color = color;
 }
