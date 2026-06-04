@@ -6,34 +6,16 @@ function doit() {
     var dayParam = url.searchParams.get("day");
     var hourParam = url.searchParams.get("hour");
     var minParam = url.searchParams.get("min");
+    var secParam = url.searchParams.get("sec");
+    var msParam = url.searchParams.get("ms");
 
     var now = new Date();
     var h = hourParam == null ? now.getHours() : Number(hourParam);
     var minute = minParam == null ? now.getMinutes() : Number(minParam);
-    var s = hourParam == null ? now.getSeconds() : 0;
-    var m = hourParam == null ? now.getMilliseconds() : 0;
+    var s = secParam == null ? now.getSeconds() : Number(secParam);
+    var m = msParam == null ? now.getMilliseconds() : Number(msParam);
     var today = yearParam ? new Date(Number(yearParam), Number(monthParam) - 1, Number(dayParam), h, minute, s, m) : now;
-    var yesterday = addDays(today, -1);
-    var tomorrow = addDays(today, 1);
-
-    var time_yasterday = getMoonTimePair(yesterday);
-    var time_today = getMoonTimePair(today);
-    var time_tommorow = getMoonTimePair(tomorrow);
-
-    var sunrise_yasterday = time_yasterday[2];
-    var sunrise = time_today[2];
-    var sunrise_tommorow = time_tommorow[2];
-    var sunset_yasterdate = time_yasterday[3];
-    var sunset = time_today[3];
-    var sunset_tommorow = time_tommorow[3];
-
-    var hour = [];
-    hour[0] = sunset_yasterdate;
-    hour[1] = sunrise;
-    hour[2] = sunrise_tommorow;
-    hour[3] = sunset_yasterdate;
-    hour[4] = sunset;
-    hour[5] = sunset_tommorow;
+    var hour = getCurrentMoonHours(today);
 
     var mazal_ordered = ["Moon", "Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury"];
     var mazal_night_01 = [6, 2, 5, 1, 4, 7, 3];
@@ -58,11 +40,103 @@ function doit() {
     return hour;
 }
 
-function getMoonTimePair(date) {
-    var moonTimes = SunCalc.getMoonTimes(date, latitude, longitude);
-    var rise = moonTimes.rise ? convertDateTimeToFloat(moonTimes.rise) : 0;
-    var set = moonTimes.set ? convertDateTimeToFloat(moonTimes.set) : 0;
-    return [0, 0, rise, set];
+function getCurrentMoonHours(today) {
+    var yasterday, clockToday, tomorrow;
+
+    if (birthYear == null) {
+        yasterday = new Date();
+        clockToday = new Date();
+        tomorrow = new Date();
+    }
+    else {
+        yasterday = new Date(birthYear, birthMonth - 1, birthDay);
+        clockToday = new Date(birthYear, birthMonth - 1, birthDay);
+        tomorrow = new Date(birthYear, birthMonth - 1, birthDay);
+    }
+
+    yasterday.setDate(clockToday.getDate() - 1);
+    tomorrow.setDate(clockToday.getDate() + 1);
+
+    var time_yasterday = [0, 0, 0, 0];
+    time_yasterday[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).rise);
+    time_yasterday[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).set);
+
+    var time_today = [0, 0, 0, 0];
+    time_today[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(clockToday, latitude, longitude).rise);
+    time_today[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(clockToday, latitude, longitude).set);
+
+    var time_tommorow = [0, 0, 0, 0];
+    time_tommorow[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).rise);
+    time_tommorow[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).set);
+
+    var sunrise_yasterday = time_yasterday[2];
+    var sunrise = time_today[2];
+    var sunrise_tommorow = time_tommorow[2];
+    var sunset_yasterday = time_yasterday[3];
+    var sunset = time_today[3];
+    var sunset_tommorow = time_tommorow[3];
+
+    var hour = [];
+    hour[0] = sunrise_yasterday;
+    hour[1] = sunrise;
+    hour[2] = sunrise_tommorow;
+    hour[3] = sunset_yasterday;
+    hour[4] = sunset;
+    hour[5] = sunset_tommorow;
+
+    setMoonsetGlobals(sunset);
+
+    return hour;
+}
+
+function setMoonsetGlobals(moonsetHour) {
+    var moonsetArray = timeadj1(moonsetHour).split(":");
+    sunsetH = moonsetArray[0];
+    sunsetM = moonsetArray[1];
+    sunsetS = moonsetArray[2];
+    sunsetMili = moonsetArray[3];
+}
+
+function moonEvents(type, centerDate) {
+    var events = [];
+
+    for (var offset = -2; offset <= 3; offset++) {
+        var moonDate = addDays(centerDate, offset);
+        var moonTimes = SunCalc.getMoonTimes(moonDate, latitude, longitude);
+        if (moonTimes[type]) {
+            events.push(moonTimes[type]);
+        }
+    }
+
+    events.sort(function (a, b) {
+        return a.getTime() - b.getTime();
+    });
+    return events;
+}
+
+function previousEvent(events, date) {
+    var previous = null;
+
+    for (var index = 0; index < events.length; index++) {
+        if (events[index].getTime() <= date.getTime()) {
+            previous = events[index];
+        }
+        else {
+            break;
+        }
+    }
+
+    return previous;
+}
+
+function nextEvent(events, date) {
+    for (var index = 0; index < events.length; index++) {
+        if (events[index].getTime() > date.getTime()) {
+            return events[index];
+        }
+    }
+
+    return null;
 }
 
 function getScheduleSegments(today, baseDate, currentHour) {

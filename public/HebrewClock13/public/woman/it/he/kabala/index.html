@@ -212,7 +212,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     </div>
 
     <script type="text/javascript" src="./js/Menu.js"></script>
-    <script type="text/javascript" src="../js/HebrewClock.js"></script>
+    <script type="text/javascript" src="./js/HebrewClock.js"></script>
 	<script type="text/javascript" src="../js/Gender.js"></script>
 	<script type="text/javascript" src="../js/Religion.js"></script>
     <script type="text/javascript" src="../../../shared/he/js/Commercial.js"></script>
@@ -263,7 +263,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     var lbHourClock;            //hour for displaying
     var lbMinute = 1075;       //minute of the clock called also chelek
     var lbSecond = 70;         //second of the clock called also re'ga
-	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
+	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin,birthSec,birthMs; //get birth time
     var audio;
     var omer;
     var mazal_url;
@@ -297,6 +297,8 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 		birthDay = url.searchParams.get("day");
 		birthHour = url.searchParams.get("hour");
 		birthMin = url.searchParams.get("min");
+		birthSec = url.searchParams.get("sec");
+		birthMs = url.searchParams.get("ms");
 		birthGMT = url.searchParams.get("gmt");
 	
 		if(lon && lat)		

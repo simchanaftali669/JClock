@@ -112,7 +112,7 @@
 
     //public variables
     var longitude, latitude;  //current geo location
-	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
+	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin,birthSec,birthMs; //get birth time
 	
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
@@ -184,6 +184,8 @@
 		birthDay = url.searchParams.get("day");
 		birthHour = url.searchParams.get("hour");
 		birthMin = url.searchParams.get("min");
+		birthSec = url.searchParams.get("sec");
+		birthMs = url.searchParams.get("ms");
 		birthGMT = url.searchParams.get("gmt");
 	
 		if(lon && lat)		
@@ -217,6 +219,8 @@
 		birthDay = url.searchParams.get("day");
 		birthHour = url.searchParams.get("hour");
 		birthMin = url.searchParams.get("min");
+		birthSec = url.searchParams.get("sec");
+		birthMs = url.searchParams.get("ms");
 		birthGMT = url.searchParams.get("gmt");
 		//tz = birthGMT;
 		
@@ -301,6 +305,8 @@
 		var date = new Date();
 		var hour = birthHour == null ? date.getHours() : birthHour;
 		var min = birthMin == null ? date.getMinutes() : birthMin;
+		var sec = birthSec == null ? date.getSeconds() : birthSec;
+		var ms = birthMs == null ? date.getMilliseconds() : birthMs;
 		var year = birthYear == null ? date.getFullYear() : birthYear;
 		var month = birthMonth == null ? date.getMonth() + 1 : birthMonth;
 		var day = birthDay == null ? date.getDate() : birthDay;
@@ -314,6 +320,10 @@
 			params.set("hour", hour);
 		if(!params.get("min"))
 			params.set("min", min);
+		if(!params.get("sec"))
+			params.set("sec", sec);
+		if(!params.get("ms"))
+			params.set("ms", ms);
 		if(!params.get("year"))
 			params.set("year", year);
 		if(!params.get("month"))
