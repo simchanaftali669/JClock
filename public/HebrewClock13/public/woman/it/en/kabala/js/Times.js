@@ -8,13 +8,26 @@ function doit() {
     var minParam = url.searchParams.get("min");
     var secParam = url.searchParams.get("sec");
     var msParam = url.searchParams.get("ms");
+    var liveParam = url.searchParams.get("live");
+    var liveStartParam = url.searchParams.get("liveStart");
 
     var now = new Date();
-    var h = hourParam == null ? now.getHours() : Number(hourParam);
-    var minute = minParam == null ? now.getMinutes() : Number(minParam);
-    var s = secParam == null ? now.getSeconds() : Number(secParam);
-    var m = msParam == null ? now.getMilliseconds() : Number(msParam);
-    var today = yearParam ? new Date(Number(yearParam), Number(monthParam) - 1, Number(dayParam), h, minute, s, m) : now;
+    var today = now;
+    if (yearParam) {
+        today = new Date(
+            Number(yearParam),
+            Number(monthParam) - 1,
+            Number(dayParam),
+            hourParam == null ? now.getHours() : Number(hourParam),
+            minParam == null ? now.getMinutes() : Number(minParam),
+            secParam == null ? now.getSeconds() : Number(secParam),
+            msParam == null ? now.getMilliseconds() : Number(msParam)
+        );
+
+        if (liveParam == "1" && liveStartParam != null) {
+            today = new Date(today.getTime() + (now.getTime() - Number(liveStartParam)));
+        }
+    }
     var hour = getCurrentMoonHours(today);
 
     var mazal_ordered = ["Moon", "Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury"];
@@ -43,10 +56,10 @@ function doit() {
 function getCurrentMoonHours(today) {
     var yasterday, clockToday, tomorrow;
 
-    if (birthYear == null) {
-        yasterday = new Date();
-        clockToday = new Date();
-        tomorrow = new Date();
+    if (birthYear == null || clockLive == "1") {
+        yasterday = new Date(today.getTime());
+        clockToday = new Date(today.getTime());
+        tomorrow = new Date(today.getTime());
     }
     else {
         yasterday = new Date(birthYear, birthMonth - 1, birthDay);

@@ -201,7 +201,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     var lbHourClock;            //hour for displaying
     var lbMinute = 1075;       //minute of the clock called also chelek
     var lbSecond = 70;         //second of the clock called also re'ga
-	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin,birthSec,birthMs; //get birth time
+	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin,birthSec,birthMs,clockLive,clockLiveStart; //get birth time
     var audio;
     var omer;
     var mazal_url;
@@ -234,6 +234,8 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 		birthMin = url.searchParams.get("min");
 		birthSec = url.searchParams.get("sec");
 		birthMs = url.searchParams.get("ms");
+		clockLive = url.searchParams.get("live");
+		clockLiveStart = url.searchParams.get("liveStart");
 		birthGMT = url.searchParams.get("gmt");
 	
 		if(lon && lat)		

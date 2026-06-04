@@ -332,6 +332,8 @@
 			params.set("day", day);
 		if(!params.get("gmt"))
 			params.set("gmt", gmt);
+		params.set("live", "1");
+		params.set("liveStart", Date.now());
 		return "?" + params.toString();
 	}
 	

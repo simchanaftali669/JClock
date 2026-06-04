@@ -22,10 +22,11 @@ function hebrewclock()
         milisec = date.getMilliseconds();
     }
     else {
-        h = birthHour;
-        m = birthMin;
-        s = birthSec == null ? 0 : Number(birthSec);
-        milisec = birthMs == null ? 0 : Number(birthMs);
+        var clockDate = getClockDate(date);
+        h = clockDate.getHours();
+        m = clockDate.getMinutes();
+        s = clockDate.getSeconds();
+        milisec = clockDate.getMilliseconds();
     }
 
     var curr_hour = milisec + (s * 1000) + (m * 60 * 1000) + (h * 60 * 60 * 1000);
@@ -70,6 +71,25 @@ function hebrewclock()
         commercialFunction();
         preLbMin = lbMinute;
     }
+}
+
+function getClockDate(now)
+{
+    var clockDate = new Date(
+        Number(birthYear),
+        Number(birthMonth) - 1,
+        Number(birthDay),
+        Number(birthHour),
+        Number(birthMin),
+        birthSec == null ? 0 : Number(birthSec),
+        birthMs == null ? 0 : Number(birthMs)
+    );
+
+    if (clockLive == "1" && clockLiveStart != null) {
+        clockDate = new Date(clockDate.getTime() + (now.getTime() - Number(clockLiveStart)));
+    }
+
+    return clockDate;
 }
 
 function setClockFromOffset(curr_hour_offset, length, hourOffset, moonSleep)
