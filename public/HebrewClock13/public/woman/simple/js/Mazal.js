@@ -31,12 +31,12 @@ function setmazal()
 	if (userLang.includes("he")) 
 	{
 		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(), "Hebrew");
-		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " ב" + hebrew_month_name['month_name'] + ", " + getHebrewDayLabel(hebrewday, isNight);
+		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " ב" + hebrew_month_name['month_name'];// + ", " + getHebrewDayLabel(hebrewday, isNight);
 	}
 	else
 	{
 		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(),"English");
-		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'] + ", " + getEnglishDayLabel(hebrewday, isNight);
+		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'];// + ", " + getEnglishDayLabel(hebrewday, isNight);
 	}
 		
 	document.body.style.backgroundImage = "url('pic/7.jpg')";
