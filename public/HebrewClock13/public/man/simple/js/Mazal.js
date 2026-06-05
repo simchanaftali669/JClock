@@ -96,14 +96,19 @@ function setmazal() {
     hebrewday = day;
 	//console.log(hebrewday);
 	var day_mida; 
+	var hour_mida;
 	
 	var userLang = navigator.language || navigator.userLanguage; 
 	//console.log("userLang: " + userLang);
-	if (userLang.includes("he")) 
-		day_mida = ["שבתאי", "צדק", "מאדים", "חמה", "נוגה", "כוכב", "לבנה"];
+	if (userLang.includes("he"))
+	{		
+		hour_mida = ["שבתאי", "צדק", "מאדים", "חמה", "נוגה", "כוכב", "לבנה"];
+		day_mida = ["צדק", "מאדים", "חמה", "שבתאי", "נוגה", "כוכב", "לבנה"];
+	}
 	else
 	{
-		day_mida = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"];
+		hour_mida = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"];
+		day_mida = ["Jupiter", "Mars", "Sun", "Saturn", "Venus", "Mercury", "Moon"];
 	}
 	var x = 0;
     if (day == 1)
@@ -126,9 +131,9 @@ function setmazal() {
 	else 
 	{
 		if (userLang.includes("he"))
-			document.getElementById("Mazal").innerText = day_mida[x] + " שב" + day_mida[hebrewday-1];		
+			document.getElementById("Mazal").innerText = hour_mida[x] + " שב" + day_mida[hebrewday-1];		
 		else
-			document.getElementById("Mazal").innerText = day_mida[x] + " in " + day_mida[hebrewday-1];		
+			document.getElementById("Mazal").innerText = hour_mida[x] + " in " + day_mida[hebrewday-1];		
 	}
 	document.body.style.backgroundImage = "url('pic/7.jpg')";
 	
