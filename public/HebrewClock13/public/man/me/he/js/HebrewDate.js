@@ -134,10 +134,10 @@ function getHebrewDate(gregorianDate) {
 		let totalMonths = 0;
 
 		if (fromHebrew.year === toHebrew.year) {
-			totalMonths = fromHebrew.month - toHebrew.month;
+			totalMonths = toHebrew.month - fromHebrew.month;
 		} else {
 			// Count the months remaining in the first year
-			totalMonths += (isHebrewLeapYear(fromHebrew.year) ? 13 : 12);// - fromHebrew.month;
+			totalMonths += (isHebrewLeapYear(fromHebrew.year) ? 13 : 12) - fromHebrew.month + 1;
 			console.log("totalMonths: ", totalMonths);
 			// Count the months in the years between the first and last year
 			for (let year = fromHebrew.year + 1; year < toHebrew.year; year++) {
@@ -160,28 +160,28 @@ function getHebrewDate(gregorianDate) {
 
 	function getCurrentMazal(period)
 	{
-		// Example usage
 		let today = new Date();
-		let tishrei5780 = new Date('2019-10-01'); // Approximate Gregorian date for Tishrei 5780
+		let tammuz5786 = new Date(2026, 5, 15, 8, 22, 9); // Molad 04/5786 reference
 
-		let monthsDifference = countHebrewMonths(tishrei5780,today,period);
+		let monthsDifference = countHebrewMonths(tammuz5786,today,period);
 		console.log("Months difference: ", monthsDifference);
 		
-		//                   day, hour, chelek
-		tishrei5780Molad = [1,11,905];
+		// JClock 02:0406:75 is Monday hour 14 from nightfall; the +1 below is for the hour name.
+		let tammuz5786Molad = [2,14,406];
+		let tammuz5786MoladRega = 75;
 		
 		
-		currentMoladDay = (tishrei5780Molad[0]+29*monthsDifference + Math.floor(((tishrei5780Molad[1]+12*monthsDifference) + Math.floor((tishrei5780Molad[2]+793*monthsDifference)/1080))/24) )%7; 
+		currentMoladDay = (tammuz5786Molad[0]+29*monthsDifference + Math.floor(((tammuz5786Molad[1]+12*monthsDifference) + Math.floor((tammuz5786Molad[2]+793*monthsDifference)/1080))/24) )%7;
 		if(currentMoladDay == 0)
 			currentMoladDay = 7;
-		currentMoladHour =  (tishrei5780Molad[1]+12*monthsDifference + Math.floor((tishrei5780Molad[2]+793*monthsDifference)/1080))%24; 
+		currentMoladHour =  (tammuz5786Molad[1]+12*monthsDifference + Math.floor((tammuz5786Molad[2]+793*monthsDifference)/1080))%24;
 		currentMoladHour = currentMoladHour+1;
 		if(currentMoladHour == 0)
 			currentMoladHour = 24;
 		
-		var currentMoladChelek = (tishrei5780Molad[2]+793*monthsDifference)%1080;
+		var currentMoladChelek = (tammuz5786Molad[2]+793*monthsDifference)%1080;
 		
-		return [currentMoladDay,currentMoladHour,currentMoladChelek];
+		return [currentMoladDay,currentMoladHour,currentMoladChelek,tammuz5786MoladRega];
 		//var date = new Date();
 	}
 
