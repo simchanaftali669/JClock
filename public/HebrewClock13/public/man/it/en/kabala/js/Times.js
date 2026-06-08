@@ -298,9 +298,7 @@ function ensureScheduleHourRows(totalHours) {
 function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalNight) {
     var mazalStart = segment.isDay ? mazalDay[segment.hebrewDay - 1] : mazalNight[segment.hebrewDay - 1];
 
-    if (!segment.isDay) {
-        renderNightStartDay(startRow, segment.hebrewDay);
-    }
+    renderScheduleSegmentTitle(startRow, segment);
 
     for (var i = 0; i < 12; i++) {
         var rowNumber = startRow + i;
@@ -320,13 +318,13 @@ function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalN
     }
 }
 
-function renderNightStartDay(startRow, hebrewDay) {
+function renderScheduleSegmentTitle(startRow, segment) {
     var firstHour = document.getElementById("hour_" + startRow + "__value");
     if (!firstHour || !firstHour.parentNode) {
         return;
     }
 
-    var separatorId = "night_start_day_" + startRow;
+    var separatorId = "schedule_segment_title_" + startRow;
     var separator = document.getElementById(separatorId);
 
     if (!separator) {
@@ -344,11 +342,16 @@ function renderNightStartDay(startRow, hebrewDay) {
         firstHour.parentNode.insertAdjacentElement("beforebegin", row);
     }
 
-    separator.value = getEnglishWeeknightName(hebrewDay);
+    separator.value = segment.isDay ? getEnglishWeekdayName(segment.hebrewDay) : getEnglishWeeknightName(segment.hebrewDay);
 }
 
 function getEnglishWeeknightName(hebrewDay) {
     var weekdays = ["Saturday night", "Sunday night", "Monday night", "Tuesday night", "Wednesday night", "Thursday night", "Friday night"];
+    return weekdays[normalizeHebrewDay(hebrewDay) - 1];
+}
+
+function getEnglishWeekdayName(hebrewDay) {
+    var weekdays = ["Sunday day", "Monday day", "Tuesday day", "Wednesday day", "Thursday day", "Friday day", "Saturday day"];
     return weekdays[normalizeHebrewDay(hebrewDay) - 1];
 }
 

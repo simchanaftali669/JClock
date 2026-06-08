@@ -298,9 +298,7 @@ function ensureScheduleHourRows(totalHours) {
 function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalNight) {
     var mazalStart = segment.isDay ? mazalDay[segment.hebrewDay - 1] : mazalNight[segment.hebrewDay - 1];
 
-    if (!segment.isDay) {
-        renderNightStartDay(startRow, segment.hebrewDay);
-    }
+    renderScheduleSegmentTitle(startRow, segment);
 
     for (var i = 0; i < 12; i++) {
         var rowNumber = startRow + i;
@@ -320,13 +318,13 @@ function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalN
     }
 }
 
-function renderNightStartDay(startRow, hebrewDay) {
+function renderScheduleSegmentTitle(startRow, segment) {
     var firstHour = document.getElementById("hour_" + startRow + "__value");
     if (!firstHour || !firstHour.parentNode) {
         return;
     }
 
-    var separatorId = "night_start_day_" + startRow;
+    var separatorId = "schedule_segment_title_" + startRow;
     var separator = document.getElementById(separatorId);
 
     if (!separator) {
@@ -344,11 +342,16 @@ function renderNightStartDay(startRow, hebrewDay) {
         firstHour.parentNode.insertAdjacentElement("beforebegin", row);
     }
 
-    separator.value = getHebrewWeekdayName(hebrewDay);
+    separator.value = segment.isDay ? getHebrewDayName(segment.hebrewDay) : getHebrewWeeknightName(segment.hebrewDay);
 }
 
-function getHebrewWeekdayName(hebrewDay) {
+function getHebrewWeeknightName(hebrewDay) {
     var weekdays = ["ליל ראשון", "ליל שני", "ליל שלישי", "ליל רביעי", "ליל חמישי", "ליל שישי", "ליל שבת"];
+    return weekdays[normalizeHebrewDay(hebrewDay) - 1];
+}
+
+function getHebrewDayName(hebrewDay) {
+    var weekdays = ["יום ראשון", "יום שני", "יום שלישי", "יום רביעי", "יום חמישי", "יום שישי", "יום שבת"];
     return weekdays[normalizeHebrewDay(hebrewDay) - 1];
 }
 
