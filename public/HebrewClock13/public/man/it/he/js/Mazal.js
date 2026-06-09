@@ -15,19 +15,13 @@
 
 //mazal of the hour
 function setmazal() {
-    var url = new URL(document.location.href);
-    var year = url.searchParams.get("year");
-    var month = url.searchParams.get("month");
-    var day = parseInt(url.searchParams.get("day")) + 1;
-    var today = year ? new Date(year-1,month-1,day) : new Date();
-
     var date = new Date();
 
     var h = date.getHours();
     var m = date.getMinutes();
     var s = date.getSeconds();
 
-    var day = today.getDay() + 1;
+    var day = date.getDay() + 1;
 
     var clockHour = lbHour;
     if (clockHour == 24)
@@ -398,6 +392,4 @@ function set_mazal_url() {
             mida_url = "";
             break;
     }
-}
-
 }

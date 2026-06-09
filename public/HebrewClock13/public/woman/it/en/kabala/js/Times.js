@@ -1,42 +1,17 @@
-//set the moonset and moonrise
+﻿//set the moonset and moonrise
 function doit() {
-    var url = new URL(document.location.href);
-    var yearParam = url.searchParams.get("year");
-    var monthParam = url.searchParams.get("month");
-    var dayParam = url.searchParams.get("day");
-    var hourParam = url.searchParams.get("hour");
-    var minParam = url.searchParams.get("min");
-    var secParam = url.searchParams.get("sec");
-    var msParam = url.searchParams.get("ms");
-    var liveParam = url.searchParams.get("live");
-    var liveStartParam = url.searchParams.get("liveStart");
-
     var now = new Date();
-    var today = now;
-    if (yearParam) {
-        today = new Date(
-            Number(yearParam),
-            Number(monthParam) - 1,
-            Number(dayParam),
-            hourParam == null ? now.getHours() : Number(hourParam),
-            minParam == null ? now.getMinutes() : Number(minParam),
-            secParam == null ? now.getSeconds() : Number(secParam),
-            msParam == null ? now.getMilliseconds() : Number(msParam)
-        );
-
-        if (liveParam == "1" && liveStartParam != null) {
-            today = new Date(today.getTime() + (now.getTime() - Number(liveStartParam)));
-        }
-    }
+    var today = new Date(now.getTime());
+    var scheduleToday = getSelectedScheduleDate(now);
     var hour = getCurrentMoonHours(today);
 
     var mazal_ordered = ["Moon", "Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury"];
     var mazal_night_01 = [6, 2, 5, 1, 4, 7, 3];
     var mazal_day_01 = [4, 7, 3, 6, 2, 5, 1];
-    var baseDate = new Date(today.getTime());
+    var baseDate = new Date(scheduleToday.getTime());
     baseDate.setHours(0, 0, 0, 0);
-    var currentHour = hoursFromBase(today, baseDate);
-    var scheduleSegments = getScheduleSegments(today, baseDate, currentHour);
+    var currentHour = hoursFromBase(scheduleToday, baseDate);
+    var scheduleSegments = getScheduleSegments(scheduleToday, baseDate, currentHour);
 
     ensureScheduleHourRows(36);
 
@@ -348,4 +323,16 @@ function addDays(date, days) {
 
 function normalizeHebrewDay(day) {
     return ((day - 1) % 7 + 7) % 7 + 1;
+}
+function getSelectedScheduleDate(fallbackDate) {
+    var url = new URL(document.location.href);
+    var yearParam = parseInt(url.searchParams.get("year"), 10);
+    var monthParam = parseInt(url.searchParams.get("month"), 10);
+    var dayParam = parseInt(url.searchParams.get("day"), 10);
+
+    if (!isNaN(yearParam) && !isNaN(monthParam) && !isNaN(dayParam)) {
+        return new Date(yearParam, monthParam - 1, dayParam, fallbackDate.getHours(), fallbackDate.getMinutes(), fallbackDate.getSeconds(), fallbackDate.getMilliseconds());
+    }
+
+    return new Date(fallbackDate.getTime());
 }

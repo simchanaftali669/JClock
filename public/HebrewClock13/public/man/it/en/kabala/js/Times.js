@@ -22,18 +22,11 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var yasterday = new Date();
-
-    var url = new URL(document.location.href);
-    var year = url.searchParams.get("year");
-    var month = url.searchParams.get("month");
-    var day = parseInt(url.searchParams.get("day")) + 1;
     var date = new Date();
-    var today = year ? new Date(year,month,day,date.getHours(),date.getMinutes(),date.getSeconds(),date.getMilliseconds()) : date;
- 
-
-    var tomorrow = new Date();
-
+    var today = new Date(date.getTime());
+    var yasterday = new Date(today.getTime());
+    var tomorrow = new Date(today.getTime());
+    var scheduleToday = getSelectedScheduleDate(date);
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
 
@@ -126,6 +119,34 @@ function doit() {
 //		hour[29] = Math.floor(shaa_zmanit_night * 3600.0 * 1000);   //night
 //		hour[30] = Math.floor(shaa_zmanit_day * 3600.0 * 1000);      //day
 
+        var scheduleYasterday = new Date(scheduleToday.getTime());
+        var scheduleTomorrow = new Date(scheduleToday.getTime());
+        scheduleYasterday.setDate(scheduleToday.getDate() - 1);
+        scheduleTomorrow.setDate(scheduleToday.getDate() + 1);
+
+        time_yasterday = suntime(scheduleYasterday.getDate(), scheduleYasterday.getMonth() + 1, scheduleYasterday.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
+        time_today = suntime(scheduleToday.getDate(), scheduleToday.getMonth() + 1, scheduleToday.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
+        time_tommorow = suntime(scheduleTomorrow.getDate(), scheduleTomorrow.getMonth() + 1, scheduleTomorrow.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
+
+        if (time_today[1] == 0) {
+            sunrise = time_today[2];
+            sunrise_tommorow = time_tommorow[2];
+            sunset_yasterdate = time_yasterday[3];
+            sunset = time_today[3];
+            sunset_tommorow = time_tommorow[3];
+            sunset_hour = timeStringToMilliseconds(timeadj1(sunset));
+            sunrise_hour = timeStringToMilliseconds(timeadj1(sunrise));
+
+            if(curr_hour > sunset_hour)
+                shaa_zmanit_night = (sunrise_tommorow + (24 - sunset)) / 12;
+            else
+                shaa_zmanit_night = (sunrise + (24 - sunset_yasterdate)) / 12;
+
+            if(curr_hour > sunset_hour)
+                shaa_zmanit_day = (sunset_tommorow - sunrise_tommorow) / 12;
+            else
+                shaa_zmanit_day = (sunset - sunrise) / 12;
+        }
         //insert an array of shaot_zmaniot
         var s1, s2,s3,s4;
         //var isNight = false;
@@ -169,7 +190,7 @@ function doit() {
 
         ensureScheduleHourRows(36);
 
-        var currentHebrewDay = normalizeHebrewDay(hebrewday || (today.getDay() + 1));
+        var currentHebrewDay = normalizeHebrewDay(scheduleToday.getDay() + 1);
         var sunrise_yasterdate = time_yasterday[2];
         var scheduleSegments;
 
@@ -357,4 +378,21 @@ function getEnglishWeekdayName(hebrewDay) {
 
 function normalizeHebrewDay(day) {
     return ((day - 1) % 7 + 7) % 7 + 1;
+}
+function getSelectedScheduleDate(fallbackDate) {
+    var url = new URL(document.location.href);
+    var yearParam = parseInt(url.searchParams.get("year"), 10);
+    var monthParam = parseInt(url.searchParams.get("month"), 10);
+    var dayParam = parseInt(url.searchParams.get("day"), 10);
+
+    if (!isNaN(yearParam) && !isNaN(monthParam) && !isNaN(dayParam)) {
+        return new Date(yearParam, monthParam - 1, dayParam, fallbackDate.getHours(), fallbackDate.getMinutes(), fallbackDate.getSeconds(), fallbackDate.getMilliseconds());
+    }
+
+    return new Date(fallbackDate.getTime());
+}
+
+function timeStringToMilliseconds(value) {
+    var parts = value.split(":");
+    return parseInt(parts[3]) + parseInt(parts[2] * 1000) + parseInt(parts[1] * 60 * 1000) + parseInt(parts[0] * 60 * 60 * 1000);
 }

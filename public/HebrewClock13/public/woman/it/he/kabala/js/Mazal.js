@@ -1,20 +1,12 @@
 ﻿//mazal of the hour
 function setmazal() {
-    var url = new URL(document.location.href);
-    var year = url.searchParams.get("year");
-    var month = url.searchParams.get("month");
-    var dayParam = url.searchParams.get("day");
-    var hourParam = url.searchParams.get("hour");
-    var minParam = url.searchParams.get("min");
-    var today = year ? new Date(Number(year), Number(month) - 1, Number(dayParam)): new Date();
-
     var date = new Date();
 
-    var h = hourParam == null ? date.getHours() : Number(hourParam);
-    var m = minParam == null ? date.getMinutes() : Number(minParam);
-    var s = hourParam == null ? date.getSeconds() : 0;
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var s = date.getSeconds();
 
-    var day = today.getDay() + 1;
+    var day = date.getDay() + 1;
 
     var clockHour = lbHour;
     if (clockHour == 24)

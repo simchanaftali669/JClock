@@ -22,18 +22,10 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var yasterday = new Date();
-
-    var url = new URL(document.location.href);
-    var year = url.searchParams.get("year");
-    var month = url.searchParams.get("month");
-    var day = parseInt(url.searchParams.get("day")) + 1;
     var date = new Date();
-    var today = year ? new Date(year,month,day,date.getHours(),date.getMinutes(),date.getSeconds(),date.getMilliseconds()) : date;
-  
-    
-    var tomorrow = new Date();
-
+    var today = new Date(date.getTime());
+    var yasterday = new Date(today.getTime());
+    var tomorrow = new Date(today.getTime());
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
 

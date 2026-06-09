@@ -1,20 +1,12 @@
 ﻿//---get Date---
-function set_default_date() 
+function set_default_date()
 {
-    var url = new URL(document.location.href);
-    var year = url.searchParams.get("year");
-    var month = url.searchParams.get("month");
-    var day = url.searchParams.get("day");
-
     var date = new Date();
 
-    var d = day ? day : date.getDate();
-    var m = month ? month : date.getMonth();
-    var y = year ? year : date.getYear() ;
+    year = date.getFullYear();
+    month = date.getMonth();
+    day = date.getDate() - 1;
 
-    month = m;
-    day = d - 1;
-    year = y;
     set_date_vars();
 }
 
@@ -31,10 +23,16 @@ function set_date_vars() {
 }
 
 function civMonthLength(month, year) {
+    var fullYear = year < 1900 ? year + 1900 : year;
+
     if (month == 2)
-        return (28 + year);
+        return isLeapYear(fullYear) ? 29 : 28;
     else if (month == 4 || month == 6 || month == 9 || month == 11)
         return 30;
     else
         return 31;
+}
+
+function isLeapYear(year) {
+    return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
 }
