@@ -115,11 +115,20 @@
       }
 
       .store-button {
-        min-height: 520px;
+        min-height: 0;
       }
 
       .store-button.garmin {
         grid-column: auto;
+      }
+
+      .preview {
+        flex: none;
+      }
+
+      .preview img {
+        height: auto;
+        object-fit: contain;
       }
     }
   </style>
