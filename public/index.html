@@ -96,6 +96,7 @@
 
 		#viewer {
 			display: none;
+			position: relative;
 			flex-direction: column;
 			height: 100%;
 			background: #fff;
@@ -103,18 +104,39 @@
 
 		#viewer-toolbar {
 			display: flex;
+			position: absolute;
+			top: 50%;
+			inset-inline-start: 0;
+			z-index: 10;
+			flex-direction: column;
 			align-items: center;
-			justify-content: space-between;
+			justify-content: center;
 			gap: 12px;
-			padding: 8px 10px;
+			max-width: 52px;
+			padding: 10px 8px;
 			background: #204b31;
 			color: #fff;
 			font-size: 18px;
 			font-weight: 700;
+			opacity: 0.95;
+			transform: translateY(-50%);
+			transition: opacity 0.18s ease;
+			writing-mode: vertical-rl;
+		}
+
+		#viewer.all-view #viewer-toolbar {
+			opacity: 0;
+		}
+
+		#viewer-title {
+			max-height: 55vh;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 
 		#back-to-choice {
-			padding: 8px 14px;
+			padding: 10px 8px;
 			border: 1px solid rgba(255,255,255,0.7);
 			border-radius: 8px;
 			background: #fff;
@@ -122,6 +144,7 @@
 			font-size: 16px;
 			font-weight: 700;
 			cursor: pointer;
+			writing-mode: vertical-rl;
 		}
 
 		#iframe-container {
@@ -170,7 +193,8 @@
 
 		@media (min-width: 1600px) and (min-height: 900px) {
 			#viewer-toolbar {
-				padding: 10px 18px;
+				max-width: 58px;
+				padding: 14px 10px;
 				font-size: 22px;
 			}
 
@@ -449,6 +473,7 @@
 
 		iframeContainer.innerHTML = "";
 		iframeContainer.className = option.layout === "quad" ? "quad-layout" : "";
+		viewer.className = option.id === "all" ? "all-view" : "";
 		viewerTitle.textContent = localText(option.label);
 
 		option.frames.forEach(function(frame) {
@@ -459,6 +484,7 @@
 			iframe.title = localText(frame.title);
 			iframe.src = frame.src;
 			iframe.allow = "geolocation";
+			iframe.setAttribute("scrolling", "no");
 			frameSlot.appendChild(iframe);
 			iframeContainer.appendChild(frameSlot);
 		});
@@ -472,6 +498,7 @@
 	function showChoices() {
 		iframeContainer.innerHTML = "";
 		iframeContainer.className = "";
+		viewer.className = "";
 		if (frameResizeObserver) {
 			frameResizeObserver.disconnect();
 			frameResizeObserver = null;
