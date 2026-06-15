@@ -122,17 +122,7 @@ function twoDigits(value)
 
 function getMoladHourForMazal(displayHour, period)
 {
-	if(period == 'month' || period == 'year')
-		return Number(displayHour);
-
-	var moladHour = Number(displayHour) - 1;
-
-	if(moladHour == 0)
-		moladHour = 1;
-	else if(moladHour < 0)
-		moladHour += 24;
-
-	return moladHour;
+	return Number(displayHour);
 }
 
 function calculateMazal(hebrewDay, hebrewHour)
