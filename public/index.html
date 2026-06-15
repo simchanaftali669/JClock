@@ -131,6 +131,14 @@
 			min-height: 0;
 		}
 
+		#iframe-container.quad-layout {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: repeat(2, minmax(0, 1fr));
+			background: #111;
+			gap: 2px;
+		}
+
 		.frame-slot {
 			flex: 1 1 0;
 			width: 100%;
@@ -142,6 +150,33 @@
 			width: 100%;
 			height: 100%;
 			border: 0;
+			background: #fff;
+		}
+
+		#iframe-container.quad-layout .frame-slot {
+			position: relative;
+			background: #fff;
+		}
+
+		#iframe-container.quad-layout .frame-slot.narrow-slot .display-frame {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			width: 900px;
+			height: calc(100% / var(--frame-scale, 1));
+			transform: translateX(-50%) scale(var(--frame-scale, 1));
+			transform-origin: top center;
+		}
+
+		@media (min-width: 1600px) and (min-height: 900px) {
+			#viewer-toolbar {
+				padding: 10px 18px;
+				font-size: 22px;
+			}
+
+			#back-to-choice {
+				font-size: 18px;
+			}
 		}
 
 		@media (max-width: 900px) {
@@ -174,6 +209,13 @@
 				height: calc(100% / var(--frame-scale, 1));
 				transform: translateX(-50%) scale(var(--frame-scale, 1));
 				transform-origin: top center;
+			}
+		}
+
+		@media (max-aspect-ratio: 1/1) {
+			#iframe-container.quad-layout {
+				grid-template-columns: 1fr;
+				grid-template-rows: repeat(4, minmax(0, 1fr));
 			}
 		}
 	</style>
@@ -232,9 +274,12 @@
 				he: "המצב הרגיל - כל 4 התצוגות",
 				en: "Regular mode - all 4 displays"
 			},
+			layout: "quad",
 			frames: [
-				{ title: { he: "פרסומות לגברים ונשים", en: "Ads for men and women" }, src: sources.commercialFamily },
-				{ title: { he: "שעון עברי לגברים ונשים", en: "Hebrew clock for men and women" }, src: sources.clockFamily }
+				{ title: { he: "פרסומות לגברים", en: "Ads for men" }, src: sources.commercialMan },
+				{ title: { he: "פרסומות לנשים", en: "Ads for women" }, src: sources.commercialWoman },
+				{ title: { he: "שעון עברי לגברים", en: "Hebrew clock for men" }, src: sources.clockMan + "&compact=1" },
+				{ title: { he: "שעון עברי לנשים", en: "Hebrew clock for women" }, src: sources.clockWoman + "&compact=1" }
 			],
 			primary: true
 		},
@@ -340,6 +385,7 @@
 	const viewerTitle = document.getElementById("viewer-title");
 	const iframeContainer = document.getElementById("iframe-container");
 	const backButton = document.getElementById("back-to-choice");
+	let frameResizeObserver = null;
 
 	function localText(value) {
 		return value[language] || value.he;
@@ -355,6 +401,32 @@
 	function updateFrameScale() {
 		const scale = Math.min(1, window.innerWidth / MOBILE_FRAME_WIDTH);
 		document.documentElement.style.setProperty("--frame-scale", scale);
+		updateSlotScales();
+	}
+
+	function updateSlotScales() {
+		iframeContainer.querySelectorAll(".frame-slot").forEach(function(slot) {
+			const slotWidth = slot.getBoundingClientRect().width || window.innerWidth;
+			const scale = Math.min(1, slotWidth / MOBILE_FRAME_WIDTH);
+			slot.classList.toggle("narrow-slot", scale < 1);
+			slot.style.setProperty("--frame-scale", scale);
+		});
+	}
+
+	function watchFrameSlots() {
+		if (frameResizeObserver) {
+			frameResizeObserver.disconnect();
+			frameResizeObserver = null;
+		}
+
+		if ("ResizeObserver" in window) {
+			frameResizeObserver = new ResizeObserver(updateSlotScales);
+			iframeContainer.querySelectorAll(".frame-slot").forEach(function(slot) {
+				frameResizeObserver.observe(slot);
+			});
+		}
+
+		requestAnimationFrame(updateSlotScales);
 	}
 
 	function renderChoices() {
@@ -376,6 +448,7 @@
 		}) || viewOptions[0];
 
 		iframeContainer.innerHTML = "";
+		iframeContainer.className = option.layout === "quad" ? "quad-layout" : "";
 		viewerTitle.textContent = localText(option.label);
 
 		option.frames.forEach(function(frame) {
@@ -393,10 +466,16 @@
 		choiceScreen.style.display = "none";
 		viewer.style.display = "flex";
 		window.location.hash = option.id;
+		watchFrameSlots();
 	}
 
 	function showChoices() {
 		iframeContainer.innerHTML = "";
+		iframeContainer.className = "";
+		if (frameResizeObserver) {
+			frameResizeObserver.disconnect();
+			frameResizeObserver = null;
+		}
 		viewer.style.display = "none";
 		choiceScreen.style.display = "block";
 		history.replaceState(null, "", window.location.pathname + window.location.search);
