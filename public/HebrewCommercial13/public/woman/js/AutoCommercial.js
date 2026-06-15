@@ -57,12 +57,8 @@ function createEmptyCommercials()
 function addMazalCommercials(nextCommercials, mazalNumber)
 {
 	var suffix = twoDigits(mazalNumber);
-	var drinkKey = 'Drink_' + suffix;
 	var eatKey = 'Eat_' + suffix;
 	var meetKey = 'Meet_' + suffix;
-
-	if(nextCommercials.hasOwnProperty(drinkKey) && nextCommercials[drinkKey] === '')
-		nextCommercials[drinkKey] = createCommercialSlots(getDrinkHours(), '0720');
 
 	if(nextCommercials.hasOwnProperty(eatKey) && nextCommercials[eatKey] === '')
 		nextCommercials[eatKey] = createCommercialSlots(getEatHours(), '0720');
