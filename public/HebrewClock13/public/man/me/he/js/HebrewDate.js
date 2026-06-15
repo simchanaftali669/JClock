@@ -579,9 +579,6 @@ function hebrewDate(inputDateOrYear, inputMonth, inputDate, inputLang) {
 
     SdnToHebrew(GregorianToSdn(inputYear, inputMonth, inputDate));
 
-    if (mpy[(hebrewYear - 1) % 19] !== 13 && hebrewMonth >= 8)
-        hebrewMonth--;
-
 	if(inputLang == "English")
 		return {
 			year: hebrewYear
