@@ -122,7 +122,7 @@ function getHebrewDate(gregorianDate) {
 	function countHebrewMonths(fromDate, toDate, period) {
 		let fromHebrew = getHebrewDate(fromDate);
 		let toHebrew = getHebrewDate(toDate);
-		if(toHebrew.date == "ל'")
+		if(toHebrew.date == 30)
 		{
 			toDate.setDate(toDate.getDate()+1);
 			toHebrew = getHebrewDate(toDate);
