@@ -118,6 +118,11 @@ function getHebrewDate(gregorianDate) {
     return hebrewDate(gregorianDate.getFullYear(), gregorianDate.getMonth() + 1, gregorianDate.getDate(), "English");
 }
 
+function getHebrewMonthForCount(hebrew) {
+	let month = Number(hebrew.month);
+	return !isHebrewLeapYear(Number(hebrew.year)) && month >= 8 ? month - 1 : month;
+}
+
 	// Function to calculate the number of Hebrew months between two Hebrew dates
 	function countHebrewMonths(fromDate, toDate, period) {
 		let fromHebrew = getHebrewDate(fromDate);
@@ -132,22 +137,24 @@ function getHebrewDate(gregorianDate) {
 			toHebrew.year = toHebrew.year - toHebrew.year%49 + 1
 
 		let totalMonths = 0;
+		let fromMonth = getHebrewMonthForCount(fromHebrew);
+		let toMonth = getHebrewMonthForCount(toHebrew);
 
 		if (fromHebrew.year === toHebrew.year) {
-			totalMonths = fromHebrew.month - toHebrew.month;
+			totalMonths = toMonth - fromMonth;
 		} else {
 			// Count the months remaining in the first year
-			totalMonths += (isHebrewLeapYear(fromHebrew.year) ? 13 : 12);// - fromHebrew.month;
+			totalMonths += (isHebrewLeapYear(fromHebrew.year) ? 13 : 12) - fromMonth + 1;
 			console.log("totalMonths: ", totalMonths);
 			// Count the months in the years between the first and last year
 			for (let year = fromHebrew.year + 1; year < toHebrew.year; year++) {
 				totalMonths += isHebrewLeapYear(year) ? 13 : 12;
 			}
 			 console.log("totalMonths: ", totalMonths);
-			 console.log("toHebrew.month: ", toHebrew.month);
+			 console.log("toHebrew.month: ", toMonth);
 			// Count the months in the last year
 			if(period == "month")
-				totalMonths += toHebrew.month - 1;
+				totalMonths += toMonth - 1;
 			 console.log("totalMonths: ", totalMonths);
 		}
 
