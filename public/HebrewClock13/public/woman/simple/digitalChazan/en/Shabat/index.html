@@ -235,10 +235,18 @@
 	
 	function showHebrewDate()
 	{
-		var date = new Date();		
+		var date = getHebrewDateSourceDate();
 
 		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(),"English");
 		document.getElementById('hebrewDate').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'];
+	}
+
+	function getHebrewDateSourceDate()
+	{
+		if(birthYear == null || birthMonth == null || birthDay == null)
+			return new Date();
+
+		return new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
 	}
 	
 	function openSpecialHebrewGiving()
