@@ -238,21 +238,24 @@ function ensureCommercialCandidates(selectedTime)
 
 function buildCommercialCandidates(dayValue, hourValue, drinkOnly)
 {
-    var hourMazal = calculateCommercialMazal(dayValue, hourValue);
+    var selectedDay = normalizeCommercialDay(dayValue);
+    var moladHourMazal = calculateMoladHourMazal(selectedDay, hourValue);
     var candidates = [];
 
     addCommercialCandidate(candidates, "Drink_07");
 
     if (drinkOnly)
     {
-        addMazalDrinkCandidates(candidates, hourMazal);
+        addMazalDrinkCandidates(candidates, selectedDay);
+        addMazalDrinkCandidates(candidates, moladHourMazal);
         return candidates;
     }
 
     if (isEatHour(hourValue))
         addCommercialCandidate(candidates, "Eat_01");
 
-    addMazalCommercialCandidates(candidates, hourMazal, hourValue);
+    addMazalCommercialCandidates(candidates, selectedDay, hourValue);
+    addMazalCommercialCandidates(candidates, moladHourMazal, hourValue);
 
     return candidates;
 }
@@ -270,9 +273,9 @@ function addMazalCommercialCandidates(candidates, mazalNumber, hourValue)
         addCommercialCandidate(candidates, "Meet_" + suffix);
 }
 
-function addMazalDrinkCandidates(candidates, hourMazal)
+function addMazalDrinkCandidates(candidates, selectedDay)
 {
-    addCommercialCandidate(candidates, "Drink_" + twoDigits(hourMazal));
+    addCommercialCandidate(candidates, "Drink_" + twoDigits(selectedDay));
 }
 
 function addCommercialCandidate(candidates, commercialName)
@@ -285,6 +288,7 @@ function isKnownCommercial(commercialName)
 {
     return (
         commercialName == "Drink_01" ||
+        commercialName == "Drink_02" ||
         commercialName == "Drink_03" ||
         commercialName == "Drink_04" ||
         commercialName == "Drink_05" ||
@@ -337,7 +341,15 @@ function isMeetHour(hour)
     return (hour >= 1 && hour <= 10) || (hour >= 20 && hour <= 24);
 }
 
-function calculateCommercialMazal(hebrewDayValue, hebrewHourValue)
+function normalizeCommercialDay(dayValue)
+{
+    dayValue = Number(dayValue);
+    if (dayValue < 1 || dayValue > 7)
+        return 1;
+    return dayValue;
+}
+
+function calculateMoladHourMazal(hebrewDayValue, hebrewHourValue)
 {
     var dayOffsets = {
         1: 6,
@@ -348,7 +360,9 @@ function calculateCommercialMazal(hebrewDayValue, hebrewHourValue)
         6: 7,
         7: 3
     };
-    var mazalHour = (dayOffsets[Number(hebrewDayValue)] + Number(hebrewHourValue) - 1) % 7;
+    var moladHour = normalizeCommercialHour(hebrewHourValue) - 1;
+    var mazalHour = (dayOffsets[Number(hebrewDayValue)] + moladHour - 1) % 7;
+
     return mazalHour == 0 ? 7 : mazalHour;
 }
 
@@ -467,3 +481,4 @@ function openCommercialInNewTab(hyperLink) {
     var win = window.open(hyperLink, '_blank');
     win.focus();
 }
+
