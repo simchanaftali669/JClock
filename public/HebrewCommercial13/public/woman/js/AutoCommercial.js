@@ -6,16 +6,53 @@ function ReCalcCommercial(period)
 	commercials = createEmptyCommercials();
 
 	var normalizedPeriod = String(period).toLowerCase();
-	var mazal = getCurrentMazal(normalizedPeriod);
+	var mazal = getCommercialMazal(normalizedPeriod);
 	var hebrewDay = Number(mazal[0]);
 	var hebrewHour = getMoladHourForMazal(mazal[1], normalizedPeriod);
 	var hourMazal = calculateMazal(hebrewDay, hebrewHour);
 	var nextCommercials = buildCommercialsByMolad(hebrewDay, hourMazal);
 
+	if(normalizedPeriod == 'dovid')
+		addCurrentMonthCommercials(nextCommercials);
+
 	applyCommercials(nextCommercials);
 	initCommercials();
 
 	return commercials;
+}
+
+function addCurrentMonthCommercials(nextCommercials)
+{
+	var monthMazal = getCurrentMazal('month');
+	var monthDay = Number(monthMazal[0]);
+
+	addMazalCommercials(nextCommercials, monthDay);
+}
+
+function getCommercialMazal(period)
+{
+	var urlMazal = getCommercialMazalFromUrl();
+	return urlMazal ? urlMazal : getCurrentMazal(period);
+}
+
+function getCommercialMazalFromUrl()
+{
+	if(typeof document === 'undefined' || !document.location)
+		return null;
+
+	var url = new URL(document.location.href);
+	var hebrewDayParam = url.searchParams.get('hebrewDay');
+	var hebrewHourParam = url.searchParams.get('hebrewHour');
+	var hebrewChelekParam = url.searchParams.get('hebrewChelek');
+
+	if(hebrewDayParam == null || hebrewHourParam == null)
+		return null;
+
+	return [
+		Number(hebrewDayParam),
+		Number(hebrewHourParam),
+		hebrewChelekParam == null ? 0 : Number(hebrewChelekParam)
+	];
 }
 
 function buildCommercialsByMolad(hebrewDay, hourMazal)

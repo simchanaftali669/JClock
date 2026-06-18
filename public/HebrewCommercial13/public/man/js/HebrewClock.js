@@ -297,6 +297,13 @@ function markTime()
 
 function ReCalcCommercialToPeriod(intialize)
 {
+	var urlPeriod = getCommercialPeriodFromUrl();
+	if(urlPeriod)
+	{
+		ReCalcCommercial(urlPeriod);
+		return;
+	}
+
 	var commercialHour = getCommercialPeriodHour();
 	var commercialMinute = getCommercialPeriodMinute();
 
@@ -335,6 +342,15 @@ function ReCalcCommercialToPeriod(intialize)
 function getCommercialPeriodHour()
 {
 	return Number(lbHour);
+}
+
+function getCommercialPeriodFromUrl()
+{
+	if(typeof document === 'undefined' || !document.location)
+		return null;
+
+	var url = new URL(document.location.href);
+	return url.searchParams.get('period');
 }
 
 function getCommercialPeriodMinute()
