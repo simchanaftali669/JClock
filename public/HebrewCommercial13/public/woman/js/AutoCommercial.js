@@ -163,8 +163,7 @@ function twoDigits(value)
 
 function getMoladHourForMazal(displayHour, period)
 {
-	var hour = Number(displayHour);
-	return hour >= 13 ? hour - 12 : hour;
+	return Number(displayHour);
 }
 
 function calculateMazal(hebrewDay, hebrewHour)

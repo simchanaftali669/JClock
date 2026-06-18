@@ -92,6 +92,12 @@
         commercialFunction();
     }
 
+    if(window.commercialPreLbMinute !== lbMinute)
+    {
+        commercialFunction();
+        window.commercialPreLbMinute = lbMinute;
+    }
+
 
     
     //if(lbMinute == 0)

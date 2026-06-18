@@ -5,7 +5,7 @@ var cInRegionAtTime = new Map();
 const commercials = {
     Soteria: 's_xx#d_xx__h_xx__p_0001+',
     Breslev: 's_12#d_xx__h_xx__p_0001+s_09#d_xx__h_xx__p_0001+s_10#d_xx__h_xx__p_0001+s_02#d_xx__h_xx__p_0001+',
-	LechemMoshe: 's_xx#d_xx__h_03__p_0360+s_xx#d_xx__h_04__p_0360+s_xx#d_xx__h_05__p_0360s_xx#d_xx__h_15__p_0360+s_xx#d_xx__h_16__p_0360+s_xx#d_xx__h_17__p_0360+',    
+	LechemMoshe: 's_xx#d_xx__h_03__p_0360+s_xx#d_xx__h_04__p_0360+s_xx#d_xx__h_05__p_0360+s_xx#d_xx__h_15__p_0360+s_xx#d_xx__h_16__p_0360+s_xx#d_xx__h_17__p_0360+',    
 	ShifonPlus: 's_xx#d_xx__h_03__p_0360+s_xx#d_xx__h_04__p_0360+s_xx#d_xx__h_05__p_0360+s_xx#d_xx__h_15__p_0360+s_xx#d_xx__h_16__p_0360+s_xx#d_xx__h_17__p_0360+',
     IDF: 's_12#d_04__h_18__p_0360+s_12#d_04__h_19__p_0360+',
     Opticana: 's_xx#d_0x__h_22__p_0720+s_xx#d_0x__h_23__p_0720+',
@@ -196,20 +196,92 @@ var commercial = commercials.Breslev;
 
 //
 
+function getPreferredFoodOrDrinkCommercial(selectedDay, selectedHour)
+{
+    var commercialHour = normalizeCommercialHour(selectedHour);
+    var hourMazal = calculateCommercialMazal(selectedDay, commercialHour);
+    var commercialType = isCurrentSystemDrinkOnly() || !isEatHour(commercialHour) ? "Drink_" : "Eat_";
+
+    return commercialType + twoDigits(hourMazal);
+}
+
+function isCurrentSystemDrinkOnly()
+{
+    var currentSystemHour = Number(lbHour);
+    return currentSystemHour >= 12 && currentSystemHour < 17;
+}
+
+function normalizeCommercialHour(hour)
+{
+    hour = Number(hour);
+    if (hour == 0)
+        return 24;
+    return hour;
+}
+
+function isEatHour(hour)
+{
+    return (hour >= 1 && hour <= 10) || (hour >= 18 && hour <= 24);
+}
+
+function calculateCommercialMazal(hebrewDayValue, hebrewHourValue)
+{
+    var dayOffsets = {
+        1: 6,
+        2: 2,
+        3: 5,
+        4: 1,
+        5: 4,
+        6: 7,
+        7: 3
+    };
+    var mazalHour = (dayOffsets[Number(hebrewDayValue)] + Number(hebrewHourValue) - 1) % 7;
+    return mazalHour == 0 ? 7 : mazalHour;
+}
+
+function twoDigits(value)
+{
+    value = Number(value);
+    return value <= 9 ? "0" + value : String(value);
+}
+
 //need to decide if i want an omer be different between 
 function commercialFunction()
 {
     //console.log("shevetLocation: " + shevetLocation + "; hebrewday: " + hebrewday + "; lbHour:" + lbHour)
     //need to know which omer and which shevetLocation
     //need to get the list of commercials in this {region,omer} slot.
+    var commercialElement = document.getElementById("commercial");
+    if (!commercialElement)
+        return;
+
+    var url = new URL(document.location.href);
+    var urlDay = url.searchParams.get("hebrewDay") || url.searchParams.get("day");
+    var urlHour = url.searchParams.get("hebrewHour") || url.searchParams.get("hour");
+    var selectedDay = Number(urlDay);
+    var selectedHour = Number(urlHour);
+    if (!Number.isFinite(selectedDay) || selectedDay < 1 || selectedDay > 7)
+        selectedDay = Number(hebrewday);
+    if (!Number.isFinite(selectedHour) || selectedHour < 0 || selectedHour > 24)
+        selectedHour = Number(lbHour);
+
+    var preferredCommercial = getPreferredFoodOrDrinkCommercial(selectedDay, selectedHour);
+    if (preferredCommercial)
+    {
+        commercialInitFunction(preferredCommercial);
+        return;
+    }
+
     regionValue = (Number(shevetLocation) <= 9) ? "0" + Number(shevetLocation) : shevetLocation;
-    dayValue = "0" + hebrewday;
-    timeValue = (lbHour <= 9) ? "0" + lbHour : String(lbHour);
+    dayValue = "0" + selectedDay;
+    timeValue = (selectedHour <= 9) ? "0" + selectedHour : String(selectedHour);
  
     //string of 6 characters ==> {rrddtt};
     var regionAtDayTime = regionValue + dayValue + timeValue;
 
     cList = cInRegionAtTime.get(regionAtDayTime);
+    if (!cList || !cList.length)
+        return;
     //console.log(regionAtDayTime);
     //console.log(cList);
 
@@ -225,54 +297,62 @@ function commercialFunction()
 //need to update each commercial for each language with 1. link address and 2. css id connected to the commercial logo 
 function commercialInitFunction(commercial)
 {
+    var commercialDayElement = document.getElementById("commercial").querySelector(".day");
+
+    if (commercial && (commercial.indexOf("Eat_") == 0 || commercial.indexOf("Drink_") == 0))
+    {
+        commercialDayElement.setAttribute("id", commercial);
+        return;
+    }
+
     switch(commercial)
 	{
 		case "Soteria":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Soteria");
+            commercialDayElement.setAttribute("id","Soteria");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"http://soteria.org.il/"));
             break;
         case "Breslev":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Breslev");
+            commercialDayElement.setAttribute("id","Breslev");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"http://www.emuniyim.com/"));
             break;
         case "LechemMoshe":
-                document.getElementById("commercial").querySelector("img").setAttribute("id","LechemMoshe");
+                commercialDayElement.setAttribute("id","LechemMoshe");
                 document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://lecemoshe.click-eat.co.il/"));
             break;  
         case "ShifonPlus":
-                document.getElementById("commercial").querySelector("img").setAttribute("id","ShifonPlus");
+                commercialDayElement.setAttribute("id","ShifonPlus");
                 document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"http://shifonplus.com/"));
             break;     
         case "IDF":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","IDF");
+            commercialDayElement.setAttribute("id","IDF");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.idf.il/"));
         break;  
         case "Opticana":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Opticana");
+            commercialDayElement.setAttribute("id","Opticana");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.opticana.co.il/"));            
         break;     
         case "NewDeli":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","NewDeli");
+            commercialDayElement.setAttribute("id","NewDeli");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://newdeli.com/"));
         break;   
         case "Velvel":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Velvel");
+            commercialDayElement.setAttribute("id","Velvel");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.velvel.co.il/"));
         break;   
         case "Mispara":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Mispara");
+            commercialDayElement.setAttribute("id","Mispara");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.opticana.co.il/"));
         break; 
         case "JacobsCoffee":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","JacobsCoffee");
+            commercialDayElement.setAttribute("id","JacobsCoffee");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.jacobscoffee.co.il/"));
         break; 
         case "CoffeeBilig":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","CoffeeBilig");
+            commercialDayElement.setAttribute("id","CoffeeBilig");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://naftali126.wixsite.com/chaimtovim"));
         break; 
         case "NesCafe":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","NesCafe");
+            commercialDayElement.setAttribute("id","NesCafe");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 
 	} 
