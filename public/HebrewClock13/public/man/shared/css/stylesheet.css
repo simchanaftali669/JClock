@@ -122,7 +122,11 @@
 #Drink_04,
 #Drink_05,
 #Drink_06,
-#Drink_07
+#Drink_07,
+#Meet_02,
+#Meet_04,
+#Meet_05,
+#Meet_07
 {
    background-repeat:no-repeat;
    background-position:center;
@@ -198,6 +202,26 @@
 #Drink_07
 {
    background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_07.png');
+}
+
+#Meet_02
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_02.png');
+}
+
+#Meet_04
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_04.png');
+}
+
+#Meet_05
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_05.png');
+}
+
+#Meet_07
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_07.png');
 }
 
 

@@ -196,13 +196,123 @@ var commercial = commercials.Breslev;
 
 //
 
-function getPreferredFoodOrDrinkCommercial(selectedDay, selectedHour)
-{
-    var commercialHour = normalizeCommercialHour(selectedHour);
-    var hourMazal = calculateCommercialMazal(selectedDay, commercialHour);
-    var commercialType = isCurrentSystemDrinkOnly() || !isEatHour(commercialHour) ? "Drink_" : "Eat_";
+var selectedCommercialDay;
+var selectedCommercialHour;
+var selectedCommercialDrinkOnly;
+var currentCommercialCandidates = [];
 
-    return commercialType + twoDigits(hourMazal);
+function getSelectedCommercialTime()
+{
+    var url = new URL(document.location.href);
+    var urlDay = url.searchParams.get("hebrewDay") || url.searchParams.get("day");
+    var urlHour = url.searchParams.get("hebrewHour") || url.searchParams.get("hour");
+    var selectedDay = Number(urlDay);
+    var selectedHour = Number(urlHour);
+
+    if (!Number.isFinite(selectedDay) || selectedDay < 1 || selectedDay > 7)
+        selectedDay = Number(hebrewday);
+    if (!Number.isFinite(selectedHour) || selectedHour < 0 || selectedHour > 24)
+        selectedHour = Number(lbHour);
+
+    return {
+        day: selectedDay,
+        hour: normalizeCommercialHour(selectedHour)
+    };
+}
+
+function ensureCommercialCandidates(selectedTime)
+{
+    var drinkOnly = isCurrentSystemDrinkOnly();
+    if (
+        selectedCommercialDay === selectedTime.day &&
+        selectedCommercialHour === selectedTime.hour &&
+        selectedCommercialDrinkOnly === drinkOnly
+    )
+        return;
+
+    selectedCommercialDay = selectedTime.day;
+    selectedCommercialHour = selectedTime.hour;
+    selectedCommercialDrinkOnly = drinkOnly;
+    currentCommercialCandidates = buildCommercialCandidates(selectedCommercialDay, selectedCommercialHour, selectedCommercialDrinkOnly);
+}
+
+function buildCommercialCandidates(dayValue, hourValue, drinkOnly)
+{
+    var hourMazal = calculateCommercialMazal(dayValue, hourValue);
+    var candidates = [];
+
+    addCommercialCandidate(candidates, "Drink_07");
+
+    if (drinkOnly)
+    {
+        addMazalDrinkCandidates(candidates, dayValue, hourMazal);
+        return candidates;
+    }
+
+    if (isEatHour(hourValue))
+        addCommercialCandidate(candidates, "Eat_01");
+
+    addMazalCommercialCandidates(candidates, dayValue, hourValue);
+    addMazalCommercialCandidates(candidates, hourMazal, hourValue);
+
+    return candidates;
+}
+
+function addMazalCommercialCandidates(candidates, mazalNumber, hourValue)
+{
+    var suffix = twoDigits(mazalNumber);
+
+    addCommercialCandidate(candidates, "Drink_" + suffix);
+
+    if (isEatHour(hourValue))
+        addCommercialCandidate(candidates, "Eat_" + suffix);
+
+    if (isMeetHour(hourValue))
+        addCommercialCandidate(candidates, "Meet_" + suffix);
+}
+
+function addMazalDrinkCandidates(candidates, dayValue, hourMazal)
+{
+    addCommercialCandidate(candidates, "Drink_" + twoDigits(dayValue));
+    addCommercialCandidate(candidates, "Drink_" + twoDigits(hourMazal));
+}
+
+function addCommercialCandidate(candidates, commercialName)
+{
+    if (isKnownCommercial(commercialName) && candidates.indexOf(commercialName) == -1)
+        candidates.push(commercialName);
+}
+
+function isKnownCommercial(commercialName)
+{
+    return (
+        commercialName == "Drink_01" ||
+        commercialName == "Drink_03" ||
+        commercialName == "Drink_04" ||
+        commercialName == "Drink_05" ||
+        commercialName == "Drink_06" ||
+        commercialName == "Drink_07" ||
+        commercialName == "Eat_01" ||
+        commercialName == "Eat_02" ||
+        commercialName == "Eat_03" ||
+        commercialName == "Eat_04" ||
+        commercialName == "Eat_05" ||
+        commercialName == "Eat_06" ||
+        commercialName == "Eat_07" ||
+        commercialName == "Meet_02" ||
+        commercialName == "Meet_04" ||
+        commercialName == "Meet_05" ||
+        commercialName == "Meet_07"
+    );
+}
+
+function pickCommercialFromCandidates()
+{
+    if (!currentCommercialCandidates.length)
+        return null;
+
+    var randomNumber = Math.floor(Math.random() * currentCommercialCandidates.length);
+    return currentCommercialCandidates[randomNumber];
 }
 
 function isCurrentSystemDrinkOnly()
@@ -222,6 +332,11 @@ function normalizeCommercialHour(hour)
 function isEatHour(hour)
 {
     return (hour >= 1 && hour <= 10) || (hour >= 18 && hour <= 24);
+}
+
+function isMeetHour(hour)
+{
+    return (hour >= 1 && hour <= 10) || (hour >= 20 && hour <= 24);
 }
 
 function calculateCommercialMazal(hebrewDayValue, hebrewHourValue)
@@ -255,26 +370,19 @@ function commercialFunction()
     if (!commercialElement)
         return;
 
-    var url = new URL(document.location.href);
-    var urlDay = url.searchParams.get("hebrewDay") || url.searchParams.get("day");
-    var urlHour = url.searchParams.get("hebrewHour") || url.searchParams.get("hour");
-    var selectedDay = Number(urlDay);
-    var selectedHour = Number(urlHour);
-    if (!Number.isFinite(selectedDay) || selectedDay < 1 || selectedDay > 7)
-        selectedDay = Number(hebrewday);
-    if (!Number.isFinite(selectedHour) || selectedHour < 0 || selectedHour > 24)
-        selectedHour = Number(lbHour);
+    var selectedTime = getSelectedCommercialTime();
+    ensureCommercialCandidates(selectedTime);
 
-    var preferredCommercial = getPreferredFoodOrDrinkCommercial(selectedDay, selectedHour);
-    if (preferredCommercial)
+    var selectedCommercial = pickCommercialFromCandidates();
+    if (selectedCommercial)
     {
-        commercialInitFunction(preferredCommercial);
+        commercialInitFunction(selectedCommercial);
         return;
     }
 
     regionValue = (Number(shevetLocation) <= 9) ? "0" + Number(shevetLocation) : shevetLocation;
-    dayValue = "0" + selectedDay;
-    timeValue = (selectedHour <= 9) ? "0" + selectedHour : String(selectedHour);
+    dayValue = "0" + selectedTime.day;
+    timeValue = (selectedTime.hour <= 9) ? "0" + selectedTime.hour : String(selectedTime.hour);
  
     //string of 6 characters ==> {rrddtt};
     var regionAtDayTime = regionValue + dayValue + timeValue;
@@ -298,7 +406,7 @@ function commercialInitFunction(commercial)
 {
     var commercialDayElement = document.getElementById("commercial").querySelector(".day");
 
-    if (commercial && (commercial.indexOf("Eat_") == 0 || commercial.indexOf("Drink_") == 0))
+    if (commercial && (commercial.indexOf("Eat_") == 0 || commercial.indexOf("Drink_") == 0 || commercial.indexOf("Meet_") == 0))
     {
         commercialDayElement.setAttribute("id", commercial);
         return;
