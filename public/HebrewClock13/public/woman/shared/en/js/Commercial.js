@@ -245,14 +245,13 @@ function buildCommercialCandidates(dayValue, hourValue, drinkOnly)
 
     if (drinkOnly)
     {
-        addMazalDrinkCandidates(candidates, dayValue, hourMazal);
+        addMazalDrinkCandidates(candidates, hourMazal);
         return candidates;
     }
 
     if (isEatHour(hourValue))
         addCommercialCandidate(candidates, "Eat_01");
 
-    addMazalCommercialCandidates(candidates, dayValue, hourValue);
     addMazalCommercialCandidates(candidates, hourMazal, hourValue);
 
     return candidates;
@@ -271,9 +270,8 @@ function addMazalCommercialCandidates(candidates, mazalNumber, hourValue)
         addCommercialCandidate(candidates, "Meet_" + suffix);
 }
 
-function addMazalDrinkCandidates(candidates, dayValue, hourMazal)
+function addMazalDrinkCandidates(candidates, hourMazal)
 {
-    addCommercialCandidate(candidates, "Drink_" + twoDigits(dayValue));
     addCommercialCandidate(candidates, "Drink_" + twoDigits(hourMazal));
 }
 
