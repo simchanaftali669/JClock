@@ -101,7 +101,7 @@ function getAllHours()
 
 function getEatHours()
 {
-	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23, 24];
+	return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 19, 20, 21, 22, 23, 24];
 }
 
 function getDrinkHours()
@@ -122,7 +122,8 @@ function twoDigits(value)
 
 function getMoladHourForMazal(displayHour, period)
 {
-	return Number(displayHour);
+	var hour = Number(displayHour);
+	return hour >= 13 ? hour - 12 : hour;
 }
 
 function calculateMazal(hebrewDay, hebrewHour)
