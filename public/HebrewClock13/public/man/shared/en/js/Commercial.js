@@ -351,18 +351,33 @@ function normalizeCommercialDay(dayValue)
 function calculateMoladHourMazal(hebrewDayValue, hebrewHourValue)
 {
     var dayOffsets = {
-        1: 6,
-        2: 2,
-        3: 5,
-        4: 1,
-        5: 4,
-        6: 7,
-        7: 3
+        1: 5,
+        2: 1,
+        3: 4,
+        4: 0,
+        5: 3,
+        6: 6,
+        7: 2
     };
     var moladHour = normalizeCommercialHour(hebrewHourValue) - 1;
-    var mazalHour = (dayOffsets[Number(hebrewDayValue)] + moladHour - 1) % 7;
+    var mazalHour = (dayOffsets[Number(hebrewDayValue)] + moladHour) % 7;
 
-    return mazalHour == 0 ? 7 : mazalHour;
+    return convertMazalIndexToCommercialSuffix(mazalHour);
+}
+
+function convertMazalIndexToCommercialSuffix(mazalIndex)
+{
+    var mazalToCommercialSuffix = {
+        0: 4,
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 5,
+        5: 6,
+        6: 7
+    };
+
+    return mazalToCommercialSuffix[Number(mazalIndex)];
 }
 
 function twoDigits(value)
