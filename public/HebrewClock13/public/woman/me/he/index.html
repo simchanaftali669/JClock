@@ -119,6 +119,9 @@
         <div style="text-align:center; margin-bottom:10px;">
             <input class="day" id="Parasha" type="text" value="" onclick="openParashaInNewTab();" />
         </div>
+        <div style="text-align:center; margin-bottom:10px;">
+            <input class="day" id="Laws" type="text" value="חוקים" onclick="openLawsInNewTab();" />
+        </div>
 		
 		<!--
         <div style="text-align:center; margin-bottom:10px;">
@@ -153,6 +156,8 @@
     <script type="text/javascript" src="js/Sefer.js"></script>
     <script type="text/javascript" src="js/Masechet.js"></script>
     <script type="text/javascript" src="js/Parasha.js"></script>
+    <script type="text/javascript" src="js/LawsData.js"></script>
+    <script type="text/javascript" src="js/Laws.js"></script>
     <script type="text/javascript" src="js/Shevet.js"></script>
 	<script type="text/javascript" src="js/Times.js"></script>
     <script type="text/javascript" src="js/SunTime.js"></script>
@@ -258,6 +263,7 @@
 			setMasechet();
 			setSefer();
 			setParasha();
+			setLaws();
 			sederLimud('Dummy');
 			
 			//נחלה
@@ -309,6 +315,7 @@
         setMasechet();
         setSefer();
         setParasha();
+		setLaws();
 		sederLimud('Dummy');
 		
 		//נחלה
@@ -361,6 +368,7 @@
         setMasechet();
         setSefer();
         setParasha();
+        setLaws();
         sederLimud();
     }
 
@@ -377,6 +385,7 @@
         localStorage.setItem("mida", document.getElementById("Mazal").value);
         localStorage.setItem("masechet", document.getElementById("Masechet").value);
         localStorage.setItem("sefer", document.getElementById("Sefer").value);
+        localStorage.setItem("laws", document.getElementById("Laws").value);
 
 
         var win = window.open("moon.html", '_blank');
