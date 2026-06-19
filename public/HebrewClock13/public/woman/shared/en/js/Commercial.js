@@ -5,7 +5,7 @@ var cInRegionAtTime = new Map();
 const commercials = {
     Soteria: 's_xx#d_xx__h_xx__p_0001+',
     Breslev: 's_12#d_xx__h_xx__p_0001+s_09#d_xx__h_xx__p_0001+s_10#d_xx__h_xx__p_0001+s_02#d_xx__h_xx__p_0001+',
-	LechemMoshe: 's_xx#d_xx__h_03__p_0360+s_xx#d_xx__h_04__p_0360+s_xx#d_xx__h_05__p_0360s_xx#d_xx__h_15__p_0360+s_xx#d_xx__h_16__p_0360+s_xx#d_xx__h_17__p_0360+',    
+	LechemMoshe: 's_xx#d_xx__h_03__p_0360+s_xx#d_xx__h_04__p_0360+s_xx#d_xx__h_05__p_0360+s_xx#d_xx__h_15__p_0360+s_xx#d_xx__h_16__p_0360+s_xx#d_xx__h_17__p_0360+',    
 	ShifonPlus: 's_xx#d_xx__h_03__p_0360+s_xx#d_xx__h_04__p_0360+s_xx#d_xx__h_05__p_0360+s_xx#d_xx__h_15__p_0360+s_xx#d_xx__h_16__p_0360+s_xx#d_xx__h_17__p_0360+',
     IDF: 's_12#d_04__h_18__p_0360+s_12#d_04__h_19__p_0360+',
     Opticana: 's_xx#d_0x__h_22__p_0720+s_xx#d_0x__h_23__p_0720+',
@@ -196,20 +196,227 @@ var commercial = commercials.Breslev;
 
 //
 
+var selectedCommercialDay;
+var selectedCommercialHour;
+var selectedCommercialDrinkOnly;
+var currentCommercialCandidates = [];
+
+function getSelectedCommercialTime()
+{
+    var url = new URL(document.location.href);
+    var urlDay = url.searchParams.get("hebrewDay") || url.searchParams.get("day");
+    var urlHour = url.searchParams.get("hebrewHour") || url.searchParams.get("hour");
+    var selectedDay = Number(urlDay);
+    var selectedHour = Number(urlHour);
+
+    if (!Number.isFinite(selectedDay) || selectedDay < 1 || selectedDay > 7)
+        selectedDay = Number(hebrewday);
+    if (!Number.isFinite(selectedHour) || selectedHour < 0 || selectedHour > 24)
+        selectedHour = Number(lbHour);
+
+    return {
+        day: selectedDay,
+        hour: normalizeCommercialHour(selectedHour)
+    };
+}
+
+function ensureCommercialCandidates(selectedTime)
+{
+    var drinkOnly = isCurrentSystemDrinkOnly();
+    if (
+        selectedCommercialDay === selectedTime.day &&
+        selectedCommercialHour === selectedTime.hour &&
+        selectedCommercialDrinkOnly === drinkOnly
+    )
+        return;
+
+    selectedCommercialDay = selectedTime.day;
+    selectedCommercialHour = selectedTime.hour;
+    selectedCommercialDrinkOnly = drinkOnly;
+    currentCommercialCandidates = buildCommercialCandidates(selectedCommercialDay, selectedCommercialHour, selectedCommercialDrinkOnly);
+}
+
+function buildCommercialCandidates(dayValue, hourValue, drinkOnly)
+{
+    var selectedDay = normalizeCommercialDay(dayValue);
+    var moladHourMazal = calculateMoladHourMazal(selectedDay, hourValue);
+    var candidates = [];
+
+    addCommercialCandidate(candidates, "Drink_07");
+
+    if (drinkOnly)
+    {
+        addMazalDrinkCandidates(candidates, selectedDay);
+        addMazalDrinkCandidates(candidates, moladHourMazal);
+        return candidates;
+    }
+
+    if (isEatHour(hourValue))
+        addCommercialCandidate(candidates, "Eat_01");
+
+    addMazalCommercialCandidates(candidates, selectedDay, hourValue);
+    addMazalCommercialCandidates(candidates, moladHourMazal, hourValue);
+
+    return candidates;
+}
+
+function addMazalCommercialCandidates(candidates, mazalNumber, hourValue)
+{
+    var suffix = twoDigits(mazalNumber);
+
+    addCommercialCandidate(candidates, "Drink_" + suffix);
+
+    if (isEatHour(hourValue))
+        addCommercialCandidate(candidates, "Eat_" + suffix);
+
+    if (isMeetHour(hourValue))
+        addCommercialCandidate(candidates, "Meet_" + suffix);
+}
+
+function addMazalDrinkCandidates(candidates, selectedDay)
+{
+    addCommercialCandidate(candidates, "Drink_" + twoDigits(selectedDay));
+}
+
+function addCommercialCandidate(candidates, commercialName)
+{
+    if (isKnownCommercial(commercialName) && candidates.indexOf(commercialName) == -1)
+        candidates.push(commercialName);
+}
+
+function isKnownCommercial(commercialName)
+{
+    return (
+        commercialName == "Drink_01" ||
+        commercialName == "Drink_02" ||
+        commercialName == "Drink_03" ||
+        commercialName == "Drink_04" ||
+        commercialName == "Drink_05" ||
+        commercialName == "Drink_06" ||
+        commercialName == "Drink_07" ||
+        commercialName == "Eat_01" ||
+        commercialName == "Eat_02" ||
+        commercialName == "Eat_03" ||
+        commercialName == "Eat_04" ||
+        commercialName == "Eat_05" ||
+        commercialName == "Eat_06" ||
+        commercialName == "Eat_07" ||
+        commercialName == "Meet_02" ||
+        commercialName == "Meet_04" ||
+        commercialName == "Meet_05" ||
+        commercialName == "Meet_07"
+    );
+}
+
+function pickCommercialFromCandidates()
+{
+    if (!currentCommercialCandidates.length)
+        return null;
+
+    var randomNumber = Math.floor(Math.random() * currentCommercialCandidates.length);
+    return currentCommercialCandidates[randomNumber];
+}
+
+function isCurrentSystemDrinkOnly()
+{
+    var currentSystemHour = Number(lbHour);
+    return currentSystemHour >= 12 && currentSystemHour < 17;
+}
+
+function normalizeCommercialHour(hour)
+{
+    hour = Number(hour);
+    if (hour == 0)
+        return 24;
+    return hour;
+}
+
+function isEatHour(hour)
+{
+    return (hour >= 1 && hour <= 10) || (hour >= 18 && hour <= 24);
+}
+
+function isMeetHour(hour)
+{
+    return (hour >= 1 && hour <= 10) || (hour >= 20 && hour <= 24);
+}
+
+function normalizeCommercialDay(dayValue)
+{
+    dayValue = Number(dayValue);
+    if (dayValue < 1 || dayValue > 7)
+        return 1;
+    return dayValue;
+}
+
+function calculateMoladHourMazal(hebrewDayValue, hebrewHourValue)
+{
+    var dayOffsets = {
+        1: 5,
+        2: 1,
+        3: 4,
+        4: 0,
+        5: 3,
+        6: 6,
+        7: 2
+    };
+    var moladHour = normalizeCommercialHour(hebrewHourValue) - 1;
+    var mazalHour = (dayOffsets[Number(hebrewDayValue)] + moladHour) % 7;
+
+    return convertMazalIndexToCommercialSuffix(mazalHour);
+}
+
+function convertMazalIndexToCommercialSuffix(mazalIndex)
+{
+    var mazalToCommercialSuffix = {
+        0: 4,
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 5,
+        5: 6,
+        6: 7
+    };
+
+    return mazalToCommercialSuffix[Number(mazalIndex)];
+}
+
+function twoDigits(value)
+{
+    value = Number(value);
+    return value <= 9 ? "0" + value : String(value);
+}
+
 //need to decide if i want an omer be different between 
 function commercialFunction()
 {
     //console.log("shevetLocation: " + shevetLocation + "; hebrewday: " + hebrewday + "; lbHour:" + lbHour)
     //need to know which omer and which shevetLocation
     //need to get the list of commercials in this {region,omer} slot.
+    var commercialElement = document.getElementById("commercial");
+    if (!commercialElement)
+        return;
+
+    var selectedTime = getSelectedCommercialTime();
+    ensureCommercialCandidates(selectedTime);
+
+    var selectedCommercial = pickCommercialFromCandidates();
+    if (selectedCommercial)
+    {
+        commercialInitFunction(selectedCommercial);
+        return;
+    }
+
     regionValue = (Number(shevetLocation) <= 9) ? "0" + Number(shevetLocation) : shevetLocation;
-    dayValue = "0" + hebrewday;
-    timeValue = (lbHour <= 9) ? "0" + lbHour : String(lbHour);
+    dayValue = "0" + selectedTime.day;
+    timeValue = (selectedTime.hour <= 9) ? "0" + selectedTime.hour : String(selectedTime.hour);
  
     //string of 6 characters ==> {rrddtt};
     var regionAtDayTime = regionValue + dayValue + timeValue;
 
     cList = cInRegionAtTime.get(regionAtDayTime);
+    if (!cList || !cList.length)
+        return;
     //console.log(regionAtDayTime);
     //console.log(cList);
 
@@ -224,54 +431,62 @@ function commercialFunction()
 //need to update each commercial for each language with 1. link address and 2. css id connected to the commercial logo 
 function commercialInitFunction(commercial)
 {
+    var commercialDayElement = document.getElementById("commercial").querySelector(".day");
+
+    if (commercial && (commercial.indexOf("Eat_") == 0 || commercial.indexOf("Drink_") == 0 || commercial.indexOf("Meet_") == 0))
+    {
+        commercialDayElement.setAttribute("id", commercial);
+        return;
+    }
+
     switch(commercial)
 	{
 		case "Soteria":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Soteria");
+            commercialDayElement.setAttribute("id","Soteria");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://soteria.org.il/soteria-israel/"));
             break;
         case "Breslev":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Breslev");
+            commercialDayElement.setAttribute("id","Breslev");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"http://www.emuniyim.com/english"));
             break;
         case "LechemMoshe":
-                document.getElementById("commercial").querySelector("img").setAttribute("id","LechemMoshe");
+                commercialDayElement.setAttribute("id","LechemMoshe");
                 document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://lecemoshe.click-eat.co.il/"));
             break;  
         case "ShifonPlus":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","ShifonPlus");
+            commercialDayElement.setAttribute("id","ShifonPlus");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"http://shifonplus.com/"));
             break;
         case "IDF":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","IDF");
+            commercialDayElement.setAttribute("id","IDF");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.idf.il/en/"));
         break;
         case "Opticana":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Opticana");
+            commercialDayElement.setAttribute("id","Opticana");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.opticana.co.il/"));            
         break;   
         case "NewDeli":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","NewDeli");
+            commercialDayElement.setAttribute("id","NewDeli");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://newdeli.com/en/"));
         break; 
         case "Velvel":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Velvel");
+            commercialDayElement.setAttribute("id","Velvel");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.velvel.co.il/"));
         break; 
         case "Mispara":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","Mispara");
+            commercialDayElement.setAttribute("id","Mispara");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.opticana.co.il/"));
         break; 
         case "JacobsCoffee":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","JacobsCoffee");
+            commercialDayElement.setAttribute("id","JacobsCoffee");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.jacobscoffee.co.il/"));
         break; 
         case "CoffeeBilig":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","CoffeeBilig");
+            commercialDayElement.setAttribute("id","CoffeeBilig");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://naftali126.wixsite.com/chaimtovim"));
         break; 
         case "NesCafe":
-            document.getElementById("commercial").querySelector("img").setAttribute("id","NesCafe");
+            commercialDayElement.setAttribute("id","NesCafe");
             document.getElementById("commercial").addEventListener("click",openCommercialInNewTab.bind(this,"https://www.nescafe.com/"));
         break; 
 	} 
@@ -281,3 +496,4 @@ function openCommercialInNewTab(hyperLink) {
     var win = window.open(hyperLink, '_blank');
     win.focus();
 }
+

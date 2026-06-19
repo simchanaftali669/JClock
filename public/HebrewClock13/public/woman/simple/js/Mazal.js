@@ -24,18 +24,21 @@ function setmazal()
 	
 	var day = getDisplayHebrewDay(date, h, m, s);
 	hebrewday = day;
+	var displayDayOffset = hebrewDayOffset();
+	var displayDate = getOffsetDate(date, displayDayOffset);
+	hebrewday = normalizeHebrewDay(day + displayDayOffset);
 	var isNight = isDisplayNight(h, m, s);
 	
 	var userLang = navigator.language || navigator.userLanguage;	
 	
 	if (userLang.includes("he")) 
 	{
-		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(), "Hebrew");
+		var hebrew_month_name = hebrewDate(displayDate.getYear()+1900, displayDate.getMonth()+1, displayDate.getDate(), "Hebrew");
 		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " ב" + hebrew_month_name['month_name'];// + ", " + getHebrewDayLabel(hebrewday, isNight);
 	}
 	else
 	{
-		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(),"English");
+		var hebrew_month_name = hebrewDate(displayDate.getYear()+1900, displayDate.getMonth()+1, displayDate.getDate(),"English");
 		document.getElementById('Mazal').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'];// + ", " + getEnglishDayLabel(hebrewday, isNight);
 	}
 		
@@ -186,15 +189,25 @@ function getEnglishDayName(dayNumber)
 	return englishDayNames[dayNumber - 1];
 }
 
+function normalizeHebrewDay(dayNumber)
+{
+	while(dayNumber < 1)
+		dayNumber += 7;
+
+	while(dayNumber > 7)
+		dayNumber -= 7;
+
+	return dayNumber;
+}
+
+function getOffsetDate(date, dayOffset)
+{
+	var offsetDate = new Date(date.getTime());
+	offsetDate.setDate(offsetDate.getDate() + dayOffset);
+	return offsetDate;
+}
+
 function getMazalHebrewDay()
 {
-	var mazalDay = hebrewday;// + hebrewDayOffset();
-	
-	if(mazalDay == 0)
-		mazalDay = 7;
-	
-	if(mazalDay == 8)
-		mazalDay = 1;
-	
-	return mazalDay;
+	return normalizeHebrewDay(hebrewday);
 }

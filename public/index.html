@@ -21,9 +21,10 @@
 	<style>
 		html,
 		body {
-			height: 100%;
+			min-height: 100%;
 			margin: 0;
-			overflow: hidden;
+			overflow-x: hidden;
+			overflow-y: auto;
 			font-family: Arial, Helvetica, sans-serif;
 			background: #f4f7f1;
 			color: #172018;
@@ -35,8 +36,7 @@
 
 		#choice-screen {
 			box-sizing: border-box;
-			height: 100%;
-			min-height: 100%;
+			min-height: 100vh;
 			padding: 28px 18px;
 			overflow: auto;
 			background:
@@ -98,7 +98,7 @@
 			display: none;
 			position: relative;
 			flex-direction: column;
-			height: 100%;
+			min-height: 100vh;
 			background: #fff;
 		}
 
@@ -484,7 +484,14 @@
 			iframe.title = localText(frame.title);
 			iframe.src = frame.src;
 			iframe.allow = "geolocation";
-			iframe.setAttribute("scrolling", "no");
+			iframe.tabIndex = 0;
+			iframe.setAttribute("scrolling", "auto");
+			iframe.addEventListener("mouseenter", function() {
+				iframe.focus();
+			});
+			iframe.addEventListener("click", function() {
+				iframe.focus();
+			});
 			frameSlot.appendChild(iframe);
 			iframeContainer.appendChild(frameSlot);
 		});

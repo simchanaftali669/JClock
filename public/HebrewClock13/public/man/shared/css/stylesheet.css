@@ -109,4 +109,119 @@
    height:400px;   
 }
 
+#Eat_01,
+#Eat_02,
+#Eat_03,
+#Eat_04,
+#Eat_05,
+#Eat_06,
+#Eat_07,
+#Drink_01,
+#Drink_02,
+#Drink_03,
+#Drink_04,
+#Drink_05,
+#Drink_06,
+#Drink_07,
+#Meet_02,
+#Meet_04,
+#Meet_05,
+#Meet_07
+{
+   background-repeat:no-repeat;
+   background-position:center;
+   width:850px;
+   height:400px;
+}
+
+#Eat_01
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Eat_01.png');
+}
+
+#Eat_02
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Eat_02.png');
+}
+
+#Eat_03
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Eat_03.png');
+}
+
+#Eat_04
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Eat_04.png');
+}
+
+#Eat_05
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Eat_05.png');
+}
+
+#Eat_06
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Eat_06.png');
+}
+
+#Eat_07
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Eat_07.png');
+}
+
+#Drink_01
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_01.png');
+}
+
+#Drink_02
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_02.png');
+}
+
+#Drink_03
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_03.png');
+}
+
+#Drink_04
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_04.png');
+}
+
+#Drink_05
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_05.png');
+}
+
+#Drink_06
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_06.png');
+}
+
+#Drink_07
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Drink_07.png');
+}
+
+#Meet_02
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_02.png');
+}
+
+#Meet_04
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_04.png');
+}
+
+#Meet_05
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_05.png');
+}
+
+#Meet_07
+{
+   background-image:url('../../../../../HebrewCommercial13/public/man/pic/Meet_07.png');
+}
+
 

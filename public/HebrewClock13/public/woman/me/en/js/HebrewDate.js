@@ -159,7 +159,9 @@ function countHebrewMonths(fromDate, toDate, period) {
     }
 	
 	if(period == "dovid")
-			totalMonths += 6;
+		totalMonths += 6;
+	else if(period == "month")
+		totalMonths -= 1;
 
     return totalMonths;
 }
