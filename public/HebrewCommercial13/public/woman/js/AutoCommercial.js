@@ -9,8 +9,7 @@ function ReCalcCommercial(period)
 	var mazal = getCommercialMazal(normalizedPeriod);
 	var hebrewDay = Number(mazal[0]);
 	var hebrewHour = getMoladHourForMazal(mazal[1], normalizedPeriod);
-	var hourMazal = calculateMazal(hebrewDay, hebrewHour);
-	var nextCommercials = buildCommercialsByMolad(hebrewDay, hourMazal);
+	var nextCommercials = buildCommercialsByMolad(hebrewDay, hebrewHour);
 
 	if(normalizedPeriod == 'dovid')
 		addCurrentMonthCommercials(nextCommercials);
@@ -60,7 +59,6 @@ function buildCommercialsByMolad(hebrewDay, hourMazal)
 	var nextCommercials = createEmptyCommercials();
 
 	nextCommercials.Drink_07 = createCommercialSlots(getAllHours(), '0360');
-	nextCommercials.Eat_01 = createCommercialSlots(getEatHours(), '0360');
 
 	addMazalCommercials(nextCommercials, hebrewDay);
 	addMazalCommercials(nextCommercials, hourMazal, { includeEat: false, includeMeet: false });
@@ -72,6 +70,7 @@ function createEmptyCommercials()
 {
 	return {
 		Drink_01: '',
+		Drink_02: '',
 		Drink_03: '',
 		Drink_04: '',
 		Drink_05: '',
@@ -166,7 +165,8 @@ function twoDigits(value)
 
 function getMoladHourForMazal(displayHour, period)
 {
-	return Number(displayHour);
+	var moladHour = Number(displayHour) % 7;
+	return moladHour == 0 ? 7 : moladHour;
 }
 
 function calculateMazal(hebrewDay, hebrewHour)
