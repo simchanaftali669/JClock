@@ -110,7 +110,7 @@ function monthsperyeararr(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9,
 
 // Function to check if a Hebrew year is a leap year
 function isHebrewLeapYear(year) {
-    return [3, 6, 8, 11, 14, 17, 19].includes(year % 19);
+    return [0, 3, 6, 8, 11, 14, 17].includes(year % 19);
 }
 
 // Function to convert Gregorian date to Hebrew date using hebrewDate function
