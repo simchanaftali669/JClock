@@ -41,7 +41,7 @@
 			overflow: auto;
 			background:
 				linear-gradient(135deg, rgba(255,255,255,0.94), rgba(244,247,241,0.9)),
-				url("./HebrewClock13/wix_media/Kotel.jpg") center/cover no-repeat;
+				url("HebrewClock13/wix_media/Kotel.jpg") center/cover no-repeat;
 		}
 
 		.choice-inner {
@@ -283,12 +283,12 @@
 	};
 
 	const sources = {
-		clockFamily: "./HebrewClock13/public/family/index.html" + locationQuery,
-		clockMan: "./HebrewClock13/public/man/simple/index.html" + locationQuery,
-		clockWoman: "./HebrewClock13/public/woman/simple/index.html" + locationQuery,
-		commercialFamily: "./HebrewCommercial13/public/family/index.html" + locationQuery,
-		commercialMan: "./HebrewCommercial13/public/man/index.html" + locationQuery,
-		commercialWoman: "./HebrewCommercial13/public/woman/index.html" + locationQuery
+		clockFamily: "HebrewClock13/public/family/index.html" + locationQuery,
+		clockMan: "HebrewClock13/public/man/simple/index.html" + locationQuery,
+		clockWoman: "HebrewClock13/public/woman/simple/index.html" + locationQuery,
+		commercialFamily: "HebrewCommercial13/public/family/index.html" + locationQuery,
+		commercialMan: "HebrewCommercial13/public/man/index.html" + locationQuery,
+		commercialWoman: "HebrewCommercial13/public/woman/index.html" + locationQuery
 	};
 
 	const viewOptions = [
@@ -467,8 +467,9 @@
 	}
 
 	function openView(optionId) {
+		const cleanOptionId = optionId.split("/")[0];
 		const option = viewOptions.find(function(item) {
-			return item.id === optionId;
+			return item.id === cleanOptionId;
 		}) || viewOptions[0];
 
 		iframeContainer.innerHTML = "";
@@ -498,7 +499,9 @@
 
 		choiceScreen.style.display = "none";
 		viewer.style.display = "flex";
-		window.location.hash = option.id;
+		window.location.hash = option.id + "/" + option.frames.map(function(frame) {
+			return frame.src;
+		}).join("|");
 		watchFrameSlots();
 	}
 
