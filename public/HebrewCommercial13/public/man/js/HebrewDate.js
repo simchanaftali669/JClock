@@ -123,6 +123,10 @@ function getHebrewMonthForCount(hebrew) {
 	return !isHebrewLeapYear(Number(hebrew.year)) && month >= 8 ? month - 1 : month;
 }
 
+function getSacredMonthNumber(hebrew) {
+	return ((Number(hebrew.month) + 5) % 13) + 1;
+}
+
 	// Function to calculate the number of Hebrew months between two Hebrew dates
 	function countHebrewMonths(fromDate, toDate, period) {
 		let fromHebrew = getHebrewDate(fromDate);
@@ -161,7 +165,7 @@ function getHebrewMonthForCount(hebrew) {
 		if(period == "dovid")
 			totalMonths += 6;
 		else if(period == "month")
-			totalMonths -= 1;
+			totalMonths += getSacredMonthNumber(toHebrew) - 1;
 
 		return totalMonths;
 	}
@@ -184,7 +188,6 @@ function getHebrewMonthForCount(hebrew) {
 		if(currentMoladDay == 0)
 			currentMoladDay = 7;
 		currentMoladHour =  (tishrei5780Molad[1]+12*monthsDifference + Math.floor((tishrei5780Molad[2]+793*monthsDifference)/1080))%24;
-		currentMoladHour = currentMoladHour + 1;
 		
 		var currentMoladChelek = (tishrei5780Molad[2]+793*monthsDifference)%1080;
 		
@@ -586,9 +589,6 @@ function hebrewDate(inputDateOrYear, inputMonth, inputDate, inputLang) {
     }
 
     SdnToHebrew(GregorianToSdn(inputYear, inputMonth, inputDate));
-
-    if (mpy[(hebrewYear - 1) % 19] !== 13 && hebrewMonth >= 8)
-        hebrewMonth--;
 
 	if(inputLang == "English")
 		return {

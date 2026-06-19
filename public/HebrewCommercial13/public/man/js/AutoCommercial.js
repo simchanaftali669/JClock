@@ -59,6 +59,7 @@ function buildCommercialsByMolad(hebrewDay, hourMazal)
 	var nextCommercials = createEmptyCommercials();
 
 	nextCommercials.Drink_07 = createCommercialSlots(getAllHours(), '0360');
+	nextCommercials.Eat_01 = createCommercialSlots(getEatHours(), '0360');
 
 	addMazalCommercials(nextCommercials, hebrewDay);
 	addMazalCommercials(nextCommercials, hourMazal);
@@ -90,14 +91,16 @@ function createEmptyCommercials()
 	};
 }
 
-function addMazalCommercials(nextCommercials, mazalNumber)
+function addMazalCommercials(nextCommercials, mazalNumber, options)
 {
+	options = options || {};
+	var includeDrink = options.includeDrink !== false;
 	var suffix = twoDigits(mazalNumber);
 	var drinkKey = 'Drink_' + suffix;
 	var eatKey = 'Eat_' + suffix;
 	var meetKey = 'Meet_' + suffix;
 
-	if(nextCommercials.hasOwnProperty(drinkKey) && nextCommercials[drinkKey] === '')
+	if(includeDrink && drinkKey != 'Drink_02' && nextCommercials.hasOwnProperty(drinkKey) && nextCommercials[drinkKey] === '')
 		nextCommercials[drinkKey] = createCommercialSlots(getDrinkHours(), '0720');
 
 	if(nextCommercials.hasOwnProperty(eatKey) && nextCommercials[eatKey] === '')
