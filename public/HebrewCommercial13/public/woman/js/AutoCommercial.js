@@ -63,7 +63,7 @@ function buildCommercialsByMolad(hebrewDay, hourMazal)
 	nextCommercials.Eat_01 = createCommercialSlots(getEatHours(), '0360');
 
 	addMazalCommercials(nextCommercials, hebrewDay);
-	addMazalCommercials(nextCommercials, hourMazal, { includeEat: false });
+	addMazalCommercials(nextCommercials, hourMazal, { includeEat: false, includeMeet: false });
 
 	return nextCommercials;
 }
@@ -95,6 +95,7 @@ function addMazalCommercials(nextCommercials, mazalNumber, options)
 {
 	options = options || {};
 	var includeEat = options.includeEat !== false;
+	var includeMeet = options.includeMeet !== false;
 	var suffix = twoDigits(mazalNumber);
 	var drinkKey = 'Drink_' + suffix;
 	var eatKey = 'Eat_' + suffix;
@@ -106,7 +107,7 @@ function addMazalCommercials(nextCommercials, mazalNumber, options)
 	if(includeEat && nextCommercials.hasOwnProperty(eatKey) && nextCommercials[eatKey] === '')
 		nextCommercials[eatKey] = createCommercialSlots(getEatHours(), '0720');
 
-	if(nextCommercials.hasOwnProperty(meetKey) && nextCommercials[meetKey] === '')
+	if(includeMeet && nextCommercials.hasOwnProperty(meetKey) && nextCommercials[meetKey] === '')
 		nextCommercials[meetKey] = createCommercialSlots(getMeetHours(), '0720');
 }
 
