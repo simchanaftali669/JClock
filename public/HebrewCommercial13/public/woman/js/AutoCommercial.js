@@ -8,8 +8,8 @@ function ReCalcCommercial(period)
 	var normalizedPeriod = String(period).toLowerCase();
 	var mazal = getCommercialMazal(normalizedPeriod);
 	var hebrewDay = Number(mazal[0]);
-	var hebrewHour = getMoladHourForMazal(mazal[1], normalizedPeriod);
-	var nextCommercials = buildCommercialsByMolad(hebrewDay, hebrewHour);
+	var hourMazal = getCommercialHourMazal(hebrewDay, mazal[1]);
+	var nextCommercials = buildCommercialsByMolad(hebrewDay, hourMazal);
 
 	applyCommercials(nextCommercials);
 	initCommercials();
@@ -162,28 +162,3 @@ function twoDigits(value)
 	return value <= 9 ? '0' + value : String(value);
 }
 
-function getMoladHourForMazal(displayHour, period)
-{
-	var moladHour = Number(displayHour) % 7;
-	return moladHour == 0 ? 7 : moladHour;
-}
-
-function calculateMazal(hebrewDay, hebrewHour)
-{
-	var dayOffsets = {
-		1: 6,
-		2: 2,
-		3: 5,
-		4: 1,
-		5: 4,
-		6: 7,
-		7: 3
-	};
-	
-	var mazalHour  = (dayOffsets[Number(hebrewDay)] + Number(hebrewHour) - 1) % 7;
-
-	if(mazalHour == 0)
-		mazalHour = 7;
-
-	return mazalHour;
-}

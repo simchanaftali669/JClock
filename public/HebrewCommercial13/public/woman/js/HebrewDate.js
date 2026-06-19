@@ -164,8 +164,6 @@ function getSacredMonthNumber(hebrew) {
 
 		if(period == "dovid")
 			totalMonths += 6;
-		else if(period == "month")
-			totalMonths += getSacredMonthNumber(toHebrew) - 1;
 
 		return totalMonths;
 	}
