@@ -24,10 +24,12 @@ html, body {
 
 #commercial
 {
-    width: fit-content;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
     text-align: center;
 }
 

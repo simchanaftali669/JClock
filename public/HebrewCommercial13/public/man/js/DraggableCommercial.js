@@ -43,17 +43,24 @@
     }
 
     function savePosition() {
-        localStorage.setItem(storageKey, JSON.stringify({
-            left: commercial.offsetLeft,
-            top: commercial.offsetTop
-        }));
+        localStorage.removeItem(storageKey);
+    }
+
+    function applyCenteredPosition(top) {
+        var bounds = getBounds();
+        commercial.style.left = "0";
+        commercial.style.top = clamp(top, 0, bounds.maxTop) + "px";
     }
 
     function restorePosition() {
-        var saved = localStorage.getItem(storageKey);
         var rect = commercial.getBoundingClientRect();
 
+        localStorage.removeItem(storageKey);
         commercial.style.position = "fixed";
+        commercial.style.display = "flex";
+        commercial.style.justifyContent = "center";
+        commercial.style.width = "100vw";
+        commercial.style.maxWidth = "100vw";
         commercial.style.right = "auto";
         commercial.style.margin = "0";
         commercial.style.zIndex = "20";
@@ -61,17 +68,7 @@
         commercial.style.touchAction = "none";
         commercial.style.userSelect = "none";
 
-        if (saved) {
-            try {
-                var position = JSON.parse(saved);
-                applyPosition(Number(position.left) || rect.left, Number(position.top) || rect.top);
-                return;
-            } catch (error) {
-                localStorage.removeItem(storageKey);
-            }
-        }
-
-        applyPosition(rect.left, rect.top);
+        applyCenteredPosition(rect.top);
     }
 
     function startDrag(event) {
@@ -122,6 +119,6 @@
     window.addEventListener("mouseup", endDrag);
     window.addEventListener("touchend", endDrag);
     window.addEventListener("resize", function() {
-        applyPosition(commercial.offsetLeft, commercial.offsetTop);
+        applyCenteredPosition(commercial.offsetTop);
     });
 })();

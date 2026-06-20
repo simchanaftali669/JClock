@@ -36,7 +36,11 @@
             
             <!-- Modal body -->
             <div class="modal-body" style="direction:rtl;!important;">
-                 <p style="display: inline-block; width: 248px;">הכנס שם מלא:</p><input type="text" value="נפתלי ביליג" id="ID" />          
+                 <p style="display: inline-block; width: 248px;">הכנס שם מלא:</p><input type="text" value="נפתלי ביליג" id="ID" />
+                 <label style="display:block; margin-top:12px;">
+                    <input type="checkbox" id="saveDefaultID" />
+                    שמור כברירת מחדל
+                 </label>
             </div>
             
             <!-- Modal footer -->
@@ -51,8 +55,27 @@
 </div>
 
 <script>
-	async function get_marrige_essential()
-	{
+    var defaultIdStorageKey = "jclock-personal-learning-default-id";
+
+    function loadDefaultID()
+    {
+        var savedID = localStorage.getItem(defaultIdStorageKey);
+        if(savedID)
+        {
+            document.getElementById("ID").value = savedID;
+        }
+    }
+
+    function saveDefaultIDIfNeeded()
+    {
+        var idInput = document.getElementById("ID");
+        var saveDefault = document.getElementById("saveDefaultID").checked;
+        if(saveDefault)
+            localStorage.setItem(defaultIdStorageKey, idInput.value);
+    }
+
+ 	async function get_marrige_essential()
+ 	{
 		var url_obj = new URL(document.location.href);
 		var lon = url_obj.searchParams.get("longitude");        
 		var lat = url_obj.searchParams.get("latitude");
@@ -67,6 +90,7 @@
             return;
         }
 
+        saveDefaultIDIfNeeded();
         var marrigeTime = window.marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
         if(marrigeTime != null)
             document.location.href = "../../me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location; 
@@ -77,10 +101,11 @@
             //document.location.href = "../../me/he/index.html"; 
         } 
     }
-	$(document).ready(function()
-	{
-		$('[data-toggle="tooltip"]').tooltip();   
-	});</script>
+ 	$(document).ready(function()
+ 	{
+        loadDefaultID();
+ 		$('[data-toggle="tooltip"]').tooltip();   
+ 	});</script>
 
 </body>
 </html>
