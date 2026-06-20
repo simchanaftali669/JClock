@@ -25,16 +25,13 @@ function setMasechet()
     var url = new URL(document.location.href);
     var marrigeHour = url.searchParams.get("hebrewHour");
     var marrigeDay = url.searchParams.get("hebrewDay");
+	var personalLimudUnit = getPersonalLimudMoladUnit(new Date());
 
-    hebrewday = marrigeDay ? parseInt(marrigeDay) : hebrewday;
+    hebrewday = marrigeDay ? parseInt(marrigeDay) : personalLimudUnit.day;
 
     //hebrewday
     //lbHourClock
-    var Hour; // = masechet_offset();
-    if (lbHour < 12)
-		Hour = lbHour + 1;
-	else
-		Hour = lbHour - 12 + 1;
+    var Hour = ((personalLimudUnit.hour - 1) % 12) + 1; // = masechet_offset();
     
 	if(marrigeHour)
 		if(marrigeHour == 12)

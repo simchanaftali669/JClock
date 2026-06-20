@@ -13,6 +13,21 @@
 	return real_day;
 }
 
+var PERSONAL_LIMUD_MOLAD_NISSAN_5786_UNIT_START = new Date(2026, 2, 17, 0, 0, 0, 0);
+var PERSONAL_LIMUD_MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+function getPersonalLimudMoladUnit(date)
+{
+	var unitDate = new Date(date.getTime());
+	unitDate.setHours(0, 0, 0, 0);
+
+	var elapsedDays = Math.floor((unitDate.getTime() - PERSONAL_LIMUD_MOLAD_NISSAN_5786_UNIT_START.getTime()) / PERSONAL_LIMUD_MS_PER_DAY);
+	return {
+		day: ((elapsedDays % 7) + 7) % 7 + 1,
+		hour: date.getHours() == 0 ? 24 : date.getHours()
+	};
+}
+
 //mazal of the hour
 function setmazal() {
     var date = new Date();
@@ -50,8 +65,9 @@ function setmazal() {
     var url = new URL(document.location.href);
     var marrigeHour = url.searchParams.get("hebrewHour");
     var marrigeDay = url.searchParams.get("hebrewDay");
+	var personalLimudUnit = getPersonalLimudMoladUnit(date);
 
-    hebrewday = marrigeDay ? parseInt(marrigeDay) : day;
+    hebrewday = marrigeDay ? parseInt(marrigeDay) : personalLimudUnit.day;
 	gender = marrigeDay ? genders.MARRIED : gender;
 	day = hebrewday;
 
@@ -59,11 +75,7 @@ function setmazal() {
     //hebrewday	
     //lbHourClock
     var Hour; // = masechet_offset();
-    if (lbHour < 12)
-		clockHour = lbHour + 1;
-	else
-		Hour = lbHour - 12 + 1;
-    Hour = marrigeHour ? (parseInt(marrigeHour)-1) : Hour; // = sefer_offset();
+    Hour = marrigeHour ? (parseInt(marrigeHour)-1) : personalLimudUnit.hour;
 	clockHour = Hour;
 
 	//var url = new URL(document.location.href);

@@ -5,6 +5,9 @@ function getLawHebrewDay()
 	if(day)
 		return parseInt(day);
 
+	if(typeof getPersonalLimudMoladUnit == "function")
+		return getPersonalLimudMoladUnit(new Date()).day;
+
 	if(typeof birthDay != "undefined" && birthDay)
 		return parseInt(birthDay);
 
@@ -20,6 +23,9 @@ function getLawHebrewHour()
 	var hour = url.searchParams.get("hebrewHour");
 	if(hour)
 		return parseInt(hour);
+
+	if(typeof getPersonalLimudMoladUnit == "function")
+		return getPersonalLimudMoladUnit(new Date()).hour;
 
 	if(typeof birthHour != "undefined" && birthHour)
 		return parseInt(birthHour);

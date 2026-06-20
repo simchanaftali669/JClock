@@ -13,8 +13,9 @@ function setSefer()
 {
     var url = new URL(document.location.href);
     var marrigeHour = url.searchParams.get("hebrewHour");
+	var personalLimudUnit = getPersonalLimudMoladUnit(new Date());
 
-    var Hour = lbHour + 1;
+    var Hour = personalLimudUnit.hour;
 	Hour = marrigeHour ? parseInt(marrigeHour) : Hour; // = sefer_offset();
 	
 	
