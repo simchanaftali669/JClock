@@ -68,6 +68,15 @@
 			gap: 12px;
 		}
 
+		.choice-section-title {
+			grid-column: 1 / -1;
+			margin: 12px 0 0;
+			font-size: 24px;
+			font-weight: 800;
+			line-height: 1.25;
+			color: #17311f;
+		}
+
 		.choice-button {
 			min-height: 82px;
 			padding: 16px 18px;
@@ -98,15 +107,30 @@
 			display: none;
 			position: relative;
 			flex-direction: column;
-			min-height: 100vh;
+			height: 100vh;
+			min-height: 0;
 			background: #fff;
+			overflow: hidden;
 		}
 
 		#iframe-container {
 			display: flex;
 			flex: 1;
 			flex-direction: column;
+			height: 100%;
 			min-height: 0;
+		}
+
+		#iframe-container.row-layout {
+			flex-direction: row;
+		}
+
+		#iframe-container.clock-ads-layout .frame-slot:first-child {
+			flex: 0 0 42vh;
+		}
+
+		#iframe-container.clock-ads-layout .frame-slot:last-child {
+			flex: 1 1 0;
 		}
 
 		#iframe-container.quad-layout {
@@ -122,6 +146,7 @@
 			width: 100%;
 			min-height: 0;
 			overflow: hidden;
+			position: relative;
 		}
 
 		.display-frame {
@@ -132,11 +157,11 @@
 		}
 
 		#iframe-container.quad-layout .frame-slot {
-			position: relative;
 			background: #fff;
 		}
 
-		#iframe-container.quad-layout .frame-slot.narrow-slot .display-frame {
+		#iframe-container.quad-layout .frame-slot.narrow-slot .display-frame,
+		#iframe-container.row-layout .frame-slot.narrow-slot .display-frame {
 			position: absolute;
 			top: 0;
 			left: 50%;
@@ -149,6 +174,10 @@
 		@media (max-width: 900px) {
 			#choice-screen {
 				padding: 18px 12px;
+			}
+
+			.choice-section-title {
+				font-size: 21px;
 			}
 
 			.choice-grid {
@@ -208,130 +237,152 @@
 
 	const text = {
 		he: {
-			subtitle: "בחר את התצוגה שתרצה לפתוח"
+			subtitle: "בחר את היבשת או האזור שבו אתה נמצא"
 		},
 		en: {
-			subtitle: "Choose the display you want to open"
+			subtitle: "Choose the continent or region where you are"
 		}
 	};
 
-	const sources = {
-		clockFamily: "HebrewClock13/public/family/index.html" + locationQuery,
-		clockMan: "HebrewClock13/public/man/simple/index.html" + locationQuery,
-		clockWoman: "HebrewClock13/public/woman/simple/index.html" + locationQuery,
-		commercialFamily: "HebrewCommercial13/public/family/index.html" + locationQuery,
-		commercialMan: "HebrewCommercial13/public/man/index.html" + locationQuery,
-		commercialWoman: "HebrewCommercial13/public/woman/index.html" + locationQuery
+	const sourcePaths = {
+		clockFamily: "HebrewClock13/public/family/index.html",
+		clockMan: "HebrewClock13/public/man/simple/index.html",
+		clockWoman: "HebrewClock13/public/woman/simple/index.html",
+		commercialFamily: "HebrewCommercial13/public/family/index.html",
+		commercialMan: "HebrewCommercial13/public/man/index.html",
+		commercialWoman: "HebrewCommercial13/public/woman/index.html"
 	};
+
+	function buildSources(query) {
+		return {
+			clockFamily: sourcePaths.clockFamily + query,
+			clockMan: sourcePaths.clockMan + query,
+			clockWoman: sourcePaths.clockWoman + query,
+			commercialFamily: sourcePaths.commercialFamily + query,
+			commercialMan: sourcePaths.commercialMan + query,
+			commercialWoman: sourcePaths.commercialWoman + query
+		};
+	}
+
+	const sources = buildSources(locationQuery);
 
 	const viewOptions = [
 		{
-			id: "all",
+			heading: {
+				he: "שעון בלבד:",
+				en: "Clock only:"
+			}
+		},
+		{
+			id: "sun-clock",
 			label: {
-				he: "המצב הרגיל - כל 4 התצוגות",
-				en: "Regular mode - all 4 displays"
+				he: "שעון חמה",
+				en: "Sun clock"
 			},
-			layout: "quad",
 			frames: [
-				{ title: { he: "פרסומות לגברים", en: "Ads for men" }, src: sources.commercialMan },
-				{ title: { he: "פרסומות לנשים", en: "Ads for women" }, src: sources.commercialWoman },
-				{ title: { he: "שעון עברי לגברים", en: "Hebrew clock for men" }, src: sources.clockMan + "&compact=1" },
-				{ title: { he: "שעון עברי לנשים", en: "Hebrew clock for women" }, src: sources.clockWoman + "&compact=1" }
+				{ title: { he: "שעון חמה", en: "Sun clock" }, src: sources.clockMan }
 			],
 			primary: true
 		},
 		{
-			id: "clock-commercial-men",
+			id: "moon-clock",
 			label: {
-				he: "שעון עברי + פרסומות לגברים",
-				en: "Hebrew clock + ads for men"
+				he: "שעון לבנה",
+				en: "Moon clock"
 			},
 			frames: [
-				{ title: { he: "פרסומות לגברים", en: "Ads for men" }, src: sources.commercialMan },
-				{ title: { he: "שעון עברי לגברים", en: "Hebrew clock for men" }, src: sources.clockMan }
+				{ title: { he: "שעון לבנה", en: "Moon clock" }, src: sources.clockWoman }
 			]
 		},
 		{
-			id: "clock-commercial-women",
+			id: "diaspora-clock",
 			label: {
-				he: "שעון עברי + פרסומות לנשים",
-				en: "Hebrew clock + ads for women"
+				he: "שעון חו\"ל (חמה ולבנה)",
+				en: "Diaspora clock (Sun and Moon)"
 			},
 			frames: [
-				{ title: { he: "פרסומות לנשים", en: "Ads for women" }, src: sources.commercialWoman },
-				{ title: { he: "שעון עברי לנשים", en: "Hebrew clock for women" }, src: sources.clockWoman }
+				{ title: { he: "שעון חמה - חו\"ל", en: "Sun clock - Diaspora" }, src: sources.clockMan },
+				{ title: { he: "שעון לבנה - חו\"ל", en: "Moon clock - Diaspora" }, src: sources.clockWoman }
+			],
+			layout: "row"
+		},
+		{
+			heading: {
+				he: "פרסומת בלבד:",
+				en: "Ads only:"
+			}
+		},
+		{
+			id: "sun-ads",
+			label: {
+				he: "פרסומות של שעון חמה",
+				en: "Sun clock ads"
+			},
+			frames: [
+				{ title: { he: "פרסומות של שעון חמה", en: "Sun clock ads" }, src: sources.commercialMan }
 			]
 		},
 		{
-			id: "clock-commercial-family",
+			id: "moon-ads",
 			label: {
-				he: "שעון עברי + פרסומות לגברים ונשים",
-				en: "Hebrew clock + ads for men and women"
+				he: "פרסומות של שעון לבנה",
+				en: "Moon clock ads"
 			},
 			frames: [
-				{ title: { he: "פרסומות לגברים ונשים", en: "Ads for men and women" }, src: sources.commercialFamily },
-				{ title: { he: "שעון עברי לגברים ונשים", en: "Hebrew clock for men and women" }, src: sources.clockFamily }
+				{ title: { he: "פרסומות של שעון לבנה", en: "Moon clock ads" }, src: sources.commercialWoman }
 			]
 		},
 		{
-			id: "clock-family",
+			id: "diaspora-ads",
 			label: {
-				he: "שעון עברי לגברים ונשים",
-				en: "Hebrew clock for men and women"
+				he: "פרסומות של שעון חו\"ל (חמה ולבנה)",
+				en: "Diaspora clock ads (Sun and Moon)"
 			},
 			frames: [
-				{ title: { he: "שעון עברי לגברים ונשים", en: "Hebrew clock for men and women" }, src: sources.clockFamily }
+				{ title: { he: "פרסומות של שעון חו\"ל", en: "Diaspora clock ads" }, src: sources.commercialFamily }
 			]
 		},
 		{
-			id: "commercial-family",
-			label: {
-				he: "פרסומות לגברים ונשים",
-				en: "Ads for men and women"
-			},
-			frames: [
-				{ title: { he: "פרסומות לגברים ונשים", en: "Ads for men and women" }, src: sources.commercialFamily }
-			]
+			heading: {
+				he: "שעון + פרסומת:",
+				en: "Clock + ads:"
+			}
 		},
 		{
-			id: "clock-men",
+			id: "sun-clock-ads",
 			label: {
-				he: "שעון עברי לגברים",
-				en: "Hebrew clock for men"
+				he: "שעון חמה + פרסומות",
+				en: "Sun clock + ads"
 			},
 			frames: [
-				{ title: { he: "שעון עברי לגברים", en: "Hebrew clock for men" }, src: sources.clockMan }
-			]
+				{ title: { he: "פרסומות של שעון חמה", en: "Sun clock ads" }, src: sources.commercialMan },
+				{ title: { he: "שעון חמה", en: "Sun clock" }, src: sources.clockMan }
+			],
+			layout: "clock-ads"
 		},
 		{
-			id: "clock-women",
+			id: "moon-clock-ads",
 			label: {
-				he: "שעון עברי לנשים",
-				en: "Hebrew clock for women"
+				he: "שעון לבנה + פרסומות",
+				en: "Moon clock + ads"
 			},
 			frames: [
-				{ title: { he: "שעון עברי לנשים", en: "Hebrew clock for women" }, src: sources.clockWoman }
-			]
+				{ title: { he: "פרסומות של שעון לבנה", en: "Moon clock ads" }, src: sources.commercialWoman },
+				{ title: { he: "שעון לבנה", en: "Moon clock" }, src: sources.clockWoman }
+			],
+			layout: "clock-ads"
 		},
 		{
-			id: "commercial-women",
+			id: "diaspora-clock-ads",
 			label: {
-				he: "פרסומות לנשים",
-				en: "Ads for women"
+				he: "שעון חו\"ל (חמה ולבנה) + פרסומות",
+				en: "Diaspora clock (Sun and Moon) + ads"
 			},
 			frames: [
-				{ title: { he: "פרסומות לנשים", en: "Ads for women" }, src: sources.commercialWoman }
-			]
-		},
-		{
-			id: "commercial-men",
-			label: {
-				he: "פרסומות לגברים",
-				en: "Ads for men"
-			},
-			frames: [
-				{ title: { he: "פרסומות לגברים", en: "Ads for men" }, src: sources.commercialMan }
-			]
+				{ title: { he: "פרסומות של שעון חו\"ל", en: "Diaspora clock ads" }, src: sources.commercialFamily },
+				{ title: { he: "שעון חו\"ל (חמה ולבנה)", en: "Diaspora clock (Sun and Moon)" }, src: sources.clockFamily }
+			],
+			layout: "clock-ads"
 		}
 	];
 
@@ -385,6 +436,14 @@
 
 	function renderChoices() {
 		viewOptions.forEach(function(option) {
+			if (option.heading) {
+				const heading = document.createElement("h2");
+				heading.className = "choice-section-title";
+				heading.textContent = localText(option.heading);
+				choiceGrid.appendChild(heading);
+				return;
+			}
+
 			const button = document.createElement("button");
 			button.type = "button";
 			button.className = "choice-button" + (option.primary ? " primary" : "");
@@ -400,19 +459,31 @@
 		const cleanOptionId = optionId.split("/")[0];
 		const option = viewOptions.find(function(item) {
 			return item.id === cleanOptionId;
-		}) || viewOptions[0];
+		}) || viewOptions.find(function(item) {
+			return item.id;
+		});
 
+		if (!option.frames) {
+			choiceScreen.style.display = "";
+			viewer.style.display = "none";
+			window.location.hash = "";
+			return;
+		}
+
+		openFrames(option.id, option.frames, option.layout);
+	}
+
+	function openFrames(optionId, frames, layout) {
 		iframeContainer.innerHTML = "";
-		iframeContainer.className = option.layout === "quad" ? "quad-layout" : "";
+		iframeContainer.className = layout === "quad" ? "quad-layout" : (layout === "row" ? "row-layout" : (layout === "clock-ads" ? "clock-ads-layout" : ""));
 
-		option.frames.forEach(function(frame) {
+		frames.forEach(function(frame) {
 			const frameSlot = document.createElement("div");
 			const iframe = document.createElement("iframe");
 			frameSlot.className = "frame-slot";
 			iframe.className = "display-frame";
 			iframe.title = localText(frame.title);
 			iframe.src = frame.src;
-			iframe.allow = "geolocation";
 			iframe.tabIndex = 0;
 			iframe.setAttribute("scrolling", "auto");
 			iframe.addEventListener("mouseenter", function() {
@@ -427,7 +498,7 @@
 
 		choiceScreen.style.display = "none";
 		viewer.style.display = "flex";
-		window.location.hash = option.id + "/" + option.frames.map(function(frame) {
+		window.location.hash = optionId + "/" + frames.map(function(frame) {
 			return frame.src;
 		}).join("|");
 		watchFrameSlots();
