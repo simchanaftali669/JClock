@@ -135,18 +135,6 @@
 			white-space: nowrap;
 		}
 
-		#back-to-choice {
-			padding: 10px 8px;
-			border: 1px solid rgba(255,255,255,0.7);
-			border-radius: 8px;
-			background: #fff;
-			color: #204b31;
-			font-size: 16px;
-			font-weight: 700;
-			cursor: pointer;
-			writing-mode: vertical-rl;
-		}
-
 		#iframe-container {
 			display: flex;
 			flex: 1;
@@ -198,9 +186,6 @@
 				font-size: 22px;
 			}
 
-			#back-to-choice {
-				font-size: 18px;
-			}
 		}
 
 		@media (max-width: 900px) {
@@ -258,7 +243,6 @@
 	<section id="viewer" aria-live="polite">
 		<div id="viewer-toolbar">
 			<span id="viewer-title">JClock</span>
-			<button id="back-to-choice" type="button"></button>
 		</div>
 		<div id="iframe-container"></div>
 	</section>
@@ -273,12 +257,10 @@
 
 	const text = {
 		he: {
-			subtitle: "בחר את התצוגה שתרצה לפתוח",
-			back: "חזרה לבחירה"
+			subtitle: "בחר את התצוגה שתרצה לפתוח"
 		},
 		en: {
-			subtitle: "Choose the display you want to open",
-			back: "Back to selection"
+			subtitle: "Choose the display you want to open"
 		}
 	};
 
@@ -408,7 +390,6 @@
 	const viewer = document.getElementById("viewer");
 	const viewerTitle = document.getElementById("viewer-title");
 	const iframeContainer = document.getElementById("iframe-container");
-	const backButton = document.getElementById("back-to-choice");
 	let frameResizeObserver = null;
 
 	function localText(value) {
@@ -419,7 +400,6 @@
 		document.documentElement.lang = language;
 		document.documentElement.dir = language === "he" ? "rtl" : "ltr";
 		subtitle.textContent = text[language].subtitle;
-		backButton.textContent = text[language].back;
 	}
 
 	function updateFrameScale() {
@@ -505,20 +485,6 @@
 		watchFrameSlots();
 	}
 
-	function showChoices() {
-		iframeContainer.innerHTML = "";
-		iframeContainer.className = "";
-		viewer.className = "";
-		if (frameResizeObserver) {
-			frameResizeObserver.disconnect();
-			frameResizeObserver = null;
-		}
-		viewer.style.display = "none";
-		choiceScreen.style.display = "block";
-		history.replaceState(null, "", window.location.pathname + window.location.search);
-	}
-
-	backButton.onclick = showChoices;
 	applyLanguage();
 	updateFrameScale();
 	renderChoices();
