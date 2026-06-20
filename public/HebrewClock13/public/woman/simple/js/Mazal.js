@@ -24,9 +24,10 @@ function setmazal()
 	
 	var day = getDisplayHebrewDay(date, h, m, s);
 	hebrewday = day;
-	var displayDayOffset = hebrewDayOffset();
+	var mazalDayOffset = hebrewDayOffset();
+	var displayDayOffset = hasFullBirthCalculationParams() ? mazalDayOffset : 0;
 	var displayDate = getOffsetDate(date, displayDayOffset);
-	hebrewday = normalizeHebrewDay(day + displayDayOffset);
+	hebrewday = normalizeHebrewDay(day + mazalDayOffset);
 	var isNight = isDisplayNight(h, m, s);
 	
 	var userLang = navigator.language || navigator.userLanguage;	
