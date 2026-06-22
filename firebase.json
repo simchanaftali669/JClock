@@ -6,6 +6,18 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "/HebrewCommercial13/public/Need-Me/index.html",
+        "type": 302
+      },
+      {
+        "source": "/index.html",
+        "destination": "/HebrewCommercial13/public/Need-Me/index.html",
+        "type": 302
+      }
     ]
   }
 }
