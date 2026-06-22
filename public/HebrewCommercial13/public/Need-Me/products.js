@@ -60,6 +60,22 @@
         tractate: "מסכת ראש השנה"
       },
       minConfidence: 0.75
+    },
+    {
+      id: "cordykos",
+      label: "קורדייקוס",
+      aliases: ["קורדייקוס", "קורדיקוס", "cordykos", "kordykos", "גיטין", "מסכת גיטין"],
+      category: "health",
+      sourceMaterial: "מסכת גיטין",
+      schedulingMode: "temporary-clock",
+      actionDurationMinutes: 60,
+      temporaryClock: {
+        hebrewDay: 3,
+        moladHours: [6, 12, 18, 24],
+        dayParts: ["day", "night"],
+        tractate: "מסכת גיטין"
+      },
+      minConfidence: 0.75
     }
   ];
 }());

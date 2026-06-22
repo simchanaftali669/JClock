@@ -391,7 +391,7 @@
       periodStartOnly: Boolean(window.periodStartOnly),
       region: options.region || "",
       audience: options.audience || "",
-      temporaryClock: getTemporaryClockReference(),
+      temporaryClock: getTemporaryClockReference(product),
       reminders: REMINDER_MINUTES.slice()
     };
   }
@@ -616,7 +616,13 @@
     }
 
     var allowedParts = reference.dayParts || ["day", "night"];
-    return molad.jewishHourOrdinal === Number(reference.moladHour || reference.hebrewHour) &&
+    var allowedHours = reference.moladHours && reference.moladHours.length
+      ? reference.moladHours
+      : [reference.moladHour || reference.hebrewHour];
+    var allowedDays = reference.hebrewDay ? [Number(reference.hebrewDay)] : [];
+
+    return allowedHours.map(Number).indexOf(Number(molad.jewishHourOrdinal)) !== -1 &&
+      (!allowedDays.length || allowedDays.indexOf(Number(molad.jewishDay)) !== -1) &&
       allowedParts.indexOf(molad.jewishDayPart) !== -1;
   }
 
@@ -929,11 +935,14 @@
     return formatRegion(region);
   }
 
-  function getTemporaryClockReference() {
+  function getTemporaryClockReference(product) {
+    var productReference = product && product.temporaryClock ? product.temporaryClock : {};
     var reference = {
-      moladHour: TEMPORARY_CLOCK_REFERENCE.moladHour,
-      dayParts: TEMPORARY_CLOCK_REFERENCE.dayParts,
-      tractate: TEMPORARY_CLOCK_REFERENCE.tractate
+      moladHour: productReference.moladHour || productReference.hebrewHour || TEMPORARY_CLOCK_REFERENCE.moladHour,
+      hebrewDay: productReference.hebrewDay,
+      moladHours: productReference.moladHours,
+      dayParts: productReference.dayParts || TEMPORARY_CLOCK_REFERENCE.dayParts,
+      tractate: productReference.tractate || TEMPORARY_CLOCK_REFERENCE.tractate
     };
 
     return reference;
@@ -944,12 +953,19 @@
       return "שעון זמני";
     }
 
+    var hours = reference.moladHours && reference.moladHours.length
+      ? reference.moladHours.join(", ")
+      : (reference.moladHour || reference.hebrewHour);
     var parts = [
       "שעון זמני",
-      "מולד שעה " + (reference.moladHour || reference.hebrewHour),
+      "מולד שעה " + hours,
       "יום או לילה",
       reference.tractate
     ];
+
+    if (reference.hebrewDay) {
+      parts.splice(2, 0, "יום " + getHebrewDayName(reference.hebrewDay));
+    }
 
     return parts.join(" / ");
   }
