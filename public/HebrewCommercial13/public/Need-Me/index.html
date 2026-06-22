@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Need Me</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://apis.google.com/js/api.js" async defer></script>
+</head>
+<body>
+  <main class="app-shell">
+    <section class="workspace" aria-labelledby="page-title">
+      <div class="masthead">
+        <div>
+          <p class="eyebrow">Need-Me</p>
+          <h1 id="page-title">שיבוץ פרסום לפי זמן</h1>
+        </div>
+        <button id="googleConnectButton" class="secondary-button" type="button">התחבר לגוגל</button>
+      </div>
+
+      <form id="plannerForm" class="planner-form">
+        <fieldset class="form-group">
+          <legend>מה המוצר שאני מחפש למכור</legend>
+
+          <label>
+            מוצר
+            <input id="productInput" name="product" type="text" list="productSuggestions" autocomplete="off" placeholder="בירה / beer" required>
+          </label>
+
+          <label>
+            אזור זמן
+            <select id="timeZoneInput" name="timeZone" required>
+              <option value="Asia/Jerusalem">Asia/Jerusalem</option>
+              <option value="Asia/Hebron">Asia/Hebron</option>
+              <option value="Europe/London">Europe/London</option>
+              <option value="America/New_York">America/New_York</option>
+              <option value="America/Los_Angeles">America/Los_Angeles</option>
+            </select>
+          </label>
+
+          <label>
+            יבשת / אזור
+            <select id="regionInput" name="region" required>
+              <option value="middle-east">מזרח תיכון</option>
+              <option value="ireland">אירלנד</option>
+              <option value="europe">אירופה</option>
+              <option value="africa">אפריקה</option>
+              <option value="asia">אסיה</option>
+              <option value="north-america">צפון אמריקה</option>
+              <option value="south-america">דרום אמריקה</option>
+              <option value="oceania">אוקיאניה</option>
+            </select>
+          </label>
+
+          <label id="audienceField">
+            מוכר ל
+            <select id="audienceInput" name="audience">
+              <option value="boys">בנים</option>
+              <option value="girls">בנות</option>
+            </select>
+          </label>
+
+          <label>
+            טווח בדיקה
+            <select id="rangeModeInput" name="rangeMode" required>
+              <option value="days">ימים ושעות שנבחרו</option>
+              <option value="months">חודשים קדימה</option>
+              <option value="shmita">מחזור שמיטה נוכחי</option>
+              <option value="yovel">יובל נוכחי</option>
+            </select>
+          </label>
+
+          <label>
+            משך פרסום
+            <select id="durationInput" name="duration">
+              <option value="60">שעה</option>
+              <option value="30">חצי שעה</option>
+              <option value="120">שעתיים</option>
+            </select>
+          </label>
+
+          <label class="checkbox-field">
+            <input id="periodStartOnlyInput" name="periodStartOnly" type="checkbox">
+            רק תחילת תקופה
+          </label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>מתי אני עומד בחנות</legend>
+
+          <label>
+            תאריך לעמידה בחנות
+            <input id="startDateInput" name="startDate" type="date" required>
+          </label>
+
+          <label>
+            ימים לבדיקה
+            <input id="daysInput" name="days" type="number" min="1" max="31" value="1" required>
+          </label>
+
+          <label>
+            חודשים קדימה
+            <input id="monthsInput" name="months" type="number" min="1" max="588" value="6" required>
+          </label>
+
+          <label id="workStartField">
+            עובד משעה
+            <input id="workStartInput" name="workStart" type="time" value="08:00" required>
+          </label>
+
+          <label id="workEndField">
+            עובד עד שעה
+            <input id="workEndInput" name="workEnd" type="time" value="14:00" required>
+          </label>
+        </fieldset>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">חשב לוח זמנים</button>
+          <button id="createCalendarButton" class="secondary-button" type="button" disabled>צור אירועים ביומן</button>
+        </div>
+      </form>
+
+      <datalist id="productSuggestions"></datalist>
+
+      <section class="status-band" aria-live="polite">
+        <div>
+          <span class="metric-label">נמצאו</span>
+          <strong id="slotCount">0</strong>
+        </div>
+        <div>
+          <span class="metric-label">טווח</span>
+          <strong id="rangeText">-</strong>
+        </div>
+        <div>
+          <span class="metric-label">יומן</span>
+          <strong id="calendarStatus">לא מחובר</strong>
+        </div>
+      </section>
+
+      <section class="results-panel" aria-labelledby="results-title">
+        <div class="results-header">
+          <h2 id="results-title">חלונות פרסום</h2>
+          <button id="downloadJsonButton" class="text-button" type="button" disabled>הורד JSON</button>
+        </div>
+        <ol id="resultsList" class="results-list"></ol>
+      </section>
+    </section>
+  </main>
+
+  <script src="products.js"></script>
+  <script src="../login/js/hebrewDate.js"></script>
+  <script src="../shared/js/CommercialMazal.js"></script>
+  <script src="../woman/js/suncalc.js"></script>
+  <script src="commercial-time-anchors.js"></script>
+  <script src="it-adapter.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
