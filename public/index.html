@@ -18,10 +18,6 @@
     <meta name="description" content="Jerusalem Universal HebrewClock">
     <meta name="keywords" content="">
     <meta name="author" content="simchanaftali Bilig">
-	<meta http-equiv="refresh" content="0; url=HebrewCommercial13/public/Need-Me/index.html">
-	<script>
-		window.location.replace("HebrewCommercial13/public/Need-Me/index.html" + window.location.search + window.location.hash);
-	</script>
 	<style>
 		html,
 		body {
@@ -218,9 +214,6 @@
 </head>
 
 <body id="youtube">
-	<noscript>
-		<p><a href="HebrewCommercial13/public/Need-Me/index.html">כניסה ל-Need-Me</a></p>
-	</noscript>
 	<main id="choice-screen">
 		<div class="choice-inner">
 			<h1>JClock</h1>
@@ -235,6 +228,15 @@
 	</section>
 
 <script type="text/javascript">
+	(function redirectNeedMeDomain() {
+		const hostname = window.location.hostname.toLowerCase().replace(/^www\./, "");
+		const needMePath = "/HebrewCommercial13/public/Need-Me/index.html";
+
+		if (hostname === "need-me.net" && window.location.pathname !== needMePath) {
+			window.location.replace(needMePath + window.location.search + window.location.hash);
+		}
+	})();
+
 	const DEFAULT_LATITUDE = "31.7768514";
 	const DEFAULT_LONGITUDE = "35.2331664";
 	const locationQuery = "?latitude=" + DEFAULT_LATITUDE + "&longitude=" + DEFAULT_LONGITUDE;

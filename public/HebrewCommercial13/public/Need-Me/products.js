@@ -76,6 +76,41 @@
         tractate: "מסכת גיטין"
       },
       minConfidence: 0.75
+    },
+    {
+      id: "resurrection",
+      label: "תחיית המתים",
+      aliases: ["תחיית המתים", "תחית המתים", "resurrection", "revival of the dead", "שבת", "מסכת שבת"],
+      category: "health",
+      sourceMaterial: "מסכת שבת, פרק ראשון",
+      schedulingMode: "temporary-clock",
+      actionDurationMinutes: 60,
+      temporaryClock: {
+        moladHour: 1,
+        hebrewDay: 7,
+        dayParts: ["night"],
+        tractate: "מסכת שבת",
+        chapter: "פרק ראשון"
+      },
+      minConfidence: 0.75
+    },
+    {
+      id: "cancer-medicine",
+      label: "תרופה לסרטן",
+      aliases: ["תרופה לסרטן", "סרטן", "cancer medicine", "cancer treatment", "נגעים", "מסכת נגעים", "משלי", "ספר משלי", "לך לך", "פרשת לך לך"],
+      category: "health",
+      sourceMaterial: "מסכת נגעים, ספר משלי, פרשת לך לך",
+      schedulingMode: "temporary-clock",
+      actionDurationMinutes: 60,
+      temporaryClock: {
+        moladHour: 15,
+        hebrewDay: 6,
+        dayParts: ["day"],
+        tractate: "מסכת נגעים",
+        book: "ספר משלי",
+        parasha: "פרשת לך לך"
+      },
+      minConfidence: 0.75
     }
   ];
 }());

@@ -855,6 +855,7 @@
     if (slot.schedulingMode === "temporary-clock") {
       parts.push(formatTemporaryClock(slot.temporaryClock));
       parts.push(formatMolad(slot.period));
+      parts.push(formatRoshChodesh(slot.period));
       parts.push(formatWindowKind(slot.windowKind));
       parts.push(formatAudienceContext(slot.region, slot.audience));
       return parts.join(" · ");
@@ -863,6 +864,7 @@
     if (slot.schedulingMode === "period-start") {
       parts.push(formatPeriodContext(slot.period));
       parts.push(formatMolad(slot.period));
+      parts.push(formatRoshChodesh(slot.period));
       var sourceMaterial = formatSourceMaterial(slot.productId);
       if (sourceMaterial) {
         parts.push(sourceMaterial);
@@ -942,7 +944,10 @@
       hebrewDay: productReference.hebrewDay,
       moladHours: productReference.moladHours,
       dayParts: productReference.dayParts || TEMPORARY_CLOCK_REFERENCE.dayParts,
-      tractate: productReference.tractate || TEMPORARY_CLOCK_REFERENCE.tractate
+      tractate: productReference.tractate || TEMPORARY_CLOCK_REFERENCE.tractate,
+      chapter: productReference.chapter || "",
+      book: productReference.book || "",
+      parasha: productReference.parasha || ""
     };
 
     return reference;
@@ -959,15 +964,41 @@
     var parts = [
       "שעון זמני",
       "מולד שעה " + hours,
-      "יום או לילה",
+      formatTemporaryClockDayParts(reference.dayParts),
       reference.tractate
     ];
+
+    if (reference.chapter) {
+      parts.push(reference.chapter);
+    }
+
+    if (reference.book) {
+      parts.push(reference.book);
+    }
+
+    if (reference.parasha) {
+      parts.push(reference.parasha);
+    }
 
     if (reference.hebrewDay) {
       parts.splice(2, 0, "יום " + getHebrewDayName(reference.hebrewDay));
     }
 
     return parts.join(" / ");
+  }
+
+  function formatTemporaryClockDayParts(dayParts) {
+    var parts = dayParts || ["day", "night"];
+
+    if (parts.length === 1 && parts[0] === "night") {
+      return "לילה";
+    }
+
+    if (parts.length === 1 && parts[0] === "day") {
+      return "יום";
+    }
+
+    return "יום או לילה";
   }
 
   function getHebrewDayName(day) {
@@ -1039,6 +1070,51 @@
 
     var partName = period.molad.jewishDayPart === "night" ? "ליל" : "יום";
     return "מולד: שעה " + numberToHebrewOrdinal(period.molad.jewishHourOrdinal) + " של " + partName + " " + period.molad.jewishDayName;
+  }
+
+  function formatRoshChodesh(period) {
+    if (!period || !period.hebrewMonth) {
+      return "ראש חודש";
+    }
+
+    var monthName = formatHebrewMonthName(period.hebrewMonth);
+    var year = period.hebrewYear ? " " + formatHebrewYear(period.hebrewYear) : "";
+
+    return "ראש חודש " + monthName + year;
+  }
+
+  function formatHebrewMonthName(monthName) {
+    var names = {
+      tishri: "תשרי",
+      tishrei: "תשרי",
+      heshvan: "חשוון",
+      cheshvan: "חשוון",
+      kislev: "כסלו",
+      tevet: "טבת",
+      shevat: "שבט",
+      adar: "אדר",
+      adari: "אדר א'",
+      adar1: "אדר א'",
+      adarii: "אדר ב'",
+      adar2: "אדר ב'",
+      nisan: "ניסן",
+      nissan: "ניסן",
+      iyyar: "אייר",
+      iyar: "אייר",
+      sivan: "סיון",
+      tammuz: "תמוז",
+      tamuz: "תמוז",
+      av: "אב",
+      elul: "אלול"
+    };
+    var key = String(monthName || "").toLowerCase().replace(/\s+/g, "");
+
+    return names[key] || monthName;
+  }
+
+  function formatHebrewYear(year) {
+    var shortYear = positiveModulo(Number(year), 1000);
+    return "ה'" + hebrewNumber(shortYear);
   }
 
   function formatSourceMaterial(productId) {
