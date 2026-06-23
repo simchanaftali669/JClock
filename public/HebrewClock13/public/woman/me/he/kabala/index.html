@@ -165,6 +165,8 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 
     //public variables
     var longitude, latitude;  //current geo location
+    var TEMPLE_MOUNT_LONGITUDE = 35.2331664;
+    var TEMPLE_MOUNT_LATITUDE = 31.7768514;
 	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
@@ -224,61 +226,34 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     function getLocation()
     {
 		var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");
 		birthYear = url.searchParams.get("year");
 		birthMonth = url.searchParams.get("month");
 		birthDay = url.searchParams.get("day");
 		birthHour = url.searchParams.get("hour");
 		birthMin = url.searchParams.get("min");
 		birthGMT = url.searchParams.get("gmt");
-	
-		if(lon && lat && !birthHour)
-		{
-		    longitude = lon ? lon : position.coords.longitude;
-			latitude = lat ? lat : position.coords.latitude; 
 
-			console.log("manual location");
-			
-			set_dst();
-			set_default_date();
-			list_pos();
-			hebrewclock();
-			oTimerclock();
-			
-			//genderInitFunction();
-			setmazal();
-			
-			//נחלה
-			setShevet();
-			commercialFunction();
-				
-			return;
-		}
-        else if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        }
+        longitude = TEMPLE_MOUNT_LONGITUDE;
+        latitude = TEMPLE_MOUNT_LATITUDE;
+
+        set_dst();
+        set_default_date();
+        list_pos();
+        hebrewclock();
+        oTimerclock();
+        
+        //genderInitFunction();
+        setmazal();
+        
+        //נחלה
+        setShevet();
+        commercialFunction();
     }
 
     function showPosition(position)
     {
-        var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");
-		birthYear = url.searchParams.get("year");
-		birthMonth = url.searchParams.get("month");
-		birthDay = url.searchParams.get("day");
-		birthHour = url.searchParams.get("hour");
-		birthMin = url.searchParams.get("min");
-		birthGMT = url.searchParams.get("gmt");
-        if(lat)
-        {
-            //tz = https://maps.googleapis.com/maps/api/timezone/outputFormat?parameters
-        }
-
-        longitude = lon ? lon : position.coords.longitude;
-        latitude = lat ? lat : position.coords.latitude;
+        longitude = TEMPLE_MOUNT_LONGITUDE;
+        latitude = TEMPLE_MOUNT_LATITUDE;
 
         set_dst();
         set_default_date();
@@ -324,15 +299,8 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 
 	function openSecret()
 	{
-		var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");
-	
 		var win;
-		if(lon)
-			win = window.open("../../../naftali/he/kabala/index.html?latitude=" + lat + "&longitude="+ lon, '_blank');
-		else
-			win = window.open("../../../naftali/he/kabala/index.html", '_blank');
+		win = window.open("../../../naftali/he/kabala/index.html", '_blank');
 					
 		win.focus();	
 	}

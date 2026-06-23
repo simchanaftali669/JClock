@@ -78,12 +78,12 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
  		<hr>
         <div style="text-align:center;">
             <input class="zmanim_index" type="text" value="10:0000:00">
-			<input  class="zmanim_text" type="text" value="Fast" />
+			<input  class="zmanim_text" type="text" value="Fast/Drink => Prepare to Pray" />
 			<input id="hour_10_idx" class="zmanim_hour" type="text"/>
         </div>
         <div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="11:0000:00">
-            <input  class="zmanim_text" type="text" value="Fast" />
+            <input  class="zmanim_text" type="text" value="Fast/Drink => Prepare to Pray" />
             <input id="hour_11_idx" class="zmanim_hour" type="text" />
         </div>
 		<hr>
@@ -121,33 +121,33 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 		<hr>
         <div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="06:0000:00">
-            <input id="chatzot_yom__label" class="zmanim_text" type="text" value= "Fast" />
+            <input id="chatzot_yom__label" class="zmanim_text" type="text" value= "Small Fast" />
             <input id="hour_18_idx" class="zmanim_hour" type="text" />
         </div>
         <div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="06:0540:00">
-            <input class="zmanim_text" type="text" value= "Work/Water" />
+            <input class="zmanim_text" type="text" value= "Work/Meal" />
             <input id="hour_18-30_idx" class="zmanim_hour" type="text" />
         </div>
 		<div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="07:0000:00">
-            <input  class="zmanim_text" type="text" value="Work/Water" />
+            <input  class="zmanim_text" type="text" value="Work/Meal" />
             <input id="hour_19_idx" class="zmanim_hour" type="text" />
         </div>
 		<div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="08:0000:00">
-            <input  class="zmanim_text" type="text" value="Work/Water" />
+            <input  class="zmanim_text" type="text" value="Work/Meal" />
             <input id="hour_20_idx" class="zmanim_hour" type="text" />
         </div>
 		<hr>
 		<div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="09:0000:00">
-            <input  class="zmanim_text" type="text" value="Work/Water" />
+            <input  class="zmanim_text" type="text" value="Work/Meal" />
             <input id="hour_21_idx" class="zmanim_hour" type="text" />
         </div>
 		<div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="10:0000:00">
-            <input  class="zmanim_text" type="text" value="Work/Water"/>
+            <input  class="zmanim_text" type="text" value="Work/Meal"/>
             <input id="hour_22_idx" class="zmanim_hour" type="text" />
         </div>
 		<div style="text-align:center;">
@@ -158,7 +158,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 		<hr>
         <div style="text-align:center;">
 			<input class="zmanim_index" type="text" value="00:0000:00">
-			<input  class="zmanim_text" type="text" value="Fast" />
+			<input  class="zmanim_text" type="text" value="Sunset" />
 			<input id="hour_00_idx" class="zmanim_hour" type="text"/>
         </div>
         <div style="text-align:center;">
@@ -178,8 +178,8 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
             <input id="tziet_tam" class="zmanim_hour" type="text" />
         </div> -->
 
-        <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px; display:flex !important; justify-content:center !important; width:100% !important; margin-left:0 !important; margin-right:0 !important;">
-			<img class="day" />
+        <div style="text-align:center; margin-bottom:10px; margin-top: 10px; display:flex !important; justify-content:center !important; width:100% !important; margin-left:0 !important; margin-right:0 !important;">
+			<iframe title="Commercial" src="../../../../../../HebrewCommercial13/public/man/index.html?latitude=31.7768514&longitude=35.2331664&embedded=1" style="width:100%; max-width:900px; height:430px; border:0; overflow:hidden; background:transparent;" allowtransparency="true"></iframe>
         </div>
     </div>
 
@@ -201,6 +201,8 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 
     //public variables
     var longitude, latitude;  //current geo location
+    var TEMPLE_MOUNT_LONGITUDE = 35.2331664;
+    var TEMPLE_MOUNT_LATITUDE = 31.7768514;
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
     var lat = 0, lng = 0;     // sun's location
@@ -257,54 +259,38 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     function getLocation()
     {
         var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");        
         
 		offset = url.searchParams.get("offset");
 		if(!offset)
 			offset = 0;
 		
-		if(lon)
-		{				
-			longitude = lon;
-			latitude = lat;
+        longitude = TEMPLE_MOUNT_LONGITUDE;
+        latitude = TEMPLE_MOUNT_LATITUDE;
 
-			set_dst();
-			set_default_date();
-			list_pos();
-			hebrewclock();
-			oTimerclock();
-			
-			//genderInitFunction();
-			setmazal();
-			
-			//נחלה
-			setShevet();
-			commercialFunction();
-		}
-        else if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        }
+        set_dst();
+        set_default_date();
+        list_pos();
+        hebrewclock();
+        oTimerclock();
+        
+        //genderInitFunction();
+        setmazal();
+        
+        //נחלה
+        setShevet();
+        commercialFunction();
     }
 
     function showPosition(position)
     {
         var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");        
         
 		offset = url.searchParams.get("offset");
 		if(!offset)
 			offset = 0;
-			
-		if(lat)
-        {
-            //tz = https://maps.googleapis.com/maps/api/timezone/outputFormat?parameters
-        }
 
-        longitude = lon ? lon : position.coords.longitude;
-        latitude = lat ? lat : position.coords.latitude;
+        longitude = TEMPLE_MOUNT_LONGITUDE;
+        latitude = TEMPLE_MOUNT_LATITUDE;
 
         set_dst();
         set_default_date();

@@ -15,13 +15,26 @@
     <title>Hebrew Commercial</title> 
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">
 	<link rel="stylesheet" type="text/css" href="css/commercialstylesheet.css" id="commercial_css"> 
+    <style>
+        html.embedded-commercial,
+        html.embedded-commercial body,
+        html.embedded-commercial #container {
+            background: transparent !important;
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+    </style>
+    <script>
+        if (new URL(document.location.href).searchParams.get("embedded") == "1")
+            document.documentElement.className += " embedded-commercial";
+    </script>
     <meta charset="UTF-8">
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="simchanaftali Bilig">
 </head>
 
-<body onclick="showBackground();">
+<body onclick="if (!isEmbeddedCommercial()) showBackground();">
 
     <div  id="container">		
 		<div class="dropdown">
@@ -203,6 +216,9 @@
 
 	function showBackground()
 	{
+		if(isEmbeddedCommercial())
+			return;
+
 		if(isShowBackground == false) 
 		{
 		//console.log(isShowBackground);
@@ -215,6 +231,11 @@
 			document.getElementById("thecss").href = "css/stylesheet.css";
 			isShowBackground = false;
 		}
+	}
+
+	function isEmbeddedCommercial()
+	{
+		return new URL(document.location.href).searchParams.get("embedded") == "1";
 	}
 
     </script>
