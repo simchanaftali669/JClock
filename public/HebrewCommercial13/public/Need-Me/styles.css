@@ -52,6 +52,13 @@ select {
   margin-bottom: 20px;
 }
 
+.masthead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .eyebrow {
   margin: 0 0 6px;
   color: var(--accent);
@@ -275,6 +282,14 @@ select {
   .results-header {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .masthead-actions {
+    justify-content: stretch;
+  }
+
+  .masthead-actions .secondary-button {
+    flex: 1 1 150px;
   }
 
   .planner-form,

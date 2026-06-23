@@ -12,11 +12,160 @@
     tractate: "מסכת ראש השנה"
   };
   var moladRangeCache = {};
+  var translations = {
+    he: {
+      brandName: "Need-Me",
+      documentTitle: "Need-Me",
+      pageTitle: "שיבוץ פרסום לפי זמן",
+      connectGoogle: "התחבר לגוגל",
+      productGroup: "מה המוצר שאני מחפש למכור",
+      productLabel: "מוצר",
+      timeZone: "אזור זמן",
+      region: "יבשת / אזור",
+      regionMiddleEast: "מזרח תיכון",
+      regionIreland: "אירלנד",
+      regionEurope: "אירופה",
+      regionAfrica: "אפריקה",
+      regionAsia: "אסיה",
+      regionNorthAmerica: "צפון אמריקה",
+      regionSouthAmerica: "דרום אמריקה",
+      regionOceania: "אוקיאניה",
+      audience: "מוכר ל",
+      boys: "בנים",
+      girls: "בנות",
+      rangeMode: "טווח בדיקה",
+      rangeDays: "ימים ושעות שנבחרו",
+      rangeMonths: "חודשים קדימה",
+      rangeShmita: "מחזור שמיטה נוכחי",
+      rangeYovel: "יובל נוכחי",
+      duration: "משך פרסום",
+      oneHour: "שעה",
+      halfHour: "חצי שעה",
+      twoHours: "שעתיים",
+      periodStartOnly: "רק תחילת תקופה",
+      storeGroup: "מתי אני עומד בחנות",
+      startDate: "תאריך לעמידה בחנות",
+      daysToCheck: "ימים לבדיקה",
+      monthsAhead: "חודשים קדימה",
+      workStart: "עובד משעה",
+      workEnd: "עובד עד שעה",
+      calculate: "חשב לוח זמנים",
+      createCalendar: "צור אירועים ביומן",
+      found: "נמצאו",
+      range: "טווח",
+      calendar: "יומן",
+      notConnected: "לא מחובר",
+      resultsTitle: "חלונות פרסום",
+      downloadJson: "הורד JSON",
+      languageToggle: "English",
+      productNotFound: "המוצר לא נמצא במאגר המקומי.",
+      noSlots: "לא נמצאו חלונות פרסום בטווח שנבחר.",
+      signaturesOutsideWorkHours: "נמצאו {count} חתימות זמן, אבל כולן מחוץ לשעות העבודה שנבחרו.",
+      renderedLimit: "מוצגות {shown} תוצאות ראשונות מתוך {total}.",
+      daysSuffix: "ימים",
+      monthsSuffix: "חודשים",
+      yovelRange: "יובל {cycle} · {start}-{end} · שנה 50: {fiftieth} · בלי שנות שמיטה",
+      shmitaRange: "שבוע {week} בתוך יובל {cycle} · {start}-{end} · בלי שנת שמיטה",
+      periodStartTime: "תחילת תקופה: {time}",
+      periodTime: "תקופה: {start} - {end}",
+      entryPoint: "נקודת כניסה לשימוש",
+      consecutiveHours: "{count} שעות רצופות",
+      relevancePeriodStart: "תחילת תקופה",
+      relevanceFull: "לעמוד בחנות: כל החלון",
+      relevancePartial: "לעמוד בחנות: {start}-{end}",
+      relevanceNo: "לא מתאים",
+      missingClientId: "חסר Client ID",
+      googleLoading: "Google עדיין נטען",
+      connected: "מחובר",
+      creatingEvents: "יוצר אירועים...",
+      createdEvents: "נוצרו {created}/{total}",
+      eventsCreated: "האירועים נוצרו",
+      eventError: "שגיאה ביצירת אירוע",
+      publish: "לפרסם: {product}",
+      periodDescription: "Need-Me · {period}. {molad}. פעולה נקודתית סביב המולד. חתימת זמן: {tags}.",
+      eventDescription: "Need-Me · להעלות פרסום בתחילת האירוע ולהוריד בסוף.",
+      source: "מקור: {source}"
+    },
+    en: {
+      brandName: "COIN · Commercial Only If Needed",
+      documentTitle: "COIN · Commercial Only If Needed",
+      pageTitle: "Time-Based Advertising Scheduler",
+      connectGoogle: "Connect Google",
+      productGroup: "Product to sell",
+      productLabel: "Product",
+      timeZone: "Time zone",
+      region: "Continent / region",
+      regionMiddleEast: "Middle East",
+      regionIreland: "Ireland",
+      regionEurope: "Europe",
+      regionAfrica: "Africa",
+      regionAsia: "Asia",
+      regionNorthAmerica: "North America",
+      regionSouthAmerica: "South America",
+      regionOceania: "Oceania",
+      audience: "Selling to",
+      boys: "Boys",
+      girls: "Girls",
+      rangeMode: "Check range",
+      rangeDays: "Selected days and hours",
+      rangeMonths: "Months ahead",
+      rangeShmita: "Current Shmita cycle",
+      rangeYovel: "Current Jubilee",
+      duration: "Ad duration",
+      oneHour: "One hour",
+      halfHour: "Half hour",
+      twoHours: "Two hours",
+      periodStartOnly: "Period start only",
+      storeGroup: "When I am in the store",
+      startDate: "Store date",
+      daysToCheck: "Days to check",
+      monthsAhead: "Months ahead",
+      workStart: "Working from",
+      workEnd: "Working until",
+      calculate: "Calculate schedule",
+      createCalendar: "Create calendar events",
+      found: "Found",
+      range: "Range",
+      calendar: "Calendar",
+      notConnected: "Not connected",
+      resultsTitle: "Advertising windows",
+      downloadJson: "Download JSON",
+      languageToggle: "עברית",
+      productNotFound: "The product was not found in the local catalog.",
+      noSlots: "No advertising windows were found in the selected range.",
+      signaturesOutsideWorkHours: "{count} time signatures were found, but all are outside the selected working hours.",
+      renderedLimit: "Showing the first {shown} results out of {total}.",
+      daysSuffix: "days",
+      monthsSuffix: "months",
+      yovelRange: "Jubilee {cycle} · {start}-{end} · 50th year: {fiftieth} · without Shmita years",
+      shmitaRange: "Week {week} within Jubilee {cycle} · {start}-{end} · without the Shmita year",
+      periodStartTime: "Period start: {time}",
+      periodTime: "Period: {start} - {end}",
+      entryPoint: "Entry point for use",
+      consecutiveHours: "{count} consecutive hours",
+      relevancePeriodStart: "Period start",
+      relevanceFull: "Stand in store: full window",
+      relevancePartial: "Stand in store: {start}-{end}",
+      relevanceNo: "Not suitable",
+      missingClientId: "Missing Client ID",
+      googleLoading: "Google is still loading",
+      connected: "Connected",
+      creatingEvents: "Creating events...",
+      createdEvents: "Created {created}/{total}",
+      eventsCreated: "Events created",
+      eventError: "Error creating event",
+      publish: "Advertise: {product}",
+      periodDescription: "COIN · Commercial Only If Needed · {period}. {molad}. Point action around the molad. Time signature: {tags}.",
+      eventDescription: "COIN · Commercial Only If Needed · publish the ad at the start of the event and remove it at the end.",
+      source: "Source: {source}"
+    }
+  };
 
   var state = {
     accessToken: "",
     slots: [],
-    selectedProduct: null
+    selectedProduct: null,
+    language: getInitialLanguage()
   };
 
   var form = document.getElementById("plannerForm");
@@ -40,17 +189,34 @@
   var calendarStatus = document.getElementById("calendarStatus");
   var resultsList = document.getElementById("resultsList");
   var productSuggestions = document.getElementById("productSuggestions");
+  var languageToggleButton = document.getElementById("languageToggleButton");
   var googleConnectButton = document.getElementById("googleConnectButton");
   var createCalendarButton = document.getElementById("createCalendarButton");
   var downloadJsonButton = document.getElementById("downloadJsonButton");
 
+  function getInitialLanguage() {
+    var requestedLanguage = new URLSearchParams(window.location.search).get("lang");
+
+    if (requestedLanguage && requestedLanguage.toLowerCase().indexOf("en") === 0) {
+      return "en";
+    }
+
+    if (requestedLanguage && requestedLanguage.toLowerCase().indexOf("he") === 0) {
+      return "he";
+    }
+
+    return "he";
+  }
+
   function init() {
     startDateInput.value = toInputDate(new Date());
+    applyLanguage();
     renderProductSuggestions();
     rangeModeInput.addEventListener("change", syncRangeControls);
     regionInput.addEventListener("change", syncAudienceControls);
     periodStartOnlyInput.addEventListener("change", syncPeriodStartOnlyControls);
     form.addEventListener("submit", handlePlanSubmit);
+    languageToggleButton.addEventListener("click", toggleLanguage);
     googleConnectButton.addEventListener("click", connectGoogle);
     createCalendarButton.addEventListener("click", createCalendarEvents);
     downloadJsonButton.addEventListener("click", downloadJson);
@@ -63,12 +229,62 @@
   function renderProductSuggestions() {
     productSuggestions.innerHTML = "";
     window.NeedMeProducts.forEach(function (product) {
-      product.aliases.forEach(function (alias) {
+      [getProductLabel(product)].concat(product.aliases).forEach(function (alias) {
         var option = document.createElement("option");
         option.value = alias;
         productSuggestions.appendChild(option);
       });
     });
+  }
+
+  function toggleLanguage() {
+    state.language = state.language === "he" ? "en" : "he";
+    applyLanguage();
+    renderProductSuggestions();
+    if (state.rangeLabel || state.slots.length || state.diagnostics) {
+      renderResults("");
+    }
+  }
+
+  function applyLanguage() {
+    var dictionary = translations[state.language] || translations.he;
+    document.documentElement.lang = state.language;
+    document.documentElement.dir = state.language === "he" ? "rtl" : "ltr";
+
+    document.querySelectorAll("[data-i18n]").forEach(function (element) {
+      element.textContent = dictionary[element.getAttribute("data-i18n")] || element.textContent;
+    });
+
+    document.querySelectorAll("[data-placeholder-he]").forEach(function (element) {
+      element.placeholder = state.language === "he" ? element.getAttribute("data-placeholder-he") : element.getAttribute("data-placeholder-en");
+    });
+
+    document.title = t("documentTitle");
+    languageToggleButton.textContent = t("languageToggle");
+    calendarStatus.textContent = state.accessToken ? t("connected") : t("notConnected");
+  }
+
+  function t(key, values) {
+    var dictionary = translations[state.language] || translations.he;
+    var template = dictionary[key] || translations.he[key] || key;
+    return template.replace(/\{([^}]+)\}/g, function (_, name) {
+      return values && Object.prototype.hasOwnProperty.call(values, name) ? values[name] : "";
+    });
+  }
+
+  function getProductLabel(product) {
+    if (state.language === "en" && product.labelEn) {
+      return product.labelEn;
+    }
+
+    return product.label;
+  }
+
+  function getSlotProductLabel(slot) {
+    var product = window.NeedMeProducts.find(function (item) {
+      return item.id === slot.productId;
+    });
+    return product ? getProductLabel(product) : slot.productLabel;
   }
 
   function handlePlanSubmit(event) {
@@ -78,7 +294,7 @@
 
     if (!product) {
       state.slots = [];
-      renderResults("המוצר לא נמצא במאגר המקומי.");
+      renderResults(t("productNotFound"));
       refreshActions();
       return;
     }
@@ -144,7 +360,7 @@
       return {
         start: requestedStart,
         end: addDays(requestedStart, days),
-        label: toInputDate(requestedStart) + " + " + days + " ימים"
+        label: toInputDate(requestedStart) + " + " + days + " " + t("daysSuffix")
       };
     }
 
@@ -160,7 +376,7 @@
     return {
       start: requestedStart,
       end: addMonths(requestedStart, months),
-      label: toInputDate(requestedStart) + " + " + months + " חודשים"
+      label: toInputDate(requestedStart) + " + " + months + " " + t("monthsSuffix")
     };
   }
 
@@ -176,7 +392,12 @@
     return {
       start: rangeStart,
       end: rangeEnd,
-      label: "יובל " + hebrewNumber(yovelCycle) + " · " + yovelStartYear + "-" + yovelFiftiethYear + " · שנה 50: " + yovelFiftiethYear + " · בלי שנות שמיטה"
+      label: t("yovelRange", {
+        cycle: state.language === "he" ? hebrewNumber(yovelCycle) : yovelCycle,
+        start: yovelStartYear,
+        end: yovelFiftiethYear,
+        fiftieth: yovelFiftiethYear
+      })
     };
   }
 
@@ -193,7 +414,12 @@
     return {
       start: rangeStart,
       end: rangeEnd,
-      label: "שבוע " + hebrewWeekLetter(weekInYovel) + " בתוך יובל " + hebrewNumber(yovelCycle) + " · " + shmitaStartYear + "-" + (shmitaEndYear - 1) + " · בלי שנת שמיטה"
+      label: t("shmitaRange", {
+        week: state.language === "he" ? hebrewWeekLetter(weekInYovel) : weekInYovel,
+        cycle: state.language === "he" ? hebrewNumber(yovelCycle) : yovelCycle,
+        start: shmitaStartYear,
+        end: shmitaEndYear - 1
+      })
     };
   }
 
@@ -372,7 +598,7 @@
 
     return {
       productId: product.id,
-      productLabel: product.label,
+      productLabel: getProductLabel(product),
       startEpoch: window.start.getTime(),
       endEpoch: window.end.getTime(),
       startDateTime: toCalendarDateTime(window.start, timeZone),
@@ -812,11 +1038,11 @@
 
     if (!state.slots.length) {
       if (state.diagnostics && state.diagnostics.filteredByWorkHours > 0) {
-        appendMessage("נמצאו " + state.diagnostics.filteredByWorkHours + " חתימות זמן, אבל כולן מחוץ לשעות העבודה שנבחרו.", "slot-warning");
+        appendMessage(t("signaturesOutsideWorkHours", { count: state.diagnostics.filteredByWorkHours }), "slot-warning");
         return;
       }
 
-      appendMessage("לא נמצאו חלונות פרסום בטווח שנבחר.", "slot-warning");
+      appendMessage(t("noSlots"), "slot-warning");
       return;
     }
 
@@ -831,7 +1057,7 @@
     });
 
     if (state.slots.length > MAX_RENDERED_RESULTS) {
-      appendMessage("מוצגות " + MAX_RENDERED_RESULTS + " תוצאות ראשונות מתוך " + state.slots.length + ".", "slot-detail");
+      appendMessage(t("renderedLimit", { shown: MAX_RENDERED_RESULTS, total: state.slots.length }), "slot-detail");
     }
   }
 
@@ -844,14 +1070,14 @@
 
   function formatSlotTime(slot) {
     if (slot.periodStartOnly) {
-      return "תחילת תקופה: " + slot.startDateTime.replace("T", " ");
+      return t("periodStartTime", { time: slot.startDateTime.replace("T", " ") });
     }
 
-    return "תקופה: " + slot.startDateTime.replace("T", " ") + " - " + slot.endDateTime.slice(11, 16);
+    return t("periodTime", { start: slot.startDateTime.replace("T", " "), end: slot.endDateTime.slice(11, 16) });
   }
 
   function formatSlotDetail(slot) {
-    var parts = [slot.productLabel, slot.timeZone];
+    var parts = [getSlotProductLabel(slot), slot.timeZone];
     if (slot.schedulingMode === "temporary-clock") {
       parts.push(formatTemporaryClock(slot.temporaryClock));
       parts.push(formatMolad(slot.period));
@@ -874,34 +1100,42 @@
       parts.push(formatAudienceContext(slot.region, slot.audience));
       parts.push(formatTemporaryClock(slot.temporaryClock));
       parts.push(formatTimeTags(slot.period));
-      parts.push("נקודת כניסה לשימוש");
+      parts.push(t("entryPoint"));
       return parts.join(" · ");
     }
 
     if (slot.slotCount > 1) {
-      parts.push(slot.slotCount + " שעות רצופות");
+      parts.push(t("consecutiveHours", { count: slot.slotCount }));
     }
     return parts.join(" · ");
   }
 
   function formatRelevance(slot) {
     if (slot.periodStartOnly) {
-      return "תחילת תקופה";
+      return t("relevancePeriodStart");
     }
 
     if (slot.relevance === "full") {
-      return "לעמוד בחנות: כל החלון";
+      return t("relevanceFull");
     }
 
     if (slot.relevance === "partial") {
-      return "לעמוד בחנות: " + slot.overlapStartDateTime.slice(11, 16) + "-" + slot.overlapEndDateTime.slice(11, 16);
+      return t("relevancePartial", { start: slot.overlapStartDateTime.slice(11, 16), end: slot.overlapEndDateTime.slice(11, 16) });
     }
 
-    return "לא מתאים";
+    return t("relevanceNo");
   }
 
   function formatWindowKind(kind) {
-    var names = {
+    var names = state.language === "en" ? {
+      month: "Monthly molad: sunrise to noon",
+      tishrei: "Tishrei molad window: noon to sunset",
+      yovel: "Jubilee Tishrei molad window: sunset to midnight",
+      nissan: "Nissan molad: midnight to sunrise",
+      "period-start-only": "Period start only",
+      "temporary-clock": "Temporary-clock window",
+      hourly: "Hourly window"
+    } : {
       month: "מולד חודש: זריחה עד חצות",
       tishrei: "חלון מולד תשרי: חצות עד שקיעה",
       yovel: "חלון מולד תשרי של יובל: שקיעה עד חצות לילה",
@@ -910,27 +1144,31 @@
       "temporary-clock": "חלון שעון זמני",
       hourly: "חלון שעתי"
     };
-    return names[kind] || "חלון מכירה";
+    return names[kind] || (state.language === "en" ? "Sales window" : "חלון מכירה");
   }
 
   function formatAnchorSource(source) {
     if (source === "molad") {
-      return "נקודת המולד";
+      return state.language === "en" ? "Molad point" : "נקודת המולד";
     }
 
     if (source === "moon") {
-      return "שעון לבנה ירושלים";
+      return state.language === "en" ? "Jerusalem moon clock" : "שעון לבנה ירושלים";
     }
 
     if (source === "sun") {
-      return "שעון חמה ירושלים";
+      return state.language === "en" ? "Jerusalem sun clock" : "שעון חמה ירושלים";
     }
 
-    return "שעון ירושלים";
+    return state.language === "en" ? "Jerusalem clock" : "שעון ירושלים";
   }
 
   function formatAudienceContext(region, audience) {
     if (isAudienceSpecificRegion(region)) {
+      if (state.language === "en") {
+        return audience === "girls" ? "Audience: girls" : "Audience: boys";
+      }
+
       return audience === "girls" ? "קהל: בנות" : "קהל: בנים";
     }
 
@@ -955,33 +1193,33 @@
 
   function formatTemporaryClock(reference) {
     if (!reference) {
-      return "שעון זמני";
+      return state.language === "en" ? "Temporary clock" : "שעון זמני";
     }
 
     var hours = reference.moladHours && reference.moladHours.length
       ? reference.moladHours.join(", ")
       : (reference.moladHour || reference.hebrewHour);
     var parts = [
-      "שעון זמני",
-      "מולד שעה " + hours,
+      state.language === "en" ? "Temporary clock" : "שעון זמני",
+      (state.language === "en" ? "molad hour " : "מולד שעה ") + hours,
       formatTemporaryClockDayParts(reference.dayParts),
-      reference.tractate
+      formatSourceName(reference.tractate)
     ];
 
     if (reference.chapter) {
-      parts.push(reference.chapter);
+      parts.push(formatSourceName(reference.chapter));
     }
 
     if (reference.book) {
-      parts.push(reference.book);
+      parts.push(formatSourceName(reference.book));
     }
 
     if (reference.parasha) {
-      parts.push(reference.parasha);
+      parts.push(formatSourceName(reference.parasha));
     }
 
     if (reference.hebrewDay) {
-      parts.splice(2, 0, "יום " + getHebrewDayName(reference.hebrewDay));
+      parts.splice(2, 0, (state.language === "en" ? "day " : "יום ") + getHebrewDayName(reference.hebrewDay));
     }
 
     return parts.join(" / ");
@@ -991,18 +1229,26 @@
     var parts = dayParts || ["day", "night"];
 
     if (parts.length === 1 && parts[0] === "night") {
-      return "לילה";
+      return state.language === "en" ? "night" : "לילה";
     }
 
     if (parts.length === 1 && parts[0] === "day") {
-      return "יום";
+      return state.language === "en" ? "day" : "יום";
     }
 
-    return "יום או לילה";
+    return state.language === "en" ? "day or night" : "יום או לילה";
   }
 
   function getHebrewDayName(day) {
-    var names = {
+    var names = state.language === "en" ? {
+      1: "Sunday",
+      2: "Monday",
+      3: "Tuesday",
+      4: "Wednesday",
+      5: "Thursday",
+      6: "Friday",
+      7: "Shabbat"
+    } : {
       1: "ראשון",
       2: "שני",
       3: "שלישי",
@@ -1016,7 +1262,16 @@
   }
 
   function formatRegion(region) {
-    var names = {
+    var names = state.language === "en" ? {
+      "middle-east": "Middle East",
+      ireland: "Ireland",
+      europe: "Europe",
+      africa: "Africa",
+      asia: "Asia",
+      "north-america": "North America",
+      "south-america": "South America",
+      oceania: "Oceania"
+    } : {
       "middle-east": "מזרח תיכון",
       ireland: "אירלנד",
       europe: "אירופה",
@@ -1027,45 +1282,54 @@
       oceania: "אוקיאניה"
     };
 
-    return names[region] || "אזור";
+    return names[region] || (state.language === "en" ? "Region" : "אזור");
   }
 
   function formatPeriod(period) {
     if (!period) {
-      return "תקופה";
+      return state.language === "en" ? "period" : "תקופה";
     }
 
-    var names = {
+    var names = state.language === "en" ? {
+      nissan: "Nissan",
+      tishrei: "Tishrei",
+      regularMonth: "regular month"
+    } : {
       nissan: "ניסן",
       tishrei: "תשרי",
       regularMonth: "חודש רגיל"
     };
-    return names[period.type] || period.type || "תקופה";
+    return names[period.type] || period.type || (state.language === "en" ? "period" : "תקופה");
   }
 
   function formatPeriodContext(period) {
     if (!period) {
-      return "פרסום חודשי";
+      return state.language === "en" ? "monthly advertising" : "פרסום חודשי";
     }
 
     if (period.type === "tishrei" && period.yovel && period.yovel.isYovelStart) {
-      return "מולד תשרי של יובל " + period.yovel.cycle;
+      return state.language === "en" ? "Tishrei molad of Jubilee " + period.yovel.cycle : "מולד תשרי של יובל " + period.yovel.cycle;
     }
 
     if (period.type === "tishrei") {
-      return "מולד שנתי: תשרי";
+      return state.language === "en" ? "Annual molad: Tishrei" : "מולד שנתי: תשרי";
     }
 
     if (period.type === "nissan") {
-      return "מולד ניסן";
+      return state.language === "en" ? "Nissan molad" : "מולד ניסן";
     }
 
-    return "מולד חודשי";
+    return state.language === "en" ? "Monthly molad" : "מולד חודשי";
   }
 
   function formatMolad(period) {
     if (!period || !period.molad) {
-      return "מולד";
+      return state.language === "en" ? "molad" : "מולד";
+    }
+
+    if (state.language === "en") {
+      var englishPartName = period.molad.jewishDayPart === "night" ? "night" : "day";
+      return "Molad: hour " + period.molad.jewishHourOrdinal + " of " + englishPartName + " " + translateJewishDayName(period.molad.jewishDayName);
     }
 
     var partName = period.molad.jewishDayPart === "night" ? "ליל" : "יום";
@@ -1074,17 +1338,39 @@
 
   function formatRoshChodesh(period) {
     if (!period || !period.hebrewMonth) {
-      return "ראש חודש";
+      return state.language === "en" ? "Rosh Chodesh" : "ראש חודש";
     }
 
     var monthName = formatHebrewMonthName(period.hebrewMonth);
-    var year = period.hebrewYear ? " " + formatHebrewYear(period.hebrewYear) : "";
+    var year = period.hebrewYear ? " " + (state.language === "en" ? period.hebrewYear : formatHebrewYear(period.hebrewYear)) : "";
 
-    return "ראש חודש " + monthName + year;
+    return (state.language === "en" ? "Rosh Chodesh " : "ראש חודש ") + monthName + year;
   }
 
   function formatHebrewMonthName(monthName) {
-    var names = {
+    var names = state.language === "en" ? {
+      tishri: "Tishrei",
+      tishrei: "Tishrei",
+      heshvan: "Cheshvan",
+      cheshvan: "Cheshvan",
+      kislev: "Kislev",
+      tevet: "Tevet",
+      shevat: "Shevat",
+      adar: "Adar",
+      adari: "Adar I",
+      adar1: "Adar I",
+      adarii: "Adar II",
+      adar2: "Adar II",
+      nisan: "Nissan",
+      nissan: "Nissan",
+      iyyar: "Iyar",
+      iyar: "Iyar",
+      sivan: "Sivan",
+      tammuz: "Tammuz",
+      tamuz: "Tammuz",
+      av: "Av",
+      elul: "Elul"
+    } : {
       tishri: "תשרי",
       tishrei: "תשרי",
       heshvan: "חשוון",
@@ -1126,7 +1412,47 @@
       return "";
     }
 
-    return "מקור: " + product.sourceMaterial;
+    return t("source", { source: getSourceMaterial(product) });
+  }
+
+  function getSourceMaterial(product) {
+    if (state.language === "en" && product.sourceMaterialEn) {
+      return product.sourceMaterialEn;
+    }
+
+    return product.sourceMaterial;
+  }
+
+  function formatSourceName(value) {
+    if (state.language !== "en") {
+      return value;
+    }
+
+    var names = {
+      "מסכת ראש השנה": "Tractate Rosh Hashanah",
+      "מסכת גיטין": "Tractate Gittin",
+      "מסכת שבת": "Tractate Shabbat",
+      "פרק ראשון": "Chapter One",
+      "מסכת נגעים": "Tractate Negaim",
+      "ספר משלי": "Book of Proverbs",
+      "פרשת לך לך": "Parashat Lech Lecha"
+    };
+
+    return names[value] || value;
+  }
+
+  function translateJewishDayName(value) {
+    var names = {
+      "ראשון": "Sunday",
+      "שני": "Monday",
+      "שלישי": "Tuesday",
+      "רביעי": "Wednesday",
+      "חמישי": "Thursday",
+      "שישי": "Friday",
+      "שבת": "Shabbat"
+    };
+
+    return names[value] || value;
   }
 
   function numberToHebrewOrdinal(value) {
@@ -1161,10 +1487,15 @@
 
   function formatTimeTags(period) {
     if (!period || !period.tags || !period.tags.length) {
-      return "חתימת זמן";
+      return state.language === "en" ? "time signature" : "חתימת זמן";
     }
 
-    var names = {
+    var names = state.language === "en" ? {
+      "daily-routine": "routine",
+      feast: "meal",
+      gathering: "gathering",
+      "season-start": "period opening"
+    } : {
       "daily-routine": "שגרה",
       feast: "סעודה",
       gathering: "התכנסות",
@@ -1178,12 +1509,12 @@
 
   function connectGoogle() {
     if (GOOGLE_CLIENT_ID.indexOf("PASTE_") === 0) {
-      calendarStatus.textContent = "חסר Client ID";
+      calendarStatus.textContent = t("missingClientId");
       return;
     }
 
     if (!window.google || !window.google.accounts || !window.google.accounts.oauth2) {
-      calendarStatus.textContent = "Google עדיין נטען";
+      calendarStatus.textContent = t("googleLoading");
       return;
     }
 
@@ -1193,7 +1524,7 @@
       callback: function (response) {
         if (response && response.access_token) {
           state.accessToken = response.access_token;
-          calendarStatus.textContent = "מחובר";
+          calendarStatus.textContent = t("connected");
           refreshActions();
         }
       }
@@ -1209,7 +1540,7 @@
     }
 
     createCalendarButton.disabled = true;
-    createCalendarButton.textContent = "יוצר אירועים...";
+    createCalendarButton.textContent = t("creatingEvents");
 
     var queue = state.slots.slice();
     var created = 0;
@@ -1217,21 +1548,21 @@
     runSequentially(queue, function (slot) {
       return insertCalendarEvent(slot).then(function () {
         created += 1;
-        calendarStatus.textContent = "נוצרו " + created + "/" + state.slots.length;
+        calendarStatus.textContent = t("createdEvents", { created: created, total: state.slots.length });
       });
     }).then(function () {
-      calendarStatus.textContent = "האירועים נוצרו";
+      calendarStatus.textContent = t("eventsCreated");
     }).catch(function () {
-      calendarStatus.textContent = "שגיאה ביצירת אירוע";
+      calendarStatus.textContent = t("eventError");
     }).finally(function () {
-      createCalendarButton.textContent = "צור אירועים ביומן";
+      createCalendarButton.textContent = t("createCalendar");
       refreshActions();
     });
   }
 
   function insertCalendarEvent(slot) {
     var event = {
-      summary: "לפרסם: " + slot.productLabel,
+      summary: t("publish", { product: getSlotProductLabel(slot) }),
       description: buildEventDescription(slot),
       start: {
         dateTime: slot.startDateTime,
@@ -1266,10 +1597,14 @@
 
   function buildEventDescription(slot) {
     if (slot.schedulingMode === "period-start") {
-      return "Need-Me · " + formatPeriodContext(slot.period) + ". " + formatMolad(slot.period) + ". פעולה נקודתית סביב המולד. חתימת זמן: " + formatTimeTags(slot.period) + ".";
+      return t("periodDescription", {
+        period: formatPeriodContext(slot.period),
+        molad: formatMolad(slot.period),
+        tags: formatTimeTags(slot.period)
+      });
     }
 
-    return "Need-Me · להעלות פרסום בתחילת האירוע ולהוריד בסוף.";
+    return t("eventDescription");
   }
 
   function runSequentially(items, worker) {

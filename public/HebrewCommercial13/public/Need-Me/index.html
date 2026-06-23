@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Need Me</title>
+  <title>Need-Me</title>
   <link rel="stylesheet" href="https://JClock.net/HebrewCommercial13/public/Need-Me/styles.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -13,23 +13,26 @@
     <section class="workspace" aria-labelledby="page-title">
       <div class="masthead">
         <div>
-          <p class="eyebrow">Need-Me</p>
-          <h1 id="page-title">שיבוץ פרסום לפי זמן</h1>
+          <p class="eyebrow" data-i18n="brandName">Need-Me</p>
+          <h1 id="page-title" data-i18n="pageTitle">שיבוץ פרסום לפי זמן</h1>
         </div>
-        <button id="googleConnectButton" class="secondary-button" type="button">התחבר לגוגל</button>
+        <div class="masthead-actions">
+          <button id="languageToggleButton" class="secondary-button" type="button" aria-label="Switch language">English</button>
+          <button id="googleConnectButton" class="secondary-button" type="button" data-i18n="connectGoogle">התחבר לגוגל</button>
+        </div>
       </div>
 
       <form id="plannerForm" class="planner-form">
         <fieldset class="form-group">
-          <legend>מה המוצר שאני מחפש למכור</legend>
+          <legend data-i18n="productGroup">מה המוצר שאני מחפש למכור</legend>
 
           <label>
-            מוצר
-            <input id="productInput" name="product" type="text" list="productSuggestions" autocomplete="off" placeholder="בירה / beer" required>
+            <span data-i18n="productLabel">מוצר</span>
+            <input id="productInput" name="product" type="text" list="productSuggestions" autocomplete="off" data-placeholder-he="תרופה לשיגעון / Medicine for Madness" data-placeholder-en="Cancer Medicine / תרופה לסרטן" placeholder="תרופה לשיגעון / Medicine for Madness" required>
           </label>
 
           <label>
-            אזור זמן
+            <span data-i18n="timeZone">אזור זמן</span>
             <select id="timeZoneInput" name="timeZone" required>
               <option value="Asia/Jerusalem">Asia/Jerusalem</option>
               <option value="Asia/Hebron">Asia/Hebron</option>
@@ -40,84 +43,84 @@
           </label>
 
           <label>
-            יבשת / אזור
+            <span data-i18n="region">יבשת / אזור</span>
             <select id="regionInput" name="region" required>
-              <option value="middle-east">מזרח תיכון</option>
-              <option value="ireland">אירלנד</option>
-              <option value="europe">אירופה</option>
-              <option value="africa">אפריקה</option>
-              <option value="asia">אסיה</option>
-              <option value="north-america">צפון אמריקה</option>
-              <option value="south-america">דרום אמריקה</option>
-              <option value="oceania">אוקיאניה</option>
+              <option value="middle-east" data-i18n="regionMiddleEast">מזרח תיכון</option>
+              <option value="ireland" data-i18n="regionIreland">אירלנד</option>
+              <option value="europe" data-i18n="regionEurope">אירופה</option>
+              <option value="africa" data-i18n="regionAfrica">אפריקה</option>
+              <option value="asia" data-i18n="regionAsia">אסיה</option>
+              <option value="north-america" data-i18n="regionNorthAmerica">צפון אמריקה</option>
+              <option value="south-america" data-i18n="regionSouthAmerica">דרום אמריקה</option>
+              <option value="oceania" data-i18n="regionOceania">אוקיאניה</option>
             </select>
           </label>
 
           <label id="audienceField">
-            מוכר ל
+            <span data-i18n="audience">מוכר ל</span>
             <select id="audienceInput" name="audience">
-              <option value="boys">בנים</option>
-              <option value="girls">בנות</option>
+              <option value="boys" data-i18n="boys">בנים</option>
+              <option value="girls" data-i18n="girls">בנות</option>
             </select>
           </label>
 
           <label>
-            טווח בדיקה
+            <span data-i18n="rangeMode">טווח בדיקה</span>
             <select id="rangeModeInput" name="rangeMode" required>
-              <option value="days">ימים ושעות שנבחרו</option>
-              <option value="months">חודשים קדימה</option>
-              <option value="shmita">מחזור שמיטה נוכחי</option>
-              <option value="yovel">יובל נוכחי</option>
+              <option value="days" data-i18n="rangeDays">ימים ושעות שנבחרו</option>
+              <option value="months" data-i18n="rangeMonths">חודשים קדימה</option>
+              <option value="shmita" data-i18n="rangeShmita">מחזור שמיטה נוכחי</option>
+              <option value="yovel" data-i18n="rangeYovel">יובל נוכחי</option>
             </select>
           </label>
 
           <label>
-            משך פרסום
+            <span data-i18n="duration">משך פרסום</span>
             <select id="durationInput" name="duration">
-              <option value="60">שעה</option>
-              <option value="30">חצי שעה</option>
-              <option value="120">שעתיים</option>
+              <option value="60" data-i18n="oneHour">שעה</option>
+              <option value="30" data-i18n="halfHour">חצי שעה</option>
+              <option value="120" data-i18n="twoHours">שעתיים</option>
             </select>
           </label>
 
           <label class="checkbox-field">
             <input id="periodStartOnlyInput" name="periodStartOnly" type="checkbox">
-            רק תחילת תקופה
+            <span data-i18n="periodStartOnly">רק תחילת תקופה</span>
           </label>
         </fieldset>
 
         <fieldset class="form-group">
-          <legend>מתי אני עומד בחנות</legend>
+          <legend data-i18n="storeGroup">מתי אני עומד בחנות</legend>
 
           <label>
-            תאריך לעמידה בחנות
+            <span data-i18n="startDate">תאריך לעמידה בחנות</span>
             <input id="startDateInput" name="startDate" type="date" required>
           </label>
 
           <label>
-            ימים לבדיקה
+            <span data-i18n="daysToCheck">ימים לבדיקה</span>
             <input id="daysInput" name="days" type="number" min="1" max="31" value="1" required>
           </label>
 
           <label>
-            חודשים קדימה
+            <span data-i18n="monthsAhead">חודשים קדימה</span>
             <input id="monthsInput" name="months" type="number" min="1" max="588" value="6" required>
           </label>
 
           <label id="workStartField">
-            עובד משעה
+            <span data-i18n="workStart">עובד משעה</span>
             <input id="workStartInput" name="workStart" type="time" value="08:00" required>
           </label>
 
           <label id="workEndField">
-            עובד עד שעה
+            <span data-i18n="workEnd">עובד עד שעה</span>
             <input id="workEndInput" name="workEnd" type="time" value="14:00" required>
           </label>
         </fieldset>
 
         <div class="form-actions">
-          <button class="primary-button" type="submit">חשב לוח זמנים</button>
-          <button id="createCalendarButton" class="secondary-button" type="button" disabled>צור אירועים ביומן</button>
+          <button class="primary-button" type="submit" data-i18n="calculate">חשב לוח זמנים</button>
+          <button id="createCalendarButton" class="secondary-button" type="button" disabled data-i18n="createCalendar">צור אירועים ביומן</button>
         </div>
       </form>
 
@@ -125,35 +128,35 @@
 
       <section class="status-band" aria-live="polite">
         <div>
-          <span class="metric-label">נמצאו</span>
+          <span class="metric-label" data-i18n="found">נמצאו</span>
           <strong id="slotCount">0</strong>
         </div>
         <div>
-          <span class="metric-label">טווח</span>
+          <span class="metric-label" data-i18n="range">טווח</span>
           <strong id="rangeText">-</strong>
         </div>
         <div>
-          <span class="metric-label">יומן</span>
-          <strong id="calendarStatus">לא מחובר</strong>
+          <span class="metric-label" data-i18n="calendar">יומן</span>
+          <strong id="calendarStatus" data-i18n="notConnected">לא מחובר</strong>
         </div>
       </section>
 
       <section class="results-panel" aria-labelledby="results-title">
         <div class="results-header">
-          <h2 id="results-title">חלונות פרסום</h2>
-          <button id="downloadJsonButton" class="text-button" type="button" disabled>הורד JSON</button>
+          <h2 id="results-title" data-i18n="resultsTitle">חלונות פרסום</h2>
+          <button id="downloadJsonButton" class="text-button" type="button" disabled data-i18n="downloadJson">הורד JSON</button>
         </div>
         <ol id="resultsList" class="results-list"></ol>
       </section>
     </section>
   </main>
 
-  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/products.js?v=20260622-cancer-medicine"></script>
+  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/products.js?v=20260624-products-en"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/login/js/hebrewDate.js"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/shared/js/CommercialMazal.js"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/woman/js/suncalc.js"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/commercial-time-anchors.js"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/it-adapter.js"></script>
-  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/app.js?v=20260622-cancer-medicine"></script>
+  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/app.js?v=20260624-coin-lang"></script>
 </body>
 </html>

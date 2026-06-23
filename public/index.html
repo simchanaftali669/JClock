@@ -284,9 +284,37 @@
 	(function redirectNeedMeDomain() {
 		const hostname = window.location.hostname.toLowerCase().replace(/^www\./, "");
 		const needMePath = "https://JClock.net/HebrewCommercial13/public/Need-Me/index.html";
+		const coinDomain = "world-coin.ai";
+		const isNeedMeDomain = hostname === "need-me.net";
+		const isCoinDomain = hostname === coinDomain;
+		const isCoinUrl = window.location.href.toLowerCase().includes("coin");
 
-		if (hostname === "need-me.net" && window.location.pathname !== needMePath) {
-			window.location.replace(needMePath + window.location.search + window.location.hash);
+		function buildNeedMeUrl(forceEnglish) {
+			const params = new URLSearchParams(window.location.search);
+
+			if (forceEnglish) {
+				params.set("lang", "en");
+			}
+
+			const query = params.toString() ? "?" + params.toString() : "";
+			return needMePath + query + window.location.hash;
+		}
+
+		function buildNeedMeDomainUrl() {
+			const params = new URLSearchParams(window.location.search);
+			params.set("lang", "en");
+
+			const query = params.toString() ? "?" + params.toString() : "";
+			return "https://Need-Me.net/" + query + window.location.hash;
+		}
+
+		if (isCoinDomain || (!isNeedMeDomain && isCoinUrl)) {
+			window.location.replace(buildNeedMeDomainUrl());
+			return;
+		}
+
+		if (isNeedMeDomain) {
+			window.location.replace(buildNeedMeUrl(false));
 		}
 	})();
 
