@@ -30,8 +30,8 @@ function hebrewclock()
 	{
 		var h = birthHour;
 		var m = birthMin;
-		var s = 0;
-		var milisec = 0;		
+		var s = birthSec == null ? 0 : birthSec;
+		var milisec = birthMs == null ? 0 : birthMs;		
 	}
 	curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
 	
@@ -252,7 +252,7 @@ function display_time()
 	{
 		var h = birthHour;
 		var m = birthMin;
-		var s = 0;
+		var s = birthSec == null ? 0 : birthSec;
 	}
 	document.getElementById("ChirstianHour").value = h<10? "0" + h : h;
 	document.getElementById("ChirstianMinute").value = m<10? "0" + m : m ;

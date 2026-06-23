@@ -2,9 +2,9 @@
 function set_default_date() {
     var date = new Date();
 
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getYear();
+    var d = birthDay == null ? date.getDate() : Number(birthDay);
+    var m = birthMonth == null ? date.getMonth() : Number(birthMonth) - 1;
+    var y = birthYear == null ? date.getYear() : Number(birthYear) - 1900;
 
     month = m;
     day = d - 1;

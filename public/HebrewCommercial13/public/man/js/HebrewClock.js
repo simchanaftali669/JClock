@@ -15,10 +15,10 @@ function hebrewclock()
     
     var date = new Date();
 
-    var h = date.getHours();
-    var m = date.getMinutes();
-    var s = date.getSeconds();
-	var milisec = date.getMilliseconds();
+    var h = birthHour == null ? date.getHours() : Number(birthHour);
+    var m = birthHour == null ? date.getMinutes() : Number(birthMin || 0);
+    var s = birthHour == null ? date.getSeconds() : Number(birthSec || 0);
+	var milisec = birthHour == null ? date.getMilliseconds() : Number(birthMs || 0);
 
 	curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
 	

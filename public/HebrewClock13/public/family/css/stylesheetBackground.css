@@ -6,10 +6,48 @@ right: 50%;
 top: 50%;
 }
 
+#family_actions {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#current_location, #marrige_learning {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+#current_location:hover, #marrige_learning:hover {
+    background-color: #5a6268;
+}
+
+@media (max-width: 768px) {
+    #family_actions {
+        top: 10px;
+        width: calc(100% - 20px);
+    }
+
+    #current_location, #marrige_learning {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+}
+
 @font-face {
     font-family: 'shlomoregular';
-    src: url('shlomo-webfont.woff2') format('woff2'),
-         url('shlomo-webfont.woff') format('woff');
+    src: url('https://JClock.net/HebrewClock13/public/family/css/shlomo-webfont.woff2') format('woff2'),
+         url('https://JClock.net/HebrewClock13/public/family/css/shlomo-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
@@ -163,7 +201,7 @@ body
             }
 
 .english_btn {
-    background-image:url('../pic/en.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/en.png');
     background-color: #4CAF50;
     width:72px;
     height:72px;
@@ -175,7 +213,7 @@ body
 }
 
 .hebrew_btn {
-    background-image:url('../pic/he.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/he.png');
     background-color: #4CAF50;
     width:72px;
     height:72px;
@@ -199,22 +237,22 @@ body
 
 .refresh_btn_hebrew
 {
-    background-image:url('../../../shared/pic/refresh_hebrew.png');
+    background-image:url('https://JClock.net/HebrewClock13/shared/pic/refresh_hebrew.png');
 }
 
 .refresh_btn_islam
 {
-    background-image:url('../../../shared/pic/‏‏refresh_islam.png');
+    background-image:url('https://JClock.net/HebrewClock13/shared/pic/%E2%80%8F%E2%80%8Frefresh_islam.png');
 }
 
 .refresh_btn_crisitan
 {
-    background-image:url('../../../shared/pic/refresh_crisitan.png');
+    background-image:url('https://JClock.net/HebrewClock13/shared/pic/refresh_crisitan.png');
 }
 
 .refresh_btn_jewish
 {
-    background-image:url('../../../shared/pic/refresh_jewish.png');
+    background-image:url('https://JClock.net/HebrewClock13/shared/pic/refresh_jewish.png');
 }
 
 
@@ -232,17 +270,17 @@ body
 
 .jewish
 {
-    background-image:url('../pic/דת_יהדות.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/%D7%93%D7%AA_%D7%99%D7%94%D7%93%D7%95%D7%AA.png');
 }
 
 .muslim
 {
-    background-image:url('../pic/דת_איסלאם.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/%D7%93%D7%AA_%D7%90%D7%99%D7%A1%D7%9C%D7%90%D7%9D.png');
 }
 
 .cristian
 {
-    background-image:url('../pic/דת_נצרות.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/%D7%93%D7%AA_%D7%A0%D7%A6%D7%A8%D7%95%D7%AA.png');
 }
 
 
@@ -260,15 +298,15 @@ body
 }    
 
 .male {
-    background-image:url('../pic/male.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/male.png');
 }
 
 .female {
-    background-image:url('../pic/female.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/female.png');
 }
 
 .married {
-    background-image:url('../pic/married.jpg');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/married.jpg');
 }
 
 .disable
@@ -284,7 +322,7 @@ body
 
 #Soteria
 {
-   background-image:url('../pic/Soteria-logo.png');
+   background-image:url('https://JClock.net/HebrewClock13/public/family/pic/Soteria-logo.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -298,7 +336,7 @@ body
 
 #Breslev
 {
-   background-image:url('../../../shared/pic/NachmanLogo.jpg');
+   background-image:url('https://JClock.net/HebrewClock13/shared/pic/NachmanLogo.jpg');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -311,7 +349,7 @@ body
 
 			
 .dropbtn {
-    background-image:url('../pic/menu.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/menu.png');
     background-color: #4CAF50;
     width:72px;
     height:72px;
@@ -328,7 +366,7 @@ body
 .dropdown {
 
     background-color:#FA9519;
-    background-image:url('../pic/menu_text.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/family/pic/menu_text.png');
     background-repeat:no-repeat;
     background-position:center;
     position:center;

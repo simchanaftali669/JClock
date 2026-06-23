@@ -41,7 +41,7 @@
 			overflow: auto;
 			background:
 				linear-gradient(135deg, rgba(255,255,255,0.94), rgba(244,247,241,0.9)),
-				url("HebrewClock13/wix_media/Kotel.jpg") center/cover no-repeat;
+				url("https://JClock.net/HebrewClock13/wix_media/Kotel.jpg") center/cover no-repeat;
 		}
 
 		.choice-inner {
@@ -101,6 +101,43 @@
 		.choice-button.primary {
 			background: #204b31;
 			color: #fff;
+		}
+
+		.choice-split {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			min-height: 82px;
+			border: 2px solid #204b31;
+			border-radius: 8px;
+			overflow: hidden;
+			box-shadow: 0 6px 16px rgba(20, 45, 25, 0.12);
+			direction: ltr;
+		}
+
+		.choice-split .choice-button {
+			min-height: 78px;
+			border: 0;
+			border-radius: 0;
+			box-shadow: none;
+		}
+
+		.choice-split .choice-button + .choice-button {
+			border-left: 2px solid #204b31;
+		}
+
+		.choice-split .choice-main {
+			direction: inherit;
+		}
+
+		.choice-split .choice-personal {
+			background: #fff3a3;
+			color: transparent;
+			direction: inherit;
+		}
+
+		.choice-split .choice-personal:hover,
+		.choice-split .choice-personal:focus {
+			background: #ffe879;
 		}
 
 		#viewer {
@@ -189,6 +226,14 @@
 				font-size: 18px;
 			}
 
+			.choice-split {
+				min-height: 66px;
+			}
+
+			.choice-split .choice-button {
+				min-height: 64px;
+			}
+
 			.frame-slot {
 				position: relative;
 			}
@@ -230,7 +275,7 @@
 <script type="text/javascript">
 	(function redirectNeedMeDomain() {
 		const hostname = window.location.hostname.toLowerCase().replace(/^www\./, "");
-		const needMePath = "/HebrewCommercial13/public/Need-Me/index.html";
+		const needMePath = "https://JClock.net/HebrewCommercial13/public/Need-Me/index.html";
 
 		if (hostname === "need-me.net" && window.location.pathname !== needMePath) {
 			window.location.replace(needMePath + window.location.search + window.location.hash);
@@ -254,12 +299,13 @@
 	};
 
 	const sourcePaths = {
-		clockFamily: "HebrewClock13/public/family/index.html",
-		clockMan: "HebrewClock13/public/man/simple/index.html",
-		clockWoman: "HebrewClock13/public/woman/simple/index.html",
-		commercialFamily: "HebrewCommercial13/public/family/index.html",
-		commercialMan: "HebrewCommercial13/public/man/index.html",
-		commercialWoman: "HebrewCommercial13/public/woman/index.html"
+		clockFamily: "https://JClock.net/HebrewClock13/public/family/index.html",
+		clockMan: "https://JClock.net/HebrewClock13/public/man/simple/index.html",
+		clockWoman: "https://JClock.net/HebrewClock13/public/woman/simple/index.html",
+		commercialFamily: "https://JClock.net/HebrewCommercial13/public/family/index.html",
+		commercialMan: "https://JClock.net/HebrewCommercial13/public/man/index.html",
+		commercialWoman: "https://JClock.net/HebrewCommercial13/public/woman/index.html",
+		personalArea: "https://JClock.net/HebrewClock13/public/man/marrige/"
 	};
 
 	function buildSources(query) {
@@ -387,6 +433,11 @@
 				he: "שעון חו\"ל (חמה ולבנה) + פרסומות",
 				en: "Diaspora clock (Sun and Moon) + ads"
 			},
+			personalLabel: {
+				he: "",
+				en: ""
+			},
+			personalUrl: sourcePaths.personalArea + language + "/index.html" + locationQuery,
 			frames: [
 				{ title: { he: "פרסומות של שעון חו\"ל", en: "Diaspora clock ads" }, src: sources.commercialFamily },
 				{ title: { he: "שעון חו\"ל (חמה ולבנה)", en: "Diaspora clock (Sun and Moon)" }, src: sources.clockFamily }
@@ -450,6 +501,37 @@
 				heading.className = "choice-section-title";
 				heading.textContent = localText(option.heading);
 				choiceGrid.appendChild(heading);
+				return;
+			}
+
+			if (option.personalUrl) {
+				const split = document.createElement("div");
+				const personalButton = document.createElement("button");
+				const mainButton = document.createElement("button");
+
+				split.className = "choice-split";
+				split.setAttribute("role", "group");
+				split.setAttribute("aria-label", localText(option.label));
+
+				personalButton.type = "button";
+				personalButton.className = "choice-button choice-personal";
+				personalButton.textContent = localText(option.personalLabel);
+				personalButton.dir = language === "he" ? "rtl" : "ltr";
+				personalButton.onclick = function() {
+					window.location.href = option.personalUrl;
+				};
+
+				mainButton.type = "button";
+				mainButton.className = "choice-button choice-main";
+				mainButton.textContent = localText(option.label);
+				mainButton.dir = language === "he" ? "rtl" : "ltr";
+				mainButton.onclick = function() {
+					openView(option.id);
+				};
+
+				split.appendChild(personalButton);
+				split.appendChild(mainButton);
+				choiceGrid.appendChild(split);
 				return;
 			}
 

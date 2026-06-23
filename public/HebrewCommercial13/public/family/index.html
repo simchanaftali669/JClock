@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -13,8 +13,8 @@
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
     <title>Hebrew Commercial</title> 
-    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">
-	<link rel="stylesheet" type="text/css" href="css/commercialstylesheet.css" id="commercial_css"> 
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewCommercial13/public/family/css/stylesheet.css" id="thecss">
+	<link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewCommercial13/public/family/css/commercialstylesheet.css" id="commercial_css"> 
     <meta charset="UTF-8">
     <meta name="description" content="">
     <meta name="keywords" content="">
@@ -24,8 +24,8 @@
 <body id="youtube" onclick="showBackground();">
 	
 	<div id="iframe-container">
-		<iframe id="commercial_woman" src="../woman/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
-		<iframe id="commercial_man" src="../man/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
+		<iframe id="commercial_woman" src="https://JClock.net/HebrewCommercial13/public/woman/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
+		<iframe id="commercial_man" src="https://JClock.net/HebrewCommercial13/public/man/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
 	</div>
 
 	
@@ -70,6 +70,35 @@
     var mazal_url;
 
 	var isShowBackground = false;
+	var defaultLatitude = "31.7768514";
+	var defaultLongitude = "35.2331664";
+	var commercialFamilyParams = getCommercialFamilyParams();
+	loadCommercialFamilyClocks();
+
+	function getCommercialFamilyParams()
+	{
+		var url = new URL(document.location.href);
+		var params = new URLSearchParams(url.search);
+
+		if(!params.get("latitude"))
+			params.set("latitude", defaultLatitude);
+		if(!params.get("longitude"))
+			params.set("longitude", defaultLongitude);
+
+		return params;
+	}
+
+	function getCommercialFamilyQuery()
+	{
+		return "?" + commercialFamilyParams.toString();
+	}
+
+	function loadCommercialFamilyClocks()
+	{
+		var query = getCommercialFamilyQuery();
+		document.getElementById("commercial_woman").src = "https://JClock.net/HebrewCommercial13/public/woman/index.html" + query;
+		document.getElementById("commercial_man").src = "https://JClock.net/HebrewCommercial13/public/man/index.html" + query;
+	}
 
 	const genders = {
         MARRIED: '10',
@@ -108,7 +137,7 @@
         
         //localStorage.setItem("mida", document.getElementById("Mazal").value);
 
-        var win = window.open("../moon.html", '_blank');
+        var win = window.open("https://JClock.net/HebrewCommercial13/public/moon.html", '_blank');
         win.focus();
     }
 
@@ -117,13 +146,13 @@
 		if(isShowBackground == false) 
 		{
 		console.log(isShowBackground);
-			document.getElementById("thecss").href = "css/stylesheetBackground.css";
+			document.getElementById("thecss").href = "https://JClock.net/HebrewCommercial13/public/family/css/stylesheetBackground.css";
 			isShowBackground = true;	
 		} 
 		else 
 		{
 		console.log(isShowBackground);
-			document.getElementById("thecss").href = "css/stylesheet.css";
+			document.getElementById("thecss").href = "https://JClock.net/HebrewCommercial13/public/family/css/stylesheet.css";
 			isShowBackground = false;
 		}
 	}

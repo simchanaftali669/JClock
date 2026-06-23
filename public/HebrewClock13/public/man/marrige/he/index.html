@@ -36,7 +36,8 @@
             
             <!-- Modal body -->
             <div class="modal-body" style="direction:rtl;!important;">
-                 <p style="display: inline-block; width: 248px;">הכנס שם מלא:</p><input type="text" value="נפתלי ביליג" id="ID" />
+                 <p style="display: inline-block; width: 248px;">הכנס שם מלא:</p><input type="text" value="נפתלי ביליג" id="ID" list="marrigeNames" autocomplete="off" />
+                 <datalist id="marrigeNames"></datalist>
                  <div style="margin-top:12px;">
                     <p style="margin-bottom:6px;">בחר מועד מפגש:</p>
                     <label style="display:block;">
@@ -46,6 +47,10 @@
                     <label style="display:block;">
                         <input type="radio" name="birthClock" value="sun" />
                         מועד החמה - מעניק לי כיוון
+                    </label>
+                    <label style="display:block;">
+                        <input type="radio" name="birthClock" value="both" />
+                        משולב - חמה ולבנה
                     </label>
                  </div>
                  <label style="display:block; margin-top:12px;">
@@ -91,9 +96,43 @@
         var saveDefault = document.getElementById("saveDefaultID").checked;
         if(saveDefault)
         {
-            localStorage.setItem(defaultIdStorageKey, idInput.value);
+            localStorage.setItem(defaultIdStorageKey, idInput.value.trim());
             localStorage.setItem(defaultClockStorageKey, getSelectedBirthClock());
         }
+    }
+
+    function populateMarrigeNameOptions()
+    {
+        if(!Array.isArray(window.marrigeDB))
+            return;
+
+        var names = [];
+        window.marrigeDB.forEach(function(record) {
+            if(record && record.ID && names.indexOf(record.ID) === -1)
+                names.push(record.ID);
+        });
+
+        names.sort(function(a, b) {
+            return a.localeCompare(b, "he");
+        });
+
+        var list = document.getElementById("marrigeNames");
+        list.innerHTML = "";
+        names.forEach(function(name) {
+            var option = document.createElement("option");
+            option.value = name;
+            list.appendChild(option);
+        });
+    }
+
+    function findMarrigeTimeByID(id)
+    {
+        var cleanId = (id || "").trim();
+        return window.marrigeDB.find(function(marrigeTime) {
+            return (marrigeTime.ID || "").trim() == cleanId;
+        }) || window.marrigeDB.find(function(marrigeTime) {
+            return (marrigeTime.ID || "").trim().toLowerCase() == cleanId.toLowerCase();
+        });
     }
 
     function getSelectedBirthClock()
@@ -137,6 +176,14 @@
     function getMarrigeTimeForSelectedClock(marrigeTime)
     {
         var clock = getSelectedBirthClock();
+        if(clock == "both")
+            clock = "moon";
+
+        return getMarrigeTimeForClock(marrigeTime, clock);
+    }
+
+    function getMarrigeTimeForClock(marrigeTime, clock)
+    {
         var day = getClockValue(marrigeTime, clock, "HebrewDay");
         var hour = getClockValue(marrigeTime, clock, "HebrewHour");
         if(day != null && hour != null)
@@ -173,6 +220,17 @@
         return pairedMatch || marrigeTime;
     }
 
+    function getCombinedClockParams(marrigeTime)
+    {
+        var moonTime = getMarrigeTimeForClock(marrigeTime, "moon");
+        var sunTime = getMarrigeTimeForClock(marrigeTime, "sun");
+        return "&clock=both" +
+            "&moonHebrewDay=" + moonTime.hebrewDay +
+            "&moonHebrewHour=" + moonTime.hebrewHour +
+            "&sunHebrewDay=" + sunTime.hebrewDay +
+            "&sunHebrewHour=" + sunTime.hebrewHour;
+    }
+
  	async function get_marrige_essential()
  	{
 		var url_obj = new URL(document.location.href);
@@ -190,22 +248,34 @@
         }
 
         saveDefaultIDIfNeeded();
-        var marrigeTime = window.marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
+        var marrigeTime = findMarrigeTimeByID(document.getElementById("ID").value);
         if(marrigeTime != null)
         {
+            var selectedClock = getSelectedBirthClock();
+            var combinedParams = "";
+            if(selectedClock == "both")
+                combinedParams = getCombinedClockParams(marrigeTime);
+
+            if(selectedClock == "both")
+            {
+                document.location.href = "https://JClock.net/HebrewClock13/public/family/index.html?period=personal&lang=he" + combinedParams + location;
+                return;
+            }
+
             marrigeTime = getMarrigeTimeForSelectedClock(marrigeTime);
-            document.location.href = "../../me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location; 
+            document.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location; 
         }
         else
         {
             alert("תעודת הזהות לא קיימת במערכת");
 			document.location.href='https://birthcalculator.web.app/';
-            //document.location.href = "../../me/he/index.html"; 
+            //document.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/index.html"; 
         } 
     }
  	$(document).ready(function()
  	{
         loadDefaultID();
+        populateMarrigeNameOptions();
  		$('[data-toggle="tooltip"]').tooltip();   
  	});</script>
 

@@ -26,7 +26,7 @@
   .gender-toggle {
 	display: grid;
 	gap: 10px;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat(3, 1fr);
 	margin-bottom: 14px;
   }
   .gender-option {
@@ -42,6 +42,9 @@
   }
   .gender-option.female {
 	background: #CA2C92;
+  }
+  .gender-option.family {
+	background: linear-gradient(90deg, #5dbcd2 0%, #5dbcd2 50%, #CA2C92 50%, #CA2C92 100%);
   }
   .gender-option.selected {
 	border: 2px dashed #000;
@@ -92,10 +95,11 @@
 			<label class="radio-inline"><input type="radio" checked name="gender" value="Male" data-toggle="toggle"> Male </label>
 			<label class="radio-inline"><input type="radio" name="gender" value="Female" data-toggle="toggle"> Female </label> 
 			<hr/>-->
-			<p href="#" data-toggle="tooltip" title="Choose boy or girl" style="display: inline-block; width: 248px;">Boy / Girl</p>
-			<div class="gender-toggle" role="group" aria-label="Choose boy or girl">
-				<button type="button" class="gender-option male selected" data-gender="woman" aria-pressed="true">Boy</button>
-				<button type="button" class="gender-option female" data-gender="man" aria-pressed="false">Girl</button>
+			<p href="#" data-toggle="tooltip" title="Choose clock type" style="display: inline-block; width: 248px;">Clock type</p>
+			<div class="gender-toggle" role="group" aria-label="Choose clock type">
+				<button type="button" class="gender-option male selected" data-gender="man" aria-pressed="true">Sun</button>
+				<button type="button" class="gender-option female" data-gender="woman" aria-pressed="false">Moon</button>
+				<button type="button" class="gender-option family" data-gender="family" aria-pressed="false">Sun + Moon (Diaspora)</button>
 			</div>
 			<p href="#" data-toggle="tooltip" title="choose location"  style="display: inline-block; width: 248px;">Choose birth location</p>
 			<div class="map-panel">
@@ -153,9 +157,12 @@
 		var day = Number(dateStr.split('-')[2]);
 		var gmt = document.getElementById('GMT').value;
 		var	gender = selectedGender;
+		var clockPath = gender == "family" ? "family/index.html" : gender + "/simple/index.html";
+		var clockBaseUrl = gender == "family" ? "https://JClock.net/HebrewCommercial13/public/" : "https://JClock.net/HebrewClock13/public/";
+		var clockUrl = clockBaseUrl + clockPath;
 			
 		//document.location.href = "https://hebrewclock13.web.app/man/simple/index.html?latitude=30&longitude=32&hour=20&min=43&year=1987&month=3&day=4&gmt=3";
-		document.location.href = "../../../HebrewClock13/public/" + gender + "/simple/index.html?latitude=" + latitude + 
+		document.location.href = clockUrl + "?latitude=" + latitude + 
 																					"&longitude=" + longitude +
 																					"&hour=" + hour + 
 																					"&min=" + min + 

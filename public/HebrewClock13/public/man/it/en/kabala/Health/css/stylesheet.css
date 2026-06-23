@@ -2,8 +2,8 @@
 
 @font-face {
     font-family: 'shlomoregular';
-    src: url('shlomo-webfont.woff2') format('woff2'),
-         url('shlomo-webfont.woff') format('woff');
+    src: url('https://JClock.net/HebrewClock13/public/man/it/en/kabala/Health/css/shlomo-webfont.woff2') format('woff2'),
+         url('https://JClock.net/HebrewClock13/public/man/it/en/kabala/Health/css/shlomo-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
@@ -149,7 +149,7 @@ body
             }
 
 .english_btn {
-    background-image:url('../pic/en.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/man/it/en/kabala/Health/pic/en.png');
     background-color: #4CAF50;
     width:72px;
     height:72px;
@@ -161,7 +161,7 @@ body
 }
 
 .hebrew_btn {
-    background-image:url('../pic/he.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/man/it/en/kabala/Health/pic/he.png');
     background-color: #4CAF50;
     width:72px;
     height:72px;
@@ -174,7 +174,7 @@ body
 
 #Soteria
 {
-   background-image:url('../pic/Soteria-logo.png');
+   background-image:url('https://JClock.net/HebrewClock13/public/man/it/en/kabala/Health/pic/Soteria-logo.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -188,7 +188,7 @@ body
 
 #Breslev
 {
-   background-image:url('../../../../../shared/pic/NachmanLogo.jpg');
+   background-image:url('https://JClock.net/HebrewClock13/public/man/shared/pic/NachmanLogo.jpg');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -202,7 +202,7 @@ body
 
 
 .dropbtn {
-    background-image:url('../pic/menu.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/man/it/en/kabala/Health/pic/menu.png');
     background-color: #4CAF50;
     width:72px;
     height:72px;
@@ -218,7 +218,7 @@ body
 
 .dropdown {
     background-color:#FA9519;
-    background-image:url('../pic/menu_text.png');
+    background-image:url('https://JClock.net/HebrewClock13/public/man/it/en/kabala/Health/pic/menu_text.png');
     background-repeat:no-repeat;
     background-position:center;
     position:center;
