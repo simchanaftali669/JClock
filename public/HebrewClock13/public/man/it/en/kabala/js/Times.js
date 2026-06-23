@@ -204,9 +204,9 @@ function doit() {
         }
         else if (curr_hour > sunset_hour) {
             scheduleSegments = [
-                { start: sunrise, hourLength: Math.abs((sunset - sunrise) / 12), isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay - 1) },
-                { start: sunset, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay },
-                { start: sunrise_tommorow, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay }
+                { start: sunrise, hourLength: Math.abs((sunset - sunrise) / 12), isDay: true, hebrewDay: currentHebrewDay },
+                { start: sunset, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1) },
+                { start: sunrise_tommorow, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1) }
             ];
         }
         else {
