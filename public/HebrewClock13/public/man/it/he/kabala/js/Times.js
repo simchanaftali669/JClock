@@ -22,11 +22,11 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var date = new Date();
+    var date = getSelectedScheduleDate(new Date());
     var today = new Date(date.getTime());
     var yasterday = new Date(today.getTime());
     var tomorrow = new Date(today.getTime());
-    var scheduleToday = getSelectedScheduleDate(date);
+    var scheduleToday = new Date(date.getTime());
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
 
@@ -186,6 +186,7 @@ function doit() {
         var isDay = !isNight;
 
         ensureScheduleHourRows(36);
+        clearScheduleHighlights(36);
 
         var currentHebrewDay = normalizeHebrewDay(scheduleToday.getDay() + 1);
         var sunrise_yasterdate = time_yasterday[2];
@@ -219,7 +220,8 @@ function doit() {
                 scheduleSegments[segmentIndex],
                 mazal_ordered,
                 mazal_day_01,
-                mazal_night_01
+                mazal_night_01,
+                curr_hour / (60 * 60 * 1000)
             );
         }
 
@@ -314,7 +316,7 @@ function ensureScheduleHourRows(totalHours) {
     }
 }
 
-function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalNight) {
+function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalNight, selectedHour) {
     var mazalStart = segment.isDay ? mazalDay[segment.hebrewDay - 1] : mazalNight[segment.hebrewDay - 1];
 
     renderScheduleSegmentTitle(startRow, segment);
@@ -334,7 +336,49 @@ function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalN
         if (hourIndex) {
             hourIndex.value = "(" + (i + 1) + ")";
         }
+
+        if (isHourInScheduleRow(selectedHour, segment.start + (segment.hourLength * i), segment.hourLength)) {
+            highlightScheduleRow(rowNumber);
+        }
     }
+}
+
+function clearScheduleHighlights(totalHours) {
+    for (var i = 1; i <= totalHours; i++) {
+        setScheduleRowHighlight(i, false);
+    }
+}
+
+function highlightScheduleRow(rowNumber) {
+    setScheduleRowHighlight(rowNumber, true);
+}
+
+function setScheduleRowHighlight(rowNumber, isHighlighted) {
+    var row = document.getElementById("hour_" + rowNumber + "__value");
+    if (!row || !row.parentNode) {
+        return;
+    }
+
+    var inputs = row.parentNode.getElementsByTagName("input");
+    row.parentNode.style.backgroundColor = isHighlighted ? "#fff3a6" : "";
+    row.parentNode.style.padding = isHighlighted ? "4px 0" : "";
+    row.parentNode.style.borderRadius = isHighlighted ? "6px" : "";
+
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].style.backgroundColor = isHighlighted ? "#fff3a6" : "";
+        inputs[i].style.borderColor = isHighlighted ? "#b7791f" : "";
+        inputs[i].style.fontWeight = isHighlighted ? "bold" : "";
+    }
+}
+
+function isHourInScheduleRow(selectedHour, rowStart, rowLength) {
+    var normalizedSelectedHour = selectedHour;
+
+    while (normalizedSelectedHour < rowStart) {
+        normalizedSelectedHour += 24;
+    }
+
+    return normalizedSelectedHour >= rowStart && normalizedSelectedHour < rowStart + rowLength;
 }
 
 function renderScheduleSegmentTitle(startRow, segment) {
@@ -382,9 +426,13 @@ function getSelectedScheduleDate(fallbackDate) {
     var yearParam = parseInt(url.searchParams.get("year"), 10);
     var monthParam = parseInt(url.searchParams.get("month"), 10);
     var dayParam = parseInt(url.searchParams.get("day"), 10);
+    var hourParam = parseInt(url.searchParams.get("hour"), 10);
+    var minuteParam = parseInt(url.searchParams.get("minute"), 10);
+    var selectedHour = !isNaN(hourParam) ? hourParam : fallbackDate.getHours();
+    var selectedMinute = !isNaN(minuteParam) ? minuteParam : fallbackDate.getMinutes();
 
     if (!isNaN(yearParam) && !isNaN(monthParam) && !isNaN(dayParam)) {
-        return new Date(yearParam, monthParam - 1, dayParam, fallbackDate.getHours(), fallbackDate.getMinutes(), fallbackDate.getSeconds(), fallbackDate.getMilliseconds());
+        return new Date(yearParam, monthParam - 1, dayParam, selectedHour, selectedMinute, fallbackDate.getSeconds(), fallbackDate.getMilliseconds());
     }
 
     return new Date(fallbackDate.getTime());

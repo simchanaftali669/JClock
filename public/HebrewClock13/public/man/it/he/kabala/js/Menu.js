@@ -21,25 +21,13 @@ window.onclick = function (event) {
 
 function englishFunction()
 {
+	window.location.href= "../../en/kabala/index.html" + getCurrentQueryString();
+}
+
+function getCurrentQueryString()
+{
 	var url_obj = new URL(document.location.href);
-	var lon = url_obj.searchParams.get("longitude");        
-	var lat = url_obj.searchParams.get("latitude");
-	var year = url_obj.searchParams.get("year");
-	var month = url_obj.searchParams.get("month");
-	var day = url_obj.searchParams.get("day");
-	
-
-	var location = "";
-	if(lon)
-		location = "?longitude=" + lon + "&latitude=" + lat;
-
-	var custom_date = "";
-	if(lon && year)
-		custom_date = "&year=" + year + "&month=" + month + "&day=" + day;
-	else if(year)
-		custom_date = "?year=" + year + "&month=" + month + "&day=" + day; 
-
-	window.location.href= "../../en/kabala/index.html" + location + custom_date;
+	return url_obj.search + url_obj.hash;
 }
 
 
