@@ -87,7 +87,7 @@
             <input style="display: none; font-weight: bold;" class="day" id="Shevet__mida_12"  type="text" value = "" onclick="window.open('tel:+972587401735')" ondblclick = "window.open('tel:+972543517530')"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="day" id="Masechet"  type="text" value="" onclick="openMasechetInNewTab();" />
+            <div class="masechet-split"><input class="day" id="Masechet"  type="text" value="" onclick="openMasechetInNewTab();" /><button type="button" class="masechet-indigo-area" onclick="openKehatiAppInNewTab();" aria-label=""></button></div>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
             <input class="day" id="Sefer"  type="text" value="" onclick="openSeferInNewTab();" ondblclick="openSeferInSefariaInNewTab();" />
@@ -283,6 +283,23 @@
     {
         var win;
         win = window.open(masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=bi', '_blank');
+        win.focus();
+    }
+
+    function openKehatiAppInNewTab()
+    {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera || '';
+        var isAndroid = /android/i.test(userAgent);
+        var isIOS = /iPad|iPhone|iPod/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var url = 'https://www.alonshvut-archive.org.il/objDoc.asp?PID=771256&OID=774375&DivID=1';
+
+        if (isAndroid) {
+            url = 'https://play.google.com/store/search?q=%D7%9E%D7%A9%D7%A0%D7%94%20%D7%A7%D7%94%D7%AA%D7%99&c=apps';
+        } else if (isIOS) {
+            url = 'https://apps.apple.com/us/search?term=%D7%9E%D7%A9%D7%A0%D7%94%20%D7%A7%D7%94%D7%AA%D7%99';
+        }
+
+        var win = window.open(url, '_blank');
         win.focus();
     }
     
