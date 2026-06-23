@@ -36,6 +36,17 @@
           <!-- Modal body -->
           <div class="modal-body">
                <p style="display: inline-block; width: 248px;">Enter full name:</p><input type="text" value="Naftali Bilig" id="ID" />
+               <div style="margin-top:12px;">
+                  <p style="margin-bottom:6px;">Choose meeting time:</p>
+                  <label style="display:block;">
+                      <input type="radio" name="birthClock" value="moon" checked />
+                      Moon time - moves me and gives me home
+                  </label>
+                  <label style="display:block;">
+                      <input type="radio" name="birthClock" value="sun" />
+                      Sun time - gives me direction
+                  </label>
+               </div>
                <label style="display:block; margin-top:12px;">
                   <input type="checkbox" id="saveDefaultID" />
                   Save as default
@@ -55,6 +66,7 @@
 
 <script>
     var defaultIdStorageKey = "jclock-personal-learning-default-id";
+    var defaultClockStorageKey = "jclock-personal-learning-default-clock";
 
     function loadDefaultID()
     {
@@ -63,6 +75,13 @@
         {
             document.getElementById("ID").value = savedID;
         }
+
+        var savedClock = localStorage.getItem(defaultClockStorageKey);
+        var clockInput = document.querySelector('input[name="birthClock"][value="' + savedClock + '"]');
+        if(clockInput)
+        {
+            clockInput.checked = true;
+        }
     }
 
     function saveDefaultIDIfNeeded()
@@ -70,7 +89,87 @@
         var idInput = document.getElementById("ID");
         var saveDefault = document.getElementById("saveDefaultID").checked;
         if(saveDefault)
+        {
             localStorage.setItem(defaultIdStorageKey, idInput.value);
+            localStorage.setItem(defaultClockStorageKey, getSelectedBirthClock());
+        }
+    }
+
+    function getSelectedBirthClock()
+    {
+        var checkedClock = document.querySelector('input[name="birthClock"]:checked');
+        return checkedClock ? checkedClock.value : "moon";
+    }
+
+    function isHebrewText(value)
+    {
+        return /[\u0590-\u05FF]/.test(value || "");
+    }
+
+    function getClockValue(record, clock, suffix)
+    {
+        var prefixes = clock == "sun" ? ["sun", "solar", "chama"] : ["moon", "lunar", "levana"];
+        for(var i = 0; i < prefixes.length; i++)
+        {
+            var key = prefixes[i] + suffix;
+            if(record[key] != null)
+                return record[key];
+        }
+
+        return null;
+    }
+
+    function getExplicitClockType(record)
+    {
+        return (record.clockType || record.birthClock || record.mazalType || record.type || "").toString().toLowerCase();
+    }
+
+    function isClockType(record, clock)
+    {
+        var clockType = getExplicitClockType(record);
+        if(clock == "sun")
+            return clockType == "sun" || clockType == "solar" || clockType == "chama";
+
+        return clockType == "moon" || clockType == "lunar" || clockType == "levana";
+    }
+
+    function getMarrigeTimeForSelectedClock(marrigeTime)
+    {
+        var clock = getSelectedBirthClock();
+        var day = getClockValue(marrigeTime, clock, "HebrewDay");
+        var hour = getClockValue(marrigeTime, clock, "HebrewHour");
+        if(day != null && hour != null)
+            return { hebrewDay: day, hebrewHour: hour };
+
+        if(isClockType(marrigeTime, clock))
+            return marrigeTime;
+
+        var currentIndex = window.marrigeDB.indexOf(marrigeTime);
+        var adjacentTimes = [window.marrigeDB[currentIndex - 1], window.marrigeDB[currentIndex + 1]];
+        var adjacentMatch = adjacentTimes.find(function(candidate) {
+            if(!candidate || candidate.phoneNumber == null || candidate.phoneNumber != marrigeTime.phoneNumber)
+                return false;
+
+            var candidateIsHebrew = isHebrewText(candidate.ID);
+            return clock == "sun" ? candidateIsHebrew : !candidateIsHebrew;
+        });
+        if(adjacentMatch)
+            return adjacentMatch;
+
+        var samePersonTimes = window.marrigeDB.filter(function(candidate) {
+            return candidate.phoneNumber != null && candidate.phoneNumber == marrigeTime.phoneNumber;
+        });
+        var explicitMatch = samePersonTimes.find(function(candidate) {
+            return isClockType(candidate, clock);
+        });
+        if(explicitMatch)
+            return explicitMatch;
+
+        var pairedMatch = samePersonTimes.find(function(candidate) {
+            var candidateIsHebrew = isHebrewText(candidate.ID);
+            return clock == "sun" ? candidateIsHebrew : !candidateIsHebrew;
+        });
+        return pairedMatch || marrigeTime;
     }
 
  	async function get_marrige_essential()
@@ -92,7 +191,10 @@
 		saveDefaultIDIfNeeded();
 		var marrigeTime = window.marrigeDB.find(marrigeTime=>marrigeTime.ID == document.getElementById("ID").value);
 		if(marrigeTime != null)
+		{
+		  marrigeTime = getMarrigeTimeForSelectedClock(marrigeTime);
 		  document.location.href = "../../me/en/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location;  
+		}
 		else
 		{  
 		  alert("The ID doesn't exist in the database");
