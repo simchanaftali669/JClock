@@ -17,7 +17,74 @@
 	}
 	return Hour;
 }
+
+function getSefariaParashaUrl(ref)
+{
+	return "https://www.sefaria.org/" + ref + "?lang=bi";
+}
 
+function setParashaSefariaUrl()
+{
+	var parashaName = document.getElementById("Parasha").value;
+	var parashot = {
+		"Bereshit": "Genesis.1.1",
+		"Noach": "Genesis.6.9",
+		"Lech lecha": "Genesis.12.1",
+		"Vayeira": "Genesis.18.1",
+		"Chayei sarah": "Genesis.23.1",
+		"Toldot": "Genesis.25.19",
+		"Vayeitzei": "Genesis.28.10",
+		"Vayishlach": "Genesis.32.4",
+		"Vayeishev": "Genesis.37.1",
+		"Mikeitz": "Genesis.41.1",
+		"Vayigash": "Genesis.44.18",
+		"Vayechi": "Genesis.47.28",
+		"Shemot": "Exodus.1.1",
+		"Va'eira": "Exodus.6.2",
+		"Bo": "Exodus.10.1",
+		"Beshalach": "Exodus.13.17",
+		"Yitro": "Exodus.18.1",
+		"Mishpatim": "Exodus.21.1",
+		"Terumah": "Exodus.25.1",
+		"Tetzaveh": "Exodus.27.20",
+		"Ki tisa": "Exodus.30.11",
+		"Vayakhel": "Exodus.35.1",
+		"Pekudei": "Exodus.38.21",
+		"Vayikra": "Leviticus.1.1",
+		"Tzav": "Leviticus.6.1",
+		"Shemini": "Leviticus.9.1",
+		"Tazria": "Leviticus.12.1",
+		"Metzora": "Leviticus.14.1",
+		"Acharei mot": "Leviticus.16.1",
+		"Kedoshim": "Leviticus.19.1",
+		"Emor": "Leviticus.21.1",
+		"Behar": "Leviticus.25.1",
+		"Bechukotai": "Leviticus.26.3",
+		"Bamidbar": "Numbers.1.1",
+		"Nasso": "Numbers.4.21",
+		"Beha'alotcha": "Numbers.8.1",
+		"Shelach": "Numbers.13.1",
+		"Korach": "Numbers.16.1",
+		"Chukat": "Numbers.19.1",
+		"Balak": "Numbers.22.2",
+		"Pinchas": "Numbers.25.10",
+		"Mattot": "Numbers.30.2",
+		"Masei": "Numbers.33.1",
+		"Devarim": "Deuteronomy.1.1",
+		"Va'etchanan": "Deuteronomy.3.23",
+		"Eikev": "Deuteronomy.7.12",
+		"Re'eh": "Deuteronomy.11.26",
+		"Shoftim": "Deuteronomy.16.18",
+		"Ki teitzei": "Deuteronomy.21.10",
+		"Ki tavo": "Deuteronomy.26.1",
+		"Nitzavim": "Deuteronomy.29.9",
+		"Vayeilech": "Deuteronomy.31.1",
+		"Haazinu": "Deuteronomy.32.1",
+		"Vezot haberachah": "Deuteronomy.33.1"
+	};
+
+	parasha_url = getSefariaParashaUrl(parashot[parashaName] || "Genesis.1.1");
+}
 //parasha of the hour
 function setParasha()
 {
@@ -456,11 +523,5 @@ function setParasha()
             }
             break;    
 	}
-	
-	var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-	if(iOS)
-		 parasha_url = 'https://apps.apple.com/us/app/shnayim/id1296709500';
-	else
-		 parasha_url = 'https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra';
-
+	setParashaSefariaUrl();
 }

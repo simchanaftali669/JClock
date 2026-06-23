@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -62,10 +62,10 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
             <input class="year" id="Masechet_year" type="text" value="עוקצים" onclick="openMasechetInNewTab();"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="year" id="Sefer_year" type="text" value="יחזקאל" onclick="openSeferInNewTab();"/>
+            <input class="year" id="Sefer_year" type="text" value="יחזקאל" onclick="openSeferInNewTab();" ondblclick="openSeferInSefariaInNewTab();"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="year" id="Parasha" type="text" value="ויחי" onclick="openParashaInNewTab();" />
+            <input class="year" id="Parasha" type="text" value="ויחי" onclick="openParashaInNewTab();" ondblclick="openParashaInSefariaInNewTab();" />
         </div>
         <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px; display:flex !important; justify-content:center !important; width:100% !important; margin-left:0 !important; margin-right:0 !important;">
 			<img class="day" />
@@ -233,12 +233,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
 
     function openMasechetInNewTab()
     {
-        var win;
-        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if(iOS)
-            win = window.open('https://apps.apple.com/us/app/kehati/id1059791961', '_blank');
-        else
-		    win = window.open('https://play.google.com/store/apps/details?id=com.nocker.kehati', '_blank');
+        var win = window.open('https://www.sefaria.org/Mishnah_Oktzin.1?lang=he', '_blank');
         win.focus();
     }
     
@@ -249,14 +244,25 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
         win = window.open('https://www.929.org.il/page/453', '_blank');
 		win.focus();
     }
+    function openSeferInSefariaInNewTab() {
+        var sefariaUrl = (typeof sefer_url !== 'undefined' && sefer_url) ? sefer_url : 'https://www.sefaria.org/Ezekiel.1?lang=he';
+        var win = window.open(sefariaUrl, '_blank');
+        win.focus();
+    }
 
+    var parashaClickTimer;
     function openParashaInNewTab() {
-        var win;
-        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if(iOS)
-            win = window.open('https://apps.apple.com/us/app/shnayim/id1296709500', '_blank');
-        else
-            win = window.open('https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra', '_blank');
+        clearTimeout(parashaClickTimer);
+        parashaClickTimer = setTimeout(function() {
+            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
+            win.focus();
+        }, 250);
+    }
+
+    function openParashaInSefariaInNewTab() {
+        clearTimeout(parashaClickTimer);
+        var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.47.28?lang=he';
+        var win = window.open(sefariaUrl, '_blank');
         win.focus();
     }
 

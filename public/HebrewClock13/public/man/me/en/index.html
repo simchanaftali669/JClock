@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -90,10 +90,10 @@
             <input class="day" id="Masechet"  type="text" value="" onclick="openMasechetInNewTab();" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="day" id="Sefer"  type="text" value="" onclick="openSeferInNewTab();" />
+            <input class="day" id="Sefer"  type="text" value="" onclick="openSeferInNewTab();" ondblclick="openSeferInSefariaInNewTab();" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="day" id="Parasha" type="text" value="" onclick="openParashaInNewTab();" />
+            <input class="day" id="Parasha" type="text" value="" onclick="openParashaInNewTab();" ondblclick="openParashaInSefariaInNewTab();" />
         </div>
         <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px; display:flex !important; justify-content:center !important; width:100% !important; margin-left:0 !important; margin-right:0 !important;">
 			<div class="day"></div>
@@ -167,7 +167,9 @@
     var mazal_url;
     var mida_url;
     var x;
+    var sefer_929_url;
     var sefer_url;
+    var masechet_url;
     var parasha_url;
 
 	
@@ -280,28 +282,40 @@
     function openMasechetInNewTab()
     {
         var win;
-        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if(iOS)
-            win = window.open('https://apps.apple.com/us/app/kehati/id1059791961', '_blank');
-        else
-		    win = window.open('https://play.google.com/store/apps/details?id=com.nocker.kehati', '_blank');
+        win = window.open(masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=bi', '_blank');
         win.focus();
     }
     
-    function openSeferInNewTab() 
+    var seferClickTimer;
+    function openSeferInNewTab()
     {
-        var win;
-        win = window.open('https://www.929.org.il/lang/en/today', '_blank');
+        clearTimeout(seferClickTimer);
+        seferClickTimer = setTimeout(function() {
+            var win = window.open(sefer_929_url || 'https://www.929.org.il/lang/en/page/1', '_blank');
+            win.focus();
+        }, 250);
+    }
+
+    function openSeferInSefariaInNewTab()
+    {
+        clearTimeout(seferClickTimer);
+        var win = window.open(sefer_url || 'https://www.sefaria.org/Genesis.1?lang=bi', '_blank');
         win.focus();
     }
 
+    var parashaClickTimer;
     function openParashaInNewTab() {
-        var win;
-        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if(iOS)
-            win = window.open('https://apps.apple.com/us/app/shnayim/id1296709500', '_blank');
-        else
-            win = window.open('https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra', '_blank');
+        clearTimeout(parashaClickTimer);
+        parashaClickTimer = setTimeout(function() {
+            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
+            win.focus();
+        }, 250);
+    }
+
+    function openParashaInSefariaInNewTab() {
+        clearTimeout(parashaClickTimer);
+        var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.1.1?lang=bi';
+        var win = window.open(sefariaUrl, '_blank');
         win.focus();
     }
     

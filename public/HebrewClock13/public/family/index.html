@@ -61,6 +61,7 @@
 	var defaultLatitude = "31.7768514";
 	var defaultLongitude = "35.2331664";
 	var familyClockParams = getFamilyClockParams();
+	updateFamilyActionsVisibility();
 	loadFamilyClocks();
 
 	function getFamilyClockParams()
@@ -110,6 +111,12 @@
 
 		document.getElementById("commercial_woman").src = clockBaseUrl + "woman/simple/index.html" + clockQuery;
 		document.getElementById("commercial_man").src = clockBaseUrl + "man/simple/index.html" + clockQuery;
+	}
+
+	function updateFamilyActionsVisibility()
+	{
+		if(isCombinedPersonalClock())
+			document.getElementById("family_actions").style.display = "none";
 	}
 
 	function isCombinedPersonalClock()

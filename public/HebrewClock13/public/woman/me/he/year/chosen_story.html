@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -191,17 +191,33 @@
 
     function openMasechetInNewTab()
     {
-        var win = window.open('https://play.google.com/store/apps/details?id=com.nocker.kehati', '_blank');
+        var win = window.open('https://www.sefaria.org/Mishnah_Oktzin.1?lang=he', '_blank');
         win.focus();
     }
 
     function openSeferInNewTab() {
-        var win = window.open('https://play.google.com/store/apps/details?id=heb.apps.tanach', '_blank');
+        var win = window.open('https://www.929.org.il/page/453', '_blank');
+        win.focus();
+    }
+    function openSeferInSefariaInNewTab() {
+        var sefariaUrl = (typeof sefer_url !== 'undefined' && sefer_url) ? sefer_url : 'https://www.sefaria.org/Ezekiel.1?lang=he';
+        var win = window.open(sefariaUrl, '_blank');
         win.focus();
     }
 
+    var parashaClickTimer;
     function openParashaInNewTab() {
-        var win = window.open('https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra', '_blank');
+        clearTimeout(parashaClickTimer);
+        parashaClickTimer = setTimeout(function() {
+            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
+            win.focus();
+        }, 250);
+    }
+
+    function openParashaInSefariaInNewTab() {
+        clearTimeout(parashaClickTimer);
+        var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.47.28?lang=he';
+        var win = window.open(sefariaUrl, '_blank');
         win.focus();
     }
 	

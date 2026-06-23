@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -60,10 +60,10 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
             <input class="yovel" id="Masechet" type="text" value="Shka'lim" onclick="openMasechetInNewTab();"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="yovel" id="Sefer" type="text" value="Ba'mid'bar"  onclick="openSeferInNewTab();"/>
+            <input class="yovel" id="Sefer" type="text" value="Ba'mid'bar"  onclick="openSeferInNewTab();" ondblclick="openSeferInSefariaInNewTab();"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="yovel" id="Parasha" type="text" value="Beshalach" onclick="openParashaInNewTab();" />
+            <input class="yovel" id="Parasha" type="text" value="Beshalach" onclick="openParashaInNewTab();" ondblclick="openParashaInSefariaInNewTab();" />
         </div>
 
         <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px; display:flex !important; justify-content:center !important; width:100% !important; margin-left:0 !important; margin-right:0 !important;">
@@ -143,12 +143,7 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
 
     function openMasechetInNewTab()
     {
-        var win;
-        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if(iOS)
-            win = window.open('https://apps.apple.com/us/app/kehati/id1059791961', '_blank');
-        else
-		    win = window.open('https://play.google.com/store/apps/details?id=com.nocker.kehati', '_blank');
+        var win = window.open('https://www.sefaria.org/Mishnah_Shekalim.1?lang=bi', '_blank');
         win.focus();
     }
     function openSeferInNewTab() 
@@ -158,14 +153,25 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
         win = window.open('https://www.929.org.il/lang/en/page/118', '_blank');
 	    win.focus();
     }
+    function openSeferInSefariaInNewTab() {
+        var sefariaUrl = (typeof sefer_url !== 'undefined' && sefer_url) ? sefer_url : 'https://www.sefaria.org/Numbers.1?lang=bi';
+        var win = window.open(sefariaUrl, '_blank');
+        win.focus();
+    }
 
+    var parashaClickTimer;
     function openParashaInNewTab() {
-        var win;
-        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if(iOS)
-            win = window.open('https://apps.apple.com/us/app/shnayim/id1296709500', '_blank');
-        else
-            win = window.open('https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra', '_blank');
+        clearTimeout(parashaClickTimer);
+        parashaClickTimer = setTimeout(function() {
+            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
+            win.focus();
+        }, 250);
+    }
+
+    function openParashaInSefariaInNewTab() {
+        clearTimeout(parashaClickTimer);
+        var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Exodus.13.17?lang=bi';
+        var win = window.open(sefariaUrl, '_blank');
         win.focus();
     }
 

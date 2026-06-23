@@ -18,6 +18,107 @@
 	return Hour;
 }
 
+function getSefariaMishnahUrl(ref)
+{
+	return "https://www.sefaria.org/" + ref + "?lang=he";
+}
+
+function setMasechetUrl()
+{
+	var masechetName = document.getElementById("Masechet").value;
+	var masechtot = {
+		"ברכות": "Mishnah_Berakhot.1",
+		"פאה": "Mishnah_Peah.1",
+		"דמאי": "Mishnah_Demai.1",
+		"כלאים": "Mishnah_Kilayim.1",
+		"שביעית": "Mishnah_Sheviit.1",
+		"תרומות": "Mishnah_Terumot.1",
+		"מעשרות": "Mishnah_Maasrot.1",
+		"מעשר שני": "Mishnah_Maaser_Sheni.1",
+		"חלה": "Mishnah_Challah.1",
+		"ערלה": "Mishnah_Orlah.1",
+		"ביכורים": "Mishnah_Bikkurim.1",
+		"שבת": "Mishnah_Shabbat.1",
+		"עירובין": "Mishnah_Eruvin.1",
+		"פסחים": "Mishnah_Pesachim.1",
+		"שקלים": "Mishnah_Shekalim.1",
+		"יומא": "Mishnah_Yoma.1",
+		"סוכה": "Mishnah_Sukkah.1",
+		"ביצה": "Mishnah_Beitzah.1",
+		"ראש השנה": "Mishnah_Rosh_Hashanah.1",
+		"תענית": "Mishnah_Taanit.1",
+		"מגילה": "Mishnah_Megillah.1",
+		"מועד קטן": "Mishnah_Moed_Katan.1",
+		"חגיגה": "Mishnah_Chagigah.1",
+		"יבמות": "Mishnah_Yevamot.1",
+		"כתובות": "Mishnah_Ketubot.1",
+		"נדרים": "Mishnah_Nedarim.1",
+		"נזיר": "Mishnah_Nazir.1",
+		"סוטה": "Mishnah_Sotah.1",
+		"גיטין": "Mishnah_Gittin.1",
+		"קידושין": "Mishnah_Kiddushin.1",
+		"בבא קמא": "Mishnah_Bava_Kamma.1",
+		"בבא מציעא": "Mishnah_Bava_Metzia.1",
+		"בבא בתרא": "Mishnah_Bava_Batra.1",
+		"סנהדרין": "Mishnah_Sanhedrin.1",
+		"מכות": "Mishnah_Makkot.1",
+		"שבועות": "Mishnah_Shevuot.1",
+		"עדיות": "Mishnah_Eduyot.1",
+		"עבודה זרה": "Mishnah_Avodah_Zarah.1",
+		"אבות": "Mishnah_Avot.1",
+		"הוריות": "Mishnah_Horayot.1",
+		"זבחים": "Mishnah_Zevachim.1",
+		"מנחות": "Mishnah_Menachot.1",
+		"חולין": "Mishnah_Chullin.1",
+		"בכורות": "Mishnah_Bekhorot.1",
+		"ערכין": "Mishnah_Arakhin.1",
+		"תמורה": "Mishnah_Temurah.1",
+		"כריתות": "Mishnah_Keritot.1",
+		"מעילה": "Mishnah_Meilah.1",
+		"תמיד": "Mishnah_Tamid.1",
+		"מדות": "Mishnah_Middot.1",
+		"קנים": "Mishnah_Kinnim.1",
+		"כלים": "Mishnah_Kelim.1",
+		"אהלות": "Mishnah_Oholot.1",
+		"נגעים": "Mishnah_Negaim.1",
+		"פרה": "Mishnah_Parah.1",
+		"טהרות": "Mishnah_Tahorot.1",
+		"מקואות": "Mishnah_Mikvaot.1",
+		"נדה": "Mishnah_Niddah.1",
+		"מכשירין": "Mishnah_Makhshirin.1",
+		"זבים": "Mishnah_Zavim.1",
+		"טבול יום": "Mishnah_Tevul_Yom.1",
+		"ידים": "Mishnah_Yadayim.1",
+		"עוקצין": "Mishnah_Oktzin.1",
+		"1 - יציאות השבת": "Mishnah_Shabbat.1",
+		"2 - במה מדליקין": "Mishnah_Shabbat.2",
+		"3 - כירה": "Mishnah_Shabbat.3",
+		"4 - במה טומנין": "Mishnah_Shabbat.4",
+		"5 - במה בהמה": "Mishnah_Shabbat.5",
+		"6 - במה אשה": "Mishnah_Shabbat.6",
+		"7 - כלל גדול": "Mishnah_Shabbat.7",
+		"8 - המוציא יין": "Mishnah_Shabbat.8",
+		"9 - אמר רבי עקיבא": "Mishnah_Shabbat.9",
+		"10 - המצניע": "Mishnah_Shabbat.10",
+		"11 - הזורק": "Mishnah_Shabbat.11",
+		"12 - הבונה": "Mishnah_Shabbat.12",
+		"13 - האורג": "Mishnah_Shabbat.13",
+		"14 - שמנה שרצים": "Mishnah_Shabbat.14",
+		"15 - ואלו קשרים": "Mishnah_Shabbat.15",
+		"16 - כל כתבי": "Mishnah_Shabbat.16",
+		"17 - כל הכלים": "Mishnah_Shabbat.17",
+		"18 - מפנין": "Mishnah_Shabbat.18",
+		"רבי אליעזר דמילה19 - ": "Mishnah_Shabbat.19",
+		"20 - תולין": "Mishnah_Shabbat.20",
+		"21 - נוטל": "Mishnah_Shabbat.21",
+		"22 - חבית": "Mishnah_Shabbat.22",
+		"23 - שואל": "Mishnah_Shabbat.23",
+		"24 - מי שהחשיך": "Mishnah_Shabbat.24"
+	};
+
+	masechet_url = getSefariaMishnahUrl(masechtot[masechetName] || "Mishnah_Berakhot.1");
+}
+
 
 //mazal of the hour
 function setMasechet()
@@ -407,4 +508,5 @@ function setMasechet()
         default:
             break;
     }
+	setMasechetUrl();
 }

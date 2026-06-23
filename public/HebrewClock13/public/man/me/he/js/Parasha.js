@@ -17,7 +17,74 @@
 	}
 	return Hour;
 }
+
+function getSefariaParashaUrl(ref)
+{
+	return "https://www.sefaria.org/" + ref + "?lang=he";
+}
 
+function setParashaSefariaUrl()
+{
+	var parashaName = document.getElementById("Parasha").value;
+	var parashot = {
+		"בראשית": "Genesis.1.1",
+		"נח": "Genesis.6.9",
+		"לך לך": "Genesis.12.1",
+		"וירא": "Genesis.18.1",
+		"חיי שרה": "Genesis.23.1",
+		"תולדות": "Genesis.25.19",
+		"ויצא": "Genesis.28.10",
+		"וישלח": "Genesis.32.4",
+		"וישב": "Genesis.37.1",
+		"מקץ": "Genesis.41.1",
+		"ויגש": "Genesis.44.18",
+		"ויחי": "Genesis.47.28",
+		"שמות": "Exodus.1.1",
+		"וארא": "Exodus.6.2",
+		"בא": "Exodus.10.1",
+		"בשלח": "Exodus.13.17",
+		"יתרו": "Exodus.18.1",
+		"משפטים": "Exodus.21.1",
+		"תרומה": "Exodus.25.1",
+		"תצווה": "Exodus.27.20",
+		"כי תשא": "Exodus.30.11",
+		"ויקהל": "Exodus.35.1",
+		"פקודי": "Exodus.38.21",
+		"ויקרא": "Leviticus.1.1",
+		"צו": "Leviticus.6.1",
+		"שמיני": "Leviticus.9.1",
+		"תזריע": "Leviticus.12.1",
+		"מצורע": "Leviticus.14.1",
+		"אחרי מות": "Leviticus.16.1",
+		"קדושים": "Leviticus.19.1",
+		"אמר": "Leviticus.21.1",
+		"בהר": "Leviticus.25.1",
+		"בחוקותי": "Leviticus.26.3",
+		"במדבר": "Numbers.1.1",
+		"נשא": "Numbers.4.21",
+		"בהעלותך": "Numbers.8.1",
+		"שלח": "Numbers.13.1",
+		"קורח": "Numbers.16.1",
+		"חוקת": "Numbers.19.1",
+		"בלק": "Numbers.22.2",
+		"פינחס": "Numbers.25.10",
+		"מטות": "Numbers.30.2",
+		"מסעי": "Numbers.33.1",
+		"דברים": "Deuteronomy.1.1",
+		"ואתחנן": "Deuteronomy.3.23",
+		"עקב": "Deuteronomy.7.12",
+		"ראה": "Deuteronomy.11.26",
+		"שופטים": "Deuteronomy.16.18",
+		"כי תצא": "Deuteronomy.21.10",
+		"כי תבוא": "Deuteronomy.26.1",
+		"נצבים": "Deuteronomy.29.9",
+		"וילך": "Deuteronomy.31.1",
+		"האזינו": "Deuteronomy.32.1",
+		"וזאת הברכה": "Deuteronomy.33.1"
+	};
+
+	parasha_url = getSefariaParashaUrl(parashot[parashaName] || "Genesis.1.1");
+}
 //parasha of the hour
 function setParasha()
 {
@@ -445,10 +512,5 @@ function setParasha()
         default:
             break;
     }
-	
-	var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-	if(iOS)
-		 parasha_url = 'https://apps.apple.com/us/app/shnayim/id1296709500';
-	else
-		 parasha_url = 'https://play.google.com/store/apps/details?id=heb.apps.shnaimmikra';
+	setParashaSefariaUrl();
 }

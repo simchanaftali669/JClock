@@ -18,6 +18,107 @@
 	return Hour;
 }
 
+function getSefariaMishnahUrl(ref)
+{
+	return "https://www.sefaria.org/" + ref + "?lang=bi";
+}
+
+function setMasechetUrl()
+{
+	var masechetName = document.getElementById("Masechet").value;
+	var masechtot = {
+		"Brachot": "Mishnah_Berakhot.1",
+		"Pe'ah": "Mishnah_Peah.1",
+		"D'mai": "Mishnah_Demai.1",
+		"Kila'im": "Mishnah_Kilayim.1",
+		"Shvi'it": "Mishnah_Sheviit.1",
+		"Terumot": "Mishnah_Terumot.1",
+		"Ma'asrot": "Mishnah_Maasrot.1",
+		"Ma'aser sheni": "Mishnah_Maaser_Sheni.1",
+		"Chala": "Mishnah_Challah.1",
+		"Orla": "Mishnah_Orlah.1",
+		"Bikurim": "Mishnah_Bikkurim.1",
+		"Shabbat": "Mishnah_Shabbat.1",
+		"Eiruvin": "Mishnah_Eruvin.1",
+		"P'sachim": "Mishnah_Pesachim.1",
+		"Shk'alim": "Mishnah_Shekalim.1",
+		"Yoma": "Mishnah_Yoma.1",
+		"Sukkah": "Mishnah_Sukkah.1",
+		"Beitzah": "Mishnah_Beitzah.1",
+		"Rosh hashanah": "Mishnah_Rosh_Hashanah.1",
+		"Ta'anit": "Mishnah_Taanit.1",
+		"Megilah": "Mishnah_Megillah.1",
+		"Moed ka'atan": "Mishnah_Moed_Katan.1",
+		"Chagigah": "Mishnah_Chagigah.1",
+		"Yevamot": "Mishnah_Yevamot.1",
+		"K'tuvot": "Mishnah_Ketubot.1",
+		"Nedarim": "Mishnah_Nedarim.1",
+		"Nazir": "Mishnah_Nazir.1",
+		"Sotah": "Mishnah_Sotah.1",
+		"Gittin": "Mishnah_Gittin.1",
+		"Kidushin": "Mishnah_Kiddushin.1",
+		"Baba kama": "Mishnah_Bava_Kamma.1",
+		"Baba metzia": "Mishnah_Bava_Metzia.1",
+		"Baba batra": "Mishnah_Bava_Batra.1",
+		"Sanhedrin": "Mishnah_Sanhedrin.1",
+		"Makkot": "Mishnah_Makkot.1",
+		"Shavuot": "Mishnah_Shevuot.1",
+		"Eduyot": "Mishnah_Eduyot.1",
+		"Avodah zara": "Mishnah_Avodah_Zarah.1",
+		"Avot": "Mishnah_Avot.1",
+		"Horayot": "Mishnah_Horayot.1",
+		"Zevachim": "Mishnah_Zevachim.1",
+		"Menachot": "Mishnah_Menachot.1",
+		"Chulin": "Mishnah_Chullin.1",
+		"B'chorot": "Mishnah_Bekhorot.1",
+		"arachin": "Mishnah_Arakhin.1",
+		"T'murah": "Mishnah_Temurah.1",
+		"Kritut": "Mishnah_Keritot.1",
+		"Me'ila": "Mishnah_Meilah.1",
+		"Tamid": "Mishnah_Tamid.1",
+		"Middot": "Mishnah_Middot.1",
+		"Kinnim": "Mishnah_Kinnim.1",
+		"Kelim": "Mishnah_Kelim.1",
+		"O'halot": "Mishnah_Oholot.1",
+		"Nega'im": "Mishnah_Negaim.1",
+		"Parah": "Mishnah_Parah.1",
+		"T'harot": "Mishnah_Tahorot.1",
+		"Mikva'ot": "Mishnah_Mikvaot.1",
+		"Niddah": "Mishnah_Niddah.1",
+		"Machshirin": "Mishnah_Makhshirin.1",
+		"Zavim": "Mishnah_Zavim.1",
+		"T'vul yom": "Mishnah_Tevul_Yom.1",
+		"Yadayim": "Mishnah_Yadayim.1",
+		"Oktzin": "Mishnah_Oktzin.1",
+		"Yetzi'ot ha'shabat - 1": "Mishnah_Shabbat.1",
+		"Ba'me madlikin - 2": "Mishnah_Shabbat.2",
+		"Kira - 3": "Mishnah_Shabbat.3",
+		"Ba'me tomnim - 4": "Mishnah_Shabbat.4",
+		"Ba'me Be'e'ma - 5": "Mishnah_Shabbat.5",
+		"Ba'me Isha - 6": "Mishnah_Shabbat.6",
+		"Klal gadol - 7": "Mishnah_Shabbat.7",
+		"Ha'motzie ya'in - 8": "Mishnah_Shabbat.8",
+		"Amar Rabi Akiva - 9": "Mishnah_Shabbat.9",
+		"Ha'matznia - 10": "Mishnah_Shabbat.10",
+		"Ha'zorek - 11": "Mishnah_Shabbat.11",
+		"Ha'bona - 12": "Mishnah_Shabbat.12",
+		"Ha'oreg - 13": "Mishnah_Shabbat.13",
+		"Shmone' shratzim - 14": "Mishnah_Shabbat.14",
+		"Ve'elo ksharim - 15": "Mishnah_Shabbat.15",
+		"Kol Kitvei - 16": "Mishnah_Shabbat.16",
+		"Kol hakelim - 17": "Mishnah_Shabbat.17",
+		"Me'fanin - 18": "Mishnah_Shabbat.18",
+		"Rabi Eliezer de'mila - 19": "Mishnah_Shabbat.19",
+		"Tolin - 20": "Mishnah_Shabbat.20",
+		"Notel - 21": "Mishnah_Shabbat.21",
+		"Chavit - 22": "Mishnah_Shabbat.22",
+		"Sho'el - 23": "Mishnah_Shabbat.23",
+		"Mi she'echshich - 24": "Mishnah_Shabbat.24"
+	};
+
+	masechet_url = getSefariaMishnahUrl(masechtot[masechetName] || "Mishnah_Berakhot.1");
+}
+
 
 //mazal of the hour
 function setMasechet()
@@ -412,4 +513,5 @@ function setMasechet()
         default:
             break;
     }
+	setMasechetUrl();
 }
