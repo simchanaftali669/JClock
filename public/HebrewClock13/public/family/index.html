@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -13,9 +13,9 @@
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
     <title>Hebrew Commercial</title> 
-	<link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/family/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/family/css/stylesheet.css" id="thecss">
-	<link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/family/css/commercialstylesheet.css" id="commercial_css"> 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">
+	<link rel="stylesheet" type="text/css" href="css/commercialstylesheet.css" id="commercial_css"> 
     <meta charset="UTF-8">
     <meta name="description" content="">
     <meta name="keywords" content="">
@@ -25,20 +25,13 @@
 <body>
 	
 	<div id="iframe-container">
-		<iframe id="commercial_woman" src="https://JClock.net/HebrewClock13/public/woman/simple/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
-		<div id="family_actions">
+		<iframe id="commercial_woman" src="../woman/simple/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
 			<button 
 				class="btn btn-lg rounded-pill shadow" 
 				onclick="updateLocation()" 
 				id="current_location">
 			</button>
-			<button
-				class="btn btn-lg rounded-pill shadow"
-				onclick="openMarrigeLearning()"
-				id="marrige_learning">
-			</button>
-		</div>
-		<iframe id="commercial_man" src="https://JClock.net/HebrewClock13/public/man/simple/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
+		<iframe id="commercial_man" src="../man/simple/index.html?latitude=31.7768514&longitude=35.2331664"> </iframe>
 	</div>
 
 	
@@ -47,102 +40,9 @@
 	//return;
 	let userLang = navigator.language || navigator.userLanguage; 
 	if (userLang.includes("he")) 
-	{
 		document.getElementById("current_location").innerText  = "מיקום נוכחי";
-		document.getElementById("marrige_learning").innerText  = "אפשרות שלישית";
-	}
 	else
-	{
 		document.getElementById("current_location").innerText  = "current location";		
-		document.getElementById("marrige_learning").innerText  = "third option";
-	}
-
-	var clockBaseUrl = "https://JClock.net/HebrewClock13/public/";
-	var defaultLatitude = "31.7768514";
-	var defaultLongitude = "35.2331664";
-	var familyClockParams = getFamilyClockParams();
-	updateFamilyActionsVisibility();
-	loadFamilyClocks();
-
-	function getFamilyClockParams()
-	{
-		var url = new URL(document.location.href);
-		var params = new URLSearchParams(url.search);
-		var date = new Date();
-
-		if(!params.get("latitude"))
-			params.set("latitude", defaultLatitude);
-		if(!params.get("longitude"))
-			params.set("longitude", defaultLongitude);
-		if(!params.get("hour"))
-			params.set("hour", date.getHours());
-		if(!params.get("min"))
-			params.set("min", date.getMinutes());
-		if(!params.get("sec"))
-			params.set("sec", date.getSeconds());
-		if(!params.get("ms"))
-			params.set("ms", date.getMilliseconds());
-		if(!params.get("year"))
-			params.set("year", date.getFullYear());
-		if(!params.get("month"))
-			params.set("month", date.getMonth() + 1);
-		if(!params.get("day"))
-			params.set("day", date.getDate());
-		if(!params.get("gmt"))
-			params.set("gmt", new Date().getTimezoneOffset() / -60);
-
-		return params;
-	}
-
-	function getFamilyClockQuery()
-	{
-		return "?" + familyClockParams.toString();
-	}
-
-	function loadFamilyClocks()
-	{
-		var clockQuery = getFamilyClockQuery();
-		if(isCombinedPersonalClock())
-		{
-			document.getElementById("commercial_woman").src = getPersonalClockUrl("woman", "moon");
-			document.getElementById("commercial_man").src = getPersonalClockUrl("man", "sun");
-			return;
-		}
-
-		document.getElementById("commercial_woman").src = clockBaseUrl + "woman/simple/index.html" + clockQuery;
-		document.getElementById("commercial_man").src = clockBaseUrl + "man/simple/index.html" + clockQuery;
-	}
-
-	function updateFamilyActionsVisibility()
-	{
-		if(isCombinedPersonalClock())
-			document.getElementById("family_actions").style.display = "none";
-	}
-
-	function isCombinedPersonalClock()
-	{
-		return familyClockParams.get("clock") == "both" &&
-			familyClockParams.get("moonHebrewDay") &&
-			familyClockParams.get("moonHebrewHour") &&
-			familyClockParams.get("sunHebrewDay") &&
-			familyClockParams.get("sunHebrewHour");
-	}
-
-	function getPersonalClockUrl(gender, clock)
-	{
-		var lang = familyClockParams.get("lang") || ((navigator.language || navigator.userLanguage).includes("he") ? "he" : "en");
-		var params = new URLSearchParams();
-		params.set("hebrewDay", familyClockParams.get(clock + "HebrewDay"));
-		params.set("hebrewHour", familyClockParams.get(clock + "HebrewHour"));
-		params.set("period", "personal");
-
-		if(familyClockParams.get("latitude"))
-			params.set("latitude", familyClockParams.get("latitude"));
-		if(familyClockParams.get("longitude"))
-			params.set("longitude", familyClockParams.get("longitude"));
-
-		return clockBaseUrl + gender + "/me/" + lang + "/index.html?" + params.toString();
-	}
 	
 	function updateLocation() 
 	{
@@ -156,20 +56,8 @@
 				var womanIframe = document.getElementById("commercial_woman");
 				var manIframe = document.getElementById("commercial_man");
 
-				familyClockParams.set("latitude", newLat);
-				familyClockParams.set("longitude", newLng);
-
-				if(isCombinedPersonalClock())
-				{
-					womanIframe.src = getPersonalClockUrl("woman", "moon");
-					manIframe.src = getPersonalClockUrl("man", "sun");
-				}
-				else
-				{
-					var clockQuery = getFamilyClockQuery();
-					womanIframe.src = clockBaseUrl + "woman/simple/index.html" + clockQuery;
-					manIframe.src = clockBaseUrl + "man/simple/index.html" + clockQuery;
-				}
+				womanIframe.src = "../woman/simple/index.html?latitude=" + newLat + "&longitude=" + newLng;
+				manIframe.src = "../man/simple/index.html?latitude=" + newLat + "&longitude=" + newLng;
 				
 			}, function(error) {
 				alert("שגיאה בקבלת מיקום: " + error.message);
@@ -179,11 +67,6 @@
 		{
 			alert("הדפדפן לא תומך ב-GPS");
 		}
-	}
-
-	function openMarrigeLearning()
-	{
-		window.location.href = clockBaseUrl + "man/marrige/en/index.html" + getFamilyClockQuery();
 	}
 	
 
@@ -264,7 +147,7 @@
         
         //localStorage.setItem("mida", document.getElementById("Mazal").value);
 
-        var win = window.open("https://JClock.net/HebrewClock13/public/moon.html", '_blank');
+        var win = window.open("../moon.html", '_blank');
         win.focus();
     }
 
@@ -273,13 +156,13 @@
 		if(isShowBackground == false) 
 		{
 		console.log(isShowBackground);
-			document.getElementById("thecss").href = "https://JClock.net/HebrewClock13/public/family/css/stylesheetBackground.css";
+			document.getElementById("thecss").href = "css/stylesheetBackground.css";
 			isShowBackground = true;	
 		} 
 		else 
 		{
 		console.log(isShowBackground);
-			document.getElementById("thecss").href = "https://JClock.net/HebrewClock13/public/family/css/stylesheet.css";
+			document.getElementById("thecss").href = "css/stylesheet.css";
 			isShowBackground = false;
 		}
 	}
