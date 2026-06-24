@@ -28,7 +28,11 @@
 
           <label>
             <span data-i18n="productLabel">מוצר</span>
-            <input id="productInput" name="product" type="text" list="productSuggestions" autocomplete="off" data-placeholder-he="תרופה לשיגעון / Medicine for Madness" data-placeholder-en="Cancer Medicine / תרופה לסרטן" placeholder="תרופה לשיגעון / Medicine for Madness" required>
+            <select id="productInput" name="product" required>
+              <option value="cordykos">תרופה לשיגעון</option>
+              <option value="resurrection">תחיית המתים</option>
+              <option value="cancer-medicine">תרופה לסרטן</option>
+            </select>
           </label>
 
           <label>
@@ -124,8 +128,6 @@
         </div>
       </form>
 
-      <datalist id="productSuggestions"></datalist>
-
       <section class="status-band" aria-live="polite">
         <div>
           <span class="metric-label" data-i18n="found">נמצאו</span>
@@ -151,12 +153,12 @@
     </section>
   </main>
 
-  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/products.js?v=20260624-products-en"></script>
+  <script src="products.js?v=20260624-three-products"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/login/js/hebrewDate.js"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/shared/js/CommercialMazal.js"></script>
   <script src="https://JClock.net/HebrewCommercial13/public/woman/js/suncalc.js"></script>
-  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/commercial-time-anchors.js"></script>
-  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/it-adapter.js"></script>
-  <script src="https://JClock.net/HebrewCommercial13/public/Need-Me/app.js?v=20260624-coin-lang"></script>
+  <script src="commercial-time-anchors.js"></script>
+  <script src="it-adapter.js"></script>
+  <script src="app.js?v=20260624-product-param-iframe"></script>
 </body>
 </html>

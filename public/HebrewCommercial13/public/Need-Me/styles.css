@@ -39,6 +39,18 @@ select {
   padding: 24px;
 }
 
+body.is-embedded .app-shell {
+  padding: 14px;
+}
+
+body.is-embedded h1 {
+  font-size: 26px;
+}
+
+body.is-embedded .masthead {
+  margin-bottom: 14px;
+}
+
 .workspace {
   max-width: 1120px;
   margin: 0 auto;

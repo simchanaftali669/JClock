@@ -59,6 +59,7 @@
       downloadJson: "הורד JSON",
       languageToggle: "English",
       productNotFound: "המוצר לא נמצא במאגר המקומי.",
+      productSourceCheckRequired: "המוצר \"{product}\" עדיין לא קיים במאגר. נדרש לבדוק היכן מופיע המוצר בספרי מסורת ישראל.",
       noSlots: "לא נמצאו חלונות פרסום בטווח שנבחר.",
       signaturesOutsideWorkHours: "נמצאו {count} חתימות זמן, אבל כולן מחוץ לשעות העבודה שנבחרו.",
       renderedLimit: "מוצגות {shown} תוצאות ראשונות מתוך {total}.",
@@ -132,6 +133,7 @@
       downloadJson: "Download JSON",
       languageToggle: "עברית",
       productNotFound: "The product was not found in the local catalog.",
+      productSourceCheckRequired: "The product \"{product}\" is not in the catalog yet. Its appearance in the books of Jewish tradition needs to be checked.",
       noSlots: "No advertising windows were found in the selected range.",
       signaturesOutsideWorkHours: "{count} time signatures were found, but all are outside the selected working hours.",
       renderedLimit: "Showing the first {shown} results out of {total}.",
@@ -165,6 +167,7 @@
     accessToken: "",
     slots: [],
     selectedProduct: null,
+    message: "",
     language: getInitialLanguage()
   };
 
@@ -188,7 +191,6 @@
   var rangeText = document.getElementById("rangeText");
   var calendarStatus = document.getElementById("calendarStatus");
   var resultsList = document.getElementById("resultsList");
-  var productSuggestions = document.getElementById("productSuggestions");
   var languageToggleButton = document.getElementById("languageToggleButton");
   var googleConnectButton = document.getElementById("googleConnectButton");
   var createCalendarButton = document.getElementById("createCalendarButton");
@@ -210,8 +212,10 @@
 
   function init() {
     startDateInput.value = toInputDate(new Date());
+    applyEmbeddingMode();
     applyLanguage();
     renderProductSuggestions();
+    applyRequestedProduct();
     rangeModeInput.addEventListener("change", syncRangeControls);
     regionInput.addEventListener("change", syncAudienceControls);
     periodStartOnlyInput.addEventListener("change", syncPeriodStartOnlyControls);
@@ -226,21 +230,83 @@
     refreshActions();
   }
 
+  function applyEmbeddingMode() {
+    var params = new URLSearchParams(window.location.search);
+    var isEmbedded = params.get("embedded") === "1";
+
+    try {
+      isEmbedded = isEmbedded || window.self !== window.top;
+    } catch (error) {
+      isEmbedded = true;
+    }
+
+    document.body.classList.toggle("is-embedded", isEmbedded);
+  }
+
   function renderProductSuggestions() {
-    productSuggestions.innerHTML = "";
+    if (!window.NeedMeProducts || !window.NeedMeProducts.length) {
+      return;
+    }
+
+    var selectedProductId = state.selectedProduct ? state.selectedProduct.id : productInput.value;
+    productInput.innerHTML = "";
+
     window.NeedMeProducts.forEach(function (product) {
-      [getProductLabel(product)].concat(product.aliases).forEach(function (alias) {
-        var option = document.createElement("option");
-        option.value = alias;
-        productSuggestions.appendChild(option);
-      });
+      var option = document.createElement("option");
+      option.value = product.id;
+      option.textContent = getProductLabel(product);
+      productInput.appendChild(option);
     });
+
+    if (selectedProductId && window.NeedMeProducts.some(function (product) {
+      return product.id === selectedProductId;
+    })) {
+      productInput.value = selectedProductId;
+    }
+  }
+
+  function applyRequestedProduct() {
+    var requestedProduct = getRequestedProduct();
+
+    if (!requestedProduct) {
+      return;
+    }
+
+    var product = findProduct(requestedProduct);
+
+    if (product) {
+      state.selectedProduct = product;
+      state.message = "";
+      productInput.value = product.id;
+      return;
+    }
+
+    state.selectedProduct = null;
+    state.slots = [];
+    state.message = t("productSourceCheckRequired", { product: requestedProduct });
+    renderResults(state.message);
+    refreshActions();
+  }
+
+  function getRequestedProduct() {
+    var params = new URLSearchParams(window.location.search);
+    return params.get("product") || params.get("p") || "";
   }
 
   function toggleLanguage() {
     state.language = state.language === "he" ? "en" : "he";
     applyLanguage();
     renderProductSuggestions();
+    if (state.selectedProduct) {
+      productInput.value = state.selectedProduct.id;
+    }
+
+    if (state.message) {
+      state.message = t("productSourceCheckRequired", { product: getRequestedProduct() });
+      renderResults(state.message);
+      return;
+    }
+
     if (state.rangeLabel || state.slots.length || state.diagnostics) {
       renderResults("");
     }
@@ -294,7 +360,8 @@
 
     if (!product) {
       state.slots = [];
-      renderResults(t("productNotFound"));
+      state.message = t("productNotFound");
+      renderResults(state.message);
       refreshActions();
       return;
     }
@@ -305,6 +372,7 @@
     var clockModel = getSelectedClockModel();
     state.diagnostics = createDiagnostics();
     state.rangeLabel = range.label;
+    state.message = "";
 
     state.slots = buildSchedule({
       product: product,
@@ -329,6 +397,10 @@
   function findProduct(rawName) {
     var name = normalizeText(rawName);
     return window.NeedMeProducts.find(function (product) {
+      if (normalizeText(product.id) === name || normalizeText(product.label) === name || normalizeText(product.labelEn) === name) {
+        return true;
+      }
+
       return product.aliases.some(function (alias) {
         return normalizeText(alias) === name;
       });
