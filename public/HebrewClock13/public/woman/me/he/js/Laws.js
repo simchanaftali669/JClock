@@ -59,6 +59,18 @@ function shuffleLaws(laws)
 	return shuffled;
 }
 
+function getLawWikisourceUrl(law)
+{
+	if(law.wikisourceUrl)
+		return law.wikisourceUrl;
+
+	var title = law.name || "";
+	title = title.replace(/\s*,\s*התש[^,]+?\s*[-–]\s*\d{4}\s*$/, "");
+	title = title.replace(/\s+/g, "_");
+
+	return "https://he.wikisource.org/wiki/" + encodeURIComponent(title);
+}
+
 function setLaws()
 {
 	var lawsInput = document.getElementById("Laws");
@@ -136,6 +148,16 @@ function renderLawsPage()
 			" | GMT+" + law.gmt;
 		item.appendChild(details);
 
+		var actions = document.createElement("div");
+		actions.className = "law-actions";
+
+		var wikisourceLink = document.createElement("a");
+		wikisourceLink.href = getLawWikisourceUrl(law);
+		wikisourceLink.target = "_blank";
+		wikisourceLink.rel = "noopener";
+		wikisourceLink.innerText = "פתח בויקיטקסט";
+		actions.appendChild(wikisourceLink);
+
 		if(law.clockUrl)
 		{
 			var link = document.createElement("a");
@@ -143,8 +165,10 @@ function renderLawsPage()
 			link.target = "_blank";
 			link.rel = "noopener";
 			link.innerText = "פתח בשעון";
-			item.appendChild(link);
+			actions.appendChild(link);
 		}
+
+		item.appendChild(actions);
 
 		list.appendChild(item);
 	});
