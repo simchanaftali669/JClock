@@ -1159,6 +1159,10 @@
       parts.push(formatTemporaryClock(slot.temporaryClock));
       parts.push(formatMolad(slot.period));
       parts.push(formatRoshChodesh(slot.period));
+      var temporarySourceMaterial = formatSourceMaterial(slot.productId);
+      if (temporarySourceMaterial) {
+        parts.push(temporarySourceMaterial);
+      }
       parts.push(formatWindowKind(slot.windowKind));
       parts.push(formatAudienceContext(slot.region, slot.audience));
       return parts.join(" · ");
@@ -1485,19 +1489,43 @@
       return item.id === productId;
     });
 
-    if (!product || !product.sourceMaterial) {
+    if (!product) {
       return "";
     }
 
-    return t("source", { source: getSourceMaterial(product) });
+    var sourceMaterial = getSourceMaterial(product);
+
+    if (!sourceMaterial) {
+      return "";
+    }
+
+    return t("source", { source: sourceMaterial });
   }
 
   function getSourceMaterial(product) {
+    var temporaryClockSource = getTemporaryClockSourceMaterial(product);
+
+    if (temporaryClockSource) {
+      return temporaryClockSource;
+    }
+
     if (state.language === "en" && product.sourceMaterialEn) {
       return product.sourceMaterialEn;
     }
 
     return product.sourceMaterial;
+  }
+
+  function getTemporaryClockSourceMaterial(product) {
+    var reference = product && product.temporaryClock;
+
+    if (!reference) {
+      return "";
+    }
+
+    return ["tractate", "chapter", "book", "parasha"].map(function (key) {
+      return reference[key] ? formatSourceName(reference[key]) : "";
+    }).filter(Boolean).join(", ");
   }
 
   function formatSourceName(value) {
@@ -1512,7 +1540,10 @@
       "פרק ראשון": "Chapter One",
       "מסכת נגעים": "Tractate Negaim",
       "ספר משלי": "Book of Proverbs",
-      "פרשת לך לך": "Parashat Lech Lecha"
+      "פרשת לך לך": "Parashat Lech Lecha",
+      "מסכת אבות": "Tractate Avot",
+      "ספר מלכים": "Book of Kings",
+      "פרשת מטות": "Parashat Matot"
     };
 
     return names[value] || value;
@@ -1673,15 +1704,28 @@
   }
 
   function buildEventDescription(slot) {
+    var sourceMaterial = formatSourceMaterial(slot.productId);
+    var description;
+
     if (slot.schedulingMode === "period-start") {
-      return t("periodDescription", {
+      description = t("periodDescription", {
         period: formatPeriodContext(slot.period),
         molad: formatMolad(slot.period),
         tags: formatTimeTags(slot.period)
       });
+      return appendSourceToDescription(description, sourceMaterial);
     }
 
-    return t("eventDescription");
+    description = t("eventDescription");
+    return appendSourceToDescription(description, sourceMaterial);
+  }
+
+  function appendSourceToDescription(description, sourceMaterial) {
+    if (!sourceMaterial) {
+      return description;
+    }
+
+    return description + "\n" + sourceMaterial;
   }
 
   function runSequentially(items, worker) {
