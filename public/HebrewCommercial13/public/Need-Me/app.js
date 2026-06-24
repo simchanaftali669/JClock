@@ -29,7 +29,7 @@
       regionAsia: "אסיה",
       regionNorthAmerica: "צפון אמריקה",
       regionSouthAmerica: "דרום אמריקה",
-      regionOceania: "אוקיאניה",
+      regionItalyAustralia: "איטליה ואוסטרליה",
       audience: "מוכר ל",
       boys: "בנים",
       girls: "בנות",
@@ -49,7 +49,7 @@
       monthsAhead: "חודשים קדימה",
       workStart: "עובד משעה",
       workEnd: "עובד עד שעה",
-      calculate: "חשב לוח זמנים",
+      calculate: "חשב תחילת זמן פרסום",
       createCalendar: "צור אירועים ביומן",
       found: "נמצאו",
       range: "טווח",
@@ -103,7 +103,7 @@
       regionAsia: "Asia",
       regionNorthAmerica: "North America",
       regionSouthAmerica: "South America",
-      regionOceania: "Oceania",
+      regionItalyAustralia: "Italy and Australia",
       audience: "Selling to",
       boys: "Boys",
       girls: "Girls",
@@ -123,7 +123,7 @@
       monthsAhead: "Months ahead",
       workStart: "Working from",
       workEnd: "Working until",
-      calculate: "Calculate schedule",
+      calculate: "Calculate Ad Start Time",
       createCalendar: "Create calendar events",
       found: "Found",
       range: "Range",
@@ -355,6 +355,7 @@
 
   function handlePlanSubmit(event) {
     event.preventDefault();
+    forceCurrentYovelRange();
     var product = findProduct(productInput.value);
     state.selectedProduct = product;
 
@@ -759,6 +760,10 @@
 
   function getSelectedClockModel() {
     var region = regionInput.value;
+
+    if (region === "south-america" || region === "italy-australia") {
+      return "sun";
+    }
 
     if (region === "europe" || region === "africa") {
       return "moon";
@@ -1342,7 +1347,7 @@
       asia: "Asia",
       "north-america": "North America",
       "south-america": "South America",
-      oceania: "Oceania"
+      "italy-australia": "Italy and Australia"
     } : {
       "middle-east": "מזרח תיכון",
       ireland: "אירלנד",
@@ -1351,7 +1356,7 @@
       asia: "אסיה",
       "north-america": "צפון אמריקה",
       "south-america": "דרום אמריקה",
-      oceania: "אוקיאניה"
+      "italy-australia": "איטליה ואוסטרליה"
     };
 
     return names[region] || (state.language === "en" ? "Region" : "אזור");
@@ -1704,10 +1709,16 @@
   }
 
   function syncRangeControls() {
+    forceCurrentYovelRange();
     var isFixedCycle = rangeModeInput.value === "shmita" || rangeModeInput.value === "yovel";
     var isDaysRange = rangeModeInput.value === "days";
+    rangeModeInput.disabled = true;
     daysInput.disabled = !isDaysRange;
     monthsInput.disabled = isFixedCycle || isDaysRange;
+  }
+
+  function forceCurrentYovelRange() {
+    rangeModeInput.value = "yovel";
   }
 
   function syncAudienceControls() {

@@ -284,12 +284,19 @@
 	(function redirectNeedMeDomain() {
 		const hostname = window.location.hostname.toLowerCase().replace(/^www\./, "");
 		const needMePath = "https://JClock.net/HebrewCommercial13/public/Need-Me/index.html";
+		const needMeIframePath = "https://JClock.net/HebrewCommercial13/public/Need-Me/iframe.html";
 		const coinDomain = "world-coin.ai";
 		const isNeedMeDomain = hostname === "need-me.net";
 		const isCoinDomain = hostname === coinDomain;
 		const isCoinUrl = window.location.href.toLowerCase().includes("coin");
 
-		function buildNeedMeUrl(forceEnglish) {
+		function wantsIframe() {
+			const params = new URLSearchParams(window.location.search);
+			const path = window.location.pathname.toLowerCase();
+			return path.includes("iframe") || path.includes("embed") || params.get("iframe") === "1" || params.get("embed") === "1";
+		}
+
+		function buildNeedMeUrl(forceEnglish, useIframe) {
 			const params = new URLSearchParams(window.location.search);
 
 			if (forceEnglish) {
@@ -297,7 +304,7 @@
 			}
 
 			const query = params.toString() ? "?" + params.toString() : "";
-			return needMePath + query + window.location.hash;
+			return (useIframe ? needMeIframePath : needMePath) + query + window.location.hash;
 		}
 
 		function buildNeedMeDomainUrl() {
@@ -305,7 +312,7 @@
 			params.set("lang", "en");
 
 			const query = params.toString() ? "?" + params.toString() : "";
-			return "https://Need-Me.net/" + query + window.location.hash;
+			return "https://Need-Me.net/" + (wantsIframe() ? "iframe.html" : "") + query + window.location.hash;
 		}
 
 		if (isCoinDomain || (!isNeedMeDomain && isCoinUrl)) {
@@ -314,7 +321,7 @@
 		}
 
 		if (isNeedMeDomain) {
-			window.location.replace(buildNeedMeUrl(false));
+			window.location.replace(buildNeedMeUrl(false, wantsIframe()));
 		}
 	})();
 

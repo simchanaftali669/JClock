@@ -23,16 +23,50 @@
       </div>
 
       <form id="plannerForm" class="planner-form">
-        <fieldset class="form-group">
-          <legend data-i18n="productGroup">מה המוצר שאני מחפש למכור</legend>
-
-          <label>
+        <fieldset class="product-bar" aria-label="מוצר למכירה">
+          <label class="product-field">
             <span data-i18n="productLabel">מוצר</span>
             <select id="productInput" name="product" required>
               <option value="cordykos">תרופה לשיגעון</option>
               <option value="resurrection">תחיית המתים</option>
               <option value="cancer-medicine">תרופה לסרטן</option>
             </select>
+          </label>
+
+          <label class="checkbox-field period-toggle">
+            <input id="periodStartOnlyInput" name="periodStartOnly" type="checkbox">
+            <span data-i18n="periodStartOnly">רק תחילת תקופה</span>
+          </label>
+
+          <button class="primary-button calculate-button" type="submit" data-i18n="calculate">חשב תחילת זמן פרסום</button>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend data-i18n="storeGroup">מתי אני עומד בחנות</legend>
+
+          <label>
+            <span data-i18n="startDate">תאריך לעמידה בחנות</span>
+            <input id="startDateInput" name="startDate" type="date" required>
+          </label>
+
+          <label>
+            <span data-i18n="daysToCheck">ימים לבדיקה</span>
+            <input id="daysInput" name="days" type="number" min="1" max="31" value="1" required>
+          </label>
+
+          <label>
+            <span data-i18n="monthsAhead">חודשים קדימה</span>
+            <input id="monthsInput" name="months" type="number" min="1" max="588" value="6" required>
+          </label>
+
+          <label id="workStartField">
+            <span data-i18n="workStart">עובד משעה</span>
+            <input id="workStartInput" name="workStart" type="time" value="08:00" required>
+          </label>
+
+          <label id="workEndField">
+            <span data-i18n="workEnd">עובד עד שעה</span>
+            <input id="workEndInput" name="workEnd" type="time" value="14:00" required>
           </label>
 
           <label>
@@ -56,7 +90,7 @@
               <option value="asia" data-i18n="regionAsia">אסיה</option>
               <option value="north-america" data-i18n="regionNorthAmerica">צפון אמריקה</option>
               <option value="south-america" data-i18n="regionSouthAmerica">דרום אמריקה</option>
-              <option value="oceania" data-i18n="regionOceania">אוקיאניה</option>
+              <option value="italy-australia" data-i18n="regionItalyAustralia">איטליה ואוסטרליה</option>
             </select>
           </label>
 
@@ -87,43 +121,9 @@
             </select>
           </label>
 
-          <label class="checkbox-field">
-            <input id="periodStartOnlyInput" name="periodStartOnly" type="checkbox">
-            <span data-i18n="periodStartOnly">רק תחילת תקופה</span>
-          </label>
-        </fieldset>
-
-        <fieldset class="form-group">
-          <legend data-i18n="storeGroup">מתי אני עומד בחנות</legend>
-
-          <label>
-            <span data-i18n="startDate">תאריך לעמידה בחנות</span>
-            <input id="startDateInput" name="startDate" type="date" required>
-          </label>
-
-          <label>
-            <span data-i18n="daysToCheck">ימים לבדיקה</span>
-            <input id="daysInput" name="days" type="number" min="1" max="31" value="1" required>
-          </label>
-
-          <label>
-            <span data-i18n="monthsAhead">חודשים קדימה</span>
-            <input id="monthsInput" name="months" type="number" min="1" max="588" value="6" required>
-          </label>
-
-          <label id="workStartField">
-            <span data-i18n="workStart">עובד משעה</span>
-            <input id="workStartInput" name="workStart" type="time" value="08:00" required>
-          </label>
-
-          <label id="workEndField">
-            <span data-i18n="workEnd">עובד עד שעה</span>
-            <input id="workEndInput" name="workEnd" type="time" value="14:00" required>
-          </label>
         </fieldset>
 
         <div class="form-actions">
-          <button class="primary-button" type="submit" data-i18n="calculate">חשב לוח זמנים</button>
           <button id="createCalendarButton" class="secondary-button" type="button" disabled data-i18n="createCalendar">צור אירועים ביומן</button>
         </div>
       </form>
@@ -159,6 +159,6 @@
   <script src="https://JClock.net/HebrewCommercial13/public/woman/js/suncalc.js"></script>
   <script src="commercial-time-anchors.js"></script>
   <script src="it-adapter.js"></script>
-  <script src="app.js?v=20260624-product-param-iframe"></script>
+  <script src="app.js?v=20260624-period-start-top"></script>
 </body>
 </html>
