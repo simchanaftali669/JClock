@@ -753,6 +753,10 @@
 		});
 	}
 
+	function navigateToFrame(frame) {
+		window.location.href = frame.src;
+	}
+
 	function openView(optionId) {
 		const cleanOptionId = optionId.split("/")[0];
 		const option = viewOptions.find(function(item) {
@@ -765,6 +769,11 @@
 			choiceScreen.style.display = "";
 			viewer.style.display = "none";
 			window.location.hash = "";
+			return;
+		}
+
+		if (option.frames.length === 1) {
+			navigateToFrame(option.frames[0]);
 			return;
 		}
 
