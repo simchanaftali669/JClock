@@ -247,6 +247,21 @@
 
     }
 
+    function getDefaultMoonLearningPeriod()
+    {
+        var defaultHebrewHour = lbHour + 1;
+        if (defaultHebrewHour > 24)
+            defaultHebrewHour = defaultHebrewHour - 24;
+
+        if (defaultHebrewHour <= 6)
+            return "Dovid";
+        if (defaultHebrewHour <= 12)
+            return "Month";
+        if (defaultHebrewHour <= 18)
+            return "Year";
+        return "Jubilee";
+    }
+
     function setDefaultHebrewDateParams(url)
     {
         if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
@@ -273,6 +288,8 @@
         if (defaultHebrewHour > 24)
             defaultHebrewHour = defaultHebrewHour - 24;
 
+        if (!url.searchParams.get("period"))
+            url.searchParams.set("period", getDefaultMoonLearningPeriod());
         url.searchParams.set("hebrewDay", defaultHebrewDay);
         url.searchParams.set("hebrewHour", defaultHebrewHour);
         window.location.replace(url.href);

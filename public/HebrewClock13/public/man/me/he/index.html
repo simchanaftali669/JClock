@@ -285,6 +285,33 @@
     }
 
 
+    function getDefaultSunLearningPeriod()
+    {
+        var date = new Date();
+        var currentHour = date.getHours() + (date.getMinutes() / 60) + (date.getSeconds() / 3600) + (date.getMilliseconds() / 3600000);
+        var zmanitHour = doit();
+        var sunsetYesterdayHour = parseFloat(zmanitHour[0]);
+        var sunriseHour = parseFloat(zmanitHour[1]);
+        var sunsetHour = parseFloat(zmanitHour[2]);
+        var sunriseTomorrowHour = parseFloat(zmanitHour[3]);
+
+        if (currentHour < sunriseHour)
+        {
+            var previousNightMidnight = (sunsetYesterdayHour + sunriseHour + 24) / 2;
+            if (previousNightMidnight >= 24 && currentHour < previousNightMidnight - 24)
+                return "Jubilee";
+            return "Dovid";
+        }
+        if (currentHour < (sunriseHour + sunsetHour) / 2)
+            return "Month";
+        if (currentHour < sunsetHour)
+            return "Year";
+        var nextNightMidnight = (sunsetHour + sunriseTomorrowHour + 24) / 2;
+        if (nextNightMidnight < 24 && currentHour >= nextNightMidnight)
+            return "Dovid";
+        return "Jubilee";
+    }
+
     function setDefaultHebrewDateParams(url)
     {
         if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
@@ -311,6 +338,8 @@
         if (defaultHebrewHour > 24)
             defaultHebrewHour = defaultHebrewHour - 24;
 
+        if (!url.searchParams.get("period"))
+            url.searchParams.set("period", getDefaultSunLearningPeriod());
         url.searchParams.set("hebrewDay", defaultHebrewDay);
         url.searchParams.set("hebrewHour", defaultHebrewHour);
         window.location.replace(url.href);
