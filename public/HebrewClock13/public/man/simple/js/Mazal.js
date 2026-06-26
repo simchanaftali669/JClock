@@ -127,7 +127,7 @@ function setmazal() {
         x = (2 + clockHour) % 7;
 
 	if(birthDay == null)
-		document.getElementById("Mazal").innerText = day_mida[x];
+		document.getElementById("Mazal").innerText = hour_mida[x];
 	else 
 	{
 		if (userLang.includes("he"))

@@ -62,6 +62,31 @@
 			line-height: 1.45;
 		}
 
+		.continent-filter {
+			margin: 0 0 20px;
+		}
+
+		.continent-select {
+			box-sizing: border-box;
+			width: min(360px, 100%);
+			min-height: 48px;
+			padding: 8px 12px;
+			border: 2px solid #204b31;
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.94);
+			color: #17311f;
+			font-size: 18px;
+			font-weight: 700;
+			line-height: 1.2;
+			cursor: pointer;
+		}
+
+		.continent-select:hover,
+		.continent-select:focus {
+			background: #e9f3e7;
+			outline: 3px solid rgba(32, 75, 49, 0.18);
+		}
+
 		.choice-grid {
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -234,6 +259,11 @@
 				font-size: 18px;
 			}
 
+			.continent-select {
+				width: 100%;
+				font-size: 17px;
+			}
+
 			.choice-split {
 				min-height: 66px;
 			}
@@ -272,6 +302,9 @@
 			<h1>JClock</h1>
 			<p class="subtitle" id="subtitle"></p>
 
+			<div class="continent-filter">
+				<select class="continent-select" id="continent-filter" aria-label="Continent filter"></select>
+			</div>
 			<div class="choice-grid" id="choice-grid"></div>
 		</div>
 	</main>
@@ -341,6 +374,73 @@
 		}
 	};
 
+	const continents = [
+		{
+			id: "north-america",
+			label: {
+				he: "צפון אמריקה",
+				en: "North America"
+			},
+			clockMode: "sun"
+		},
+		{
+			id: "asia",
+			label: {
+				he: "אסיה",
+				en: "Asia"
+			},
+			clockMode: "sun"
+		},
+		{
+			id: "europe",
+			label: {
+				he: "אירופה",
+				en: "Europe"
+			},
+			clockMode: "moon"
+		},
+		{
+			id: "south-america",
+			label: {
+				he: "דרום אמריקה",
+				en: "South America"
+			},
+			clockMode: "sun"
+		},
+		{
+			id: "australia-italy",
+			label: {
+				he: "אוסטרליה ואיטליה",
+				en: "Australia and Italy"
+			},
+			clockMode: "sun"
+		},
+		{
+			id: "africa",
+			label: {
+				he: "אפריקה",
+				en: "Africa"
+			},
+			clockMode: "moon"
+		},
+		{
+			id: "middle-east",
+			label: {
+				he: "המזרח התיכון",
+				en: "Middle East"
+			},
+			clockMode: "mixed"
+		},
+		{
+			id: "ireland",
+			label: {
+				he: "אירלנד",
+				en: "Ireland"
+			},
+			clockMode: "mixed"
+		}
+	];
+
 	const sourcePaths = {
 		clockFamily: "https://JClock.net/HebrewClock13/public/family/index.html",
 		clockMan: "https://JClock.net/HebrewClock13/public/man/simple/index.html",
@@ -380,7 +480,8 @@
 			frames: [
 				{ title: { he: "שעון חמה", en: "Sun clock" }, src: sources.clockMan }
 			],
-			primary: true
+			primary: true,
+			clockMode: "sun"
 		},
 		{
 			id: "moon-clock",
@@ -390,7 +491,8 @@
 			},
 			frames: [
 				{ title: { he: "שעון לבנה", en: "Moon clock" }, src: sources.clockWoman }
-			]
+			],
+			clockMode: "moon"
 		},
 		{
 			id: "diaspora-clock",
@@ -402,7 +504,8 @@
 				{ title: { he: "שעון חמה - חו\"ל", en: "Sun clock - Diaspora" }, src: sources.clockMan },
 				{ title: { he: "שעון לבנה - חו\"ל", en: "Moon clock - Diaspora" }, src: sources.clockWoman }
 			],
-			layout: "row"
+			layout: "row",
+			clockMode: "mixed"
 		},
 		{
 			heading: {
@@ -418,7 +521,8 @@
 			},
 			frames: [
 				{ title: { he: "פרסומות של שעון חמה", en: "Sun clock ads" }, src: sources.commercialMan }
-			]
+			],
+			clockMode: "sun"
 		},
 		{
 			id: "moon-ads",
@@ -428,7 +532,8 @@
 			},
 			frames: [
 				{ title: { he: "פרסומות של שעון לבנה", en: "Moon clock ads" }, src: sources.commercialWoman }
-			]
+			],
+			clockMode: "moon"
 		},
 		{
 			id: "diaspora-ads",
@@ -438,7 +543,8 @@
 			},
 			frames: [
 				{ title: { he: "פרסומות של שעון חו\"ל", en: "Diaspora clock ads" }, src: sources.commercialFamily }
-			]
+			],
+			clockMode: "mixed"
 		},
 		{
 			heading: {
@@ -456,7 +562,8 @@
 				{ title: { he: "פרסומות של שעון חמה", en: "Sun clock ads" }, src: sources.commercialMan },
 				{ title: { he: "שעון חמה", en: "Sun clock" }, src: sources.clockMan }
 			],
-			layout: "clock-ads"
+			layout: "clock-ads",
+			clockMode: "sun"
 		},
 		{
 			id: "moon-clock-ads",
@@ -468,7 +575,8 @@
 				{ title: { he: "פרסומות של שעון לבנה", en: "Moon clock ads" }, src: sources.commercialWoman },
 				{ title: { he: "שעון לבנה", en: "Moon clock" }, src: sources.clockWoman }
 			],
-			layout: "clock-ads"
+			layout: "clock-ads",
+			clockMode: "moon"
 		},
 		{
 			id: "diaspora-clock-ads",
@@ -485,19 +593,33 @@
 				{ title: { he: "פרסומות של שעון חו\"ל", en: "Diaspora clock ads" }, src: sources.commercialFamily },
 				{ title: { he: "שעון חו\"ל (חמה ולבנה)", en: "Diaspora clock (Sun and Moon)" }, src: sources.clockFamily }
 			],
-			layout: "clock-ads"
+			layout: "clock-ads",
+			clockMode: "mixed"
 		}
 	];
 
 	const choiceScreen = document.getElementById("choice-screen");
 	const subtitle = document.getElementById("subtitle");
+	const continentFilter = document.getElementById("continent-filter");
 	const choiceGrid = document.getElementById("choice-grid");
 	const viewer = document.getElementById("viewer");
 	const iframeContainer = document.getElementById("iframe-container");
 	let frameResizeObserver = null;
+	let selectedContinentId = "north-america";
 
 	function localText(value) {
 		return value[language] || value.he;
+	}
+
+	function getSelectedContinent() {
+		return continents.find(function(continent) {
+			return continent.id === selectedContinentId;
+		}) || continents[0];
+	}
+
+	function shouldShowOption(option) {
+		const continent = getSelectedContinent();
+		return continent.clockMode === "all" || option.clockMode === continent.clockMode;
 	}
 
 	function applyLanguage() {
@@ -537,8 +659,50 @@
 		requestAnimationFrame(updateSlotScales);
 	}
 
-	function renderChoices() {
+	function renderContinentFilter() {
+		continentFilter.innerHTML = "";
+
+		continents.forEach(function(continent) {
+			const option = document.createElement("option");
+			option.value = continent.id;
+			option.textContent = localText(continent.label);
+			continentFilter.appendChild(option);
+		});
+
+		continentFilter.value = selectedContinentId;
+		continentFilter.onchange = function() {
+			selectedContinentId = continentFilter.value;
+			renderChoices();
+		};
+	}
+
+	function getVisibleChoiceItems() {
+		const visibleItems = [];
+		let pendingHeading = null;
+
 		viewOptions.forEach(function(option) {
+			if (option.heading) {
+				pendingHeading = option;
+				return;
+			}
+
+			if (shouldShowOption(option)) {
+				if (pendingHeading) {
+					visibleItems.push(pendingHeading);
+					pendingHeading = null;
+				}
+
+				visibleItems.push(option);
+			}
+		});
+
+		return visibleItems;
+	}
+
+	function renderChoices() {
+		choiceGrid.innerHTML = "";
+
+		getVisibleChoiceItems().forEach(function(option) {
 			if (option.heading) {
 				const heading = document.createElement("h2");
 				heading.className = "choice-section-title";
@@ -640,6 +804,7 @@
 
 	applyLanguage();
 	updateFrameScale();
+	renderContinentFilter();
 	renderChoices();
 	window.addEventListener("resize", updateFrameScale);
 
