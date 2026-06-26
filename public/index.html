@@ -430,10 +430,20 @@
 
 	const DEFAULT_LATITUDE = "31.7768514";
 	const DEFAULT_LONGITUDE = "35.2331664";
-	const locationQuery = "?latitude=" + DEFAULT_LATITUDE + "&longitude=" + DEFAULT_LONGITUDE;
+	const locationQuery = "?latitude=" + DEFAULT_LATITUDE + "&longitude=" + DEFAULT_LONGITUDE + buildRefreshQuery();
 	const userLanguage = (navigator.language || navigator.userLanguage || "he").toLowerCase();
 	const language = userLanguage.startsWith("en") ? "en" : "he";
 	const MOBILE_FRAME_WIDTH = 900;
+
+	function isExplicitRefresh() {
+		const navigationEntry = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+		return (navigationEntry && navigationEntry.type === "reload") ||
+			(performance.navigation && performance.navigation.type === performance.navigation.TYPE_RELOAD);
+	}
+
+	function buildRefreshQuery() {
+		return isExplicitRefresh() ? "&cacheBust=" + Date.now() : "";
+	}
 
 	const text = {
 		he: {
