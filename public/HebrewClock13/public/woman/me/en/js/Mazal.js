@@ -177,6 +177,8 @@ function setmazal() {
 			x = 12;
 		
         var shevetHour = Number(x);
+		if(shevetHour == 0)
+			shevetHour = 12;
 		
 		//Offset is Real - 5785-09-13
 		//not feel real - 5785-10-08

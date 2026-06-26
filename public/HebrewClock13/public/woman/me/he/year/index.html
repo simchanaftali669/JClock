@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -10,13 +10,13 @@
 
 	  gtag('config', 'UA-30684949-2');
 	</script>
-	
+
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
 
-    <title>לימוד שנתי</title>  
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/me/he/css/stylesheet.css" id="thecss">  
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/shared/css/stylesheet.css" id="commercial_css">    
+    <title>לימוד שנתי</title>
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/me/he/css/stylesheet.css" id="thecss">
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/shared/css/stylesheet.css" id="commercial_css">
     <meta charset="UTF-8">
     <meta name="description" content="hebrew clock that showing the sun clock in order to Sanctify the month">
     <meta name="keywords" content="HebrewClock,kidush levana,moon,sunclock, hebrew time,
@@ -38,7 +38,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
                 <a href="https://JClock.net/HebrewClock13/public/woman/me/he/year/index.html" id="yearly__learning">לימוד עם נוצרי/ה</a>
 				<a href="https://JClock.net/HebrewClock13/public/woman/me/he/jewish/index.html" id="Jubilee__learning">לימוד עם יהודי/ה</a>-->
 <!--                <a href="https://JClock.net/HebrewClock13/public/woman/me/he/guide.html">מדריך למשתמש</a>
-                <a href="https://JClock.net/HebrewClock13/public/woman/me/he/year/chosen_story.html">סיפור החורף</a>  --> 
+                <a href="https://JClock.net/HebrewClock13/public/woman/me/he/year/chosen_story.html">סיפור החורף</a>  -->
 				<a href="https://JClock.net/HebrewClock13/public/woman/me/he/kabala/index.html">לו"ז תפילה</a>
             </div>
         </div>
@@ -54,7 +54,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
         <div style="text-align:center; margin-bottom:10px;">
             <!--<button id="stop" onclick="stop()" />עצור-->
         </div>
-        <div style="text-align:center; margin-bottom:10px;">	
+        <div style="text-align:center; margin-bottom:10px;">
             <input style="font-weight: bold;" class="year" id="Mazal_year" type="text" value="נפתלי שבבנימין"/>
             <input style="font-weight: bold;" class="year" id="Mazal_year" type="text" value="חסד שביסוד" onclick="openMidaInNewTab(1);" ondblclick="openMidaInNewTab(0);"/>
         </div>
@@ -165,7 +165,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
 
     var milisec_shaa_zmanit_night = 1000;
     var milisec_shaa_zmanit_day = 1000;
-	
+
     var oTimer;                 //event for the running clock
 
 	var sunrise;
@@ -187,18 +187,26 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
     //---get Location and activate the clock---
     function getLocation()
     {
-        if (navigator.geolocation)
+
+        var defaultLongitude = "35.2331664";
+        var defaultLatitude = "31.7768514";
+        var defaultUrl = new URL(document.location.href);
+        if (defaultUrl.searchParams.get("longitude") !== defaultLongitude || defaultUrl.searchParams.get("latitude") !== defaultLatitude)
         {
-            navigator.geolocation.getCurrentPosition(showPosition);
+            defaultUrl.searchParams.set("longitude", defaultLongitude);
+            defaultUrl.searchParams.set("latitude", defaultLatitude);
+            window.location.replace(defaultUrl.href);
+            return;
         }
+        showPosition({ coords: { longitude: defaultLongitude, latitude: defaultLatitude } });
     }
 
     function showPosition(position)
     {
-        
+
         var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");        
+        var lon = url.searchParams.get("longitude");
+        var lat = url.searchParams.get("latitude");
         if(lat)
         {
             //tz = https://maps.googleapis.com/maps/api/timezone/outputFormat?parameters
@@ -215,7 +223,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
         setmazal();
         //sederLimud();
         //setSefer();
-		
+
         //נחלה
         setShevet();
         commercialFunction();
@@ -236,8 +244,8 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
         var win = window.open('https://www.sefaria.org/Mishnah_Oktzin.1?lang=he', '_blank');
         win.focus();
     }
-    
-    function openSeferInNewTab() 
+
+    function openSeferInNewTab()
     {
         var win;
         //win = window.open('https://www.929.org.il/p/home', '_blank');
@@ -271,7 +279,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
         var win = window.open("https://JClock.net/HebrewClock13/public/woman/me/he/year/Health/index.html", '_blank');
         win.focus();
     }
-	
+
     //pause the background music
     function pause() {
         audio.pause();

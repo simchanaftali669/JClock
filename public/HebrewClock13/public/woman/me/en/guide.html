@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -12,9 +12,9 @@
 	</script>
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
-    <title>Guide</title>  
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/me/en/css/stylesheet.css" id="thecss">  
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/shared/css/stylesheet.css" id="commercial_css">    
+    <title>Guide</title>
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/me/en/css/stylesheet.css" id="thecss">
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/shared/css/stylesheet.css" id="commercial_css">
     <meta charset="UTF-8">
     <meta name="description" content="A Hebrew Clock that shows the time of the Sun for sanctify the Moon">
     <meta name="keywords" content="Hebrew Clock">
@@ -116,7 +116,7 @@
 
 	var milisec_shaa_zmanit_night = 1000;
     var milisec_shaa_zmanit_day = 1000;
-	
+
     var oTimer;                 //event for the running clock
 
     var hebrewday;
@@ -135,7 +135,7 @@
 	const genders = {
         MARRIED: '10',
         FEMALE: '01',
-        MALE: '00'        
+        MALE: '00'
 	}
     var gender;
     if( localStorage["gender"] != null )
@@ -150,10 +150,18 @@
     //---get Location and activate the clock---
     function getLocation()
     {
-        if (navigator.geolocation)
+
+        var defaultLongitude = "35.2331664";
+        var defaultLatitude = "31.7768514";
+        var defaultUrl = new URL(document.location.href);
+        if (defaultUrl.searchParams.get("longitude") !== defaultLongitude || defaultUrl.searchParams.get("latitude") !== defaultLatitude)
         {
-            navigator.geolocation.getCurrentPosition(showPosition);
+            defaultUrl.searchParams.set("longitude", defaultLongitude);
+            defaultUrl.searchParams.set("latitude", defaultLatitude);
+            window.location.replace(defaultUrl.href);
+            return;
         }
+        showPosition({ coords: { longitude: defaultLongitude, latitude: defaultLatitude } });
     }
 
     function showPosition(position)
@@ -172,7 +180,7 @@
         //setMasechet();
         //setSefer();
         //setParasha();
-		
+
 		//נחלה
         setShevet();
         commercialFunction();

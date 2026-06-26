@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -10,14 +10,14 @@
 
 	  gtag('config', 'UA-30684949-2');
 	</script>
-	
+
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
 
-	
-    <title>לימוד חודשי</title>  
+
+    <title>לימוד חודשי</title>
     <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/man/me/he/css/stylesheet.css" id="thecss">
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/man/shared/css/stylesheet.css" id="commercial_css">        
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/man/shared/css/stylesheet.css" id="commercial_css">
     <meta charset="UTF-8">
     <meta name="description" content="hebrew clock that showing the sun clock in order to Sanctify the month">
     <meta name="keywords" content="HebrewClock,kidush levana,moon,sunclock, hebrew time,
@@ -73,7 +73,7 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
         </div>
         <br />
         <br />
-<!--      
+<!--
         <div style="text-align:center;">
             <input id="tefila1" class="zmanim_hour" type="text" />
             <input id="Text15" class="zmanim_text" type="text" value="الفجر" />
@@ -101,8 +101,8 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
          <div style="text-align:center;">
             <input id="test" class="zmanim_hour" type="text" style="width:200px" />
             <input id="Text10" class="zmanim_text" type="text" value="בדיקה" />
-        </div> --> 
-    </div> 
+        </div> -->
+    </div>
 
     <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/me/he/month/js/Menu.js"></script>
     <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/me/he/js/HebrewClock.js"></script>
@@ -146,7 +146,7 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
 
     var milisec_shaa_zmanit_night = 1000;
     var milisec_shaa_zmanit_day = 1000;
-	
+
     var oTimer;                 //event for the running clock
 
     var hebrewday;
@@ -177,11 +177,11 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
         var win = window.open('https://www.sefaria.org/Mishnah_Niddah.1?lang=he', '_blank');
         win.focus();
     }
-    function openSeferInNewTab() 
+    function openSeferInNewTab()
     {
         var win;
 		//win = window.open('https://www.929.org.il/today', '_blank');
-        win = window.open('https://www.929.org.il/page/212', '_blank');	
+        win = window.open('https://www.929.org.il/page/212', '_blank');
 		win.focus();
     }
     function openSeferInSefariaInNewTab() {
@@ -210,17 +210,25 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
     //---get Location and activate the clock---
     function getLocation()
     {
-        if (navigator.geolocation)
+
+        var defaultLongitude = "35.2331664";
+        var defaultLatitude = "31.7768514";
+        var defaultUrl = new URL(document.location.href);
+        if (defaultUrl.searchParams.get("longitude") !== defaultLongitude || defaultUrl.searchParams.get("latitude") !== defaultLatitude)
         {
-            navigator.geolocation.getCurrentPosition(showPosition);
+            defaultUrl.searchParams.set("longitude", defaultLongitude);
+            defaultUrl.searchParams.set("latitude", defaultLatitude);
+            window.location.replace(defaultUrl.href);
+            return;
         }
+        showPosition({ coords: { longitude: defaultLongitude, latitude: defaultLatitude } });
     }
 
     function showPosition(position)
     {
         var url = new URL(document.location.href);
-        var lon = url.searchParams.get("longitude");        
-        var lat = url.searchParams.get("latitude");        
+        var lon = url.searchParams.get("longitude");
+        var lat = url.searchParams.get("latitude");
         if(lat)
         {
             //tz = https://maps.googleapis.com/maps/api/timezone/outputFormat?parameters
@@ -228,7 +236,7 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
 
         longitude = lon ? lon : position.coords.longitude;
         latitude = lat ? lat : position.coords.latitude;
-        
+
         set_dst();
         set_default_date();
         list_pos();
@@ -236,7 +244,7 @@ Sanctification of the Month,kidush hachodesh,شهر,قمر,شمس,مزولة,م�
         oTimerclock();
         setmazal();
         //sederLimud();
-		
+
         //נחלה
         setShevet();
         commercialFunction();

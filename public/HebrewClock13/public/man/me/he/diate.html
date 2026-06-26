@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -13,9 +13,9 @@
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
 
-    <title>מדריך</title>  
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/man/me/he/css/stylesheet.css" id="thecss">  
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/man/shared/css/stylesheet.css" id="commercial_css">      
+    <title>מדריך</title>
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/man/me/he/css/stylesheet.css" id="thecss">
+    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/man/shared/css/stylesheet.css" id="commercial_css">
     <meta charset="UTF-8">
     <meta name="description" content="שעון עברי המציג את זמן השמש בשביל לקדש את הלבנה">
     <meta name="keywords" content="שעון עברי">
@@ -45,7 +45,7 @@
 				<input class ="clock" id="Text4" type="text" value = ":"/>
 				<input class ="clock" id="Second" type="text" value = "75" />
 			<table/>
-        </div>		
+        </div>
         <div style = "text-align:center; margin-bottom:10px; visibility:hidden;">
             <input  id="Mazal"  type="text" value = "" onclick="openMidaInNewTab(1);" ondblclick="openMidaInNewTab(0);" />
         </div>
@@ -122,7 +122,7 @@
 
     var shaa_zmanit_night = 1;
     var shaa_zmanit_day = 1;
-	
+
 	var milisec_shaa_zmanit_night = 1000;
     var milisec_shaa_zmanit_day = 1000;
 
@@ -144,9 +144,9 @@
 	const genders = {
         MARRIED: '10',
         FEMALE: '01',
-        MALE: '00'        
+        MALE: '00'
     }
-    
+
     var gender;
     if( localStorage["gender"] != null )
         gender = localStorage["gender"];
@@ -160,10 +160,18 @@
     //---get Location and activate the clock---
     function getLocation()
     {
-        if (navigator.geolocation)
+
+        var defaultLongitude = "35.2331664";
+        var defaultLatitude = "31.7768514";
+        var defaultUrl = new URL(document.location.href);
+        if (defaultUrl.searchParams.get("longitude") !== defaultLongitude || defaultUrl.searchParams.get("latitude") !== defaultLatitude)
         {
-            navigator.geolocation.getCurrentPosition(showPosition);
+            defaultUrl.searchParams.set("longitude", defaultLongitude);
+            defaultUrl.searchParams.set("latitude", defaultLatitude);
+            window.location.replace(defaultUrl.href);
+            return;
         }
+        showPosition({ coords: { longitude: defaultLongitude, latitude: defaultLatitude } });
     }
 
     function showPosition(position)
@@ -182,7 +190,7 @@
         //setMasechet();
         //setSefer();
         //setParasha();
-		
+
 		//נחלה
         setShevet();
         commercialFunction();
@@ -229,7 +237,7 @@
         var win = window.open(sefariaUrl, '_blank');
         win.focus();
     }
-	
+
     //pause the background music
     function pause() {
         audio.pause();
