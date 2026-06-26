@@ -274,7 +274,7 @@
 
     function setDefaultHebrewDateParams(url)
     {
-        if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
+        if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour") && url.searchParams.get("period"))
             return false;
 
         var date = new Date();
@@ -300,6 +300,11 @@
 
         if (!url.searchParams.get("period"))
             url.searchParams.set("period", getDefaultSunLearningPeriod());
+        if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
+        {
+            window.location.replace(url.href);
+            return true;
+        }
         url.searchParams.set("hebrewDay", defaultHebrewDay);
         url.searchParams.set("hebrewHour", defaultHebrewHour);
         window.location.replace(url.href);
