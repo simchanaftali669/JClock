@@ -189,6 +189,24 @@
 
     //document.getElementById("Masechet").value = "ברכות";
 
+    var directDefaultLearningKey = "jclockDirectDefaultLearning:" + window.location.pathname;
+
+    function markDirectDefaultLearningRequest(url)
+    {
+        if (!url.search)
+            sessionStorage.setItem(directDefaultLearningKey, "1");
+    }
+
+    function shouldSetDefaultHebrewDateParams(url)
+    {
+        return !url.search || sessionStorage.getItem(directDefaultLearningKey) === "1";
+    }
+
+    function clearDirectDefaultLearningRequest()
+    {
+        sessionStorage.removeItem(directDefaultLearningKey);
+    }
+
     //---get Location and activate the clock---
     function getLocation()
     {
@@ -196,6 +214,7 @@
         var defaultLongitude = "35.2331664";
         var defaultLatitude = "31.7768514";
         var defaultUrl = new URL(document.location.href);
+        markDirectDefaultLearningRequest(defaultUrl);
         if (defaultUrl.searchParams.get("longitude") !== defaultLongitude || defaultUrl.searchParams.get("latitude") !== defaultLatitude)
         {
             defaultUrl.searchParams.set("longitude", defaultLongitude);
@@ -275,6 +294,12 @@
     function setDefaultHebrewDateParams(url)
     {
         if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour") && url.searchParams.get("period"))
+        {
+            clearDirectDefaultLearningRequest();
+            return false;
+        }
+
+        if (!shouldSetDefaultHebrewDateParams(url))
             return false;
 
         var date = new Date();
@@ -302,11 +327,13 @@
             url.searchParams.set("period", getDefaultSunLearningPeriod());
         if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
         {
+            clearDirectDefaultLearningRequest();
             window.location.replace(url.href);
             return true;
         }
         url.searchParams.set("hebrewDay", defaultHebrewDay);
         url.searchParams.set("hebrewHour", defaultHebrewHour);
+        clearDirectDefaultLearningRequest();
         window.location.replace(url.href);
         return true;
     }
