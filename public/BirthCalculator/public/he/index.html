@@ -194,6 +194,7 @@
 	var geocoder;
 	var placesService;
 	var placeAutocomplete;
+	var defaultLocationLabel = 'הכותל המערבי';
 	var latitude = 31.7768514;
 	var longitude = 35.2331664;
 	var placeSearchInput = document.getElementById('place-search');
@@ -205,7 +206,14 @@
 	  geocoder = new google.maps.Geocoder();
 	  map = new google.maps.Map(document.getElementById('map'), {zoom: 13, center: initialLocation});
 	  placesService = new google.maps.places.PlacesService(map);
-	  marker = new google.maps.Marker({draggable: true, position: initialLocation, map: map});
+	  marker = new google.maps.Marker({
+	    draggable: true,
+	    position: initialLocation,
+	    map: map,
+	    title: defaultLocationLabel
+	  });
+	  locationStatus.className = '';
+	  locationStatus.textContent = 'ברירת המחדל: הכותל המערבי.';
 
 	  marker.addListener('dragend', function() {
 	    setSelectedLocation(marker.getPosition().lat(), marker.getPosition().lng());
@@ -225,7 +233,6 @@
 	    applyGoogleLocation(place.geometry.location, place.formatted_address || place.name);
 	  });
 
-	  getLocation();
 	}
 
 	function getLocation() {
@@ -324,7 +331,7 @@
 
 	function showLocationError() {
 	  locationStatus.className = 'error';
-	  locationStatus.textContent = 'לא ניתן לקבל מיקום. נשארים עם ירושלים.';
+	  locationStatus.textContent = 'לא ניתן לקבל מיקום. נשארים עם הכותל המערבי.';
 	}
     </script>
     <script async defer
