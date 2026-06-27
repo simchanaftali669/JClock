@@ -209,10 +209,17 @@ function monthsperyeararr(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9,
 
 const gWeekday = new weekdayarr("Sun", "Mon", "Tues", "Wednes", "Thurs", "Fri", "Satur")
     , gMonth = new gregmontharr("January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December")
-    , hMonth = new hebrewmontharr("Tishri", "Heshvan", "Kislev", "Tevet", "Shevat", "AdarI", "AdarII", "Nisan", "Iyyar", "Sivan", "Tammuz", "Av", "Elul")
+    , hMonth = new hebrewmontharr("Tishri", "Heshvan", "Kislev", "Tevet", "Shevat", "Adar", "Adar II", "Nisan", "Iyyar", "Sivan", "Tammuz", "Av", "Elul")
 	, hMonthHebrew = new hebrewmontharr("תשרי", "חשוון", "כסלו", "טבת", "שבט", "אדר", "אדר ב", "ניסן", "אייר", "סיוון", "תמוז", "אב", "אלול")
     , mpy = new monthsperyeararr(12, 12, 13, 12, 12, 13, 12, 13, 12, 12, 13, 12, 12, 13, 12, 12, 13, 12, 13)
     ;
+
+function getEnglishHebrewMonthName(month, metonicYear) {
+	if (month == 6 && mpy[metonicYear] == 13)
+		return "Adar I";
+
+	return hMonth[month - 1];
+}
 
 /**
  * hebrewDate
@@ -488,7 +495,7 @@ function hebrewDate(inputDateOrYear, inputMonth, inputDate, inputLang) {
 			year: hebrewYear
 		  , month: hebrewMonth
 		  , date: hebrewDate
-		  , month_name: hMonth[hebrewMonth - 1]
+		  , month_name: getEnglishHebrewMonthName(hebrewMonth, metonicYear)
 		};
 	else
 		return {
