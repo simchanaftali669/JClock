@@ -103,9 +103,14 @@
             return;
 
         var names = [];
+        var seenNames = {};
         window.marrigeDB.forEach(function(record) {
-            if(record && record.ID && names.indexOf(record.ID) === -1)
+            var normalizedName = normalizeMarrigeName(record && record.ID);
+            if(record && record.ID && !seenNames[normalizedName])
+            {
+                seenNames[normalizedName] = true;
                 names.push(record.ID);
+            }
         });
 
         names.sort(function(a, b) {
@@ -121,23 +126,59 @@
         });
     }
 
-    function findMarrigeTimeByID(id)
+    function normalizeMarrigeName(name)
     {
-        var cleanId = (id || "").trim();
-        return window.marrigeDB.find(function(marrigeTime) {
-            return (marrigeTime.ID || "").trim() == cleanId;
-        }) || window.marrigeDB.find(function(marrigeTime) {
-            return (marrigeTime.ID || "").trim().toLowerCase() == cleanId.toLowerCase();
+        return (name || "").trim().replace(/\s+/g, " ").toLowerCase();
+    }
+
+    function findMarrigeTimesByID(id)
+    {
+        var cleanId = normalizeMarrigeName(id);
+        return window.marrigeDB.filter(function(marrigeTime) {
+            return normalizeMarrigeName(marrigeTime.ID) == cleanId;
         });
     }
 
-    function getMarrigeTimeForSelectedClock(marrigeTime)
+    function parseBooleanClockValue(value)
     {
-        var selectedClock = getSelectedBirthClock();
+        if(value === true || value === "true" || value === 1 || value === "1")
+            return true;
+
+        if(value === false || value === "false" || value === 0 || value === "0")
+            return false;
+
+        return null;
+    }
+
+    function isClockType(record, clock)
+    {
+        var isMoon = parseBooleanClockValue(record.isMoon);
+        if(isMoon !== null)
+            return clock == "moon" ? isMoon : !isMoon;
+
+        var clockType = (record.clockType || record.birthClock || record.mazalType || record.type || "").toString().toLowerCase();
+        if(clock == "sun")
+            return clockType == "sun" || clockType == "solar" || clockType == "chama";
+
+        return clockType == "moon" || clockType == "lunar" || clockType == "levana";
+    }
+
+    function getMarrigeTimeForClock(marrigeTimes, clock)
+    {
+        var records = Array.isArray(marrigeTimes) ? marrigeTimes : [marrigeTimes];
+        var selectedRecord = records.find(function(record) {
+            return record && isClockType(record, clock);
+        }) || records[0];
+
         return {
-            hebrewDay: marrigeTime.hebrewDay,
-            hebrewHour: selectedClock == "sun" && marrigeTime.mazalHour != null ? marrigeTime.mazalHour : marrigeTime.hebrewHour
+            hebrewDay: selectedRecord.hebrewDay,
+            hebrewHour: selectedRecord.hebrewHour
         };
+    }
+
+    function getMarrigeTimeForSelectedClock(marrigeTimes)
+    {
+        return getMarrigeTimeForClock(marrigeTimes, getSelectedBirthClock());
     }
 
 	async function get_marrige_essential()
@@ -156,10 +197,10 @@
         }
 
         saveDefaultIDIfNeeded();
-        var marrigeTime = findMarrigeTimeByID(document.getElementById("ID").value);
-        if(marrigeTime != null)
+        var marrigeTimes = findMarrigeTimesByID(document.getElementById("ID").value);
+        if(marrigeTimes.length > 0)
         {
-            marrigeTime = getMarrigeTimeForSelectedClock(marrigeTime);
+            var marrigeTime = getMarrigeTimeForSelectedClock(marrigeTimes);
             document.location.href = "https://JClock.net/HebrewClock13/public/woman/me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location;
         }
         else
