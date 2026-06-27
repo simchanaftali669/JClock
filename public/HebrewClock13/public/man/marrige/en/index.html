@@ -157,6 +157,18 @@
                 return record[key];
         }
 
+        if(suffix == "HebrewDay" && record.hebrewDay != null)
+            return record.hebrewDay;
+
+        if(suffix == "HebrewHour")
+        {
+            if(clock == "sun" && record.mazalHour != null)
+                return record.mazalHour;
+
+            if(clock == "moon" && record.hebrewHour != null)
+                return record.hebrewHour;
+        }
+
         return null;
     }
 
