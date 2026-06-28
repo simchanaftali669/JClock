@@ -65,8 +65,8 @@
       renderedLimit: "מוצגות {shown} תוצאות ראשונות מתוך {total}.",
       daysSuffix: "ימים",
       monthsSuffix: "חודשים",
-      yovelRange: "יובל {cycle} · {start}-{end} · שנה 50: {fiftieth} · בלי שנות שמיטה",
-      shmitaRange: "שבוע {week} בתוך יובל {cycle} · {start}-{end} · בלי שנת שמיטה",
+      yovelRange: "יובל {cycle} · {start}-{end} · שנה 50: {fiftieth}",
+      shmitaRange: "שבוע {week} בתוך יובל {cycle} · {start}-{end}",
       periodStartTime: "תחילת תקופה: {time}",
       periodTime: "תקופה: {start} - {end}",
       entryPoint: "נקודת כניסה לשימוש",
@@ -139,8 +139,8 @@
       renderedLimit: "Showing the first {shown} results out of {total}.",
       daysSuffix: "days",
       monthsSuffix: "months",
-      yovelRange: "Jubilee {cycle} · {start}-{end} · 50th year: {fiftieth} · without Shmita years",
-      shmitaRange: "Week {week} within Jubilee {cycle} · {start}-{end} · without the Shmita year",
+      yovelRange: "Jubilee {cycle} · {start}-{end} · 50th year: {fiftieth}",
+      shmitaRange: "Week {week} within Jubilee {cycle} · {start}-{end}",
       periodStartTime: "Period start: {time}",
       periodTime: "Period: {start} - {end}",
       entryPoint: "Entry point for use",
@@ -553,11 +553,6 @@
         timeZone: options.timeZone
       });
 
-      if (isSkippedHebrewYear(info)) {
-        cursor = addMinutes(cursor, 60);
-        continue;
-      }
-
       var allowedHour = isAllowedHour(options.product, info);
       var allowedDay = isAllowedDay(options.product, info);
       var allowedPeriod = isAllowedActivationSignal(options.product, info.period);
@@ -584,10 +579,6 @@
     molads.forEach(function (molad) {
       var info = molad.info;
 
-      if (isSkippedHebrewYear(info)) {
-        return;
-      }
-
       if (!isAllowedActivationSignal(options.product, info.period) || info.confidence < options.product.minConfidence) {
         return;
       }
@@ -609,7 +600,7 @@
     molads.forEach(function (molad) {
       var info = molad.info;
 
-      if (!isSkippedHebrewYear(info) && isAllowedTemporaryClock(options.product, info) && info.confidence >= options.product.minConfidence) {
+      if (isAllowedTemporaryClock(options.product, info) && info.confidence >= options.product.minConfidence) {
         options.diagnostics.candidateCount += 1;
         var slot = toSlot(options.product, molad.date, options.timeZone, options.durationMinutes, info, options);
         if (slot.relevance !== "none") {
@@ -980,10 +971,6 @@
     }
 
     return product.allowedWeekdays.indexOf(info.weekday) !== -1;
-  }
-
-  function isSkippedHebrewYear(info) {
-    return info.hebrew && info.hebrew.year % 7 === 0;
   }
 
   function getSchedulingMode(product) {
