@@ -239,7 +239,15 @@
 
     function shouldSetDefaultHebrewDateParams(url)
     {
-        return !url.search || sessionStorage.getItem(directDefaultLearningKey) === "1";
+        return !url.search ||
+            sessionStorage.getItem(directDefaultLearningKey) === "1" ||
+            (
+                url.searchParams.get("longitude") &&
+                url.searchParams.get("latitude") &&
+                !url.searchParams.get("period") &&
+                !url.searchParams.get("hebrewDay") &&
+                !url.searchParams.get("hebrewHour")
+            );
     }
 
     function clearDirectDefaultLearningRequest()
@@ -328,7 +336,7 @@
 
     function setDefaultHebrewDateParams(url)
     {
-        if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour") && url.searchParams.get("period"))
+        if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
         {
             clearDirectDefaultLearningRequest();
             return false;
@@ -358,18 +366,8 @@
         if (defaultHebrewHour > 24)
             defaultHebrewHour = defaultHebrewHour - 24;
 
-        if (!url.searchParams.get("period"))
-            url.searchParams.set("period", getDefaultMoonLearningPeriod());
-        if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
-        {
-            clearDirectDefaultLearningRequest();
-            window.location.replace(url.href);
-            return true;
-        }
-        url.searchParams.set("hebrewDay", defaultHebrewDay);
-        url.searchParams.set("hebrewHour", defaultHebrewHour);
         clearDirectDefaultLearningRequest();
-        window.location.replace(url.href);
+        sederLimud(getDefaultMoonLearningPeriod());
         return true;
     }
 
