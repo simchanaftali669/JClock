@@ -147,30 +147,38 @@ body
 
 @media (orientation: portrait), (max-width: 700px) {
     #container table {
-        width: min(100%, 850px) !important;
+        width: auto !important;
+        max-width: 100%;
     }
 
     .clock,
     .ChirstianClock {
         font-size: clamp(34px, 11vw, 58px);
+        margin: 0;
+        padding: 0;
+        vertical-align: baseline;
     }
 
     #Hour,
-    #Second,
-    .ChirstianClock {
-        width: clamp(48px, 17vw, 76px);
+    #Second {
+        width: 1.55em;
     }
 
-    #Minute,
-    #ChirstianMinute {
-        width: clamp(96px, 33vw, 150px);
+    #Minute {
+        width: 2.45em;
+    }
+
+    #ChirstianHour,
+    #ChirstianMinute,
+    #ChirstianSecond {
+        width: 1.35em;
     }
 
     #Text2,
     #Text4,
     #HebrewText2,
     #HebrewText4 {
-        width: clamp(10px, 5vw, 18px);
+        width: 0.3em;
     }
 
     #Mazal {
