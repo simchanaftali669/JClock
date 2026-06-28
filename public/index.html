@@ -432,8 +432,15 @@
 	const DEFAULT_LONGITUDE = "35.2331664";
 	const locationQuery = "?latitude=" + DEFAULT_LATITUDE + "&longitude=" + DEFAULT_LONGITUDE + buildRefreshQuery();
 	const userLanguage = (navigator.language || navigator.userLanguage || "he").toLowerCase();
-	const language = userLanguage.startsWith("en") ? "en" : "he";
+	const shortcutLanguage = getShortcutLanguageFromHash();
+	const language = shortcutLanguage || !userLanguage.startsWith("he") ? "en" : "he";
 	const MOBILE_FRAME_WIDTH = 900;
+
+	function getShortcutLanguageFromHash() {
+		const hashValue = window.location.hash.substring(1);
+		const match = hashValue.match(/^\d{2}(?:[\/_-]?([a-z]{2,3}(?:-[a-z]{2,8})?)|([a-z]{2,3}(?:-[a-z]{2,8})?))?(?:\/.*)?$/i);
+		return match ? match[1] || match[2] || "" : "";
+	}
 
 	function isExplicitRefresh() {
 		const navigationEntry = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
@@ -457,6 +464,7 @@
 	const continents = [
 		{
 			id: "north-america",
+			shortcut: "01",
 			label: {
 				he: "צפון אמריקה",
 				en: "North America"
@@ -465,6 +473,7 @@
 		},
 		{
 			id: "asia",
+			shortcut: "02",
 			label: {
 				he: "אסיה",
 				en: "Asia"
@@ -473,6 +482,7 @@
 		},
 		{
 			id: "europe",
+			shortcut: "03",
 			label: {
 				he: "אירופה",
 				en: "Europe"
@@ -481,6 +491,7 @@
 		},
 		{
 			id: "south-america",
+			shortcut: "04",
 			label: {
 				he: "דרום אמריקה",
 				en: "South America"
@@ -489,6 +500,7 @@
 		},
 		{
 			id: "australia-italy",
+			shortcut: "05",
 			label: {
 				he: "אוסטרליה ואיטליה",
 				en: "Australia and Italy"
@@ -497,6 +509,7 @@
 		},
 		{
 			id: "africa",
+			shortcut: "06",
 			label: {
 				he: "אפריקה",
 				en: "Africa"
@@ -505,6 +518,7 @@
 		},
 		{
 			id: "middle-east",
+			shortcut: "07",
 			label: {
 				he: "המזרח התיכון",
 				en: "Middle East"
@@ -513,6 +527,7 @@
 		},
 		{
 			id: "ireland",
+			shortcut: "08",
 			label: {
 				he: "אירלנד",
 				en: "Ireland"
@@ -709,6 +724,34 @@
 		}) || continents[0];
 	}
 
+	function getContinentShortcutHash(continent) {
+		return "#" + continent.shortcut;
+	}
+
+	function findContinentByShortcut(hashValue) {
+		const shortcutMatch = hashValue.replace(/^#/, "").match(/^(\d{2})(?:[\/_-]?[a-z]{2,3}(?:-[a-z]{2,8})?)?(?:\/.*)?$/i);
+		const shortcut = shortcutMatch ? shortcutMatch[1] : hashValue.split("/")[0].replace(/^#/, "").toLowerCase();
+		return continents.find(function(continent) {
+			return continent.shortcut === shortcut;
+		});
+	}
+
+	function setContinentShortcutHash() {
+		const continent = getSelectedContinent();
+		if (window.location.hash !== getContinentShortcutHash(continent)) {
+			history.replaceState(null, "", getContinentShortcutHash(continent));
+		}
+	}
+
+	function applyContinentShortcut(hashValue) {
+		const continent = findContinentByShortcut(hashValue);
+		if (!continent)
+			return false;
+
+		selectedContinentId = continent.id;
+		return true;
+	}
+
 	function shouldShowOption(option) {
 		const continent = getSelectedContinent();
 		return option.clockMode === "all" || continent.clockMode === "all" || option.clockMode === continent.clockMode;
@@ -757,38 +800,22 @@
 		continents.forEach(function(continent) {
 			const option = document.createElement("option");
 			option.value = continent.id;
-			option.textContent = localText(continent.label);
+			option.textContent = continent.shortcut + " - " + localText(continent.label);
 			continentFilter.appendChild(option);
 		});
 
 		continentFilter.value = selectedContinentId;
 		continentFilter.onchange = function() {
 			selectedContinentId = continentFilter.value;
+			setContinentShortcutHash();
 			renderChoices();
 		};
 	}
 
 	function getVisibleChoiceItems() {
-		const visibleItems = [];
-		let pendingHeading = null;
-
-		viewOptions.forEach(function(option) {
-			if (option.heading) {
-				pendingHeading = option;
-				return;
-			}
-
-			if (shouldShowOption(option)) {
-				if (pendingHeading) {
-					visibleItems.push(pendingHeading);
-					pendingHeading = null;
-				}
-
-				visibleItems.push(option);
-			}
+		return viewOptions.filter(function(option) {
+			return option.learningShortcut && shouldShowOption(option);
 		});
-
-		return visibleItems;
 	}
 
 	function renderChoices() {
@@ -834,11 +861,11 @@
 				return;
 			}
 
-			if (option.learningShortcut && getSelectedContinent().clockMode === "mixed") {
+			if (option.learningShortcut) {
 				const split = document.createElement("div");
 				const label = document.createElement("div");
-				const manButton = document.createElement("button");
-				const womanButton = document.createElement("button");
+				const clockButton = document.createElement("button");
+				const learningButton = document.createElement("button");
 
 				split.className = "learning-split";
 				split.setAttribute("role", "group");
@@ -847,22 +874,22 @@
 				label.className = "learning-split-label";
 				label.textContent = localText(option.label);
 
-				manButton.type = "button";
-				manButton.className = "learning-half learning-half-man";
-				manButton.textContent = language === "he" ? "גברים" : "Men";
-				manButton.onclick = function() {
-					window.location.href = buildLearningUrl(false);
+				clockButton.type = "button";
+				clockButton.className = "learning-half learning-half-man";
+				clockButton.textContent = language === "he" ? "שעון" : "Clock";
+				clockButton.onclick = function() {
+					openContinentClock();
 				};
 
-				womanButton.type = "button";
-				womanButton.className = "learning-half learning-half-woman";
-				womanButton.textContent = language === "he" ? "נשים" : "Women";
-				womanButton.onclick = function() {
-					window.location.href = buildLearningUrl(true);
+				learningButton.type = "button";
+				learningButton.className = "learning-half learning-half-woman";
+				learningButton.textContent = localText(option.label);
+				learningButton.onclick = function() {
+					openLearningShortcut(false);
 				};
 
-				split.appendChild(manButton);
-				split.appendChild(womanButton);
+				split.appendChild(clockButton);
+				split.appendChild(learningButton);
 				split.appendChild(label);
 				choiceGrid.appendChild(split);
 				return;
@@ -892,6 +919,22 @@
 		const continent = getSelectedContinent();
 		const isWoman = forceWoman || continent.clockMode === "moon";
 		window.location.href = buildLearningUrl(isWoman);
+	}
+
+	function getContinentClockOptionId() {
+		const continent = getSelectedContinent();
+
+		if (continent.clockMode === "moon")
+			return "moon-clock";
+
+		if (continent.clockMode === "mixed")
+			return "diaspora-clock";
+
+		return "sun-clock";
+	}
+
+	function openContinentClock() {
+		openView(getContinentClockOptionId());
 	}
 
 	function openHashShortcut(hashValue) {
@@ -969,12 +1012,22 @@
 
 	applyLanguage();
 	updateFrameScale();
+
+	if (window.location.hash.length > 1) {
+		applyContinentShortcut(window.location.hash.substring(1));
+	} else {
+		setContinentShortcutHash();
+	}
+
 	renderContinentFilter();
 	renderChoices();
 	window.addEventListener("resize", updateFrameScale);
 
 	if (window.location.hash.length > 1) {
-		openView(window.location.hash.substring(1));
+		const hashValue = window.location.hash.substring(1);
+		if (!findContinentByShortcut(hashValue)) {
+			openView(hashValue);
+		}
 	}
 </script>
 </body>
