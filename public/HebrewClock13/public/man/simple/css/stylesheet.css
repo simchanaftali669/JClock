@@ -145,6 +145,39 @@ body
     font-family: Comic Sans MS;
 }
 
+@media (orientation: portrait), (max-width: 700px) {
+    #container table {
+        width: min(100%, 850px) !important;
+    }
+
+    .clock,
+    .ChirstianClock {
+        font-size: clamp(34px, 11vw, 58px);
+    }
+
+    #Hour,
+    #Second,
+    .ChirstianClock {
+        width: clamp(48px, 17vw, 76px);
+    }
+
+    #Minute,
+    #ChirstianMinute {
+        width: clamp(96px, 33vw, 150px);
+    }
+
+    #Text2,
+    #Text4,
+    #HebrewText2,
+    #HebrewText4 {
+        width: clamp(10px, 5vw, 18px);
+    }
+
+    #Mazal {
+        font-size: clamp(34px, 11vw, 58px);
+    }
+}
+
 /* For phones */
 @media (max-width: 768px) {
     .time-display {
