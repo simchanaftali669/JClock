@@ -27,6 +27,63 @@
   <script>
     document.write('<script src="https://bind-me.net/MarrigeDB.js?v=' + Date.now() + '"><\/script>');
   </script>
+  <style>
+    .name-autocomplete {
+        display: inline-block;
+        position: relative;
+    }
+
+    .name-autocomplete input {
+        width: 188px;
+    }
+
+    .name-suggestions {
+        background: #fff;
+        border: 1px solid #d7d7d7;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+        display: none;
+        left: 0;
+        max-height: 190px;
+        overflow-y: auto;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 2px);
+        z-index: 1060;
+    }
+
+    .name-suggestions.show {
+        display: block;
+    }
+
+    .name-suggestion {
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        display: block;
+        padding: 8px 10px;
+        text-align: right;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+    .name-suggestion:hover,
+    .name-suggestion:focus {
+        background: #f7eef6;
+        outline: none;
+    }
+
+    @media (max-width: 575px) {
+        .modal-body p {
+            width: 100% !important;
+        }
+
+        .name-autocomplete,
+        .name-autocomplete input {
+            width: 100%;
+        }
+    }
+  </style>
 </head>
 <body>
 
@@ -52,8 +109,11 @@
             
             <!-- Modal body -->
             <div class="modal-body" style="direction:rtl;!important;">
-                 <p style="display: inline-block; width: 248px;">הכנס שם מלא:</p><input type="text" value="נפתלי ביליג" id="ID" list="marrigeNames" autocomplete="off" />
-                 <datalist id="marrigeNames"></datalist>
+                 <p style="display: inline-block; width: 248px;">הכנס שם מלא:</p>
+                 <div class="name-autocomplete">
+                    <input type="text" value="נפתלי ביליג" id="ID" autocomplete="off" />
+                    <div id="marrigeNames" class="name-suggestions" role="listbox"></div>
+                 </div>
                  <div style="margin-top:12px;">
                     <p style="margin-bottom:6px;">בחר מועד מפגש:</p>
                     <label style="display:block;">
@@ -85,6 +145,7 @@
 <script>
     var defaultIdStorageKey = "jclock-personal-learning-default-id";
     var defaultClockStorageKey = "jclock-personal-learning-default-clock";
+    var marrigeNameOptions = [];
 
     function loadDefaultID()
     {
@@ -133,12 +194,56 @@
             return a.localeCompare(b, "he");
         });
 
+        marrigeNameOptions = names;
+        renderMarrigeNameSuggestions(document.getElementById("ID").value);
+    }
+
+    function renderMarrigeNameSuggestions(value)
+    {
         var list = document.getElementById("marrigeNames");
+        var cleanValue = normalizeMarrigeName(value);
+        var matches = marrigeNameOptions.filter(function(name) {
+            return !cleanValue || normalizeMarrigeName(name).indexOf(cleanValue) > -1;
+        }).slice(0, 12);
+
         list.innerHTML = "";
-        names.forEach(function(name) {
-            var option = document.createElement("option");
-            option.value = name;
+        matches.forEach(function(name) {
+            var option = document.createElement("button");
+            option.type = "button";
+            option.className = "name-suggestion";
+            option.setAttribute("role", "option");
+            option.textContent = name;
+            option.addEventListener("pointerdown", function(event) {
+                event.preventDefault();
+                document.getElementById("ID").value = name;
+                hideMarrigeNameSuggestions();
+            });
             list.appendChild(option);
+        });
+
+        list.classList.toggle("show", matches.length > 0);
+    }
+
+    function hideMarrigeNameSuggestions()
+    {
+        document.getElementById("marrigeNames").classList.remove("show");
+    }
+
+    function setupMarrigeNameAutocomplete()
+    {
+        var idInput = document.getElementById("ID");
+        idInput.addEventListener("focus", function() {
+            renderMarrigeNameSuggestions(idInput.value);
+        });
+        idInput.addEventListener("input", function() {
+            renderMarrigeNameSuggestions(idInput.value);
+        });
+        idInput.addEventListener("click", function() {
+            renderMarrigeNameSuggestions(idInput.value);
+        });
+        document.addEventListener("pointerdown", function(event) {
+            if(!event.target.closest(".name-autocomplete"))
+                hideMarrigeNameSuggestions();
         });
     }
 
@@ -226,9 +331,10 @@
         } 
     }
 	$(document).ready(function()
-	{
+    {
         loadDefaultID();
         populateMarrigeNameOptions();
+        setupMarrigeNameAutocomplete();
 		$('[data-toggle="tooltip"]').tooltip();   
 	});</script>
 
