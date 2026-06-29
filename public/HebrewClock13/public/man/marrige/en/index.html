@@ -4,6 +4,22 @@
   <title>Marrige essennce</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script>
+    (function hardRefreshOnReload() {
+      var navigationEntry = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+      var isReload = (navigationEntry && navigationEntry.type == "reload") ||
+        (performance.navigation && performance.navigation.type === performance.navigation.TYPE_RELOAD);
+      if(isReload)
+      {
+        var url = new URL(window.location.href);
+        url.searchParams.set("hardRefresh", Date.now().toString());
+        window.location.replace(url.toString());
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -41,11 +57,11 @@
                   <p style="margin-bottom:6px;">Choose meeting molad:</p>
                   <label style="display:block;">
                       <input type="radio" name="birthClock" value="sun" checked />
-                      Sun molad - gives me direction
+                      Sun molad - What should I give? What is my goal in life?
                   </label>
                   <label style="display:block;">
                       <input type="radio" name="birthClock" value="moon" />
-                      Moon molad - moves me and gives me home
+                      Moon molad - What am I entitled to receive? What motivates me in life?
                   </label>
                   <!--
                   <label style="display:block;">
