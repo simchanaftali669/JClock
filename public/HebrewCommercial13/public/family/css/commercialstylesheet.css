@@ -101,14 +101,14 @@
 
 #commercial > div
 {
-   background-size: 69% auto !important;
+   background-size: 280px auto !important;
 }
 
 @media (min-width: 1200px) and (orientation: landscape)
 {
    #commercial > div
    {
-      background-size: 50% auto !important;
+      background-size: 220px auto !important;
    }
 }
 

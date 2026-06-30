@@ -99,4 +99,37 @@
    height:400px;   
 }
 
+#Soteria,
+#Breslev,
+#ShifonPlus,
+#IDF,
+#NewDeli,
+#Opticana,
+#Velvel,
+#Mispara,
+#JacobsCoffee,
+#NesCafe,
+#CoffeeBilig
+{
+   background-size: 280px auto !important;
+}
+
+@media (min-width: 1200px) and (orientation: landscape)
+{
+   #Soteria,
+   #Breslev,
+   #ShifonPlus,
+   #IDF,
+   #NewDeli,
+   #Opticana,
+   #Velvel,
+   #Mispara,
+   #JacobsCoffee,
+   #NesCafe,
+   #CoffeeBilig
+   {
+      background-size: 220px auto !important;
+   }
+}
+
 

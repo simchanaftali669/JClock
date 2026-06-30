@@ -137,23 +137,53 @@ body
     width:200px; 
 }
 .zmanim_text {
-                width:360px; 
+                width:460px;
                 text-align:center; 
-                font-size:40px;
+                font-size:28px;
                 color:#0070c0; /*blue*/
 				font-family: Comic Sans MS;
             }
 .zmanim_hour {
-                width:240px; 
+                width:195px;
                 text-align:center; 
                 font-size:40px;
                 font-family:Comic Sans MS;
             }
 .zmanim_index{
-    width: 240px;
+    width: 195px;
     text-align: center;
     font-size: 36px;
     font-family: Comic Sans MS;    
+}
+.kabala-page .zmanim_text,
+.kabala-page .zmanim_hour,
+.kabala-page .zmanim_index {
+    box-sizing: border-box;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.kabala-page div[style*="text-align:center"] {
+    white-space: nowrap;
+}
+.kabala-page .zmanim_text {
+    width: min(350px, 50vw);
+    font-size: clamp(12px, 2.1vw, 21px);
+}
+.kabala-page .zmanim_hour {
+    width: min(125px, 17vw);
+    font-size: clamp(12px, 2.1vw, 21px);
+}
+.kabala-page .zmanim_index {
+    width: min(145px, 21vw);
+    font-size: clamp(12px, 2.1vw, 21px);
+}
+.kabala-page .zmanim_text.zmanim_wrap {
+    height: 2.6em;
+    line-height: 1.15;
+    padding: 2px 4px;
+    resize: none;
+    overflow: hidden;
+    white-space: normal;
 }
 .english_btn {
     background-image:url('https://JClock.net/HebrewClock13/public/man/naftali/en/pic/en.png');

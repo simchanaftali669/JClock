@@ -136,9 +136,9 @@ body
     width:200px; 
 }
 .zmanim_text {
-                width:360px; 
+                width:470px;
                 text-align:center; 
-                font-size:40px;
+                font-size:32px;
                 color:#0070c0; /*blue*/
 				font-family: Comic Sans MS;
             }
@@ -153,6 +153,36 @@ body
     text-align: center;
     font-size: 36px;
     font-family: Comic Sans MS;    
+}
+.kabala-page .zmanim_text,
+.kabala-page .zmanim_hour,
+.kabala-page .zmanim_index {
+    box-sizing: border-box;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.kabala-page div[style*="text-align:center"] {
+    white-space: nowrap;
+}
+.kabala-page .zmanim_text {
+    width: min(330px, 48vw);
+    font-size: clamp(14px, 2.5vw, 24px);
+}
+.kabala-page .zmanim_hour {
+    width: min(130px, 18vw);
+    font-size: clamp(14px, 2.5vw, 24px);
+}
+.kabala-page .zmanim_index {
+    width: min(150px, 22vw);
+    font-size: clamp(14px, 2.5vw, 24px);
+}
+.kabala-page .zmanim_text.zmanim_wrap {
+    height: 2.6em;
+    line-height: 1.15;
+    padding: 2px 4px;
+    resize: none;
+    overflow: hidden;
+    white-space: normal;
 }
 .english_btn {
     background-image:url('https://JClock.net/HebrewClock13/public/woman/naftali/he/pic/en.png');
