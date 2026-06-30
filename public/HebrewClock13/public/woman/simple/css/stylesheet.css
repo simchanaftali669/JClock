@@ -75,6 +75,19 @@ body
     border: none;  
 }
 
+.clock,
+.ChirstianClock {
+    box-sizing: content-box;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    line-height: 1;
+    letter-spacing: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
 
 #Text2, #HebrewText2
 {
@@ -161,27 +174,55 @@ body
 
     #Hour,
     #Second {
-        width: 1.55em;
+        width: 2ch;
     }
 
     #Minute {
-        width: 2.45em;
+        width: 4ch;
     }
 
     #ChirstianHour,
     #ChirstianMinute,
     #ChirstianSecond {
-        width: 1.35em;
+        width: 2ch;
     }
 
     #Text2,
     #Text4,
     #HebrewText2,
     #HebrewText4 {
-        width: 0.3em;
+        width: 0.45ch;
     }
 
     #Mazal {
         font-size: clamp(34px, 11vw, 58px);
+    }
+}
+
+@media (min-width: 701px) and (max-width: 1100px) {
+    #container {
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #container > div {
+        width: 100%;
+    }
+
+    #container table {
+        width: min(850px, 96vw) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .clock,
+    .ChirstianClock {
+        font-size: clamp(58px, 8vw, 86px);
+    }
+
+    #Mazal {
+        font-size: clamp(52px, 7vw, 80px);
     }
 }

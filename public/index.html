@@ -66,25 +66,34 @@
 			margin: 0 0 20px;
 		}
 
-		.continent-select {
-			box-sizing: border-box;
-			width: min(360px, 100%);
-			min-height: 48px;
-			padding: 8px 12px;
+		.continent-buttons {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+			gap: 8px;
+		}
+
+		.continent-button {
+			min-height: 46px;
+			padding: 8px 10px;
 			border: 2px solid #204b31;
 			border-radius: 8px;
 			background: rgba(255, 255, 255, 0.94);
 			color: #17311f;
-			font-size: 18px;
+			font-size: 17px;
 			font-weight: 700;
 			line-height: 1.2;
 			cursor: pointer;
 		}
 
-		.continent-select:hover,
-		.continent-select:focus {
+		.continent-button:hover,
+		.continent-button:focus {
 			background: #e9f3e7;
 			outline: 3px solid rgba(32, 75, 49, 0.18);
+		}
+
+		.continent-button.active {
+			background: #204b31;
+			color: #fff;
 		}
 
 		.choice-grid {
@@ -198,6 +207,38 @@
 			outline: 3px solid rgba(32, 75, 49, 0.18);
 		}
 
+		.gender-choice {
+			grid-column: 1 / -1;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 12px;
+			direction: ltr;
+		}
+
+		.gender-choice .choice-button {
+			text-align: center;
+			direction: rtl;
+		}
+
+		.gender-choice-woman {
+			background: rgba(255, 243, 163, 0.92);
+		}
+
+		.gender-choice-woman:hover,
+		.gender-choice-woman:focus {
+			background: rgba(255, 232, 121, 0.96);
+		}
+
+		.gender-choice-man {
+			background: #00b050;
+			color: #fff;
+		}
+
+		.gender-choice-man:hover,
+		.gender-choice-man:focus {
+			background: #17c765;
+		}
+
 		.choice-split {
 			position: relative;
 			min-height: 82px;
@@ -265,12 +306,18 @@
 			flex-direction: row;
 		}
 
+		#iframe-container.row-layout .frame-slot {
+			min-height: 50%;
+		}
+
 		#iframe-container.clock-ads-layout .frame-slot:first-child {
-			flex: 0 0 42vh;
+			flex: 1 1 0;
+			min-height: 0;
 		}
 
 		#iframe-container.clock-ads-layout .frame-slot:last-child {
 			flex: 1 1 0;
+			min-height: 0;
 		}
 
 		#iframe-container.quad-layout {
@@ -324,14 +371,13 @@
 				grid-template-columns: 1fr;
 			}
 
+			.continent-buttons {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+
 			.choice-button {
 				min-height: 66px;
 				font-size: 18px;
-			}
-
-			.continent-select {
-				width: 100%;
-				font-size: 17px;
 			}
 
 			.choice-split {
@@ -363,6 +409,12 @@
 				grid-template-rows: repeat(4, minmax(0, 1fr));
 			}
 		}
+
+		@media (max-width: 1100px), (orientation: portrait) {
+			#iframe-container.row-layout {
+				flex-direction: column;
+			}
+		}
 	</style>
 </head>
 
@@ -373,7 +425,7 @@
 			<p class="subtitle" id="subtitle"></p>
 
 			<div class="continent-filter">
-				<select class="continent-select" id="continent-filter" aria-label="Continent filter"></select>
+				<div class="continent-buttons" id="continent-buttons" role="group" aria-label="Continent buttons"></div>
 			</div>
 			<div class="choice-grid" id="choice-grid"></div>
 		</div>
@@ -707,7 +759,7 @@
 
 	const choiceScreen = document.getElementById("choice-screen");
 	const subtitle = document.getElementById("subtitle");
-	const continentFilter = document.getElementById("continent-filter");
+	const continentButtons = document.getElementById("continent-buttons");
 	const choiceGrid = document.getElementById("choice-grid");
 	const viewer = document.getElementById("viewer");
 	const iframeContainer = document.getElementById("iframe-container");
@@ -795,21 +847,29 @@
 	}
 
 	function renderContinentFilter() {
-		continentFilter.innerHTML = "";
+		continentButtons.innerHTML = "";
 
 		continents.forEach(function(continent) {
-			const option = document.createElement("option");
-			option.value = continent.id;
-			option.textContent = continent.shortcut + " - " + localText(continent.label);
-			continentFilter.appendChild(option);
+			const button = document.createElement("button");
+			button.type = "button";
+			button.className = "continent-button";
+			button.textContent = continent.shortcut + " - " + localText(continent.label);
+			button.setAttribute("aria-pressed", continent.id === selectedContinentId ? "true" : "false");
+			if (continent.id === selectedContinentId) {
+				button.classList.add("active");
+			}
+			button.onclick = function() {
+				selectContinent(continent.id);
+			};
+			continentButtons.appendChild(button);
 		});
+	}
 
-		continentFilter.value = selectedContinentId;
-		continentFilter.onchange = function() {
-			selectedContinentId = continentFilter.value;
-			setContinentShortcutHash();
-			renderChoices();
-		};
+	function selectContinent(continentId) {
+		selectedContinentId = continentId;
+		setContinentShortcutHash();
+		renderContinentFilter();
+		renderChoices();
 	}
 
 	function getVisibleChoiceItems() {
@@ -885,7 +945,7 @@
 				learningButton.className = "learning-half learning-half-woman";
 				learningButton.textContent = localText(option.label);
 				learningButton.onclick = function() {
-					openLearningShortcut(false);
+					openLearningChoice();
 				};
 
 				split.appendChild(clockButton);
@@ -921,6 +981,47 @@
 		window.location.href = buildLearningUrl(isWoman);
 	}
 
+	function openLearningChoice() {
+		const continent = getSelectedContinent();
+
+		if (continent.clockMode !== "mixed") {
+			openLearningShortcut(false);
+			return;
+		}
+
+		renderLearningGenderChoice();
+	}
+
+	function renderLearningGenderChoice() {
+		choiceGrid.innerHTML = "";
+
+		const genderChoice = document.createElement("div");
+		const womanButton = document.createElement("button");
+		const manButton = document.createElement("button");
+
+		genderChoice.className = "gender-choice";
+		genderChoice.setAttribute("role", "group");
+		genderChoice.setAttribute("aria-label", language === "he" ? "בחירת נשים או גברים" : "Choose women or men");
+
+		womanButton.type = "button";
+		womanButton.className = "choice-button gender-choice-woman";
+		womanButton.textContent = language === "he" ? "נשים" : "Woman";
+		womanButton.onclick = function() {
+			openLearningShortcut(true);
+		};
+
+		manButton.type = "button";
+		manButton.className = "choice-button gender-choice-man";
+		manButton.textContent = language === "he" ? "גברים" : "Man";
+		manButton.onclick = function() {
+			window.location.href = buildLearningUrl(false);
+		};
+
+		genderChoice.appendChild(womanButton);
+		genderChoice.appendChild(manButton);
+		choiceGrid.appendChild(genderChoice);
+	}
+
 	function getContinentClockOptionId() {
 		const continent = getSelectedContinent();
 
@@ -928,7 +1029,7 @@
 			return "moon-clock";
 
 		if (continent.clockMode === "mixed")
-			return "diaspora-clock";
+			return "diaspora-clock-ads";
 
 		return "sun-clock";
 	}
@@ -941,7 +1042,7 @@
 		const shortcut = hashValue.split("/")[0].toLowerCase();
 
 		if (shortcut === "bilig_limud") {
-			openLearningShortcut(false);
+			openLearningChoice();
 			return true;
 		}
 
