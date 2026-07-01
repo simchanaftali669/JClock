@@ -181,12 +181,14 @@
         var names = [];
         var seenNames = {};
         window.marrigeDB.forEach(function(record) {
-            var normalizedName = normalizeMarrigeName(record && record.ID);
-            if(record && record.ID && !seenNames[normalizedName])
-            {
-                seenNames[normalizedName] = true;
-                names.push(record.ID);
-            }
+            getMarrigeRecordNames(record).forEach(function(name) {
+                var normalizedName = normalizeMarrigeName(name);
+                if(normalizedName && !seenNames[normalizedName])
+                {
+                    seenNames[normalizedName] = true;
+                    names.push(name);
+                }
+            });
         });
 
         names.sort(function(a, b) {
@@ -251,11 +253,23 @@
         return (name || "").trim().replace(/\s+/g, " ").toLowerCase();
     }
 
+    function getMarrigeRecordNames(record)
+    {
+        if(!record)
+            return [];
+
+        return [record.ID, record.eID].filter(function(name) {
+            return normalizeMarrigeName(name);
+        });
+    }
+
     function findMarrigeTimesByID(id)
     {
         var cleanId = normalizeMarrigeName(id);
         return window.marrigeDB.filter(function(marrigeTime) {
-            return normalizeMarrigeName(marrigeTime.ID) == cleanId;
+            return getMarrigeRecordNames(marrigeTime).some(function(name) {
+                return normalizeMarrigeName(name) == cleanId;
+            });
         });
     }
 
