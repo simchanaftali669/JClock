@@ -5,20 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">   
     <link rel="stylesheet" type="text/css" href="css/progressBar.css" id="thecss">   
-	<link rel="shortcut icon" type="image/x-icon" href="https://JClock.net/HebrewClock13/public/man/hebrewclock.png" />
-	<!-- Brevo Conversations {literal} -->
-	<script>
-		(function(d, w, c) {
-			w.BrevoConversationsID = '652c1250be69cc115264be87';
-			w[c] = w[c] || function() {
-				(w[c].q = w[c].q || []).push(arguments);
-			};
-			var s = d.createElement('script');
-			s.async = true;
-			s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
-			if (d.head) d.head.appendChild(s);
-		})(document, window, 'BrevoConversations');
-	</script>
+	<link rel="shortcut icon" type="image/x-icon" href="../hebrewclock.png" />
 	<style>
 
 	@media (max-width: 768px) {
@@ -33,7 +20,6 @@
 	}
 
 	</style>
-	<!-- /Brevo Conversations {/literal} -->
 </head>
 
 <body id="hebrewClock">
@@ -104,19 +90,19 @@
     </div>
 
 	
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/adhan.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/shared/he/js/Commercial.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/Geolocation.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/SunAlert.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/HebrewClock.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/Times.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/SunTime.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/TimeAdj.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/Dst.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/Dates.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/Location.js"></script>
+	<script type="text/javascript" src="js/adhan.js"></script>
+    <script type="text/javascript" src="../shared/he/js/Commercial.js"></script>
+	<script type="text/javascript" src="js/Geolocation.js"></script>
+    <script type="text/javascript" src="js/SunAlert.js"></script>
+    <script type="text/javascript" src="js/HebrewClock.js"></script>
+	<script type="text/javascript" src="js/Times.js"></script>
+    <script type="text/javascript" src="js/SunTime.js"></script>
+    <script type="text/javascript" src="js/TimeAdj.js"></script>
+    <script type="text/javascript" src="js/Dst.js"></script>
+    <script type="text/javascript" src="js/Dates.js"></script>
+    <script type="text/javascript" src="js/Location.js"></script>
     <script type="text/javascript" src="js/Mazal.js?v=20260624-mazal-hour"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/js/Tefila.js"></script>
+	<script type="text/javascript" src="js/Tefila.js"></script>
 
     
 <script type="text/javascript">
@@ -254,9 +240,9 @@
         //return;
         var userLang = navigator.language || navigator.userLanguage; 
         if (userLang.includes("he")) 
-            window.location.href = "https://JClock.net/HebrewClock13/public/man/mahasrot/he/index.html";
+            window.location.href = "../mahasrot/he/index.html";
         else
-            window.location.href = "https://JClock.net/HebrewClock13/public/man/mahasrot/en/index.html";		
+            window.location.href = "../mahasrot/en/index.html";		
 	}
 	
     function openSpecialHebrewClock()
@@ -267,11 +253,11 @@
         var userLang = navigator.language || navigator.userLanguage; 
 		if (userLang.includes("he"))
 		{
-			window.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/kabala/index.html" + queryString;
+			window.location.href = "../me/he/kabala/index.html" + queryString;
 		}
 		else
 		{
-			window.location.href = "https://JClock.net/HebrewClock13/public/man/me/en/kabala/index.html" + queryString;
+			window.location.href = "../me/en/kabala/index.html" + queryString;
 		}
     }
     
@@ -283,11 +269,11 @@
         var userLang = navigator.language || navigator.userLanguage; 
         if (userLang.includes("he")) 
 		{
-			window.location.href = "https://JClock.net/HebrewClock13/public/man/is/he/kabala/index.html" + queryString;
+			window.location.href = "../is/he/kabala/index.html" + queryString;
         }
 		else
 		{
-			window.location.href = "https://JClock.net/HebrewClock13/public/man/is/en/kabala/index.html" + queryString;
+			window.location.href = "../is/en/kabala/index.html" + queryString;
 		}
     }
 
@@ -299,11 +285,11 @@
 		var userLang = navigator.language || navigator.userLanguage; 
         if (userLang.includes("he"))
 		{
-			window.location.href = "https://JClock.net/HebrewClock13/public/man/it/he/kabala/index.html" + queryString;
+			window.location.href = "../it/he/kabala/index.html" + queryString;
 		}
 		else
 		{
-			window.location.href = "https://JClock.net/HebrewClock13/public/man/it/en/kabala/index.html" + queryString;
+			window.location.href = "../it/en/kabala/index.html" + queryString;
 		}
 	}
 
@@ -348,9 +334,9 @@
 	{
         var userLang = navigator.language || navigator.userLanguage; 
         if (userLang = "he") 
-            window.location.href = "https://JClock.net/HebrewClock13/public/man/yovelMazalCalculator/he/index.html";
+            window.location.href = "../yovelMazalCalculator/he/index.html";
         else
-            window.location.href = "https://JClock.net/HebrewClock13/public/man/yovelMazalCalculator/en/index.html";
+            window.location.href = "../yovelMazalCalculator/en/index.html";
 	
 	}
 
@@ -358,15 +344,15 @@
 	{
 		//var url = new URL(document.location.href);
 		//var selfShevet = url.searchParams.get("selfShevet");        
-		//window.location.href = "https://JClock.net/HebrewClock13/public/man/house4You/index.html?selfShevet=" + selfShevet;
+		//window.location.href = "../house4You/index.html?selfShevet=" + selfShevet;
 			
 		if(birthHour)
 		{
 			var userLang = navigator.language || navigator.userLanguage; 
 			if (userLang = "he") 
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);
+				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);
 			else
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);		
+				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);		
 		}
 	}
 	
@@ -385,17 +371,17 @@
         if (userLang = "he") 
 		{
 			if(lon)
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + "&latitude=" + lat + "&longitude="+ lon;
+				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + "&latitude=" + lat + "&longitude="+ lon;
 			else
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal;
+				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal;
 
         }
 		else
 		{
 			if(lon)
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + "&latitude=" + lat + "&longitude=" + lon;
+				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + "&latitude=" + lat + "&longitude=" + lon;
 			else
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal;
+				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal;
             	
 		}
 	}

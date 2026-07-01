@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://JClock.net/BirthCalculator/public/shared/style.css">
+  <link rel="stylesheet" href="../shared/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -112,7 +112,7 @@
 				<p id="location-status" aria-live="polite"></p>
 				<div id="map"></div>
 			</div>
-			<!-- <iframe style="width:100%; height:450px;" src="https://JClock.net/BirthCalculator/public/he/location.html"></iframe>-->
+			<!-- <iframe style="width:100%; height:450px;" src="./location.html"></iframe>-->
 			<!--
 			<p href="#" data-toggle="tooltip" title="קו רוחב"  style="display: inline-block; width: 248px;">קו רוחב</p><input id="latitude" value="30"/>		  
 			</br>
@@ -164,7 +164,7 @@
 		var gmt = document.getElementById('GMT').value;
 		var gender = selectedGender;
 		var clockPath = gender == "family" ? "family/index.html" : gender + "/simple/index.html";
-		var clockBaseUrl = gender == "family" ? "https://JClock.net/HebrewCommercial13/public/" : "https://JClock.net/HebrewClock13/public/";
+		var clockBaseUrl = gender == "family" ? "../../../HebrewCommercial13/public" : "../../../HebrewClock13/public";
 		var clockUrl = clockBaseUrl + clockPath;
 
 		//document.location.href = "https://hebrewclock13.web.app/man/simple/index.html?latitude=30&longitude=32&hour=20&min=43&year=1987&month=3&day=4&gmt=3";

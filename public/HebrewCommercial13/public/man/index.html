@@ -13,8 +13,8 @@
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
     <title>Hebrew Commercial</title> 
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewCommercial13/public/man/css/stylesheet.css" id="thecss">
-	<link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewCommercial13/public/man/css/commercialstylesheet.css" id="commercial_css"> 
+    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" id="thecss">
+	<link rel="stylesheet" type="text/css" href="./css/commercialstylesheet.css" id="commercial_css"> 
     <style>
         html.embedded-commercial,
         html.embedded-commercial body,
@@ -56,25 +56,25 @@
 		</center>
     </div>
 
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/conf/commercialsData.json"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Geolocation.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Menu.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/HebrewClock.js?v=20260624_1"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Gender.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Religion.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/shared/js/CommercialMazal.js?v=20260619_1"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/AutoCommercial.js?v=20260619_4"></script>
-	<Script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/HebrewDate.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Commercial.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Mazal.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Times.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Shevet.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/SunTime.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/TimeAdj.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Dst.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Dates.js?v=20260624_1"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/Location.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/man/js/DraggableCommercial.js"></script>
+    <script type="text/javascript" src="./conf/commercialsData.json"></script>
+    <script type="text/javascript" src="./js/Geolocation.js"></script>
+    <script type="text/javascript" src="./js/Menu.js"></script>
+    <script type="text/javascript" src="./js/HebrewClock.js?v=20260624_1"></script>
+    <script type="text/javascript" src="./js/Gender.js"></script>
+    <script type="text/javascript" src="./js/Religion.js"></script>
+	<script type="text/javascript" src="../shared/js/CommercialMazal.js?v=20260619_1"></script>
+	<script type="text/javascript" src="./js/AutoCommercial.js?v=20260619_4"></script>
+	<Script type="text/javascript" src="./js/HebrewDate.js"></script>
+    <script type="text/javascript" src="./js/Commercial.js"></script>
+    <script type="text/javascript" src="./js/Mazal.js"></script>
+    <script type="text/javascript" src="./js/Times.js"></script>
+    <script type="text/javascript" src="./js/Shevet.js"></script>
+    <script type="text/javascript" src="./js/SunTime.js"></script>
+    <script type="text/javascript" src="./js/TimeAdj.js"></script>
+    <script type="text/javascript" src="./js/Dst.js"></script>
+    <script type="text/javascript" src="./js/Dates.js?v=20260624_1"></script>
+    <script type="text/javascript" src="./js/Location.js"></script>
+    <script type="text/javascript" src="./js/DraggableCommercial.js"></script>
 
 
 	
@@ -219,7 +219,7 @@
         
         //localStorage.setItem("mida", document.getElementById("Mazal").value);
 
-        var win = window.open("https://JClock.net/HebrewCommercial13/public/moon.html", '_blank');
+        var win = window.open("../moon.html", '_blank');
         win.focus();
     }
 
@@ -231,13 +231,13 @@
 		if(isShowBackground == false) 
 		{
 		//console.log(isShowBackground);
-			document.getElementById("thecss").href = "https://JClock.net/HebrewCommercial13/public/man/css/stylesheetBackground.css";
+			document.getElementById("thecss").href = "./css/stylesheetBackground.css";
 			isShowBackground = true;	
 		} 
 		else 
 		{
 		//console.log(isShowBackground);
-			document.getElementById("thecss").href = "https://JClock.net/HebrewCommercial13/public/man/css/stylesheet.css";
+			document.getElementById("thecss").href = "./css/stylesheet.css";
 			isShowBackground = false;
 		}
 	}

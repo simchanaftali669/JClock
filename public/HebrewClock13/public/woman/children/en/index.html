@@ -46,17 +46,17 @@
   
 </div>
 
-<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/shared/multiLanguage/js/ChildrenDB.js"></script>
+<script type="text/javascript" src="../../shared/multiLanguage/js/ChildrenDB.js"></script>
 <script>
 	function get_marrige_essential()
 	{
     var childrenTime = childrenDB.find(childrenTime=>childrenTime.ID == document.getElementById("ID").value);
     if(childrenTime != null)
-      document.location.href = "https://JClock.net/HebrewClock13/public/woman/me/en/index.html?hebrewDay=" + childrenTime.hebrewDay + "&hebrewHour=" + childrenTime.hebrewHour;  
+      document.location.href = "../../me/en/index.html?hebrewDay=" + childrenTime.hebrewDay + "&hebrewHour=" + childrenTime.hebrewHour;  
     else
     {  
       alert("The ID doesn't exist in the database");
-      document.location.href = "https://JClock.net/HebrewClock13/public/woman/me/en/index.html";  
+      document.location.href = "../../me/en/index.html";  
     }
   }
 	$(document).ready(function()

@@ -47,17 +47,17 @@
   
 </div>
 
-<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/shared/multiLanguage/js/ChildrenDB.js"></script>
+<script type="text/javascript" src="../../shared/multiLanguage/js/ChildrenDB.js"></script>
 <script>
 	function get_marrige_essential()
 	{
         var childrenTime = childrenDB.find(childrenTime=>childrenTime.ID == document.getElementById("ID").value);
         if(childrenTime != null)
-            document.location.href = "https://JClock.net/HebrewClock13/public/woman/me/he/index.html?hebrewDay=" + childrenTime.hebrewDay + "&hebrewHour=" + childrenTime.hebrewHour; 
+            document.location.href = "../../me/he/index.html?hebrewDay=" + childrenTime.hebrewDay + "&hebrewHour=" + childrenTime.hebrewHour; 
         else
         {
             alert("תעודת הזהות לא קיימת במערכת");
-            document.location.href = "https://JClock.net/HebrewClock13/public/woman/me/he/index.html"; 
+            document.location.href = "../../me/he/index.html"; 
         } 
     }
 	$(document).ready(function()

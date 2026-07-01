@@ -1,6 +1,6 @@
 .modal-content
 {
-    background-image: url(https://JClock.net/HebrewClock13/public/woman/yovelMazalCalculator/shared/shofar.jpg);
+    background-image: url(./shofar.jpg);
     /* background-repeat: no-repeat; */
     background-blend-mode: exclusion;
     background-position-x: center;

@@ -13,8 +13,8 @@
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
     <title>Hebrew Commercial</title> 
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/css/stylesheet.css" id="thecss">
-	<link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/css/commercialstylesheet.css" id="commercial_css"> 
+    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" id="thecss">
+	<link rel="stylesheet" type="text/css" href="./css/commercialstylesheet.css" id="commercial_css"> 
     <meta charset="UTF-8">
     <meta name="description" content="">
     <meta name="keywords" content="">
@@ -43,21 +43,21 @@
 		</center>
     </div>
 
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/conf/commercialsData.json"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Geolocation.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Menu.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/HebrewClock.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Gender.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Religion.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Commercial.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Mazal.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Times.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Shevet.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/SunTime.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/TimeAdj.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Dst.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Dates.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/js/Location.js"></script>
+    <script type="text/javascript" src="./conf/commercialsData.json"></script>
+    <script type="text/javascript" src="./js/Geolocation.js"></script>
+    <script type="text/javascript" src="./js/Menu.js"></script>
+    <script type="text/javascript" src="./js/HebrewClock.js"></script>
+    <script type="text/javascript" src="./js/Gender.js"></script>
+    <script type="text/javascript" src="./js/Religion.js"></script>
+    <script type="text/javascript" src="./js/Commercial.js"></script>
+    <script type="text/javascript" src="./js/Mazal.js"></script>
+    <script type="text/javascript" src="./js/Times.js"></script>
+    <script type="text/javascript" src="./js/Shevet.js"></script>
+    <script type="text/javascript" src="./js/SunTime.js"></script>
+    <script type="text/javascript" src="./js/TimeAdj.js"></script>
+    <script type="text/javascript" src="./js/Dst.js"></script>
+    <script type="text/javascript" src="./js/Dates.js"></script>
+    <script type="text/javascript" src="./js/Location.js"></script>
 
 
 	
@@ -187,7 +187,7 @@
         
         //localStorage.setItem("mida", document.getElementById("Mazal").value);
 
-        var win = window.open("https://JClock.net/HebrewCommercial13/public/cr/moon.html", '_blank');
+        var win = window.open("../moon.html", '_blank');
         win.focus();
     }
 
@@ -196,13 +196,13 @@
 		if(isShowBackground == false) 
 		{
 		console.log(isShowBackground);
-			document.getElementById("thecss").href = "https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/css/stylesheetBackground.css";
+			document.getElementById("thecss").href = "./css/stylesheetBackground.css";
 			isShowBackground = true;	
 		} 
 		else 
 		{
 		console.log(isShowBackground);
-			document.getElementById("thecss").href = "https://JClock.net/HebrewCommercial13/public/cr/LechemMoshe/css/stylesheet.css";
+			document.getElementById("thecss").href = "./css/stylesheet.css";
 			isShowBackground = false;
 		}
 	}

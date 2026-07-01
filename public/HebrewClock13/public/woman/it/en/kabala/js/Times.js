@@ -368,7 +368,7 @@ function getSelectedScheduleDate(fallbackDate) {
     var monthParam = parseInt(url.searchParams.get("month"), 10);
     var dayParam = parseInt(url.searchParams.get("day"), 10);
     var hourParam = parseInt(url.searchParams.get("hour"), 10);
-    var minuteParam = parseInt(url.searchParams.get("minute"), 10);
+    var minuteParam = parseInt(url.searchParams.get("minute") || url.searchParams.get("min"), 10);
     var selectedHour = !isNaN(hourParam) ? hourParam : fallbackDate.getHours();
     var selectedMinute = !isNaN(minuteParam) ? minuteParam : fallbackDate.getMinutes();
 

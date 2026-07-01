@@ -321,12 +321,12 @@
 		if(marrigeTimes.length > 0)
         {
           var marrigeTime = getMarrigeTimeForSelectedClock(marrigeTimes);
-		  document.location.href = "https://JClock.net/HebrewClock13/public/woman/me/en/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location;
+		  document.location.href = "../../me/en/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location;
         }
 		else
 		{  
 		  alert("The ID doesn't exist in the database");
-		  //document.location.href = "https://JClock.net/HebrewClock13/public/woman/me/en/index.html";  
+		  //document.location.href = "../../me/en/index.html";  
 		}
 	}
 	$(document).ready(function()

@@ -1,7 +1,7 @@
 /*//Commercial_manually*/
 #Soteria
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/Soteria-logo.png');
+   background-image:url('../pic/Soteria-logo.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -10,7 +10,7 @@
         
 #Breslev
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/NachmanLogo.jpg');
+   background-image:url('../pic/NachmanLogo.jpg');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -19,7 +19,7 @@
 
 #LechemMoshe
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/LechemMoshe.png');
+   background-image:url('../pic/LechemMoshe.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -29,7 +29,7 @@
 
 #ShifonPlus
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/ShifonPlus.png');
+   background-image:url('../pic/ShifonPlus.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -38,7 +38,7 @@
 
 #IDF
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/IDF.png');
+   background-image:url('../pic/IDF.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -47,7 +47,7 @@
 
 #NewDeli
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/NewDeli.png');
+   background-image:url('../pic/NewDeli.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -56,7 +56,7 @@
 
 #Opticana
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/Opticana.jpg');
+   background-image:url('../pic/Opticana.jpg');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -65,7 +65,7 @@
 
 #Velvel
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/Velel.png');
+   background-image:url('../pic/Velel.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -74,7 +74,7 @@
 
 #Mispara
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/Mispara.jpg');
+   background-image:url('../pic/Mispara.jpg');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -83,7 +83,7 @@
 
 #JacobsCoffee
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/JacobsCoffee.png');
+   background-image:url('../pic/JacobsCoffee.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -92,7 +92,7 @@
 
 #NesCafe
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/NesCafe.png');
+   background-image:url('../pic/NesCafe.png');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -102,7 +102,7 @@
 
 #CoffeeBilig
 {
-   background-image:url('https://JClock.net/HebrewClock13/public/woman/shared/pic/CoffeeBilig.jpg');
+   background-image:url('../pic/CoffeeBilig.jpg');
    background-repeat:no-repeat;
    background-position:center;  
    width:850px; 
@@ -136,92 +136,92 @@
 
 #Eat_01
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Eat_01.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Eat_01.png');
 }
 
 #Eat_02
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Eat_02.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Eat_02.png');
 }
 
 #Eat_03
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Eat_03.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Eat_03.png');
 }
 
 #Eat_04
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Eat_04.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Eat_04.png');
 }
 
 #Eat_05
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Eat_05.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Eat_05.png');
 }
 
 #Eat_06
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Eat_06.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Eat_06.png');
 }
 
 #Eat_07
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Eat_07.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Eat_07.png');
 }
 
 #Drink_01
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Drink_01.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Drink_01.png');
 }
 
 #Drink_02
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Drink_02.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Drink_02.png');
 }
 
 #Drink_03
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Drink_03.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Drink_03.png');
 }
 
 #Drink_04
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Drink_04.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Drink_04.png');
 }
 
 #Drink_05
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Drink_05.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Drink_05.png');
 }
 
 #Drink_06
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Drink_06.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Drink_06.png');
 }
 
 #Drink_07
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Drink_07.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Drink_07.png');
 }
 
 #Meet_02
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Meet_02.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Meet_02.png');
 }
 
 #Meet_04
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Meet_04.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Meet_04.png');
 }
 
 #Meet_05
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Meet_05.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Meet_05.png');
 }
 
 #Meet_07
 {
-   background-image:url('https://JClock.net/HebrewCommercial13/public/woman/pic/Meet_07.png');
+   background-image:url('../../../../../HebrewCommercial13/public/woman/pic/Meet_07.png');
 }
 
 

@@ -8,10 +8,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://JClock.net/HebrewCommercial13/public/login/style.css">
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body >
-	<script type="text/javascript" src="https://JClock.net/HebrewCommercial13/public/login/js/hebrewDate.js"></script>
+	<script type="text/javascript" src="../js/hebrewDate.js"></script>
 <div class="container mt-3">
   <!-- Button to Open the Modal -->
 <center>
@@ -63,9 +63,9 @@
 		if(document.getElementById('dateOfBirth').value == "")
 		{
 			if(boy == true)
-				window.location.href = "https://JClock.net/HebrewCommercial13/public/man/index.html";
+				window.location.href = "../../man/index.html";
 			else
-				window.location.href = "https://JClock.net/HebrewCommercial13/public/woman/index.html";
+				window.location.href = "../../woman/index.html";
 		}
 		else
 		{
@@ -73,9 +73,9 @@
 			var hebrew_month_number = hebrewDate(dateOfBitrh[0], dateOfBitrh[1], dateOfBitrh[2],"Number")['month_name'];
 						
 			if(boy == true)
-				window.location.href = "https://JClock.net/HebrewCommercial13/public/man/index.html?selfShevet=" +hebrew_month_number;
+				window.location.href = "../../man/index.html?selfShevet=" +hebrew_month_number;
 			else
-				window.location.href = "https://JClock.net/HebrewCommercial13/public/woman/index.html";
+				window.location.href = "../../woman/index.html";
 		}
 	}
 

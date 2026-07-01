@@ -1,22 +1,22 @@
 <html>
 <head>
-	<link rel="shortcut icon" type="image/x-icon" href="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/hebrewclock.png" />
+	<link rel="shortcut icon" type="image/x-icon" href="./hebrewclock.png" />
 </head>
 <body>
 
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/Geolocation.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/SunAlert.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/HebrewClock.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/Times.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/SunTime.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/TimeAdj.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/Dst.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/Dates.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/Location.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/Mazal.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/js/Tefila.js"></script>
+	<script type="text/javascript" src="./js/Geolocation.js"></script>
+    <script type="text/javascript" src="./js/SunAlert.js"></script>
+    <script type="text/javascript" src="./js/HebrewClock.js"></script>
+	<script type="text/javascript" src="./js/Times.js"></script>
+    <script type="text/javascript" src="./js/SunTime.js"></script>
+    <script type="text/javascript" src="./js/TimeAdj.js"></script>
+    <script type="text/javascript" src="./js/Dst.js"></script>
+    <script type="text/javascript" src="./js/Dates.js"></script>
+    <script type="text/javascript" src="./js/Location.js"></script>
+    <script type="text/javascript" src="./js/Mazal.js"></script>
+	<script type="text/javascript" src="./js/Tefila.js"></script>
 
-<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/he/shared/js/HebrewDate.js"></script>	
+<script type="text/javascript" src="./he/shared/js/HebrewDate.js"></script>	
 
 <script type="text/javascript">
 
@@ -108,16 +108,16 @@
 			if (userLang.includes("he")) 
 			{
 				if (day != 7 && !IsMoed())	
-					window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/he/YomChol/index.html?longitude=" + longitude + "&latitude=" + latitude;
+					window.location.href = "./he/YomChol/index.html?longitude=" + longitude + "&latitude=" + latitude;
 				else
-					window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/he/Shabat/index.html?longitude=" + longitude + "&latitude=" + latitude;
+					window.location.href = "./he/Shabat/index.html?longitude=" + longitude + "&latitude=" + latitude;
 			}
 			else
 			{
 				if (day != 7 && !IsMoed()) 
-					window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/en/YomChol/index.html?longitude=" + longitude + "&latitude=" + latitude;
+					window.location.href = "./en/YomChol/index.html?longitude=" + longitude + "&latitude=" + latitude;
 				else
-					window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/en/Shabat/index.html?longitude=" + longitude + "&latitude=" + latitude;
+					window.location.href = "./en/Shabat/index.html?longitude=" + longitude + "&latitude=" + latitude;
 			}
 
 				
@@ -171,16 +171,16 @@
 		if (userLang = "he") 
 		{
 			if (day != 7 && !IsMoed())	
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/he/YomChol/index.html";
+				window.location.href = "./he/YomChol/index.html";
 			else
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/he/Shabat/index.html";
+				window.location.href = "./he/Shabat/index.html";
 		}
 		else
 		{
 			if (day != 7 && !IsMoed()) 
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/en/YomChol/index.html";
+				window.location.href = "./en/YomChol/index.html";
 			else
-				window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/en/Shabat/index.html";
+				window.location.href = "./en/Shabat/index.html";
 		}
 
     }
@@ -201,9 +201,9 @@
 	}
 //debug
 //if (userLang = "he") 
-//	window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/he/index.html";
+//	window.location.href = "./he/index.html";
 //else
-//	window.location.href = "https://JClock.net/HebrewClock13/public/man/simple/digitalChazan/en/index.html";
+//	window.location.href = "./en/index.html";
 </script>
 
 </body>

@@ -423,18 +423,18 @@
 
             if(selectedClock == "both")
             {
-                document.location.href = "https://JClock.net/HebrewClock13/public/family/index.html?period=personal&lang=he" + combinedParams + location;
+                document.location.href = "../../../family/index.html?period=personal&lang=he" + combinedParams + location;
                 return;
             }
 
             var marrigeTime = getMarrigeTimeForSelectedClock(marrigeTimes);
-            document.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location; 
+            document.location.href = "../../me/he/index.html?hebrewDay=" + marrigeTime.hebrewDay + "&hebrewHour=" + marrigeTime.hebrewHour + "&period=personal" + location; 
         }
         else
         {
             alert("תעודת הזהות לא קיימת במערכת");
 			document.location.href='https://birthcalculator.web.app/';
-            //document.location.href = "https://JClock.net/HebrewClock13/public/man/me/he/index.html"; 
+            //document.location.href = "../../me/he/index.html"; 
         } 
     }
  	$(document).ready(function()
