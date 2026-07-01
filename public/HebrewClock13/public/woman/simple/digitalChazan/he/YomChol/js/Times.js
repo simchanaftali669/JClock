@@ -141,7 +141,19 @@ function doit() {
 
         //insert an array of shaot_zmaniot
         var s1, s2,s3,s4;
-        if (curr_hour > sunset_hour) {
+        if (sunset < sunrise) {
+            if (curr_hour < sunset_hour) {
+                s1 = sunset_yasterdate;
+                s2 = sunrise_yasterday - 24;
+                s3 = sunset;
+            }
+            else {
+                s1 = sunset;
+                s2 = sunrise;
+                s3 = sunset_tommorow;
+            }
+        }
+        else if (curr_hour > sunset_hour) {
             s1 = sunset;
             s2 = sunrise_tommorow;
 			s3 = sunset_tommorow;
@@ -165,8 +177,13 @@ function doit() {
         }
         //------------------------------
 */		
-		birkutHashahar = s2 - 6/60; // 42 regular minutes before sunrise -- ברכות השחר
-		kriyahtShema = s2 - 2/60;// =   timeadj(s2 - 4/60, ampm);	// 04 regular minutes before sunrise -- קריאת שמע
+		publicSunrise = s2;
+		birkutHashahar = s2 - 42/60; // 42 regular minutes before sunrise -- ברכות השחר
+		patachEliyaou = s2 - 38/60;// =  timeadj(s2 - 38/60, ampm); // 38 regular minutes before sunrise -- פתח אליהו
+		korbanot = s2 - 35/60;// = 		 timeadj(s2 - 35/60, ampm);	// 35 regular minutes before sunrise -- קורבנות
+		psokeiDzimra = s2 - 22/60;// =   timeadj(s2 - 22/60, ampm); // 22 regular minutes before sunrise -- פסוקי דזמרה
+		yozerOr = s2 - 8/60;// =	     timeadj(s2 - 8/60, ampm);  // 08 regular minutes before sunrise -- יוצר אור
+		kriyahtShema = s2 - 4/60;// =   timeadj(s2 - 4/60, ampm);	// 04 regular minutes before sunrise -- קריאת שמע
 		
 		
 		//משיכיר

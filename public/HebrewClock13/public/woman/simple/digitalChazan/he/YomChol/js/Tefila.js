@@ -5,24 +5,15 @@ function Tefila()
 	//document.getElementById("btn2").style.display = "none";
 
 	
-	var date = new Date();
-
-	var h,m,s,milisec;
-	var h = date.getHours();
-	var m = date.getMinutes();
-	var s = date.getSeconds();
-	var milisec = date.getMilliseconds();
-	curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);	
-	curr_hour = curr_hour/(1000 * 3600);
+	if(typeof curr_hour !== "number" || isNaN(curr_hour))
+		curr_hour = getCurrentClockHour();
 	
 	
 	//console.log(curr_hour);
 	if(curr_hour < birkutHashahar)
 	{
-		var secLeft = SecLeft(curr_hour,birkutHashahar);
-		document.querySelector("#Mazal").innerText = "ממתין לתפילה";
-		//console.log(1);
-		//BirkutHashahar(secLeft);
+		redirectToSimpleClock();
+		return;
 	}
 	else if(curr_hour >= birkutHashahar && curr_hour < patachEliyaou)
 	{
@@ -68,9 +59,53 @@ function Tefila()
 	}
 	else if(curr_hour >= publicSunrise && !isPressLink)
 	{
-		isPressLink = true;
-		window.location.href = "../../../index.html?longitude=" + longitude + "&latitude=" + latitude;
+		redirectToSimpleClock();
 	}
+}
+
+function redirectToSimpleClock()
+{
+	if(isPressLink)
+		return;
+
+	isPressLink = true;
+	var params = new URLSearchParams();
+	if(longitude != null && latitude != null)
+	{
+		params.set("longitude", longitude);
+		params.set("latitude", latitude);
+	}
+	if(birthYear != null) params.set("year", birthYear);
+	if(birthMonth != null) params.set("month", birthMonth);
+	if(birthDay != null) params.set("day", birthDay);
+	if(birthHour != null) params.set("hour", birthHour);
+	if(birthMin != null) params.set("min", birthMin);
+	if(birthGMT != null) params.set("gmt", birthGMT);
+
+	var queryString = params.toString();
+	window.location.href = "../../../index.html" + (queryString ? "?" + queryString : "");
+}
+
+function getCurrentClockHour()
+{
+	var date = new Date();
+	var h,m,s,milisec;
+	if(birthHour == null)
+	{
+		h = date.getHours();
+		m = date.getMinutes();
+		s = date.getSeconds();
+		milisec = date.getMilliseconds();
+	}
+	else
+	{
+		h = Number(birthHour);
+		m = birthMin == null ? 0 : Number(birthMin);
+		s = 0;
+		milisec = 0;
+	}
+
+	return (milisec + (s*1000) + (m*60*1000) + (h*60*60*1000))/(1000 * 3600);
 }
 
 function BirkutHashahar(secLeft)

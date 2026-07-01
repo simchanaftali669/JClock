@@ -112,6 +112,8 @@
     //public variables
     var longitude, latitude;  //current geo location
 	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
+	var defaultLongitude = 35.2331664;
+	var defaultLatitude = 31.7768514;
 	
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
@@ -172,11 +174,12 @@
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
 		birthHour = url.searchParams.get("hour");
+		birthMin = url.searchParams.get("min");
 	
-		if(lon && lat && !birthHour)
+		if(lon && lat)
 		{
-		    longitude = lon ? lon : position.coords.longitude;
-			latitude = lat ? lat : position.coords.latitude; 
+		    longitude = lon;
+			latitude = lat; 
 
 			console.log("manual location");
 			
@@ -192,10 +195,7 @@
 				
 			return;
 		}
-        else if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        }
+		showDefaultPosition();
     }
   
     function showPosition(position)
@@ -232,6 +232,21 @@
 		TefilaNetz();
 		//console.log(timeadj1(birkutHashahar));
     }
+
+	function showDefaultPosition()
+	{
+		longitude = defaultLongitude;
+		latitude = defaultLatitude;
+
+		set_dst();
+		set_default_date();
+		list_pos();
+		hebrewclock();
+		oTimerclock();
+		showHebrewDate();
+		setmazal();
+		TefilaNetz();
+	}
 	
 	function showHebrewDate()
 	{

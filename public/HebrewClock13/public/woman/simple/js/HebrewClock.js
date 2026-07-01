@@ -1,6 +1,7 @@
 ﻿var isStartPray = false;
 var curr_hour;
 var isPressLink = false;
+var previousDigitalChazanHour = null;
 function hebrewclock()
 {
 
@@ -222,10 +223,13 @@ function hebrewclock()
 		
 	//if(lbHour == 6)
 	//	isStartPray = false;
-	if(curr_hour >= sunrise-1 &&  curr_hour < sunrise && !isPressLink)
+	var digitalChazanStart = getDigitalChazanStartTime(publicSunrise);
+	var shouldOpenChazan = shouldOpenDigitalChazan(digitalChazanStart);
+	previousDigitalChazanHour = curr_hour;
+	if(shouldOpenChazan)
 	{
 		isPressLink = true;
-		window.location.href = "./digitalChazan/index.html?longitude=" + longitude + "&latitude=" + latitude;
+		window.location.href = "./digitalChazan/index.html" + getDigitalChazanQueryString();
 	}	
 
 	
@@ -233,6 +237,97 @@ function hebrewclock()
 	//sunalert(curr_hour,lbHour,lbMinute,lbSecond);
     //if(lbMinute == 0 || lbMinute == 360 || lbMinute == 720)
     //    tick_sound();
+}
+
+function getDigitalChazanStartTime(tefilaSunriseTime)
+{
+	return isDigitalChazanShabatOrMoed(tefilaSunriseTime) ? tefilaSunriseTime - 1 : birkutHashahar;
+}
+
+function shouldOpenDigitalChazan(startTime)
+{
+	if(isPressLink || birthHour != null || previousDigitalChazanHour == null)
+		return false;
+
+	return didPassClockPoint(previousDigitalChazanHour, curr_hour, startTime);
+}
+
+function didPassClockPoint(previousHour, currentHour, targetHour)
+{
+	var previous = normalizeDayHour(previousHour);
+	var current = normalizeDayHour(currentHour);
+	var target = normalizeDayHour(targetHour);
+	var maxRedirectDelay = 2 / 3600;
+
+	if(current < previous)
+		current += 24;
+
+	while(target < previous)
+		target += 24;
+
+	return previous < target && current >= target && current - target <= maxRedirectDelay;
+}
+
+function normalizeDayHour(hour)
+{
+	hour = Number(hour);
+	while(hour < 0)
+		hour += 24;
+	while(hour >= 24)
+		hour -= 24;
+
+	return hour;
+}
+
+function isDigitalChazanShabatOrMoed(tefilaSunriseTime)
+{
+	var date = getDigitalChazanDateForTefila(tefilaSunriseTime);
+	return date.getDay() == 6 || isDigitalChazanMoed(date);
+}
+
+function getDigitalChazanDateForTefila(tefilaSunriseTime)
+{
+	var date = getDigitalChazanDate();
+	if(tefilaSunriseTime == null)
+		return date;
+
+	var tefilaSunrise = normalizeDayHour(tefilaSunriseTime);
+	var current = normalizeDayHour(curr_hour);
+	if(tefilaSunrise < current)
+		date.setDate(date.getDate() + 1);
+
+	return date;
+}
+
+function getDigitalChazanDate()
+{
+	if(birthYear == null || birthMonth == null || birthDay == null)
+		return new Date();
+
+	return new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
+}
+
+function isDigitalChazanMoed(date)
+{
+	if(typeof hebrewDate !== "function")
+		return false;
+
+	var hebrewMonthName = hebrewDate(date.getFullYear(), date.getMonth() + 1, date.getDate(), "hebrew");
+	var isMoed = false;
+
+	isMoed = isMoed || (hebrewMonthName["month_name"] == "ניסן" && hebrewMonthName["date"].match("ט\"ו|כ\"א") != null);
+	isMoed = isMoed || (hebrewMonthName["month_name"] == "סיוון" && hebrewMonthName["date"].match("ו'") != null);
+	isMoed = isMoed || (hebrewMonthName["month_name"] == "תשרי" && hebrewMonthName["date"].match("ט\"ו|כ\"א|כ\"ב|א'|ב'|י'") != null);
+
+	return isMoed;
+}
+
+function getDigitalChazanQueryString()
+{
+	var params = new URLSearchParams(window.location.search);
+	params.set("longitude", longitude || 35.2331664);
+	params.set("latitude", latitude || 31.7768514);
+	return "?" + params.toString();
 }
 
 

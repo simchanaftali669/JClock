@@ -89,24 +89,24 @@
         </div>		
     </div>
 
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/suncalc.js"></script>
+	<script type="text/javascript" src="js/suncalc.js"></script>
  <!--   <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/shared/he/js/Commercial.js"></script>-->
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/man/HebrewClock.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/man/Mazal.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/man/Times.js"></script>	
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/HebrewDayOffset.js"></script>	
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/Geolocation.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/SunAlert.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/HebrewDate.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/HebrewClock.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/Times.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/SunTime.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/TimeAdj.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/Dst.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/Dates.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/Location.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/Mazal.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/js/Tefila.js"></script>
+	<script type="text/javascript" src="js/man/HebrewClock.js"></script>
+	<script type="text/javascript" src="js/man/Mazal.js"></script>
+	<script type="text/javascript" src="js/man/Times.js"></script>
+	<script type="text/javascript" src="js/HebrewDayOffset.js"></script>
+	<script type="text/javascript" src="js/Geolocation.js"></script>
+    <script type="text/javascript" src="js/SunAlert.js"></script>
+	<script type="text/javascript" src="js/HebrewDate.js"></script>
+    <script type="text/javascript" src="js/HebrewClock.js"></script>
+	<script type="text/javascript" src="js/Times.js"></script>
+    <script type="text/javascript" src="js/SunTime.js"></script>
+    <script type="text/javascript" src="js/TimeAdj.js"></script>
+    <script type="text/javascript" src="js/Dst.js"></script>
+    <script type="text/javascript" src="js/Dates.js"></script>
+    <script type="text/javascript" src="js/Location.js"></script>
+    <script type="text/javascript" src="js/Mazal.js"></script>
+	<script type="text/javascript" src="js/Tefila.js"></script>
 
     
 <script type="text/javascript">
@@ -114,6 +114,8 @@
     //public variables
     var longitude, latitude;  //current geo location
 	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin,birthSec,birthMs; //get birth time
+	var defaultLongitude = 35.2331664;
+	var defaultLatitude = 31.7768514;
 	
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
@@ -171,6 +173,7 @@
 /*5*/ var psokeiDzimra;	// 22 regular minutes before sunrise -- פסוקי דזמרה
 /*6*/ var YozerOr;		// 08 regular minutes before sunrise -- יוצר אור
 /*7*/ var kriyahtShema;	// 04 regular minutes before sunrise -- קריאת שמע
+      var publicSunrise; //זריחה
 
     getLocation();  //activate the clock
 
@@ -189,24 +192,15 @@
 		birthMs = url.searchParams.get("ms");
 		birthGMT = url.searchParams.get("gmt");
 	
-		if(lon && lat)		
-		{
-			longitude = lon ? lon : position.coords.longitude;
-			latitude = lat ? lat : position.coords.latitude; 
+		longitude = lon ? lon : defaultLongitude;
+		latitude = lat ? lat : defaultLatitude;
 
-			set_dst();
-			set_default_date();
-			list_pos();
-			hebrewclock();
-			oTimerclock();
-			setmazal();
-				
-			return;
-		}
-        else if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        }
+		set_dst();
+		set_default_date();
+		list_pos();
+		hebrewclock();
+		oTimerclock();
+		setmazal();
     }
   
     function showPosition(position)

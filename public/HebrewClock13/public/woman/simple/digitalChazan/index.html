@@ -4,35 +4,27 @@
 </head>
 <body>
 
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/Geolocation.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/SunAlert.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/HebrewClock.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/Times.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/SunTime.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/TimeAdj.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/Dst.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/Dates.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/Location.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/Mazal.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/js/Tefila.js"></script>
+	<script type="text/javascript" src="js/Geolocation.js"></script>
+    <script type="text/javascript" src="js/SunAlert.js"></script>
+    <script type="text/javascript" src="js/HebrewClock.js"></script>
+	<script type="text/javascript" src="js/Times.js"></script>
+    <script type="text/javascript" src="js/SunTime.js"></script>
+    <script type="text/javascript" src="js/TimeAdj.js"></script>
+    <script type="text/javascript" src="js/Dst.js"></script>
+    <script type="text/javascript" src="js/Dates.js"></script>
+    <script type="text/javascript" src="js/Location.js"></script>
+    <script type="text/javascript" src="js/Mazal.js"></script>
+	<script type="text/javascript" src="js/Tefila.js"></script>
 
-<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/he/shared/js/HebrewDate.js"></script>	
+<script type="text/javascript" src="he/shared/js/HebrewDate.js"></script>
 
 <script type="text/javascript">
-
-// navigator.geolocation.watchPosition(function(position) {
-//     console.log("i'm tracking you!");
-//   },
-//   function(error) {
-//     if (error.code == error.PERMISSION_DENIED)
-//      { 
-// 		 console.log("you denied me :-(");
-// 	}
-//   });
 
     //public variables
     var longitude, latitude;  //current geo location
 	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
+	var defaultLongitude = 35.2331664;
+	var defaultLatitude = 31.7768514;
 	
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
@@ -92,41 +84,18 @@
 		var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
+		setClockParams(url);
 	
 		if(lon && lat)
 		{
-		    longitude = lon ? lon : position.coords.longitude;
-			latitude = lat ? lat : position.coords.latitude; 
+		    longitude = lon;
+			latitude = lat;
 
 			console.log("manual location");
-
-			var date = new Date();
-			var day = date.getDay() + 1;
-
-			
-			var userLang = navigator.language || navigator.userLanguage; 
-			if (userLang = "he") 
-			{
-				if (day != 7 && !IsMoed())	
-					window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/he/YomChol/index.html?longitude=" + longitude + "&latitude=" + latitude;
-				else
-					window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/he/Shabat/index.html?longitude=" + longitude + "&latitude=" + latitude;
-			}
-			else
-			{
-				if (day != 7 && !IsMoed()) 
-					window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/YomChol/index.html?longitude=" + longitude + "&latitude=" + latitude;
-				else
-					window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/index.html?longitude=" + longitude + "&latitude=" + latitude;
-			}
-
-				
+			redirectToClock();
 			return;
 		}
-        else if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        }
+		showDefaultPosition();
     }
   
     function showPosition(position)
@@ -134,14 +103,7 @@
         var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
-		
-		//birthYear = url.searchParams.get("year");
-		//birthMonth = url.searchParams.get("month");
-		//birthDay = url.searchParams.get("day");
-		//birthHour = url.searchParams.get("hour");
-		//birthMin = url.searchParams.get("min");
-		//birthGMT = url.searchParams.get("gmt");
-		//tz = birthGMT;
+		setClockParams(url);
 		
         if(lat)
         {
@@ -163,33 +125,56 @@
 		//TefilaNetz();
 		//console.log(timeadj1(birkutHashahar));
 		
-		var date = new Date();
-		var day = date.getDay() + 1;
-
-		
-		var userLang = navigator.language || navigator.userLanguage; 
-		if (userLang = "he") 
-		{
-			if (day != 7 && !IsMoed())	
-				window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/he/YomChol/index.html";
-			else
-				window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/he/Shabat/index.html";
-		}
-		else
-		{
-			if (day != 7 && !IsMoed()) 
-				window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/YomChol/index.html";
-			else
-				window.location.href = "https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/index.html";
-		}
+		redirectToClock();
 
     }
 
-	function IsMoed()
+	function showDefaultPosition()
 	{
-		var date2 = new Date();		
+		longitude = defaultLongitude;
+		latitude = defaultLatitude;
+		redirectToClock();
+	}
 
-		var hebrew_month_name = hebrewDate(date2.getYear()+1900, date2.getMonth()+1, date2.getDate(),"hebrew");
+	function redirectToClock()
+	{
+		var date = getClockDate();
+		var day = date.getDay() + 1;
+		var userLang = navigator.language || navigator.userLanguage;
+		var lang = userLang.includes("he") ? "he" : "en";
+		var dayType = day != 7 && !IsMoed(date) ? "YomChol" : "Shabat";
+		window.location.href = lang + "/" + dayType + "/index.html" + getClockQueryString();
+	}
+
+	function setClockParams(url)
+	{
+		birthYear = url.searchParams.get("year");
+		birthMonth = url.searchParams.get("month");
+		birthDay = url.searchParams.get("day");
+		birthHour = url.searchParams.get("hour");
+		birthMin = url.searchParams.get("min");
+		birthGMT = url.searchParams.get("gmt");
+	}
+
+	function getClockDate()
+	{
+		if(birthYear == null || birthMonth == null || birthDay == null)
+			return new Date();
+
+		return new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
+	}
+
+	function getClockQueryString()
+	{
+		var params = new URLSearchParams(window.location.search);
+		params.set("longitude", longitude || defaultLongitude);
+		params.set("latitude", latitude || defaultLatitude);
+		return "?" + params.toString();
+	}
+
+	function IsMoed(date2)
+	{
+		var hebrew_month_name = hebrewDate(date2.getFullYear(), date2.getMonth()+1, date2.getDate(),"hebrew");
 		//document.getElementById('hebrewDate').innerText = hebrew_month_name['date'] + " ב" + hebrew_month_name['month_name'];
 		var isMoed = false;
 		

@@ -176,14 +176,6 @@ body
     width: min(150px, 22vw);
     font-size: clamp(14px, 2.5vw, 24px);
 }
-.kabala-page .zmanim_text.zmanim_wrap {
-    height: 2.6em;
-    line-height: 1.15;
-    padding: 2px 4px;
-    resize: none;
-    overflow: hidden;
-    white-space: normal;
-}
 .english_btn {
     background-image:url('https://JClock.net/HebrewClock13/public/man/naftali/he/pic/en.png');
     background-color: #4CAF50;

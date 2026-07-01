@@ -137,15 +137,16 @@ body
     width:200px; 
 }
 .zmanim_text {
-                width:360px; 
+                width:460px; 
                 text-align:center; 
-                font-size:40px;
+                font-size:32px;
                 color:#0070c0; /*blue*/
+                font-family:Comic Sans MS;
             }
 .zmanim_hour {
-                width:175px; 
+                width:190px; 
                 text-align:center; 
-                font-size:34px;
+                font-size:32px;
                 font-family:Comic Sans MS;
             }
 
@@ -155,6 +156,14 @@ body
                 font-size:34px;
                 font-family:Comic Sans MS;
             }
+
+.kabala-page .zmanim_text,
+.kabala-page .zmanim_hour,
+.kabala-page .zmanit_hour {
+    box-sizing: border-box;
+    white-space: nowrap;
+    vertical-align: middle;
+}
 
 .english_btn {
     background-image:url('https://JClock.net/HebrewClock13/public/man/me/en/pic/en.png');
@@ -360,12 +369,13 @@ body
     }
 
     .zmanim_text {
-        width:180px;
-        font-size:40px;
+        width: min(460px, 62vw);
+        font-size: clamp(18px, 4vw, 32px);
     }
 
     .zmanim_hour {
-        width:150px;
+        width: min(190px, 28vw);
+        font-size: clamp(18px, 4vw, 32px);
     }
 }
 	

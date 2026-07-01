@@ -13,8 +13,9 @@
     <script data-ad-client="ca-pub-1007867022366730" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
     </script>
     <title>חזן דיגיטלי</title>  
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/css/stylesheet.css" id="thecss">   
-    <link rel="stylesheet" type="text/css" href="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/css/progressBar.css" id="thecss">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" id="thecss">   
+    <link rel="stylesheet" type="text/css" href="css/progressBar.css" id="thecss">   
 	<link rel="shortcut icon" type="image/x-icon" href="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/hebrewclock.png" />
 	<link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -35,14 +36,14 @@
 			<div> 
 				<a id="hebrewDate" style="text-decoration: unset;"></a>
 			</div>
-            <table style="width:850px;">
-                <input style="" class ="ChirstianClock" id="ChirstianHour" type="text" value="11" onclick="House4You()";/>
-                <input style="width:22px;" class ="ChirstianClock" id="ChirstianDots1" type="text" value=":"/>
-                <input style="" class ="ChirstianClock" id="ChirstianMinute" type="text" value="59" onclick="Tefila();"/>
-                <input style="width:22px;" class ="ChirstianClock" id="ChirstianDots2" type="text" value=":"/>
-                <input style="" class ="ChirstianClock" id="ChirstianSecond" type="text"  value="59" onclick="yovelMazalCalculator();"//>
+            <table>
+                <input class ="ChirstianClock" id="ChirstianHour" type="text" value="11" onclick="House4You()";/>
+                <input class ="ChirstianClock" id="ChirstianDots1" type="text" value=":"/>
+                <input class ="ChirstianClock" id="ChirstianMinute" type="text" value="59" onclick="Tefila();"/>
+                <input class ="ChirstianClock" id="ChirstianDots2" type="text" value=":"/>
+                <input class ="ChirstianClock" id="ChirstianSecond" type="text"  value="59" onclick="yovelMazalCalculator();"//>
             </table>
-            <table style="display:none; width:850px;">
+            <table style="display:none;">
                     <input style="display:none;" class ="clock" id="Hour" type="text" value = "11" onclick="openSpecialHebrewClock();"/>
                     <input style="display:none;" class ="clock" id="Text2" type="text" value = ":" onclick="openSpecialHebrewGiving();" />
                     <input style="display:none;" class ="clock" id="Minute" type="text" value = "1079" onclick="openSpecialChristianClock();"/>
@@ -91,19 +92,19 @@
         </div>		
     </div>
 
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/suncalc.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/Geolocation.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/SunAlert.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/HebrewClock.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/Times.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/SunTime.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/TimeAdj.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/Dst.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/Dates.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/Location.js"></script>
-    <script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/Mazal.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/Shabat/js/Tefila.js"></script>
-	<script type="text/javascript" src="https://JClock.net/HebrewClock13/public/woman/simple/digitalChazan/en/shared/js/HebrewDate.js"></script>
+	<script type="text/javascript" src="js/suncalc.js"></script>
+	<script type="text/javascript" src="js/Geolocation.js"></script>
+    <script type="text/javascript" src="js/SunAlert.js"></script>
+    <script type="text/javascript" src="js/HebrewClock.js"></script>
+	<script type="text/javascript" src="js/Times.js"></script>
+    <script type="text/javascript" src="js/SunTime.js"></script>
+    <script type="text/javascript" src="js/TimeAdj.js"></script>
+    <script type="text/javascript" src="js/Dst.js"></script>
+    <script type="text/javascript" src="js/Dates.js"></script>
+    <script type="text/javascript" src="js/Location.js"></script>
+    <script type="text/javascript" src="js/Mazal.js"></script>
+	<script type="text/javascript" src="js/Tefila.js"></script>
+	<script type="text/javascript" src="../shared/js/HebrewDate.js"></script>
 	‏‏
 
     
@@ -112,6 +113,8 @@
     //public variables
     var longitude, latitude;  //current geo location
 	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin; //get birth time
+	var defaultLongitude = 35.2331664;
+	var defaultLatitude = 31.7768514;
 	
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
@@ -140,6 +143,7 @@
     var milisec_shaa_zmanit_day = 1000;
 
     var oTimer;                 //event for the running clock
+	var hebrewDateTimer;
 
     var hebrewday;
     var lbHour = 23;           //hour of the clock called also sha'a
@@ -160,6 +164,7 @@
 /*6*/ var yozerOr;		// 08 regular minutes before sunrise -- יוצר אור
 /*7*/ var kriyahtShema;	// 04 regular minutes before sunrise -- קריאת שמע
       var publicSunrise; //זריחה
+	  var tzeit; //צאת הכוכבים
 	  
     getLocation();  //activate the clock
 	
@@ -172,11 +177,12 @@
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");
 		birthHour = url.searchParams.get("hour");
+		birthMin = url.searchParams.get("min");
 	
-		if(lon && lat && !birthHour)
+		if(lon && lat)
 		{
-		    longitude = lon ? lon : position.coords.longitude;
-			latitude = lat ? lat : position.coords.latitude; 
+		    longitude = lon;
+			latitude = lat; 
 
 			console.log("manual location");
 			
@@ -186,16 +192,14 @@
 			hebrewclock();
 			oTimerclock();
 			showHebrewDate();		
+			startHebrewDateTimer();
 			setmazal();
 			TefilaNetz();
 
 				
 			return;
 		}
-        else if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        }
+		showDefaultPosition();
     }
   
     function showPosition(position)
@@ -228,17 +232,58 @@
         hebrewclock();
         oTimerclock();
         showHebrewDate();
+		startHebrewDateTimer();
 		setmazal();
 		TefilaNetz();
 		//console.log(timeadj1(birkutHashahar));
     }
+
+	function showDefaultPosition()
+	{
+		longitude = defaultLongitude;
+		latitude = defaultLatitude;
+
+		set_dst();
+		set_default_date();
+		list_pos();
+		hebrewclock();
+		oTimerclock();
+		showHebrewDate();
+		startHebrewDateTimer();
+		setmazal();
+		TefilaNetz();
+	}
 	
 	function showHebrewDate()
 	{
 		var date = getHebrewDateSourceDate();
+		if(shouldShowTomorrowHebrewDate())
+			date.setDate(date.getDate() + 1);
 
-		var hebrew_month_name = hebrewDate(date.getYear()+1900, date.getMonth()+1, date.getDate(),"English");
+		var hebrew_month_name = hebrewDate(date.getFullYear(), date.getMonth() + 1, date.getDate(),"English");
 		document.getElementById('hebrewDate').innerText = hebrew_month_name['date'] + " at " + hebrew_month_name['month_name'];
+	}
+
+	function startHebrewDateTimer()
+	{
+		if(hebrewDateTimer)
+			return;
+
+		hebrewDateTimer = setInterval(showHebrewDate, 60000);
+	}
+
+	function shouldShowTomorrowHebrewDate()
+	{
+		if(typeof tzeit !== "number")
+			return false;
+
+		var date = getHebrewDateSourceDate();
+		var h = birthHour == null ? date.getHours() : Number(birthHour);
+		var m = birthMin == null ? date.getMinutes() : Number(birthMin);
+		var s = date.getSeconds();
+		var curr_hour = (s / 3600) + (m / 60) + h;
+
+		return curr_hour > tzeit && curr_hour < 24;
 	}
 
 	function getHebrewDateSourceDate()

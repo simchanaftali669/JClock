@@ -141,7 +141,19 @@ function doit() {
 
         //insert an array of shaot_zmaniot
         var s1, s2,s3,s4;
-        if (curr_hour > sunset_hour) {
+        if (sunset < sunrise) {
+            if (curr_hour < sunset_hour) {
+                s1 = sunset_yasterdate;
+                s2 = sunrise_yasterday - 24;
+                s3 = sunset;
+            }
+            else {
+                s1 = sunset;
+                s2 = sunrise;
+                s3 = sunset_tommorow;
+            }
+        }
+        else if (curr_hour > sunset_hour) {
             s1 = sunset;
             s2 = sunrise_tommorow;
 			s3 = sunset_tommorow;
