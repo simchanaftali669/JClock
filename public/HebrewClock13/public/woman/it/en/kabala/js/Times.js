@@ -261,6 +261,8 @@ function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalN
             hourIndex.value = "(" + (i + 1) + ")";
         }
 
+        setScheduleRowLearningLink(rowNumber, segment, i + 1);
+
         if (isHourInScheduleRow(selectedHour, segment.start + (segment.hourLength * i), segment.hourLength)) {
             highlightScheduleRow(rowNumber);
         }
@@ -362,6 +364,61 @@ function addDays(date, days) {
 function normalizeHebrewDay(day) {
     return ((day - 1) % 7 + 7) % 7 + 1;
 }
+
+function setScheduleRowLearningLink(rowNumber, segment, hebrewHour) {
+    var hourValue = document.getElementById("hour_" + rowNumber + "__value");
+    if (!hourValue || !hourValue.parentNode) {
+        return;
+    }
+
+    var row = hourValue.parentNode;
+    var rowDate = getScheduleRowDate(segment, hebrewHour);
+    var learningUrl = buildScheduleLearningUrl(segment.hebrewDay, hebrewHour, rowDate);
+
+    row.dataset.learningUrl = learningUrl;
+    row.style.cursor = "pointer";
+    row.title = "Open self learning for this row";
+    row.setAttribute("role", "button");
+    row.setAttribute("tabindex", "0");
+
+    row.onclick = function(event) {
+        event.stopPropagation();
+        window.location.href = this.dataset.learningUrl;
+    };
+
+    row.onkeydown = function(event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            window.location.href = this.dataset.learningUrl;
+        }
+    };
+}
+
+function getScheduleRowDate(segment, hebrewHour) {
+    var rowDate = new Date(segment.date.getTime());
+    var rowStart = segment.start + (segment.hourLength * (hebrewHour - 1));
+    rowDate.setTime(rowDate.getTime() + Math.round((rowStart - segment.start) * 60 * 60 * 1000));
+    return rowDate;
+}
+
+function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate) {
+    var currentUrl = new URL(document.location.href);
+    var learningUrl = new URL("../../../me/en/index.html", document.location.href);
+    var latitudeParam = currentUrl.searchParams.get("latitude") || localStorage.getItem("latitude") || "31.7768514";
+    var longitudeParam = currentUrl.searchParams.get("longitude") || localStorage.getItem("longitude") || "35.2331664";
+
+    learningUrl.searchParams.set("hebrewDay", hebrewDay);
+    learningUrl.searchParams.set("hebrewHour", hebrewHour);
+    learningUrl.searchParams.set("latitude", latitudeParam);
+    learningUrl.searchParams.set("longitude", longitudeParam);
+    var religion = currentUrl.searchParams.get("religion");
+    if (religion) {
+        learningUrl.searchParams.set("religion", religion);
+    }
+
+    return learningUrl.href;
+}
+
 function getSelectedScheduleDate(fallbackDate) {
     var url = new URL(document.location.href);
     var yearParam = parseInt(url.searchParams.get("year"), 10);

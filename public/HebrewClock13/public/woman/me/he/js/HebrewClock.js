@@ -12,7 +12,7 @@
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
     
-    var date = new Date();
+    var date = getSelectedLearningDate(new Date());
 
     var h = date.getHours();
     var m = date.getMinutes();

@@ -63,7 +63,7 @@ function doit() {
 
         //using current time in the computer to adjust the right secdule...
         //get the time right now
-        var date = new Date();
+        var date = getSelectedScheduleDate(new Date());
 
         var h = date.getHours();
         var minute = date.getMinutes();
@@ -197,23 +197,23 @@ function doit() {
 
         if (isDay) {
             scheduleSegments = [
-                { start: sunset_yasterdate, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay },
-                { start: sunrise, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay },
-                { start: sunset, hourLength: Math.abs((sunrise_tommorow + (24 - sunset)) / 12), isDay: false, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1) }
+                { start: sunset_yasterdate, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay, date: scheduleYasterday },
+                { start: sunrise, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay, date: scheduleToday },
+                { start: sunset, hourLength: Math.abs((sunrise_tommorow + (24 - sunset)) / 12), isDay: false, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1), date: scheduleToday }
             ];
         }
         else if (curr_hour > sunset_hour) {
             scheduleSegments = [
-                { start: sunrise, hourLength: Math.abs((sunset - sunrise) / 12), isDay: true, hebrewDay: currentHebrewDay },
-                { start: sunset, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1) },
-                { start: sunrise_tommorow, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1) }
+                { start: sunrise, hourLength: Math.abs((sunset - sunrise) / 12), isDay: true, hebrewDay: currentHebrewDay, date: scheduleToday },
+                { start: sunset, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1), date: scheduleToday },
+                { start: sunrise_tommorow, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay + 1), date: scheduleTomorrow }
             ];
         }
         else {
             scheduleSegments = [
-                { start: sunrise_yasterdate, hourLength: Math.abs((sunset_yasterdate - sunrise_yasterdate) / 12), isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay - 1) },
-                { start: sunset_yasterdate, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay },
-                { start: sunrise, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay }
+                { start: sunrise_yasterdate, hourLength: Math.abs((sunset_yasterdate - sunrise_yasterdate) / 12), isDay: true, hebrewDay: normalizeHebrewDay(currentHebrewDay - 1), date: scheduleYasterday },
+                { start: sunset_yasterdate, hourLength: shaa_zmanit_night, isDay: false, hebrewDay: currentHebrewDay, date: scheduleYasterday },
+                { start: sunrise, hourLength: shaa_zmanit_day, isDay: true, hebrewDay: currentHebrewDay, date: scheduleToday }
             ];
         }
 
@@ -339,6 +339,8 @@ function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalN
             hourIndex.value = "(" + (i + 1) + ")";
         }
 
+        setScheduleRowLearningLink(rowNumber, segment, i + 1);
+
         if (isHourInScheduleRow(selectedHour, segment.start + (segment.hourLength * i), segment.hourLength)) {
             highlightScheduleRow(rowNumber);
         }
@@ -423,6 +425,61 @@ function getEnglishWeekdayName(hebrewDay) {
 function normalizeHebrewDay(day) {
     return ((day - 1) % 7 + 7) % 7 + 1;
 }
+
+function setScheduleRowLearningLink(rowNumber, segment, hebrewHour) {
+    var hourValue = document.getElementById("hour_" + rowNumber + "__value");
+    if (!hourValue || !hourValue.parentNode) {
+        return;
+    }
+
+    var row = hourValue.parentNode;
+    var rowStart = segment.start + (segment.hourLength * (hebrewHour - 1));
+    var rowDate = getScheduleRowDate(segment.date, rowStart);
+    var learningUrl = buildScheduleLearningUrl(segment.hebrewDay, hebrewHour, rowDate);
+
+    row.dataset.learningUrl = learningUrl;
+    row.style.cursor = "pointer";
+    row.title = "Open self learning for this row";
+    row.setAttribute("role", "button");
+    row.setAttribute("tabindex", "0");
+
+    row.onclick = function(event) {
+        event.stopPropagation();
+        window.location.href = this.dataset.learningUrl;
+    };
+
+    row.onkeydown = function(event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            window.location.href = this.dataset.learningUrl;
+        }
+    };
+}
+
+function getScheduleRowDate(baseDate, rowStart) {
+    var rowDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+    rowDate.setTime(rowDate.getTime() + Math.round(rowStart * 60 * 60 * 1000));
+    return rowDate;
+}
+
+function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate) {
+    var currentUrl = new URL(document.location.href);
+    var learningUrl = new URL("../../../me/en/index.html", document.location.href);
+    var latitudeParam = currentUrl.searchParams.get("latitude") || localStorage.getItem("latitude") || "31.7768514";
+    var longitudeParam = currentUrl.searchParams.get("longitude") || localStorage.getItem("longitude") || "35.2331664";
+
+    learningUrl.searchParams.set("hebrewDay", hebrewDay);
+    learningUrl.searchParams.set("hebrewHour", hebrewHour);
+    learningUrl.searchParams.set("latitude", latitudeParam);
+    learningUrl.searchParams.set("longitude", longitudeParam);
+    var religion = currentUrl.searchParams.get("religion");
+    if (religion) {
+        learningUrl.searchParams.set("religion", religion);
+    }
+
+    return learningUrl.href;
+}
+
 function getSelectedScheduleDate(fallbackDate) {
     var url = new URL(document.location.href);
     var yearParam = parseInt(url.searchParams.get("year"), 10);

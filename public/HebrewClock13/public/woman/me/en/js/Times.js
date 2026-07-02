@@ -68,7 +68,7 @@ function doit() {
 
         //using current time in the computer to adjust the right secdule...
         //get the time right now
-        var date = new Date();
+        var date = getSelectedLearningDate(new Date());
 
         var h = date.getHours();
         var minute = date.getMinutes();
