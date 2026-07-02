@@ -284,7 +284,8 @@ function addMazalCommercialCandidates(candidates, mazalNumber, hourValue)
 {
     var suffix = twoDigits(mazalNumber);
 
-    addCommercialCandidate(candidates, "Drink_" + suffix);
+    if (suffix != "02")
+        addCommercialCandidate(candidates, "Drink_" + suffix);
 
     if (isEatHour(hourValue))
         addCommercialCandidate(candidates, "Eat_" + suffix);
@@ -295,6 +296,9 @@ function addMazalCommercialCandidates(candidates, mazalNumber, hourValue)
 
 function addMazalDrinkCandidates(candidates, selectedDay)
 {
+    if (twoDigits(selectedDay) == "02")
+        return;
+
     addCommercialCandidate(candidates, "Drink_" + twoDigits(selectedDay));
 }
 
