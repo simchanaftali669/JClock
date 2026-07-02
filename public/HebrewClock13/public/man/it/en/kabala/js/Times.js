@@ -428,6 +428,7 @@ function normalizeHebrewDay(day) {
 
 function setScheduleRowLearningLink(rowNumber, segment, hebrewHour) {
     var hourValue = document.getElementById("hour_" + rowNumber + "__value");
+    var hourIndex = document.getElementById("hour_" + rowNumber + "_idx");
     if (!hourValue || !hourValue.parentNode) {
         return;
     }
@@ -435,20 +436,37 @@ function setScheduleRowLearningLink(rowNumber, segment, hebrewHour) {
     var row = hourValue.parentNode;
     var rowStart = segment.start + (segment.hourLength * (hebrewHour - 1));
     var rowDate = getScheduleRowDate(segment.date, rowStart);
-    var learningUrl = buildScheduleLearningUrl(segment.hebrewDay, hebrewHour, rowDate);
+    var generalLearningUrl = buildScheduleLearningUrl(segment.hebrewDay, hebrewHour, rowDate, true);
+    var personalLearningUrl = buildScheduleLearningUrl(segment.hebrewDay, hebrewHour, rowDate, false);
 
-    row.dataset.learningUrl = learningUrl;
-    row.style.cursor = "pointer";
-    row.title = "Open self learning for this row";
-    row.setAttribute("role", "button");
-    row.setAttribute("tabindex", "0");
+    row.onclick = null;
+    row.onkeydown = null;
+    row.style.cursor = "";
+    row.removeAttribute("role");
+    row.removeAttribute("tabindex");
+    row.removeAttribute("title");
 
-    row.onclick = function(event) {
+    configureScheduleLearningLink(hourIndex, generalLearningUrl, "Open learning with general ad");
+    configureScheduleLearningLink(hourValue, personalLearningUrl, "Open learning with personal ad");
+}
+
+function configureScheduleLearningLink(element, learningUrl, title) {
+    if (!element) {
+        return;
+    }
+
+    element.dataset.learningUrl = learningUrl;
+    element.style.cursor = "pointer";
+    element.title = title;
+    element.setAttribute("role", "button");
+    element.setAttribute("tabindex", "0");
+
+    element.onclick = function(event) {
         event.stopPropagation();
         window.location.href = this.dataset.learningUrl;
     };
 
-    row.onkeydown = function(event) {
+    element.onkeydown = function(event) {
         if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             window.location.href = this.dataset.learningUrl;
@@ -462,7 +480,7 @@ function getScheduleRowDate(baseDate, rowStart) {
     return rowDate;
 }
 
-function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate) {
+function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate, isGeneral) {
     var currentUrl = new URL(document.location.href);
     var learningUrl = new URL("../../../me/en/index.html", document.location.href);
     var latitudeParam = currentUrl.searchParams.get("latitude") || localStorage.getItem("latitude") || "31.7768514";
@@ -472,6 +490,9 @@ function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate) {
     learningUrl.searchParams.set("hebrewHour", hebrewHour);
     learningUrl.searchParams.set("latitude", latitudeParam);
     learningUrl.searchParams.set("longitude", longitudeParam);
+    if (isGeneral) {
+        learningUrl.searchParams.set("general", "1");
+    }
     var religion = currentUrl.searchParams.get("religion");
     if (religion) {
         learningUrl.searchParams.set("religion", religion);

@@ -204,8 +204,9 @@ var currentCommercialCandidates = [];
 function getSelectedCommercialTime()
 {
     var url = new URL(document.location.href);
-    var urlDay = url.searchParams.get("hebrewDay") || url.searchParams.get("day");
-    var urlHour = url.searchParams.get("hebrewHour") || url.searchParams.get("hour");
+    var generalTime = isGeneralCommercialRequest() ? getGeneralCommercialTime() : null;
+    var urlDay = generalTime ? generalTime.day : (url.searchParams.get("hebrewDay") || url.searchParams.get("day"));
+    var urlHour = generalTime ? generalTime.hour : (url.searchParams.get("hebrewHour") || url.searchParams.get("hour"));
     var selectedDay = Number(urlDay);
     var selectedHour = Number(urlHour);
 
@@ -220,9 +221,29 @@ function getSelectedCommercialTime()
     };
 }
 
+function isGeneralCommercialRequest()
+{
+    var url = new URL(document.location.href);
+    var general = url.searchParams.get("general");
+    return general == "1" || general == "true";
+}
+
+function getGeneralCommercialTime()
+{
+    if (typeof getDefaultSunLearningPeriod !== "function" || typeof getCurrentMazal !== "function")
+        return null;
+
+    var period = getDefaultSunLearningPeriod().toLowerCase();
+    var mazal = getCurrentMazal(period);
+    return {
+        day: Number(mazal[0]),
+        hour: Number(mazal[1])
+    };
+}
+
 function ensureCommercialCandidates(selectedTime)
 {
-    var drinkOnly = isCurrentSystemDrinkOnly();
+    var drinkOnly = isDrinkOnlyForCommercialTime(selectedTime);
     if (
         selectedCommercialDay === selectedTime.day &&
         selectedCommercialHour === selectedTime.hour &&
@@ -321,6 +342,14 @@ function isCurrentSystemDrinkOnly()
 {
     var currentSystemHour = Number(lbHour);
     return currentSystemHour >= 12 && currentSystemHour < 17;
+}
+
+function isDrinkOnlyForCommercialTime(selectedTime)
+{
+    if (isGeneralCommercialRequest())
+        return selectedTime.hour >= 12 && selectedTime.hour < 17;
+
+    return isCurrentSystemDrinkOnly();
 }
 
 function normalizeCommercialHour(hour)

@@ -61,14 +61,55 @@ function shuffleLaws(laws)
 
 function getLawWikisourceUrl(law)
 {
-	if(law.wikisourceUrl)
-		return law.wikisourceUrl;
+	return "https://he.wikisource.org/wiki/" + encodeURIComponent(getLawWikisourceTitle(law));
+}
 
+function getLawWikisourceTitle(law)
+{
 	var title = law.name || "";
 	title = title.replace(/\s*,\s*התש[^,]+?\s*[-–]\s*\d{4}\s*$/, "");
 	title = title.replace(/\s+/g, "_");
 
-	return "https://he.wikisource.org/wiki/" + encodeURIComponent(title);
+	return title;
+}
+
+function getLawSource(law)
+{
+	return {
+		url: getLawWikisourceUrl(law),
+		fallbackUrl: law.knessetPdfUrl || law.olawPdfUrl || law.officialUrl || getLawWikisourceUrl(law)
+	};
+}
+
+function updateLawSourceLink(law, link)
+{
+	if(law.wikisourceUrl)
+	{
+		link.href = law.wikisourceUrl;
+		return;
+	}
+
+	var title = getLawWikisourceTitle(law);
+	var apiUrl = "https://he.wikisource.org/w/api.php?action=query&format=json&origin=*&titles=" + encodeURIComponent(title);
+
+	fetch(apiUrl)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+			var pages = data && data.query && data.query.pages;
+			var pageIds = pages ? Object.keys(pages) : [];
+			var exists = pageIds.some(function(pageId) {
+				return pageId != "-1" && !pages[pageId].missing;
+			});
+
+			if(!exists)
+				link.href = law.knessetPdfUrl || law.olawPdfUrl || law.officialUrl || getLawWikisourceUrl(law);
+		})
+		.catch(function() {
+			if(law.knessetPdfUrl || law.olawPdfUrl || law.officialUrl)
+				link.href = law.knessetPdfUrl || law.olawPdfUrl || law.officialUrl;
+		});
 }
 
 function setLaws()
@@ -151,12 +192,14 @@ function renderLawsPage()
 		var actions = document.createElement("div");
 		actions.className = "law-actions";
 
-		var wikisourceLink = document.createElement("a");
-		wikisourceLink.href = getLawWikisourceUrl(law);
-		wikisourceLink.target = "_blank";
-		wikisourceLink.rel = "noopener";
-		wikisourceLink.innerText = "פתח בויקיטקסט";
-		actions.appendChild(wikisourceLink);
+		var source = getLawSource(law);
+		var sourceLink = document.createElement("a");
+		sourceLink.href = source.url;
+		sourceLink.target = "_blank";
+		sourceLink.rel = "noopener";
+		sourceLink.innerText = "פתח חוק";
+		updateLawSourceLink(law, sourceLink);
+		actions.appendChild(sourceLink);
 
 		if(law.clockUrl)
 		{
