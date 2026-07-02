@@ -22,7 +22,7 @@
   .map-actions {
 	display: grid;
 	gap: 10px;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat(3, 1fr);
   }
   .gender-toggle {
 	display: grid;
@@ -103,6 +103,7 @@
 				<input id="place-search" type="text" class="form-control" placeholder="לדוגמה: הכותל המערבי">
 				<div class="map-actions">
 					<button type="button" id="place-search-button" class="btn btn-info">חפש במפה</button>
+					<button type="button" id="default-location" class="btn btn-primary">ירושלים</button>
 					<button type="button" id="current-location" class="btn btn-default">השתמש במיקום הנוכחי</button>
 				</div>
 				<p id="location-status" aria-live="polite"></p>
@@ -210,8 +211,10 @@
 	var placesService;
 	var placeAutocomplete;
 	var defaultLocationLabel = 'הכותל המערבי';
-	var latitude = 31.7768514;
-	var longitude = 35.2331664;
+	var defaultLatitude = 31.7768514;
+	var defaultLongitude = 35.2331664;
+	var latitude = defaultLatitude;
+	var longitude = defaultLongitude;
 	var placeSearchInput = document.getElementById('place-search');
 	var locationStatus = document.getElementById('location-status');
 
@@ -267,6 +270,12 @@
 	  locationStatus.className = '';
 	  locationStatus.textContent = 'מאתר מיקום...';
 	  getLocation();
+	});
+
+	document.getElementById('default-location').addEventListener('click', function() {
+	  updateLocation(defaultLatitude, defaultLongitude);
+	  locationStatus.className = '';
+	  locationStatus.textContent = 'נבחר מיקום ברירת המחדל: ירושלים.';
 	});
 
 	document.getElementById('place-search-button').addEventListener('click', searchPlace);
