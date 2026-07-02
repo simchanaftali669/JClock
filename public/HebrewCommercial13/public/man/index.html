@@ -83,6 +83,8 @@
     //public variables
     var longitude, latitude;  //current geo location
 	var birthYear,birthMonth,birthDay,birthGMT,birthHour,birthMin,birthSec,birthMs; //get fixed time from url
+    var defaultLatitude = "31.7768514";
+    var defaultLongitude = "35.2331664";
     var latd = -1, latm = 0;  // lat on earth
     var lngd = -1, lngm = 0;  // long on earth
     var lat = 0, lng = 0;     // sun's location
@@ -145,17 +147,7 @@
     //---get Location and activate the clock---
     function getLocation()
     {
-		var url = new URL(document.location.href);
-		if(url.searchParams.get("longitude") != null)
-		{
-			showPosition(null);
-			return;
-		}
-		
-        if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        }
+		showPosition();
     }
 
     function showPosition(position)
@@ -176,8 +168,8 @@
             //tz = https://maps.googleapis.com/maps/api/timezone/outputFormat?parameters
         }
 
-        longitude = lon ? lon : position.coords.longitude;
-        latitude = lat ? lat : position.coords.latitude;
+        longitude = lon ? lon : defaultLongitude;
+        latitude = lat ? lat : defaultLatitude;
 
         set_dst();
         set_default_date();
