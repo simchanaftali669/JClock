@@ -75,9 +75,11 @@ function getLawWikisourceTitle(law)
 
 function getLawSource(law)
 {
+	var fallbackUrl = law.knessetPdfUrl || law.olawPdfUrl || law.officialUrl || "";
+
 	return {
-		url: getLawWikisourceUrl(law),
-		fallbackUrl: law.knessetPdfUrl || law.olawPdfUrl || law.officialUrl || getLawWikisourceUrl(law)
+		url: law.wikisourceUrl || fallbackUrl || getLawWikisourceUrl(law),
+		fallbackUrl: fallbackUrl || getLawWikisourceUrl(law)
 	};
 }
 
@@ -88,6 +90,8 @@ function updateLawSourceLink(law, link)
 		link.href = law.wikisourceUrl;
 		return;
 	}
+	if(law.knessetPdfUrl || law.olawPdfUrl || law.officialUrl)
+		return;
 
 	var title = getLawWikisourceTitle(law);
 	var apiUrl = "https://he.wikisource.org/w/api.php?action=query&format=json&origin=*&titles=" + encodeURIComponent(title);
