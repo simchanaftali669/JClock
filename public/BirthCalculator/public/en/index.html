@@ -26,7 +26,7 @@
   .gender-toggle {
 	display: grid;
 	gap: 10px;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(2, 1fr);
 	margin-bottom: 14px;
   }
   .gender-option {
@@ -42,9 +42,6 @@
   }
   .gender-option.female {
 	background: #CA2C92;
-  }
-  .gender-option.family {
-	background: linear-gradient(90deg, #5dbcd2 0%, #5dbcd2 50%, #CA2C92 50%, #CA2C92 100%);
   }
   .gender-option.selected {
 	border: 2px dashed #000;
@@ -99,7 +96,6 @@
 			<div class="gender-toggle" role="group" aria-label="Choose clock type">
 				<button type="button" class="gender-option male selected" data-gender="man" aria-pressed="true">Sun</button>
 				<button type="button" class="gender-option female" data-gender="woman" aria-pressed="false">Moon</button>
-				<button type="button" class="gender-option family" data-gender="family" aria-pressed="false">Sun + Moon (Diaspora)</button>
 			</div>
 			<p href="#" data-toggle="tooltip" title="choose location"  style="display: inline-block; width: 248px;">Choose birth location</p>
 			<div class="map-panel">
@@ -112,10 +108,10 @@
 				<div id="map"></div>
 			</div>
 			<hr/>
-			<p href="#" data-toggle="tooltip" title="Longitude Date Of Birth" style="display: inline-block; width: 248px;">Date Of Birth</p><input type="date" id="dateOfBirth"  value="32"/>
-			<p href="#" data-toggle="tooltip" title="Hour of Birth" style="display: inline-block; width: 248px;">Hour of Birth</p><input type="time" id="hourOfBirth"  value="32"/>			
+			<p href="#" data-toggle="tooltip" title="Longitude Date Of Birth" style="display: inline-block; width: 248px;">Date Of Birth</p><input type="date" id="dateOfBirth" required/>
+			<p href="#" data-toggle="tooltip" title="Hour of Birth" style="display: inline-block; width: 248px;">Hour of Birth</p><input type="time" id="hourOfBirth" required/>			
 			<br>
-			<p href="#" data-toggle="tooltip" title="In israel, winter=+2, summer=+3" style="display: inline-block; width: 248px;" onclick="window.open('https://www.timeanddate.com/time/change/israel/jerusalem','_blank')">GMT</p><input type="number" id="GMT"  value="3"/>
+			<p href="#" data-toggle="tooltip" title="In israel, winter=+2, summer=+3" style="display: inline-block; width: 248px;" onclick="window.open('https://www.timeanddate.com/time/change/israel/jerusalem','_blank')">GMT</p><input type="number" id="GMT"  value="3" required/>
 			<hr/>
 			
         </div>        
@@ -146,20 +142,39 @@
 
 	function calculateHebrewHour()
 	{		
+		var gender = selectedGender;
+		if (gender !== "man" && gender !== "woman") {
+			alert("Please choose Sun or Moon.");
+			return;
+		}
+
+		var hourStr = document.getElementById('hourOfBirth').value;
+		var dateStr = document.getElementById('dateOfBirth').value;
+		var gmt = document.getElementById('GMT').value;
+		if (!dateStr || !hourStr || gmt === "") {
+			alert("Please fill date of birth, hour of birth, and GMT.");
+			return;
+		}
+
+		if (!marker || !marker.position) {
+			alert("Please choose a location.");
+			return;
+		}
+
 		var latitude = marker.position.lat();
 		var longitude = marker.position.lng();
-		var hourStr = document.getElementById('hourOfBirth').value;
 		var hour = Number(hourStr.split(':')[0]);
 		var min = Number(hourStr.split(':')[1]);
-		var dateStr = document.getElementById('dateOfBirth').value;
 		var year = Number(dateStr.split('-')[0]);
 		var month = Number(dateStr.split('-')[1]);
 		var day = Number(dateStr.split('-')[2]);
-		var gmt = document.getElementById('GMT').value;
-		var	gender = selectedGender;
-		var clockPath = gender == "family" ? "family/index.html" : gender + "/simple/index.html";
-		var clockBaseUrl = gender == "family" ? "../../../HebrewCommercial13/public" : "../../../HebrewClock13/public";
-		var clockUrl = clockBaseUrl + clockPath;
+		gmt = Number(gmt);
+		if (![latitude, longitude, hour, min, year, month, day, gmt].every(Number.isFinite)) {
+			alert("One value is invalid. Please check the date, time, location, and GMT.");
+			return;
+		}
+
+		var clockUrl = "../../../HebrewClock13/public/" + gender + "/simple/index.html";
 			
 		//document.location.href = "https://hebrewclock13.web.app/man/simple/index.html?latitude=30&longitude=32&hour=20&min=43&year=1987&month=3&day=4&gmt=3";
 		document.location.href = clockUrl + "?latitude=" + latitude + 

@@ -27,7 +27,7 @@
   .gender-toggle {
 	display: grid;
 	gap: 10px;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(2, 1fr);
 	margin-bottom: 14px;
   }
   .gender-option {
@@ -43,9 +43,6 @@
   }
   .gender-option.female {
 	background: #CA2C92;
-  }
-  .gender-option.family {
-	background: linear-gradient(90deg, #5dbcd2 0%, #5dbcd2 50%, #CA2C92 50%, #CA2C92 100%);
   }
   .gender-option.selected {
 	border: 2px dashed #000;
@@ -100,7 +97,6 @@
 			<div class="gender-toggle" role="group" aria-label="בחירת סוג השעון">
 				<button type="button" class="gender-option male selected" data-gender="man" aria-pressed="true">חמה</button>
 				<button type="button" class="gender-option female" data-gender="woman" aria-pressed="false">לבנה</button>
-				<button type="button" class="gender-option family" data-gender="family" aria-pressed="false">חמה ולבנה (חו"ל)</button>
 			</div>
 			<p href="#" data-toggle="tooltip" title="בחירת המיקום"  style="display: inline-block; width: 248px;">בחירת המיקום</p>
 			<div class="map-panel">
@@ -119,10 +115,10 @@
 			<p href="#" data-toggle="tooltip" title="קו אורך" style="display: inline-block; width: 248px;">קו אורך</p><input id="longitude"  value="32"/>
 			-->
 		  <hr/>
-			<p href="#" data-toggle="tooltip" title="תאריך חילוני"  style="display: inline-block; width: 248px;">תאריך לידה</p><input type="date" id="dateOfBirth" class="form-control" data-toggle="datepicker"> 
-			<p href="#" data-toggle="tooltip" title="שעה חילונית"  style="display: inline-block; width: 248px;">שעת לידה</p><input type="time" id="hourOfBirth" class="form-control" data-toggle="timepicker"> 
+			<p href="#" data-toggle="tooltip" title="תאריך חילוני"  style="display: inline-block; width: 248px;">תאריך לידה</p><input type="date" id="dateOfBirth" class="form-control" data-toggle="datepicker" required> 
+			<p href="#" data-toggle="tooltip" title="שעה חילונית"  style="display: inline-block; width: 248px;">שעת לידה</p><input type="time" id="hourOfBirth" class="form-control" data-toggle="timepicker" required> 
 			<br>
-			<p href="#" data-toggle="tooltip" title="ישראל בחורף +2 ובקיץ +3" style="display: inline-block; width: 248px;" onclick="window.open('https://www.timeanddate.com/time/change/israel/jerusalem','_blank')">GMT</p><input type="number" id="GMT"  value="3"/>
+			<p href="#" data-toggle="tooltip" title="ישראל בחורף +2 ובקיץ +3" style="display: inline-block; width: 248px;" onclick="window.open('https://www.timeanddate.com/time/change/israel/jerusalem','_blank')">GMT</p><input type="number" id="GMT"  value="3" required/>
         </div>
         
         <!-- Modal footer -->
@@ -152,20 +148,39 @@
 
 	function calculateHebrewHour()
 	{		
+		var gender = selectedGender;
+		if (gender !== "man" && gender !== "woman") {
+			alert("נא לבחור חמה או לבנה.");
+			return;
+		}
+
+		var hourStr = document.getElementById('hourOfBirth').value;
+		var dateStr = document.getElementById('dateOfBirth').value;
+		var gmt = document.getElementById('GMT').value;
+		if (!dateStr || !hourStr || gmt === "") {
+			alert("נא למלא תאריך לידה, שעת לידה ו-GMT.");
+			return;
+		}
+
+		if (!marker || !marker.position) {
+			alert("נא לבחור מיקום.");
+			return;
+		}
+
 		var latitude = marker.position.lat();
 		var longitude = marker.position.lng();
-		var hourStr = document.getElementById('hourOfBirth').value;
 		var hour = Number(hourStr.split(':')[0]);
 		var min = Number(hourStr.split(':')[1]);
-		var dateStr = document.getElementById('dateOfBirth').value;
 		var year = Number(dateStr.split('-')[0]);
 		var month = Number(dateStr.split('-')[1]);
 		var day = Number(dateStr.split('-')[2]);
-		var gmt = document.getElementById('GMT').value;
-		var gender = selectedGender;
-		var clockPath = gender == "family" ? "family/index.html" : gender + "/simple/index.html";
-		var clockBaseUrl = gender == "family" ? "../../../HebrewCommercial13/public" : "../../../HebrewClock13/public";
-		var clockUrl = clockBaseUrl + clockPath;
+		gmt = Number(gmt);
+		if (![latitude, longitude, hour, min, year, month, day, gmt].every(Number.isFinite)) {
+			alert("יש ערך לא תקין. נא לבדוק את התאריך, השעה, המיקום וה-GMT.");
+			return;
+		}
+
+		var clockUrl = "../../../HebrewClock13/public/" + gender + "/simple/index.html";
 
 		//document.location.href = "https://hebrewclock13.web.app/man/simple/index.html?latitude=30&longitude=32&hour=20&min=43&year=1987&month=3&day=4&gmt=3";
 		document.location.href = clockUrl + "?latitude=" + latitude + 
