@@ -22,14 +22,16 @@
       productLabel: "מוצר",
       timeZone: "אזור זמן",
       region: "יבשת / אזור",
-      regionMiddleEast: "מזרח תיכון",
-      regionIreland: "אירלנד",
-      regionEurope: "אירופה",
-      regionAfrica: "אפריקה",
-      regionAsia: "אסיה",
-      regionNorthAmerica: "צפון אמריקה",
-      regionSouthAmerica: "דרום אמריקה",
-      regionItalyAustralia: "איטליה ואוסטרליה",
+      regionMiddleEast: "המזרח התיכון - שעון חמה ולבנה",
+      regionIreland: "אירלנד - שעון חמה ולבנה",
+      regionEurope: "אירופה - שעון לבנה",
+      regionAfrica: "אפריקה - שעון לבנה",
+      regionAsia: "אסיה - שעון חמה",
+      regionNorthAmerica: "צפון אמריקה - שעון חמה",
+      regionSouthAmerica: "דרום אמריקה - שעון חמה",
+      regionAustralia: "אוסטרליה - שעון חמה",
+      regionItaly: "איטליה - שעון חמה",
+      regionItalyAustralia: "איטליה - שעון חמה",
       audience: "מוכר ל",
       boys: "בנים",
       girls: "בנות",
@@ -96,14 +98,16 @@
       productLabel: "Product",
       timeZone: "Time zone",
       region: "Continent / region",
-      regionMiddleEast: "Middle East",
-      regionIreland: "Ireland",
-      regionEurope: "Europe",
-      regionAfrica: "Africa",
-      regionAsia: "Asia",
-      regionNorthAmerica: "North America",
-      regionSouthAmerica: "South America",
-      regionItalyAustralia: "Italy and Australia",
+      regionMiddleEast: "Middle East - sun and moon clocks",
+      regionIreland: "Ireland - sun and moon clocks",
+      regionEurope: "Europe - moon clock",
+      regionAfrica: "Africa - moon clock",
+      regionAsia: "Asia - sun clock",
+      regionNorthAmerica: "North America - sun clock",
+      regionSouthAmerica: "South America - sun clock",
+      regionAustralia: "Australia - sun clock",
+      regionItaly: "Italy - sun clock",
+      regionItalyAustralia: "Italy - sun clock",
       audience: "Selling to",
       boys: "Boys",
       girls: "Girls",
@@ -752,7 +756,7 @@
   function getSelectedClockModel() {
     var region = regionInput.value;
 
-    if (region === "south-america" || region === "italy-australia") {
+    if (region === "south-america" || region === "australia" || region === "italy" || region === "italy-australia") {
       return "sun";
     }
 
@@ -1331,23 +1335,27 @@
 
   function formatRegion(region) {
     var names = state.language === "en" ? {
-      "middle-east": "Middle East",
-      ireland: "Ireland",
-      europe: "Europe",
-      africa: "Africa",
-      asia: "Asia",
-      "north-america": "North America",
-      "south-america": "South America",
-      "italy-australia": "Italy and Australia"
+      "north-america": "North America - sun clock",
+      asia: "Asia - sun clock",
+      europe: "Europe - moon clock",
+      "south-america": "South America - sun clock",
+      australia: "Australia - sun clock",
+      italy: "Italy - sun clock",
+      "italy-australia": "Italy - sun clock",
+      africa: "Africa - moon clock",
+      "middle-east": "Middle East - sun and moon clocks",
+      ireland: "Ireland - sun and moon clocks"
     } : {
-      "middle-east": "מזרח תיכון",
-      ireland: "אירלנד",
-      europe: "אירופה",
-      africa: "אפריקה",
-      asia: "אסיה",
-      "north-america": "צפון אמריקה",
-      "south-america": "דרום אמריקה",
-      "italy-australia": "איטליה ואוסטרליה"
+      "north-america": "צפון אמריקה - שעון חמה",
+      asia: "אסיה - שעון חמה",
+      europe: "אירופה - שעון לבנה",
+      "south-america": "דרום אמריקה - שעון חמה",
+      australia: "אוסטרליה - שעון חמה",
+      italy: "איטליה - שעון חמה",
+      "italy-australia": "איטליה - שעון חמה",
+      africa: "אפריקה - שעון לבנה",
+      "middle-east": "המזרח התיכון - שעון חמה ולבנה",
+      ireland: "אירלנד - שעון חמה ולבנה"
     };
 
     return names[region] || (state.language === "en" ? "Region" : "אזור");
