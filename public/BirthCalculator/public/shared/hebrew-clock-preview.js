@@ -8,6 +8,7 @@
   "use strict";
 
   var MON_COUNT = [13, 1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
+  var HALAKIM_PER_HOUR = 1080;
   var HOUR_MIDA_HE = ["שבתאי", "צדק", "מאדים", "חמה", "נוגה", "כוכב", "לבנה"];
   var DAY_MIDA_HE = ["צדק", "מאדים", "חמה", "שבתאי", "נוגה", "כוכב", "לבנה"];
   var HOUR_MIDA_EN = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"];
@@ -23,6 +24,7 @@
     "#808080"
   ];
   var COMMERCIAL_MAZAL_BY_INDEX = [4, 1, 2, 3, 5, 6, 7];
+  var DAY_MAZAL_INDEX_BY_HEBREW_DAY = [null, 1, 2, 3, 0, 4, 5, 6];
 
   function normalizeHebrewDay(dayNumber) {
     while (dayNumber < 1) {
@@ -212,45 +214,62 @@
     return ((parts.millisecond || 0) + ((parts.second || 0) * 1000) + (parts.minute * 60 * 1000) + (parts.hour * 60 * 60 * 1000)) / (1000 * 3600);
   }
 
-  function getClockSegmentHour(length, offset) {
-    return Math.floor(12 * (offset / length));
+  function getClockSegment(length, offset, hourOffset) {
+    var rawHour = 12 * (offset / length);
+    var boundedHour = Math.max(0, Math.min(rawHour, 11.999999999));
+    var hour = Math.floor(boundedHour);
+    var parts = Math.floor((boundedHour - hour) * HALAKIM_PER_HOUR);
+
+    if (parts >= HALAKIM_PER_HOUR) {
+      hour += 1;
+      parts = 0;
+    }
+
+    return {
+      clockHour: hour + (hourOffset || 0),
+      parts: Math.max(0, Math.min(parts, HALAKIM_PER_HOUR - 1))
+    };
   }
 
   function getSunClockHour(parts, latitude, longitude, gmt) {
     var times = getSolarTimes(parts, latitude, longitude, gmt);
     var currHour = getCurrentHour(parts);
-    var clockHour = null;
+    var clock = null;
 
     if (times.sunset > times.sunrise && currHour < times.sunset) {
-      clockHour = getClockSegmentHour(times.sunset - times.sunrise, currHour - times.sunrise) + 12;
+      clock = getClockSegment(times.sunset - times.sunrise, currHour - times.sunrise, 12);
     }
 
     if (times.sunset > times.sunrise && currHour < times.sunrise) {
-      clockHour = getClockSegmentHour(times.sunrise + 24 - times.sunsetYesterday, currHour + 24 - times.sunsetYesterday);
+      clock = getClockSegment(times.sunrise + 24 - times.sunsetYesterday, currHour + 24 - times.sunsetYesterday, 0);
     }
 
     if (times.sunset > times.sunrise && currHour > times.sunset) {
-      clockHour = getClockSegmentHour(times.sunriseTomorrow + 24 - times.sunset, currHour - times.sunset);
+      clock = getClockSegment(times.sunriseTomorrow + 24 - times.sunset, currHour - times.sunset, 0);
     }
 
     if (times.sunset < times.sunrise && currHour < times.sunrise) {
-      clockHour = getClockSegmentHour(times.sunrise - times.sunset, currHour - times.sunset);
+      clock = getClockSegment(times.sunrise - times.sunset, currHour - times.sunset, 0);
     }
 
     if (times.sunset < times.sunrise && currHour < times.sunset) {
-      clockHour = getClockSegmentHour(times.sunset + 24 - times.sunriseYesterday, currHour + 24 - times.sunriseYesterday) + 12;
+      clock = getClockSegment(times.sunset + 24 - times.sunriseYesterday, currHour + 24 - times.sunriseYesterday, 12);
     }
 
     if (times.sunset < times.sunrise && currHour > times.sunrise) {
-      clockHour = getClockSegmentHour(times.sunsetTomorrow + 24 - times.sunrise, currHour - times.sunrise) + 12;
+      clock = getClockSegment(times.sunsetTomorrow + 24 - times.sunrise, currHour - times.sunrise, 12);
     }
 
-    if (!Number.isFinite(clockHour)) {
-      clockHour = 0;
+    if (!clock || !Number.isFinite(clock.clockHour)) {
+      clock = {
+        clockHour: 0,
+        parts: 0
+      };
     }
 
     return {
-      clockHour: clockHour,
+      clockHour: clock.clockHour,
+      parts: clock.parts,
       sunset: times.sunset
     };
   }
@@ -343,37 +362,40 @@
   function getMoonClockHour(parts, latitude, longitude, sunCalc) {
     var times = getMoonTimes(parts, latitude, longitude, sunCalc);
     var currHour = getCurrentHour(parts);
-    var clockHour = null;
+    var clock = null;
 
     if (times.set > times.rise && currHour < times.set) {
-      clockHour = getClockSegmentHour(times.set - times.rise, currHour - times.rise) + 12;
+      clock = getClockSegment(times.set - times.rise, currHour - times.rise, 12);
     }
 
     if (times.set > times.rise && currHour < times.rise) {
-      clockHour = getClockSegmentHour(times.rise + 24 - times.setYesterday, currHour + 24 - times.setYesterday);
+      clock = getClockSegment(times.rise + 24 - times.setYesterday, currHour + 24 - times.setYesterday, 0);
     }
 
     if (times.set > times.rise && currHour > times.set) {
-      clockHour = getClockSegmentHour(times.riseTomorrow + 24 - times.set, currHour - times.set);
+      clock = getClockSegment(times.riseTomorrow + 24 - times.set, currHour - times.set, 0);
     }
 
     if (times.set < times.rise && currHour < times.rise) {
-      clockHour = getClockSegmentHour(times.rise - times.set, currHour - times.set);
+      clock = getClockSegment(times.rise - times.set, currHour - times.set, 0);
     }
 
     if (times.set < times.rise && currHour < times.set) {
-      clockHour = getClockSegmentHour(times.set + 24 - times.riseYesterday, currHour + 24 - times.riseYesterday) + 12;
+      clock = getClockSegment(times.set + 24 - times.riseYesterday, currHour + 24 - times.riseYesterday, 12);
     }
 
     if (times.set < times.rise && currHour > times.rise) {
-      clockHour = getClockSegmentHour(times.setTomorrow + 24 - times.rise, currHour - times.rise) + 12;
+      clock = getClockSegment(times.setTomorrow + 24 - times.rise, currHour - times.rise, 12);
     }
 
-    if (!Number.isFinite(clockHour)) {
-      clockHour = 0;
+    if (!clock || !Number.isFinite(clock.clockHour)) {
+      clock = {
+        clockHour: 0,
+        parts: 0
+      };
     }
 
-    return clockHour;
+    return clock;
   }
 
   function getMazalIndex(hebrewDay, clockHour) {
@@ -385,16 +407,151 @@
     return (offsetsByDay[hebrewDay] + clockHour) % 7;
   }
 
-  function getResult(kind, hebrewDay, clockHour) {
+  function getDayMazalIndex(hebrewDay) {
+    return DAY_MAZAL_INDEX_BY_HEBREW_DAY[normalizeHebrewDay(hebrewDay)];
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function hexToRgb(hex) {
+    var normalized = String(hex || "").replace("#", "");
+    return {
+      r: parseInt(normalized.slice(0, 2), 16),
+      g: parseInt(normalized.slice(2, 4), 16),
+      b: parseInt(normalized.slice(4, 6), 16)
+    };
+  }
+
+  function rgbToHex(rgb) {
+    return "#" + [rgb.r, rgb.g, rgb.b].map(function(part) {
+      return String(part.toString(16)).padStart(2, "0");
+    }).join("").toUpperCase();
+  }
+
+  function rgbToHsl(rgb) {
+    var r = rgb.r / 255;
+    var g = rgb.g / 255;
+    var b = rgb.b / 255;
+    var max = Math.max(r, g, b);
+    var min = Math.min(r, g, b);
+    var h = 0;
+    var s = 0;
+    var l = (max + min) / 2;
+    var d;
+
+    if (max !== min) {
+      d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+      if (max === r) {
+        h = (g - b) / d + (g < b ? 6 : 0);
+      } else if (max === g) {
+        h = (b - r) / d + 2;
+      } else {
+        h = (r - g) / d + 4;
+      }
+
+      h /= 6;
+    }
+
+    return {
+      h: h,
+      s: s,
+      l: l
+    };
+  }
+
+  function hueToRgb(p, q, t) {
+    var value = t;
+
+    if (value < 0) {
+      value += 1;
+    }
+
+    if (value > 1) {
+      value -= 1;
+    }
+
+    if (value < 1 / 6) {
+      return p + (q - p) * 6 * value;
+    }
+
+    if (value < 1 / 2) {
+      return q;
+    }
+
+    if (value < 2 / 3) {
+      return p + (q - p) * (2 / 3 - value) * 6;
+    }
+
+    return p;
+  }
+
+  function hslToRgb(hsl) {
+    var h = hsl.h;
+    var s = clamp(hsl.s, 0, 1);
+    var l = clamp(hsl.l, 0, 1);
+    var r;
+    var g;
+    var b;
+    var q;
+    var p;
+
+    if (s === 0) {
+      r = l;
+      g = l;
+      b = l;
+    } else {
+      q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      p = 2 * l - q;
+      r = hueToRgb(p, q, h + 1 / 3);
+      g = hueToRgb(p, q, h);
+      b = hueToRgb(p, q, h - 1 / 3);
+    }
+
+    return {
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255)
+    };
+  }
+
+  function applyBrightnessToHex(baseHex, brightness) {
+    var hsl = rgbToHsl(hexToRgb(baseHex));
+    hsl.l = clamp(brightness, 0, 1);
+    return rgbToHex(hslToRgb(hsl));
+  }
+
+  function getResult(kind, hebrewDay, clockSegment) {
+    var clockHour = typeof clockSegment === "number" ? clockSegment : clockSegment.clockHour;
+    var parts = typeof clockSegment === "number" ? 0 : Number(clockSegment.parts || 0);
     var index = getMazalIndex(hebrewDay, clockHour);
+    var dayIndex = getDayMazalIndex(hebrewDay);
+    var hourBrightness = clamp(parts / HALAKIM_PER_HOUR, 0, 1);
+    var dayBrightness = clamp(clockHour / 24, 0, 1);
+    var hourBaseColor = WOMAN_SIMPLE_COLORS_BY_INDEX[index];
+    var dayBaseColor = WOMAN_SIMPLE_COLORS_BY_INDEX[dayIndex];
+
     return {
       kind: kind,
       hebrewDay: hebrewDay,
       hebrewHour: clockHour + 1,
       clockHour: clockHour,
+      parts: parts,
       mazalIndex: index,
       mazalHour: COMMERCIAL_MAZAL_BY_INDEX[index],
-      color: WOMAN_SIMPLE_COLORS_BY_INDEX[index],
+      baseColor: hourBaseColor,
+      color: applyBrightnessToHex(hourBaseColor, hourBrightness),
+      brightness: hourBrightness,
+      dayMazalIndex: dayIndex,
+      dayMazalHour: COMMERCIAL_MAZAL_BY_INDEX[dayIndex],
+      dayBaseColor: dayBaseColor,
+      dayColor: applyBrightnessToHex(dayBaseColor, dayBrightness),
+      dayBrightness: dayBrightness,
+      dayTextHe: DAY_MIDA_HE[hebrewDay - 1],
+      dayTextEn: DAY_MIDA_EN[hebrewDay - 1],
       mazalTextHe: HOUR_MIDA_HE[index] + " שב" + DAY_MIDA_HE[hebrewDay - 1],
       mazalTextEn: HOUR_MIDA_EN[index] + " in " + DAY_MIDA_EN[hebrewDay - 1]
     };
@@ -411,11 +568,11 @@
     var solarClock = getSunClockHour(parts, latitude, longitude, gmt);
     var sunDay = getSunHebrewDay(parts, solarClock);
     var moonDay = normalizeHebrewDay(sunDay - 1);
-    var moonClockHour = getMoonClockHour(parts, latitude, longitude, options.sunCalc || input.sunCalc);
+    var moonClock = getMoonClockHour(parts, latitude, longitude, options.sunCalc || input.sunCalc);
 
     return {
-      sun: getResult("sun", sunDay, solarClock.clockHour),
-      moon: getResult("moon", moonDay, moonClockHour)
+      sun: getResult("sun", sunDay, solarClock),
+      moon: getResult("moon", moonDay, moonClock)
     };
   }
 
