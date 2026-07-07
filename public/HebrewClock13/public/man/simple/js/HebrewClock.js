@@ -15,27 +15,12 @@ function hebrewclock()
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
     
-    var date = new Date();
-
-	var h,m,s,milisec;
-
-	if(birthHour == null)
-    {
-		var h = date.getHours();
-		var m = date.getMinutes();
-		var s = date.getSeconds();
-		var milisec = date.getMilliseconds();
+    if (typeof getClockTimeAsHours == "function")
+		curr_hour = getClockTimeAsHours();
+	else {
+		var date = new Date();
+		curr_hour = (date.getMilliseconds() + (date.getSeconds()*1000) + (date.getMinutes()*60*1000) + (date.getHours()*60*60*1000))/(1000 * 3600);
 	}
-	else
-	{
-		var h = birthHour;
-		var m = birthMin;
-		var s = birthSec == null ? 0 : birthSec;
-		var milisec = birthMs == null ? 0 : birthMs;		
-	}
-	curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
-	
-	curr_hour = curr_hour/(1000 * 3600);
 
 
 	//console.log(curr_hour);
@@ -239,20 +224,20 @@ function display_time()
         document.getElementById("Hour").value = document.getElementById("Hour").value;
 
 	
-	var date = new Date();
-
+	var timeParts = typeof getDisplayTimeParts == "function" ? getDisplayTimeParts() : null;
 	var h,m,s
-	if(birthHour == null)
-    {
-		var h = date.getHours();
-		var m = date.getMinutes();
-		var s = date.getSeconds();
+	if(timeParts)
+	{
+		h = timeParts.hour;
+		m = timeParts.minute;
+		s = timeParts.second;
 	}
 	else
-	{
-		var h = birthHour;
-		var m = birthMin;
-		var s = birthSec == null ? 0 : birthSec;
+    {
+		var date = new Date();
+		h = date.getHours();
+		m = date.getMinutes();
+		s = date.getSeconds();
 	}
 	document.getElementById("ChirstianHour").value = h<10? "0" + h : h;
 	document.getElementById("ChirstianMinute").value = m<10? "0" + m : m ;

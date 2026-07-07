@@ -1,27 +1,23 @@
 ﻿//mazal of the hour
 function setmazal() {
 	
-	var date;
-	if(birthYear == null)
-		date = new Date();
-	else
-		date = new Date(birthYear,birthMonth-1,birthDay);
-	
+	var timeParts = typeof getClockTimeParts == "function" ? getClockTimeParts() : null;
 	var h,m,s,day;
-	if(birthHour == null)
+	if(timeParts)
 	{
+		h = timeParts.hour;
+		m = timeParts.minute;
+		s = timeParts.second;
+	}
+	else
+	{
+		var date = new Date();
 		h = date.getHours();
 		m = date.getMinutes();
 		s = date.getSeconds();
 	}
-	else
-	{
-		h = Number(birthHour);
-		m = Number(birthMin);
-		s = Number(0);
-	}
 
-    var day = date.getDay() + 1;
+    var day = (typeof getClockDayOfWeek == "function" ? getClockDayOfWeek() : new Date().getDay()) + 1;
     var clockHour = lbHour;
 
 	// switch ((clockHour%12)+1) 

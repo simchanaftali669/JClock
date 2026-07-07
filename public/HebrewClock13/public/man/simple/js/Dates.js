@@ -1,14 +1,19 @@
 ﻿//---get Date---
 function set_default_date() {
-    var date = new Date();
+    var parts = typeof getClockDateParts == "function" ? getClockDateParts() : null;
 
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getYear();
+    if (!parts) {
+        var date = new Date();
+        parts = {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            day: date.getDate()
+        };
+    }
 
-    month = m;
-    day = d - 1;
-    year = y;
+    month = parts.month - 1;
+    day = parts.day - 1;
+    year = parts.year - 1900;
     set_date_vars();
 }
 
