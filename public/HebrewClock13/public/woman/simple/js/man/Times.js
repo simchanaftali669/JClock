@@ -99,11 +99,11 @@ function doit_man() {
 
         var str = timeadj1(sunset);
         var sunsetArray = str.split(":");
-        sunsetH = sunsetArray[0];
-        sunsetM = sunsetArray[1];
-        sunsetS = sunsetArray[2];
-		sunsetMili = sunsetArray[3];
-        var sunset_hour =  parseInt(sunsetMili) + parseInt((sunsetS*1000)) + parseInt((sunsetM*60*1000)) + parseInt((sunsetH*60*60*1000));
+        sunsetH_man = sunsetArray[0];
+        sunsetM_man = sunsetArray[1];
+        sunsetS_man = sunsetArray[2];
+		sunsetMili_man = sunsetArray[3];
+        var sunset_hour =  parseInt(sunsetMili_man) + parseInt((sunsetS_man*1000)) + parseInt((sunsetM_man*60*1000)) + parseInt((sunsetH_man*60*60*1000));
 		//-----------------------------------------------------------------
 
         //document.getElementById("Masechet").value = shaa_zmanit_night;

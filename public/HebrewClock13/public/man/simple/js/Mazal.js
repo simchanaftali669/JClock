@@ -78,11 +78,7 @@ function setmazal() {
         (h == sunsetH && m > sunsetM) ||
         (h > sunsetH)
        )
-        if ((h == 23 && m == 23 && s <= 59) ||    // לפני חצות
-            (h == 23 && m < 59) ||
-            (h < 23)
-           )
-            day = day + 1;
+        day = day + 1;
 
     
 

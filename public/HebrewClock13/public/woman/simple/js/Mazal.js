@@ -22,12 +22,11 @@ function setmazal()
 		s = 0;
 	}
 	
-	var day = getDisplayHebrewDay(date, h, m, s);
-	hebrewday = day;
 	var mazalDayOffset = hebrewDayOffset();
-	var displayDayOffset = hasFullBirthCalculationParams() ? mazalDayOffset : 0;
+	var day = normalizeHebrewDay(hebrewday_man + mazalDayOffset);
+	var displayDayOffset = mazalDayOffset;
 	var displayDate = getOffsetDate(date, displayDayOffset);
-	hebrewday = normalizeHebrewDay(day + mazalDayOffset);
+	hebrewday = day;
 	var isNight = isDisplayNight(h, m, s);
 	
 	var userLang = navigator.language || navigator.userLanguage;	

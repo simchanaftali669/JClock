@@ -27,15 +27,8 @@ function setmazal_man() {
     if (clockHour == 24)
         clockHour = 0;
 
-    if ((h == sunsetH_man && m == sunsetM_man && s >= sunsetS_man) ||    // אחרי שקיעה
-        (h == sunsetH_man && m > sunsetM_man) ||
-        (h > sunsetH_man)
-       )
-        if ((h == 23 && m == 23 && s <= 59) ||    // לפני חצות
-            (h == 23 && m < 59) ||
-            (h < 23)
-           )
-            day = day + 1;
+    if (isAfterSunset(h, m, s, sunsetH_man, sunsetM_man, sunsetS_man))
+        day = day + 1;
 
 
     //document.getElementById("test").value = h > sunsetH;
@@ -44,4 +37,18 @@ function setmazal_man() {
         day = 1;
 
     hebrewday_man = day;
+}
+
+function isAfterSunset(h, m, s, sunsetHour, sunsetMinute, sunsetSecond)
+{
+    h = Number(h);
+    m = Number(m);
+    s = Number(s);
+    sunsetHour = Number(sunsetHour);
+    sunsetMinute = Number(sunsetMinute);
+    sunsetSecond = Number(sunsetSecond);
+
+    return (h == sunsetHour && m == sunsetMinute && s >= sunsetSecond) ||
+        (h == sunsetHour && m > sunsetMinute) ||
+        (h > sunsetHour);
 }
