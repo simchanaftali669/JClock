@@ -21,7 +21,7 @@
     function initializeJerusalemKabalaTime() {
         var url = new URL(root.document.location.href);
         root.clockTimeZone = JERUSALEM_TIME_ZONE;
-        root.displayTimeZone = url.searchParams.get("displayTimeZone") || getBrowserTimeZone();
+        root.displayTimeZone = getBrowserTimeZone() || url.searchParams.get("displayTimeZone") || JERUSALEM_TIME_ZONE;
         root.displayLatitude = JERUSALEM_LATITUDE;
         root.displayLongitude = JERUSALEM_LONGITUDE;
 

@@ -22,9 +22,10 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var yasterday = new Date();
-    var today = new Date();
-    var tomorrow = new Date();
+    var date = typeof getCurrentMoonCalculationDate == "function" ? getCurrentMoonCalculationDate() : new Date();
+    var yasterday = new Date(date.getTime());
+    var today = new Date(date.getTime());
+    var tomorrow = new Date(date.getTime());
 
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
@@ -84,12 +85,14 @@ function doit() {
 
     function setMoonTime(id, start, offsetHours) {
         var date = new Date(start.getTime() + offsetHours * 60 * 60 * 1000);
-        setTime(id, timeadj(hours(date), ampm));
+        setTime(id, typeof formatDateTimeForDisplay == "function" ?
+            formatDateTimeForDisplay(date, ampm) :
+            timeadj(hours(date), ampm));
     }
 
     var moonRises = moonEvents("rise", today);
     var moonSets = moonEvents("set", today);
-    var now = new Date();
+    var now = typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date();
 
     var lastMoonrise = previousEvent(moonRises, now);
     var nextMoonrise = nextEvent(moonRises, now);
@@ -133,7 +136,7 @@ function doit() {
 
         //using current time in the computer to adjust the right secdule...
         //get the time right now
-        var date = new Date();
+        var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
 
         var h = date.getHours();
         var minute = date.getMinutes();

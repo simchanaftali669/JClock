@@ -12,22 +12,11 @@ function hebrewclock()
     var sunset = zmanit_hour[4];
     var sunset_tommorow = zmanit_hour[5];
 
-    var date = new Date();
-    var h, m, s, milisec;
-
-    if (birthHour == null) {
-        h = date.getHours();
-        m = date.getMinutes();
-        s = date.getSeconds();
-        milisec = date.getMilliseconds();
-    }
-    else {
-        var clockDate = getClockDate(date);
-        h = clockDate.getHours();
-        m = clockDate.getMinutes();
-        s = clockDate.getSeconds();
-        milisec = clockDate.getMilliseconds();
-    }
+    var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var s = date.getSeconds();
+    var milisec = date.getMilliseconds();
 
     var curr_hour = milisec + (s * 1000) + (m * 60 * 1000) + (h * 60 * 60 * 1000);
     curr_hour = curr_hour / (1000 * 3600);
@@ -71,25 +60,6 @@ function hebrewclock()
         commercialFunction();
         preLbMin = lbMinute;
     }
-}
-
-function getClockDate(now)
-{
-    var clockDate = new Date(
-        Number(birthYear),
-        Number(birthMonth) - 1,
-        Number(birthDay),
-        Number(birthHour),
-        Number(birthMin),
-        birthSec == null ? 0 : Number(birthSec),
-        birthMs == null ? 0 : Number(birthMs)
-    );
-
-    if (clockLive == "1" && clockLiveStart != null) {
-        clockDate = new Date(clockDate.getTime() + (now.getTime() - Number(clockLiveStart)));
-    }
-
-    return clockDate;
 }
 
 function setClockFromOffset(curr_hour_offset, length, hourOffset, moonSleep)

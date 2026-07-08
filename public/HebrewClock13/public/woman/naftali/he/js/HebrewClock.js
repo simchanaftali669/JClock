@@ -14,7 +14,7 @@ function hebrewclock()
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
     
-    var date = new Date();
+    var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
 	var birthHour = null;	//פלסתר
 	var h,m,s,milisec;
 	if(birthHour == null)
@@ -207,7 +207,7 @@ function display_time()
         document.getElementById("Hour").value = document.getElementById("Hour").value;
 
 	var birthHour = null;
-	var date = new Date();
+	var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
 
 	var h,m,s
 	if(birthHour == null)

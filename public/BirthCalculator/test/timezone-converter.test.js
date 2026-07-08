@@ -2,20 +2,11 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
-const vm = require("node:vm");
 
 const preview = require("../public/shared/hebrew-clock-preview.js");
 const tzlookup = require("../public/shared/tz-lookup.js");
 const time = require("../public/shared/timezone-converter.js");
 const ROOT = path.resolve(__dirname, "..");
-
-function loadSunCalc() {
-  const code = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "woman", "simple", "js", "suncalc.js"), "utf8");
-  const context = { Date, Math };
-  vm.createContext(context);
-  vm.runInContext(code, context);
-  return context.SunCalc;
-}
 
 test("New York birth time on 1987-03-04 13:45 is 20:45 in Jerusalem", () => {
   const result = time.convertLocalTimeToJerusalem({
@@ -86,7 +77,52 @@ test("Jerusalem summer date keeps Israeli daylight saving GMT", () => {
   assert.equal(time.formatGmtOffset(result.jerusalemGmt), "GMT+03:00");
 });
 
-test("color preview matches the simple moon clock for the known Jerusalem example", () => {
+test("London winter birth time keeps winter GMT and moon day context", () => {
+  const timeInfo = time.convertLocalTimeToJerusalem({
+    latitude: 51.5074,
+    longitude: -0.1278,
+    year: 1985,
+    month: 12,
+    day: 20,
+    hour: 4,
+    minute: 20,
+    lookupTimeZone: tzlookup
+  });
+
+  assert.equal(timeInfo.timeZone, "Europe/London");
+  assert.equal(timeInfo.sourceGmt, 0);
+  assert.equal(timeInfo.jerusalemGmt, 2);
+  assert.deepEqual(timeInfo.jerusalem, {
+    year: 1985,
+    month: 12,
+    day: 20,
+    hour: 6,
+    minute: 20,
+    second: 0
+  });
+
+  const result = preview.predict({
+    latitude: 31.7768514,
+    longitude: 35.2331664,
+    year: timeInfo.jerusalem.year,
+    month: timeInfo.jerusalem.month,
+    day: timeInfo.jerusalem.day,
+    hour: timeInfo.jerusalem.hour,
+    minute: timeInfo.jerusalem.minute,
+    gmt: timeInfo.jerusalemGmt
+  });
+
+  assert.equal(result.sun.hebrewDay, 6);
+  assert.equal(result.moon.hebrewDay, 6);
+  assert.equal(result.moon.hebrewHour, 6);
+  assert.equal(result.moon.clockHour, 5);
+  assert.equal(result.moon.parts, 1058);
+  assert.equal(result.moon.mazalHour, 5);
+  assert.equal(result.moon.mazalTextEn, "Venus in Mercury");
+  assert.equal(result.moon.dayTextEn, "Mercury");
+});
+
+test("color preview uses Jerusalem moon times for the known Jerusalem example", () => {
   const result = preview.predict({
     latitude: 31.7768514,
     longitude: 35.2331664,
@@ -95,8 +131,7 @@ test("color preview matches the simple moon clock for the known Jerusalem exampl
     day: 4,
     hour: 20,
     minute: 45,
-    gmt: 2,
-    sunCalc: loadSunCalc()
+    gmt: 2
   });
 
   assert.equal(result.sun.hebrewDay, 5);
@@ -110,19 +145,18 @@ test("color preview matches the simple moon clock for the known Jerusalem exampl
   assert.equal(result.sun.dayBaseColor, "#BA8D1A");
   assert.equal(result.sun.dayColor, "#382A08");
   assert.equal(result.sun.dayBrightness, 0.125);
-  assert.equal(result.moon.hebrewDay, 4);
+  assert.equal(result.moon.hebrewDay, 5);
   assert.equal(result.moon.hebrewHour, 23);
-  assert.equal(result.moon.mazalHour, 1);
-  assert.equal(result.moon.mazalTextHe, "צדק שבשבתאי");
-  assert.equal(result.moon.mazalTextEn, "Jupiter in Saturn");
+  assert.equal(result.moon.mazalHour, 5);
+  assert.equal(result.moon.mazalTextEn, "Venus in Venus");
   assert.equal(result.moon.parts, 645);
-  assert.equal(result.moon.baseColor, "#2D8DA1");
-  assert.equal(result.moon.color, "#5EBED2");
+  assert.equal(result.moon.baseColor, "#BA8D1A");
+  assert.equal(result.moon.color, "#E6BA4B");
   assert.equal(result.moon.brightness, 645 / 1080);
-  assert.equal(result.moon.dayTextEn, "Saturn");
-  assert.equal(result.moon.dayMazalHour, 4);
-  assert.equal(result.moon.dayBaseColor, "#84C45E");
-  assert.equal(result.moon.dayColor, "#E7F4E0");
+  assert.equal(result.moon.dayTextEn, "Venus");
+  assert.equal(result.moon.dayMazalHour, 5);
+  assert.equal(result.moon.dayBaseColor, "#BA8D1A");
+  assert.equal(result.moon.dayColor, "#FAF1DA");
   assert.equal(result.moon.dayBrightness, 22 / 24);
 });
 
@@ -139,7 +173,7 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
     assert.doesNotMatch(html, /\?latitude=" \+ latitude/);
     assert.doesNotMatch(html, /"&longitude=" \+ longitude/);
     assert.match(html, /jclock\.net\/HebrewClock13\/public\/woman\/simple\/js\/suncalc\.js\?v=20260707-final-hebrew-day/);
-    assert.match(html, /shared\/hebrew-clock-preview\.js\?v=20260707-day-brightness/);
+    assert.match(html, /shared\/hebrew-clock-preview\.js\?v=20260708-moon-day-context/);
     assert.match(html, /id="color-preview"/);
     assert.match(html, /id="sun-color-swatch"/);
     assert.match(html, /id="sun-day-color-swatch"/);
@@ -194,6 +228,15 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
       assert.doesNotMatch(html, /add to DB/);
     }
   });
+});
+
+test("simple moon clock does not force the Hebrew day one day back", () => {
+  const offsetJs = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "woman", "simple", "js", "HebrewDayOffset.js"), "utf8");
+  const simpleHtml = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "woman", "simple", "index.html"), "utf8");
+
+  assert.match(offsetJs, /return 0;/);
+  assert.doesNotMatch(offsetJs, /return -1;/);
+  assert.match(simpleHtml, /js\/HebrewDayOffset\.js\?v=20260708-moon-day-context/);
 });
 
 test("schedule converts source time before sending Jerusalem coordinates onward", () => {

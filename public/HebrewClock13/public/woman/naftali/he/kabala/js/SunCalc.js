@@ -255,6 +255,10 @@ function hoursLater(date, h) {
 // calculations for moon rise/set times are based on http://www.stargazing.net/kepler/moonrise.html article
 
 SunCalc.getMoonTimes = function (date, lat, lng, inUTC) {
+    if (!inUTC && typeof getJerusalemMoonTimesForDate == "function") {
+        return getJerusalemMoonTimesForDate(date, lat, lng);
+    }
+
     var t = new Date(date);
 	//console.log(t); --> check here the bug...
     if (inUTC) t.setUTCHours(0, 0, 0, 0);
@@ -311,11 +315,14 @@ SunCalc.getMoonTimes = function (date, lat, lng, inUTC) {
 
 function convertDateTimeToFloat(date)
 {
-	//console.log(date);
-	var h = date.getHours();
-    var m = date.getMinutes();
-    var s = date.getSeconds();
-	var milisec = date.getMilliseconds();
+	if(!date)
+		return 0;
+
+	var parts = typeof getZonedPartsForClock == "function" ? getZonedPartsForClock(date) : null;
+	var h = parts ? parts.hour : date.getHours();
+    var m = parts ? parts.minute : date.getMinutes();
+    var s = parts ? parts.second : date.getSeconds();
+	var milisec = parts && parts.millisecond != null ? parts.millisecond : date.getMilliseconds();
 	var floatDate = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);	
 	floatDate = floatDate/(1000 * 3600);
 

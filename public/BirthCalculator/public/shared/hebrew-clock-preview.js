@@ -9,6 +9,10 @@
 
   var MON_COUNT = [13, 1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
   var HALAKIM_PER_HOUR = 1080;
+  var ASTRONOMY_DAY_MS = 1000 * 60 * 60 * 24;
+  var J1970 = 2440588;
+  var J2000 = 2451545;
+  var RAD = Math.PI / 180;
   var HOUR_MIDA_HE = ["שבתאי", "צדק", "מאדים", "חמה", "נוגה", "כוכב", "לבנה"];
   var DAY_MIDA_HE = ["צדק", "מאדים", "חמה", "שבתאי", "נוגה", "כוכב", "לבנה"];
   var HOUR_MIDA_EN = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"];
@@ -320,47 +324,161 @@
     return normalizeHebrewDay(day);
   }
 
-  function getSunCalc(sunCalc) {
-    if (sunCalc && typeof sunCalc.getMoonTimes === "function") {
-      return sunCalc;
-    }
-
-    if (root && root.SunCalc && typeof root.SunCalc.getMoonTimes === "function") {
-      return root.SunCalc;
-    }
-
-    throw new Error("SunCalc is unavailable.");
+  function daysFromCivil(year, month, day) {
+    return Math.floor(Date.UTC(year, month - 1, day) / ASTRONOMY_DAY_MS);
   }
 
-  function convertDateTimeToFloat(date) {
-    if (!date) {
-      return NaN;
-    }
-
-    return (date.getMilliseconds() + (date.getSeconds() * 1000) + (date.getMinutes() * 60 * 1000) + (date.getHours() * 60 * 60 * 1000)) / (1000 * 3600);
+  function julianFromLocalMidnight(civilDate, offsetHours) {
+    return daysFromCivil(civilDate.year, civilDate.month, civilDate.day) + J1970 - 0.5 - offsetHours / 24;
   }
 
-  function getMoonTimes(parts, latitude, longitude, sunCalc) {
-    var calc = getSunCalc(sunCalc);
-    var yesterday = makeLocalDate(parts, -1);
-    var today = makeLocalDate(parts, 0);
-    var tomorrow = makeLocalDate(parts, 1);
-    var yesterdayMoon = calc.getMoonTimes(yesterday, latitude, longitude);
-    var todayMoon = calc.getMoonTimes(today, latitude, longitude);
-    var tomorrowMoon = calc.getMoonTimes(tomorrow, latitude, longitude);
+  function hoursLaterJulian(julian, hours) {
+    return julian + hours / 24;
+  }
+
+  function rightAscension(l, b) {
+    var e = RAD * 23.4397;
+    return Math.atan2(Math.sin(l) * Math.cos(e) - Math.tan(b) * Math.sin(e), Math.cos(l));
+  }
+
+  function declination(l, b) {
+    var e = RAD * 23.4397;
+    return Math.asin(Math.sin(b) * Math.cos(e) + Math.cos(b) * Math.sin(e) * Math.sin(l));
+  }
+
+  function siderealTime(d, lw) {
+    return RAD * (280.16 + 360.9856235 * d) - lw;
+  }
+
+  function astronomicalAltitude(h, phi, dec) {
+    return Math.asin(Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.cos(h));
+  }
+
+  function astroRefraction(h) {
+    if (h < 0) {
+      h = 0;
+    }
+
+    return 0.0002967 / Math.tan(h + 0.00312536 / (h + 0.08901179));
+  }
+
+  function moonCoordsForDay(d) {
+    var l0 = RAD * (218.316 + 13.176396 * d);
+    var m = RAD * (134.963 + 13.064993 * d);
+    var f = RAD * (93.272 + 13.229350 * d);
+    var l = l0 + RAD * 6.289 * Math.sin(m);
+    var b = RAD * 5.128 * Math.sin(f);
 
     return {
-      riseYesterday: convertDateTimeToFloat(yesterdayMoon.rise),
-      rise: convertDateTimeToFloat(todayMoon.rise),
-      riseTomorrow: convertDateTimeToFloat(tomorrowMoon.rise),
-      setYesterday: convertDateTimeToFloat(yesterdayMoon.set),
-      set: convertDateTimeToFloat(todayMoon.set),
-      setTomorrow: convertDateTimeToFloat(tomorrowMoon.set)
+      ra: rightAscension(l, b),
+      dec: declination(l, b)
     };
   }
 
-  function getMoonClockHour(parts, latitude, longitude, sunCalc) {
-    var times = getMoonTimes(parts, latitude, longitude, sunCalc);
+  function moonAltitude(julian, latitude, longitude) {
+    var lw = RAD * -longitude;
+    var phi = RAD * latitude;
+    var d = julian - J2000;
+    var coords = moonCoordsForDay(d);
+    var h = siderealTime(d, lw) - coords.ra;
+    var altitude = astronomicalAltitude(h, phi, coords.dec);
+    return altitude + astroRefraction(altitude);
+  }
+
+  function getCivilDate(parts, dayOffset) {
+    var date = makeLocalDate(parts, dayOffset || 0);
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate()
+    };
+  }
+
+  function getMoonTimesForCivilDate(civilDate, latitude, longitude, gmt) {
+    var offsetHours = Number(gmt);
+    if (!Number.isFinite(offsetHours)) {
+      throw new TypeError("Invalid Jerusalem GMT offset.");
+    }
+
+    var start = julianFromLocalMidnight(civilDate, offsetHours);
+    var hc = 0.133 * RAD;
+    var h0 = moonAltitude(start, latitude, longitude) - hc;
+    var result = {};
+
+    for (var i = 1; i <= 25; i += 2) {
+      var h1 = moonAltitude(hoursLaterJulian(start, i), latitude, longitude) - hc;
+      var h2 = moonAltitude(hoursLaterJulian(start, i + 1), latitude, longitude) - hc;
+      var a = (h0 + h2) / 2 - h1;
+      var b = (h2 - h0) / 2;
+      var xe;
+      var ye;
+      var discriminant;
+      var roots = 0;
+      var x1 = 0;
+      var x2 = 0;
+
+      if (a === 0) {
+        h0 = h2;
+        continue;
+      }
+
+      xe = -b / (2 * a);
+      ye = (a * xe + b) * xe + h1;
+      discriminant = b * b - 4 * a * h1;
+
+      if (discriminant >= 0) {
+        var dx = Math.sqrt(discriminant) / (Math.abs(a) * 2);
+        x1 = xe - dx;
+        x2 = xe + dx;
+        if (Math.abs(x1) <= 1) {
+          roots += 1;
+        }
+        if (Math.abs(x2) <= 1) {
+          roots += 1;
+        }
+        if (x1 < -1) {
+          x1 = x2;
+        }
+      }
+
+      if (roots === 1) {
+        if (h0 < 0) {
+          result.rise = i + x1;
+        } else {
+          result.set = i + x1;
+        }
+      } else if (roots === 2) {
+        result.rise = i + (ye < 0 ? x2 : x1);
+        result.set = i + (ye < 0 ? x1 : x2);
+      }
+
+      if (Number.isFinite(result.rise) && Number.isFinite(result.set)) {
+        break;
+      }
+
+      h0 = h2;
+    }
+
+    return result;
+  }
+
+  function getMoonTimes(parts, latitude, longitude, gmt) {
+    var yesterdayMoon = getMoonTimesForCivilDate(getCivilDate(parts, -1), latitude, longitude, gmt);
+    var todayMoon = getMoonTimesForCivilDate(getCivilDate(parts, 0), latitude, longitude, gmt);
+    var tomorrowMoon = getMoonTimesForCivilDate(getCivilDate(parts, 1), latitude, longitude, gmt);
+
+    return {
+      riseYesterday: yesterdayMoon.rise,
+      rise: todayMoon.rise,
+      riseTomorrow: tomorrowMoon.rise,
+      setYesterday: yesterdayMoon.set,
+      set: todayMoon.set,
+      setTomorrow: tomorrowMoon.set
+    };
+  }
+
+  function getMoonClockHour(parts, latitude, longitude, gmt) {
+    var times = getMoonTimes(parts, latitude, longitude, gmt);
     var currHour = getCurrentHour(parts);
     var clock = null;
 
@@ -567,8 +685,8 @@
     var gmt = Number(input.gmt);
     var solarClock = getSunClockHour(parts, latitude, longitude, gmt);
     var sunDay = getSunHebrewDay(parts, solarClock);
-    var moonDay = normalizeHebrewDay(sunDay - 1);
-    var moonClock = getMoonClockHour(parts, latitude, longitude, options.sunCalc || input.sunCalc);
+    var moonDay = sunDay;
+    var moonClock = getMoonClockHour(parts, latitude, longitude, gmt);
 
     return {
       sun: getResult("sun", sunDay, solarClock),

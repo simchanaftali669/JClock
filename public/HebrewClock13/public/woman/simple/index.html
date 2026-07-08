@@ -77,19 +77,20 @@
         </div>		
     </div>
 
-	<script type="text/javascript" src="js/suncalc.js"></script>
+	<script type="text/javascript" src="js/suncalc.js?v=2"></script>
 	<script type="text/javascript" src="../../../../BirthCalculator/public/shared/tz-lookup.js"></script>
 	<script type="text/javascript" src="../../../../BirthCalculator/public/shared/timezone-converter.js"></script>
+	<script type="text/javascript" src="../../shared/js/jerusalem-woman-kabala-time.js?v=4"></script>
  <!--   <script type="text/javascript" src="../../shared/he/js/Commercial.js"></script>-->
 	<script type="text/javascript" src="js/man/HebrewClock.js"></script>
 	<script type="text/javascript" src="js/man/Mazal.js?v=20260707-final-hebrew-day"></script>
 	<script type="text/javascript" src="js/man/Times.js?v=20260707-final-hebrew-day"></script>
-	<script type="text/javascript" src="js/HebrewDayOffset.js?v=20260707-final-hebrew-day"></script>
+	<script type="text/javascript" src="js/HebrewDayOffset.js?v=20260708-moon-day-context"></script>
 	<script type="text/javascript" src="js/Geolocation.js"></script>
     <script type="text/javascript" src="js/SunAlert.js"></script>
 	<script type="text/javascript" src="js/HebrewDate.js"></script>
     <script type="text/javascript" src="js/HebrewClock.js"></script>
-	<script type="text/javascript" src="js/Times.js"></script>
+    <script type="text/javascript" src="js/Times.js?v=2"></script>
     <script type="text/javascript" src="js/SunTime.js"></script>
     <script type="text/javascript" src="js/TimeAdj.js"></script>
     <script type="text/javascript" src="js/Dst.js"></script>
@@ -130,10 +131,17 @@
     var displayTimeZone = DEFAULT_TIME_ZONE;
     var displayGmt = 2;
     var useProvidedLocationAsClock = false;
+    var forceJerusalemClock = true;
     var locationMode = "jerusalem";
     var CURRENT_LOCATION_STORAGE_KEY = "JClock.Simple.CurrentLocation";
     var JERUSALEM_TIME_API_URL = "https://timeapi.io/api/TimeZone/zone?timeZone=Asia/Jerusalem";
+    var JERUSALEM_TIME_FALLBACK_API_URL = "https://worldtimeapi.org/api/timezone/Asia/Jerusalem";
+    var JERUSALEM_TIME_SERVICES = [
+        { name: "timeapi.io", url: JERUSALEM_TIME_API_URL, apply: applyTimeApiJerusalemTime },
+        { name: "worldtimeapi.org", url: JERUSALEM_TIME_FALLBACK_API_URL, apply: applyWorldTimeApiJerusalemTime }
+    ];
     var JERUSALEM_TIME_REFRESH_MS = 5 * 60 * 1000;
+    var JERUSALEM_TIME_RETRY_MS = 15 * 1000;
     var JERUSALEM_TIME_TIMEOUT_MS = 4000;
     var jerusalemNetworkTime = null;
     var jerusalemNetworkRefreshTimer = null;
@@ -228,6 +236,9 @@
 
 	function shouldUseProvidedLocationAsClock(url)
 	{
+		if(forceJerusalemClock)
+			return false;
+
 		var clockLocation = (url.searchParams.get("ClockLocation") || "").toLowerCase();
 		if(clockLocation == "local" || clockLocation == "location" || clockLocation == "current" || clockLocation == "currentlocation" || clockLocation == "user")
 			return true;
@@ -240,9 +251,9 @@
 	function setLocationModeFromUrl(url)
 	{
 		if(isCurrentLocationRequested(url))
-			locationMode = shouldUseProvidedLocationAsClock(url) ? "local" : "current";
+			locationMode = "current";
 		else if(url.searchParams.get("latitude") && url.searchParams.get("longitude"))
-			locationMode = shouldUseProvidedLocationAsClock(url) ? "local" : "current";
+			locationMode = "current";
 		else
 			locationMode = "jerusalem";
 
@@ -299,11 +310,11 @@
 	{
         var url = new URL(document.location.href);
 		readClockParams(url);
-		useProvidedLocationAsClock = forceLocalClock || shouldUseProvidedLocationAsClock(url);
-		locationMode = useProvidedLocationAsClock ? "local" : "current";
+		useProvidedLocationAsClock = false;
+		locationMode = "current";
 
 		if(rememberInUrl)
-			rememberCurrentLocationInUrl(url, forceLocalClock);
+			rememberCurrentLocationInUrl(url, false);
 
         startClockWithDisplayLocation(currentLatitude, currentLongitude, source);
 	}
@@ -315,7 +326,7 @@
 
 	function useCurrentLocationAsLocalClock()
 	{
-		requestCurrentLocation(true, true, true);
+		requestCurrentLocation(true, false, true);
 	}
 
 	function saveCurrentPosition(position)
@@ -399,8 +410,6 @@
 	{
 		if(locationMode == "jerusalem")
 			useCurrentLocation();
-		else if(locationMode == "current")
-			useCurrentLocationAsLocalClock();
 		else
 			useJerusalemLocation();
 	}
@@ -415,11 +424,6 @@
 		{
 			button.innerText = "מיקום נוכחי";
 			button.title = "מיקום נוכחי";
-		}
-		else if(locationMode == "current")
-		{
-			button.innerText = "מיקום ושעה מקומית";
-			button.title = "מיקום ושעה מקומית";
 		}
 		else
 		{
@@ -487,25 +491,25 @@
         displayLatitude = parsedLatitude;
         displayLongitude = parsedLongitude;
 
-		if(useProvidedLocationAsClock)
-		{
-			latitude = displayLatitude;
-			longitude = displayLongitude;
-		}
-		else
-		{
-			latitude = JERUSALEM_LATITUDE;
-			longitude = JERUSALEM_LONGITUDE;
-		}
+		useProvidedLocationAsClock = false;
+		latitude = JERUSALEM_LATITUDE;
+		longitude = JERUSALEM_LONGITUDE;
 
 		setDisplayTimeZone();
 		setClockTimeZone();
 
 		if(!skipNetworkSync && shouldSyncJerusalemNetworkTime())
 		{
-			syncJerusalemNetworkTime(function() {
-				if(startToken == pendingClockStartToken)
+			syncJerusalemNetworkTime(function(synced) {
+				if(startToken != pendingClockStartToken)
+					return;
+				if(synced)
 					startClockWithDisplayLocation(parsedLatitude, parsedLongitude, source, true, startToken);
+				else
+				{
+					showJerusalemTimeSyncError();
+					scheduleJerusalemNetworkRefresh();
+				}
 			});
 			return;
 		}
@@ -526,7 +530,18 @@
 
 	function shouldSyncJerusalemNetworkTime()
 	{
-		return clockTimeZone == DEFAULT_TIME_ZONE && !hasExplicitClockDateTime();
+		return !hasExplicitClockDateTime();
+	}
+
+	function showJerusalemTimeSyncError()
+	{
+		var mazal = document.getElementById("Mazal");
+		if(mazal)
+			mazal.innerText = "ממתין לסנכרון זמן ירושלים";
+
+		var button = document.getElementById("LocationModeButton");
+		if(button)
+			button.title = "ממתין לסנכרון זמן ירושלים";
 	}
 
 	function hasExplicitClockDateTime()
@@ -548,6 +563,18 @@
 			return;
 		}
 
+		fetchJerusalemTimeService(0, callback);
+	}
+
+	function fetchJerusalemTimeService(serviceIndex, callback)
+	{
+		if(serviceIndex >= JERUSALEM_TIME_SERVICES.length)
+		{
+			callback(false);
+			return;
+		}
+
+		var service = JERUSALEM_TIME_SERVICES[serviceIndex];
 		var timeoutId = null;
 		var fetchOptions = { cache: "no-store" };
 		if(typeof window.AbortController == "function")
@@ -559,35 +586,53 @@
 			}, JERUSALEM_TIME_TIMEOUT_MS);
 		}
 
-		window.fetch(JERUSALEM_TIME_API_URL, fetchOptions)
+		window.fetch(service.url, fetchOptions)
 			.then(function(response) {
 				if(!response.ok)
-					throw new Error("Jerusalem time request failed: " + response.status);
+					throw new Error(service.name + " Jerusalem time request failed: " + response.status);
 				return response.json();
 			})
 			.then(function(data) {
 				if(timeoutId)
 					clearTimeout(timeoutId);
-				applyJerusalemNetworkTime(data);
+				service.apply(data);
 				callback(true);
 			})
 			.catch(function(error) {
 				if(timeoutId)
 					clearTimeout(timeoutId);
-				console.warn("Could not sync Jerusalem time from the network", error);
-				callback(false);
+				console.warn("Could not sync Jerusalem time from " + service.name, error);
+				fetchJerusalemTimeService(serviceIndex + 1, callback);
 			});
 	}
 
-	function applyJerusalemNetworkTime(data)
+	function applyTimeApiJerusalemTime(data)
 	{
 		var offsetSeconds = Number(data && data.currentUtcOffset && data.currentUtcOffset.seconds);
 		var localMilliseconds = parseLocalDateTimeAsUtcMilliseconds(data && data.currentLocalTime);
 		if(!Number.isFinite(offsetSeconds) || !Number.isFinite(localMilliseconds))
 			throw new Error("Invalid Jerusalem time response.");
 
+		applyJerusalemNetworkTime(localMilliseconds - (offsetSeconds * 1000), offsetSeconds);
+	}
+
+	function applyWorldTimeApiJerusalemTime(data)
+	{
+		var utcMilliseconds = Date.parse(data && data.utc_datetime);
+		var offsetSeconds = Number(data && data.raw_offset) + Number(data && data.dst_offset);
+
+		if(!Number.isFinite(offsetSeconds))
+			offsetSeconds = parseOffsetSecondsFromDateTime(data && data.datetime);
+		if(!Number.isFinite(utcMilliseconds) || !Number.isFinite(offsetSeconds))
+			throw new Error("Invalid Jerusalem fallback time response.");
+
+		applyJerusalemNetworkTime(utcMilliseconds, offsetSeconds);
+	}
+
+	function applyJerusalemNetworkTime(utcMilliseconds, offsetSeconds)
+	{
 		jerusalemNetworkTime = {
-			utcMilliseconds: localMilliseconds - (offsetSeconds * 1000),
+			utcMilliseconds: utcMilliseconds,
 			offsetSeconds: offsetSeconds,
 			receivedAtMilliseconds: getSteadyNowMilliseconds()
 		};
@@ -595,6 +640,16 @@
 		clockGmt = offsetSeconds / 3600;
 		if(clockTimeZone == DEFAULT_TIME_ZONE)
 			tz = clockGmt;
+	}
+
+	function parseOffsetSecondsFromDateTime(value)
+	{
+		var match = /([+-])(\d{2}):(\d{2})$/.exec(value || "");
+		if(!match)
+			return NaN;
+
+		var sign = match[1] == "-" ? -1 : 1;
+		return sign * ((Number(match[2]) * 60 * 60) + (Number(match[3]) * 60));
 	}
 
 	function parseLocalDateTimeAsUtcMilliseconds(value)
@@ -658,6 +713,7 @@
 		if(!shouldSyncJerusalemNetworkTime())
 			return;
 
+		var refreshDelay = jerusalemNetworkTime ? JERUSALEM_TIME_REFRESH_MS : JERUSALEM_TIME_RETRY_MS;
 		jerusalemNetworkRefreshTimer = setTimeout(function() {
 			syncJerusalemNetworkTime(function(synced) {
 				if(synced)
@@ -671,12 +727,12 @@
 				}
 				scheduleJerusalemNetworkRefresh();
 			});
-		}, JERUSALEM_TIME_REFRESH_MS);
+		}, refreshDelay);
 	}
 
 	function setClockTimeZone()
 	{
-		clockTimeZone = getTimeZoneForLocation(latitude, longitude);
+		clockTimeZone = DEFAULT_TIME_ZONE;
 		clockGmt = getTimeZoneOffset(clockTimeZone);
 		tz = clockGmt;
 	}
@@ -839,12 +895,17 @@
 	function getZonedPartsForClock(date)
 	{
 		if(window.BirthCalculatorTime && typeof BirthCalculatorTime.getZonedParts == "function")
-			return BirthCalculatorTime.getZonedParts(date, clockTimeZone);
+		{
+			var parts = BirthCalculatorTime.getZonedParts(date, clockTimeZone);
+			parts.millisecond = date.getMilliseconds();
+			return parts;
+		}
 
 		return {
 			hour: date.getHours(),
 			minute: date.getMinutes(),
-			second: date.getSeconds()
+			second: date.getSeconds(),
+			millisecond: date.getMilliseconds()
 		};
 	}
 	

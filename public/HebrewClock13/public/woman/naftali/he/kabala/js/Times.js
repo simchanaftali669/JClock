@@ -22,9 +22,10 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var yasterday = new Date();
-    var today = new Date();
-    var tomorrow = new Date();
+    var date = typeof getCurrentMoonCalculationDate == "function" ? getCurrentMoonCalculationDate() : new Date();
+    var yasterday = new Date(date.getTime());
+    var today = new Date(date.getTime());
+    var tomorrow = new Date(date.getTime());
 
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
@@ -32,22 +33,25 @@ function doit() {
 
     //the time of yasterday
     var time_yasterday = [0, 0, 0, 0];
+    var moonTimesYesterday = SunCalc.getMoonTimes(yasterday, latitude, longitude);
 	
-	time_yasterday[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).rise);
-	time_yasterday[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).set);	
+	time_yasterday[2] = getMoonTimeHour(moonTimesYesterday, "rise");
+	time_yasterday[3] = getMoonTimeHour(moonTimesYesterday, "set");
     //time_yasterday = suntime(yasterday.getDate(), yasterday.getMonth() +1, yasterday.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
 
     //the time of the current day
     var time_today = [0, 0, 0, 0];
+    var moonTimesToday = SunCalc.getMoonTimes(today, latitude, longitude);
     //time_today = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
-	time_today[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(today, latitude, longitude).rise);
-	time_today[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(today, latitude, longitude).set);	
+	time_today[2] = getMoonTimeHour(moonTimesToday, "rise");
+	time_today[3] = getMoonTimeHour(moonTimesToday, "set");
 
     //the time of the next day
     var time_tommorow = [0, 0, 0, 0];
+    var moonTimesTomorrow = SunCalc.getMoonTimes(tomorrow, latitude, longitude);
     //time_tommorow = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
-	time_tommorow[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).rise);
-	time_tommorow[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).set);	
+	time_tommorow[2] = getMoonTimeHour(moonTimesTomorrow, "rise");
+	time_tommorow[3] = getMoonTimeHour(moonTimesTomorrow, "set");
 
 
 
@@ -69,7 +73,7 @@ function doit() {
 
         //using current time in the computer to adjust the right secdule...
         //get the time right now
-        var date = new Date();
+        var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
 
         var h = date.getHours();
         var minute = date.getMinutes();
@@ -157,27 +161,28 @@ function doit() {
 //		{
 	
 
-			document.getElementById("hour_10_idx").value = timeadj(s2 - shaa_zmanit_night*2, ampm);
-			document.getElementById("hour_11_idx").value = timeadj(s2 - shaa_zmanit_night*1, ampm);
+			var scheduleDate = curr_hour > sunset_hour ? tomorrow : today;
+			setScheduleDisplayTime("hour_10_idx", s2 - shaa_zmanit_night*2, scheduleDate);
+			setScheduleDisplayTime("hour_11_idx", s2 - shaa_zmanit_night*1, scheduleDate);
 			
-			document.getElementById("hour_12_idx").value = timeadj(s2, ampm);
-			document.getElementById("hour_13_idx").value = timeadj(s2 + shaa_zmanit_day, ampm);
-			document.getElementById("hour_14_idx").value = timeadj(s2 + 2*shaa_zmanit_day, ampm);
+			setScheduleDisplayTime("hour_12_idx", s2, scheduleDate);
+			setScheduleDisplayTime("hour_13_idx", s2 + shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_14_idx", s2 + 2*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_15_idx").value = timeadj(s2 + 3*shaa_zmanit_day, ampm);
-			document.getElementById("hour_16_idx").value = timeadj(s2 + 4*shaa_zmanit_day, ampm);
-			document.getElementById("hour_17_idx").value = timeadj(s2 + 5*shaa_zmanit_day , ampm);
+			setScheduleDisplayTime("hour_15_idx", s2 + 3*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_16_idx", s2 + 4*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_17_idx", s2 + 5*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_18_idx").value = timeadj(s2 + 6*shaa_zmanit_day , ampm);
-			document.getElementById("hour_18-30_idx").value = timeadj(s2 + 6*shaa_zmanit_day + 0.5 , ampm);
-			document.getElementById("hour_19_idx").value = timeadj(s2 + 7*shaa_zmanit_day , ampm);
-			document.getElementById("hour_20_idx").value = timeadj(s2 + 8*shaa_zmanit_day , ampm);
+			setScheduleDisplayTime("hour_18_idx", s2 + 6*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_18-30_idx", s2 + 6*shaa_zmanit_day + 0.5, scheduleDate);
+			setScheduleDisplayTime("hour_19_idx", s2 + 7*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_20_idx", s2 + 8*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_21_idx").value = timeadj(s2 + 9*shaa_zmanit_day , ampm);
-			document.getElementById("hour_22_idx").value = timeadj(s2 + 10*shaa_zmanit_day , ampm);
-			document.getElementById("hour_23_idx").value = timeadj(s2 + 11*shaa_zmanit_day , ampm);
+			setScheduleDisplayTime("hour_21_idx", s2 + 9*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_22_idx", s2 + 10*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_23_idx", s2 + 11*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_00_idx").value = timeadj(s3 , ampm);
+			setScheduleDisplayTime("hour_00_idx", s3, scheduleDate);
 			document.getElementById("hour_together").value = "יחד";
 
 
@@ -196,6 +201,7 @@ function doit() {
 		}
 */		
 		var time;
+		var timeDate;
 		
 		// //עלות השחר
 		// if( curr_hour > sunset_hour )
@@ -216,13 +222,17 @@ function doit() {
 		// 	document.getElementById("misheyakir").value = timeadj(time[2], ampm);
 
 		 //צאת הכוכבים
-		 if( curr_hour > sunset_hour )
+		 if( curr_hour > sunset_hour ) {
+            timeDate = tomorrow;
 		 	time = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 96, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
-         else
+         }
+         else {
+            timeDate = today;
 		 	time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 96, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
+         }
 		
 		 if (time[1] == 0)
-            document.getElementById("tziet").value = timeadj(time[3], ampm);
+            setScheduleDisplayTime("tziet", time[3], timeDate);
         
     }
 
@@ -230,4 +240,23 @@ function doit() {
 
     return hour;
 
+}
+
+function setScheduleDisplayTime(elementId, clockHour, baseDate) {
+    var element = document.getElementById(elementId);
+    if (!element) {
+        return;
+    }
+
+    element.value = typeof formatScheduleTimeForDisplay == "function" ?
+        formatScheduleTimeForDisplay(clockHour, baseDate, ampm) :
+        timeadj(clockHour, ampm);
+}
+
+function getMoonTimeHour(moonTimes, eventType) {
+    if (typeof getMoonEventClockHour == "function") {
+        return getMoonEventClockHour(moonTimes, eventType);
+    }
+
+    return convertDateTimeToFloat(moonTimes && moonTimes[eventType]);
 }

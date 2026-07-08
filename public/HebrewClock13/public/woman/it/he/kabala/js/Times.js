@@ -1,17 +1,17 @@
 ﻿//set the moonset and moonrise
 function doit() {
-    var now = new Date();
-    var today = new Date(now.getTime());
+    var now = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
+    var today = typeof getCurrentMoonCalculationDate == "function" ? getCurrentMoonCalculationDate() : new Date(now.getTime());
     var scheduleToday = getSelectedScheduleDate(now);
     var hour = getCurrentMoonHours(today);
 
     var mazal_ordered = ["לבנה", "שבתאי", "צדק", "מאדים", "חמה", "נוגה", "כוכב"];
     var mazal_night_01 = [6, 2, 5, 1, 4, 7, 3];
     var mazal_day_01 = [4, 7, 3, 6, 2, 5, 1];
-    var baseDate = new Date(scheduleToday.getTime());
+    var baseDate = new Date(today.getTime());
     baseDate.setHours(0, 0, 0, 0);
     var currentHour = hoursFromBase(scheduleToday, baseDate);
-    var scheduleSegments = getScheduleSegments(scheduleToday, baseDate, currentHour);
+    var scheduleSegments = getScheduleSegments(today, baseDate, currentHour);
 
     ensureScheduleHourRows(36);
     clearScheduleHighlights(36);
@@ -47,17 +47,20 @@ function getCurrentMoonHours(today) {
     yasterday.setDate(clockToday.getDate() - 1);
     tomorrow.setDate(clockToday.getDate() + 1);
 
+    var moonTimesYesterday = SunCalc.getMoonTimes(yasterday, latitude, longitude);
     var time_yasterday = [0, 0, 0, 0];
-    time_yasterday[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).rise);
-    time_yasterday[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).set);
+    time_yasterday[2] = getMoonTimeHour(moonTimesYesterday, "rise");
+    time_yasterday[3] = getMoonTimeHour(moonTimesYesterday, "set");
 
+    var moonTimesToday = SunCalc.getMoonTimes(clockToday, latitude, longitude);
     var time_today = [0, 0, 0, 0];
-    time_today[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(clockToday, latitude, longitude).rise);
-    time_today[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(clockToday, latitude, longitude).set);
+    time_today[2] = getMoonTimeHour(moonTimesToday, "rise");
+    time_today[3] = getMoonTimeHour(moonTimesToday, "set");
 
+    var moonTimesTomorrow = SunCalc.getMoonTimes(tomorrow, latitude, longitude);
     var time_tommorow = [0, 0, 0, 0];
-    time_tommorow[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).rise);
-    time_tommorow[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).set);
+    time_tommorow[2] = getMoonTimeHour(moonTimesTomorrow, "rise");
+    time_tommorow[3] = getMoonTimeHour(moonTimesTomorrow, "set");
 
     var sunrise_yasterday = time_yasterday[2];
     var sunrise = time_today[2];
@@ -87,25 +90,36 @@ function setMoonsetGlobals(moonsetHour) {
     sunsetMili = moonsetArray[3];
 }
 
+function getMoonTimeHour(moonTimes, eventType) {
+    if (typeof getMoonEventClockHour == "function") {
+        return getMoonEventClockHour(moonTimes, eventType);
+    }
+
+    return convertDateTimeToFloat(moonTimes && moonTimes[eventType]);
+}
+
 function getScheduleSegments(today, baseDate, currentHour) {
     var events = [];
 
     for (var offset = -3; offset <= 4; offset++) {
         var moonDate = addDays(today, offset);
         var moonTimes = SunCalc.getMoonTimes(moonDate, latitude, longitude);
+        var dayHourOffset = offset * 24;
 
         if (moonTimes.rise) {
+            var riseHour = getMoonTimeHour(moonTimes, "rise");
             events.push({
                 type: "rise",
-                hour: hoursFromBase(moonTimes.rise, baseDate),
+                hour: Number.isFinite(riseHour) ? dayHourOffset + riseHour : hoursFromBase(moonTimes.rise, baseDate),
                 date: moonTimes.rise
             });
         }
 
         if (moonTimes.set) {
+            var setHour = getMoonTimeHour(moonTimes, "set");
             events.push({
                 type: "set",
-                hour: hoursFromBase(moonTimes.set, baseDate),
+                hour: Number.isFinite(setHour) ? dayHourOffset + setHour : hoursFromBase(moonTimes.set, baseDate),
                 date: moonTimes.set
             });
         }
@@ -128,7 +142,8 @@ function getScheduleSegments(today, baseDate, currentHour) {
             end: events[i + 1].hour,
             hourLength: (events[i + 1].hour - events[i].hour) / 12,
             isDay: isDay,
-            hebrewDay: normalizeHebrewDay(titleDate.getDay() + 1),
+            hebrewDay: normalizeHebrewDay(getClockWeekday(titleDate) + 1),
+            startDate: events[i].date,
             date: titleDate
         });
     }
@@ -161,6 +176,22 @@ function hoursFromBase(date, baseDate) {
 
 function normalizeDisplayHour(hourValue) {
     return ((hourValue % 24) + 24) % 24;
+}
+
+function getClockWeekday(date) {
+    var clockDate = getClockCalendarDate(date);
+    return new Date(Date.UTC(clockDate.getFullYear(), clockDate.getMonth(), clockDate.getDate())).getUTCDay();
+}
+
+function getClockCalendarDate(date) {
+    if (typeof getZonedPartsForClock == "function") {
+        var parts = getZonedPartsForClock(date);
+        if (parts) {
+            return new Date(parts.year, parts.month - 1, parts.day);
+        }
+    }
+
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 function ensureScheduleHourRows(totalHours) {
@@ -213,15 +244,19 @@ function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalN
             continue;
         }
 
+        var rowStart = segment.start + (segment.hourLength * i);
+        var rowDate = getScheduleRowDate(segment, i + 1);
         hourLabel.value = "תפילת " + mazalOrdered[(mazalStart + i) % 7];
-        hourValue.value = timeadj(normalizeDisplayHour(segment.start + (segment.hourLength * i)), ampm);
+        hourValue.value = typeof formatDateTimeForDisplay == "function" ?
+            formatDateTimeForDisplay(rowDate, ampm) :
+            timeadj(normalizeDisplayHour(rowStart), ampm);
         if (hourIndex) {
             hourIndex.value = "(" + (i + 1) + ")";
         }
 
         setScheduleRowLearningLink(rowNumber, segment, i + 1);
 
-        if (isHourInScheduleRow(selectedHour, segment.start + (segment.hourLength * i), segment.hourLength)) {
+        if (isHourInScheduleRow(selectedHour, rowStart, segment.hourLength)) {
             highlightScheduleRow(rowNumber);
         }
     }
@@ -288,6 +323,8 @@ function renderHebrewDateTitle(startRow, segment) {
 }
 
 function getHebrewDateTitle(date) {
+    var clockDate = getClockCalendarDate(date);
+
     if (typeof hebrewDate === "function") {
         if (typeof tzeit === "undefined") {
             tzeit = 25;
@@ -295,12 +332,12 @@ function getHebrewDateTitle(date) {
 
         var originalTzeit = tzeit;
         tzeit = 25;
-        var hebrew = hebrewDate(date.getFullYear(), date.getMonth() + 1, date.getDate(), "Hebrew");
+        var hebrew = hebrewDate(clockDate.getFullYear(), clockDate.getMonth() + 1, clockDate.getDate(), "Hebrew");
         tzeit = originalTzeit;
         return hebrew["date"] + " ב" + hebrew["month_name"];
     }
 
-    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    return clockDate.getFullYear() + "-" + (clockDate.getMonth() + 1) + "-" + clockDate.getDate();
 }
 
 function getHebrewWeeknightName(hebrewDay) {
@@ -371,7 +408,7 @@ function configureScheduleLearningLink(element, learningUrl, title) {
 }
 
 function getScheduleRowDate(segment, hebrewHour) {
-    var rowDate = new Date(segment.date.getTime());
+    var rowDate = new Date((segment.startDate || segment.date).getTime());
     var rowStart = segment.start + (segment.hourLength * (hebrewHour - 1));
     rowDate.setTime(rowDate.getTime() + Math.round((rowStart - segment.start) * 60 * 60 * 1000));
     return rowDate;
@@ -380,13 +417,18 @@ function getScheduleRowDate(segment, hebrewHour) {
 function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate, isGeneral) {
     var currentUrl = new URL(document.location.href);
     var learningUrl = new URL("../../../me/he/index.html", document.location.href);
-    var latitudeParam = currentUrl.searchParams.get("latitude") || localStorage.getItem("latitude") || "31.7768514";
-    var longitudeParam = currentUrl.searchParams.get("longitude") || localStorage.getItem("longitude") || "35.2331664";
+    var latitudeParam = typeof JERUSALEM_LATITUDE != "undefined" ? String(JERUSALEM_LATITUDE) : "31.7768514";
+    var longitudeParam = typeof JERUSALEM_LONGITUDE != "undefined" ? String(JERUSALEM_LONGITUDE) : "35.2331664";
+    var timeZoneParam = typeof JERUSALEM_TIME_ZONE != "undefined" ? JERUSALEM_TIME_ZONE : "Asia/Jerusalem";
 
     learningUrl.searchParams.set("hebrewDay", hebrewDay);
     learningUrl.searchParams.set("hebrewHour", hebrewHour);
     learningUrl.searchParams.set("latitude", latitudeParam);
     learningUrl.searchParams.set("longitude", longitudeParam);
+    learningUrl.searchParams.set("timeZone", timeZoneParam);
+    if (typeof displayTimeZone != "undefined" && displayTimeZone) {
+        learningUrl.searchParams.set("displayTimeZone", displayTimeZone);
+    }
     if (isGeneral) {
         learningUrl.searchParams.set("general", "1");
     }
@@ -399,6 +441,10 @@ function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate, isGeneral) {
 }
 
 function getSelectedScheduleDate(fallbackDate) {
+    if (typeof getCurrentClockDate == "function") {
+        return new Date(fallbackDate.getTime());
+    }
+
     var url = new URL(document.location.href);
     var yearParam = parseInt(url.searchParams.get("year"), 10);
     var monthParam = parseInt(url.searchParams.get("month"), 10);

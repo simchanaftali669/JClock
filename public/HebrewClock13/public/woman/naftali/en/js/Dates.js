@@ -1,10 +1,10 @@
 ﻿//---get Date---
 function set_default_date() {
-    var date = new Date();
+    var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
 
     var d = date.getDate();
     var m = date.getMonth();
-    var y = date.getYear();
+    var y = date.getFullYear();
 
     month = m;
     day = d - 1;
@@ -25,10 +25,16 @@ function set_date_vars() {
 }
 
 function civMonthLength(month, year) {
+    var fullYear = year < 1900 ? year + 1900 : year;
+
     if (month == 2)
-        return (28 + year);
+        return isLeapYear(fullYear) ? 29 : 28;
     else if (month == 4 || month == 6 || month == 9 || month == 11)
         return 30;
     else
         return 31;
+}
+
+function isLeapYear(year) {
+    return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
 }

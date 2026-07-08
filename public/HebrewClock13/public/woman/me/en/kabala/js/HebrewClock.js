@@ -10,23 +10,12 @@
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
     
-    var date = new Date();
+    var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
 
-	var h,m,s,milisec;
-	if(birthHour == null)
-    {
-		h = date.getHours();
-		m = date.getMinutes();
-		s = date.getSeconds();
-		milisec = date.getMilliseconds();
-	}
-	else
-	{
-		h = birthHour;
-		m = birthMin;
-		s = 0;
-		milisec = 0;
-	}
+	var h = date.getHours();
+	var m = date.getMinutes();
+	var s = date.getSeconds();
+	var milisec = date.getMilliseconds();
 
 	var curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
 	

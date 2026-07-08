@@ -58,7 +58,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
             <button onclick="myFunction()" class="dropbtn"></button>
             <!-- <button onclick="genderFunction()" class="gender married"></button> -->
             <button onclick="englishFunction()" class="hebrew_btn"></button>
-            <button class="religion cristianity"></button>
+            <button onclick="religionFunction()" class="religion cristianity"></button>
             <div id="myDropdown" class="dropdown-content">
 			<a href="../../../me/he/index.html?religion=christian&period=Year&latitude=31.7768514&longitude=35.2331664" id="hourly__learning">לימוד עצמי</a>			
 			<a href="../../../../../../HebrewSchedule13/public/index.html?lang=he" style="cursor: pointer;">תיאום פגישה</a>
@@ -212,14 +212,16 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     </div>
 
     <script type="text/javascript" src="../../../simple/js/Geolocation.js"></script>
+    <script type="text/javascript" src="../../../../../../BirthCalculator/public/shared/timezone-converter.js"></script>
+    <script type="text/javascript" src="../../../../shared/js/jerusalem-woman-kabala-time.js?v=4"></script>
     <script type="text/javascript" src="./js/Menu.js"></script>
     <script type="text/javascript" src="./js/HebrewClock.js"></script>
 	<script type="text/javascript" src="../js/Gender.js"></script>
 	<script type="text/javascript" src="../js/Religion.js"></script>
     <script type="text/javascript" src="../../../shared/he/js/Commercial.js"></script>
     <script type="text/javascript" src="./js/Mazal.js"></script>
-    <script type="text/javascript" src="./js/suncalc.js"></script>
-    <script type="text/javascript" src="./js/Times.js?v=4"></script>
+    <script type="text/javascript" src="./js/suncalc.js?v=2"></script>
+    <script type="text/javascript" src="./js/Times.js?v=7"></script>
     <script type="text/javascript" src="./js/Shevet.js"></script>
     <script type="text/javascript" src="../js/SunTime.js"></script>
     <script type="text/javascript" src="../js/TimeAdj.js"></script>
@@ -290,6 +292,9 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     //---get Location and activate the clock---
     function getLocation()
     {
+        startVerifiedJerusalemWomanKabalaClock();
+        return;
+
 		var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude") || localStorage.getItem("longitude") || "35.2331664";        
         var lat = url.searchParams.get("latitude") || localStorage.getItem("latitude") || "31.7768514";
@@ -329,6 +334,9 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 
     function showPosition(position)
     {
+        startVerifiedJerusalemWomanKabalaClock();
+        return;
+
         var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");        

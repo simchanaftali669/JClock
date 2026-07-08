@@ -2,7 +2,7 @@ function hebrewDayOffset()
 {
 	hebrewclock_man();
 	setmazal_man();
-	return -1;
+	return 0;
 }
 
 function hasFullBirthCalculationParams()

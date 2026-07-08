@@ -1,7 +1,7 @@
 ﻿//---get Date---
 function set_default_date()
 {
-    var date = new Date();
+    var date = typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date();
 
     year = date.getFullYear();
     month = date.getMonth();

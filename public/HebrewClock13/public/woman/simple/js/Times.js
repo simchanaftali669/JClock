@@ -33,22 +33,25 @@ function doit() {
 		
     //the time of yasterday
     var time_yasterday = [0, 0, 0, 0];
+    var moonTimesYesterday = SunCalc.getMoonTimes(yasterday, latitude, longitude);
 	
-	time_yasterday[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).rise);
-	time_yasterday[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(yasterday, latitude, longitude).set);	
+	time_yasterday[2] = getMoonTimeHour(moonTimesYesterday, "rise");
+	time_yasterday[3] = getMoonTimeHour(moonTimesYesterday, "set");
     //time_yasterday = suntime(yasterday.getDate(), yasterday.getMonth() +1, yasterday.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
 
     //the time of the current day
     var time_today = [0, 0, 0, 0];
+    var moonTimesToday = SunCalc.getMoonTimes(today, latitude, longitude);
     //time_today = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
-	time_today[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(today, latitude, longitude).rise);
-	time_today[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(today, latitude, longitude).set);	
+	time_today[2] = getMoonTimeHour(moonTimesToday, "rise");
+	time_today[3] = getMoonTimeHour(moonTimesToday, "set");
 
     //the time of the next day
     var time_tommorow = [0, 0, 0, 0];
+    var moonTimesTomorrow = SunCalc.getMoonTimes(tomorrow, latitude, longitude);
     //time_tommorow = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 90, 50, lngd, lngm, ewi, latd, latm, nsi, adj);
-	time_tommorow[2] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).rise);
-	time_tommorow[3] = convertDateTimeToFloat(SunCalc.getMoonTimes(tomorrow, latitude, longitude).set);	
+	time_tommorow[2] = getMoonTimeHour(moonTimesTomorrow, "rise");
+	time_tommorow[3] = getMoonTimeHour(moonTimesTomorrow, "set");
 
 
     //if (time_today[1] == 0) {
@@ -182,4 +185,12 @@ function doit() {
 
     return hour;
 
+}
+
+function getMoonTimeHour(moonTimes, eventType) {
+    if (typeof getMoonEventClockHour == "function") {
+        return getMoonEventClockHour(moonTimes, eventType);
+    }
+
+    return convertDateTimeToFloat(moonTimes && moonTimes[eventType]);
 }

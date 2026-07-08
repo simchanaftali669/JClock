@@ -136,14 +136,16 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
         </div> 
     </div>
 
+    <script type="text/javascript" src="../../../../../../BirthCalculator/public/shared/timezone-converter.js"></script>
+    <script type="text/javascript" src="../../../../shared/js/jerusalem-woman-kabala-time.js?v=4"></script>
     <script type="text/javascript" src="./js/Menu.js"></script>
     <script type="text/javascript" src="../js/HebrewClock.js"></script>
     <script type="text/javascript" src="../js/Gender.js"></script>
     <script type="text/javascript" src="../js/Religion.js"></script>
     <script type="text/javascript" src="../../../shared/he/js/Commercial.js"></script>
     <script type="text/javascript" src="./js/Mazal.js"></script>
-    <script type="text/javascript" src="./js/SunCalc.js"></script>
-    <script type="text/javascript" src="./js/Times.js"></script>
+    <script type="text/javascript" src="./js/SunCalc.js?v=2"></script>
+    <script type="text/javascript" src="./js/Times.js?v=3"></script>
     <script type="text/javascript" src="./js/Shevet.js"></script>
     <script type="text/javascript" src="../js/SunTime.js"></script>
     <script type="text/javascript" src="../js/TimeAdj.js"></script>
@@ -214,6 +216,9 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     //---get Location and activate the clock---
     function getLocation()
     {
+        startVerifiedJerusalemWomanKabalaClock();
+        return;
+
         if (navigator.geolocation)
         {
             navigator.geolocation.getCurrentPosition(showPosition);
@@ -222,6 +227,9 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
 
     function showPosition(position)
     {
+        startVerifiedJerusalemWomanKabalaClock();
+        return;
+
         var url = new URL(document.location.href);
         var lon = url.searchParams.get("longitude");        
         var lat = url.searchParams.get("latitude");        
