@@ -94,7 +94,7 @@
     .button-row {
       display: grid;
       gap: 10px;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
     }
 
     .gender-panel {
@@ -153,6 +153,22 @@
 
     .secondary:hover {
       background: #ffe19a;
+    }
+
+    .timezone-preview {
+      display: grid;
+      gap: 8px;
+    }
+
+    .timezone-hint {
+      min-height: 20px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .timezone-hint.error {
+      color: var(--danger);
     }
 
     .primary {
@@ -249,8 +265,15 @@
         <div id="map"></div>
       </div>
 
+      <div class="timezone-preview">
+        <label>
+          <span id="jerusalem-time-label">תאריך ושעה בירושלים</span>
+          <input id="jerusalem-time" type="text" readonly>
+        </label>
+        <p id="timezone-preview" class="timezone-hint" aria-live="polite"></p>
+      </div>
+
       <div class="button-row">
-        <button class="secondary" id="current-location" type="button">השתמש במיקום הנוכחי</button>
         <button class="secondary" id="jerusalem-location" type="button">השתמש במיקום ירושלים</button>
       </div>
       <p id="status" aria-live="polite"></p>
@@ -258,6 +281,8 @@
     </form>
   </main>
 
+  <script src="../../BirthCalculator/public/shared/tz-lookup.js"></script>
+  <script src="../../BirthCalculator/public/shared/timezone-converter.js"></script>
   <script>
     const JERUSALEM = {
       latitude: "31.7768514",
@@ -269,52 +294,54 @@
         lang: "he",
         dir: "rtl",
         title: "פתיחת יומן",
-        description: "בחר תאריך, שעה ומיקום לפתיחת יומן JClock.",
+        description: "בחר תאריך, שעה ומיקום לצורך תרגום לשעון ירושלים. היומן ייפתח תמיד במיקום ירושלים.",
         date: "תאריך",
         time: "שעה",
-        latitude: "קו רוחב",
-        longitude: "קו אורך",
+        latitude: "קו רוחב לקביעת אזור זמן",
+        longitude: "קו אורך לקביעת אזור זמן",
         gender: "בן / בת",
         boy: "בן",
         girl: "בת",
-        place: "חיפוש מקום",
-        placePlaceholder: "לדוגמה: הכותל המערבי",
+        place: "מיקום השעה המבוקשת",
+        placePlaceholder: "לדוגמה: ניו-יורק",
         searchPlace: "חפש במפה",
         placeNotFound: "לא נמצא מקום מתאים.",
-        currentLocation: "השתמש במיקום הנוכחי",
         jerusalemLocation: "השתמש במיקום ירושלים",
         languageToggle: "English",
         open: "פתח יומן",
-        locating: "מאתר מיקום...",
-        locationReady: "המיקום הנוכחי נבחר.",
-        jerusalemReady: "מיקום ירושלים נבחר.",
-        locationUnavailable: "לא ניתן לקבל מיקום. נשארים עם ירושלים.",
+        locationReady: "המיקום נבחר לצורך תרגום לשעון ירושלים.",
+        jerusalemReady: "ירושלים נבחרה לצורך תרגום לשעון ירושלים.",
+        jerusalemTime: "תאריך ושעה שיישלחו בירושלים",
+        timezonePreviewEmpty: "אחרי בחירת תאריך, שעה ומיקום יוצג הזמן שיישלח ליומן.",
+        timezoneUnavailable: "מפת אזורי הזמן לא נטענה. נא לרענן את הדף.",
+        conversionError: "לא ניתן לתרגם את הזמן לשעון ירושלים.",
         target: "../../HebrewClock13/public/{gender}/it/he/kabala/index.html"
       },
       en: {
         lang: "en",
         dir: "ltr",
         title: "Open Schedule",
-        description: "Choose a date, time, and location to open the JClock schedule.",
+        description: "Choose a date, time, and source location for Jerusalem-time conversion. The schedule always opens at the Jerusalem location.",
         date: "Date",
         time: "Time",
-        latitude: "Latitude",
-        longitude: "Longitude",
+        latitude: "Source latitude",
+        longitude: "Source longitude",
         gender: "Boy / Girl",
         boy: "Boy",
         girl: "Girl",
-        place: "Find location",
-        placePlaceholder: "For example: Western Wall",
+        place: "Requested time location",
+        placePlaceholder: "For example: New York",
         searchPlace: "Search map",
         placeNotFound: "No matching place was found.",
-        currentLocation: "Use current location",
         jerusalemLocation: "Use Jerusalem location",
         languageToggle: "עברית",
         open: "Open Schedule",
-        locating: "Finding location...",
-        locationReady: "Current location selected.",
-        jerusalemReady: "Jerusalem location selected.",
-        locationUnavailable: "Location is unavailable. Jerusalem remains selected.",
+        locationReady: "Location selected for Jerusalem-time conversion.",
+        jerusalemReady: "Jerusalem selected for Jerusalem-time conversion.",
+        jerusalemTime: "Date and time sent in Jerusalem",
+        timezonePreviewEmpty: "After choosing a date, time, and location, the time sent to the schedule will appear here.",
+        timezoneUnavailable: "The time zone map did not load. Please refresh the page.",
+        conversionError: "Unable to convert the time to Jerusalem time.",
         target: "../../HebrewClock13/public/{gender}/it/en/kabala/index.html"
       }
     };
@@ -340,8 +367,9 @@
     document.getElementById("place-search").placeholder = text.placePlaceholder;
     document.getElementById("place-search-button").textContent = text.searchPlace;
     document.getElementById("language-toggle").textContent = text.languageToggle;
-    document.getElementById("current-location").textContent = text.currentLocation;
     document.getElementById("jerusalem-location").textContent = text.jerusalemLocation;
+    document.getElementById("jerusalem-time-label").textContent = text.jerusalemTime;
+    document.getElementById("timezone-preview").textContent = text.timezonePreviewEmpty;
     document.getElementById("open-button").textContent = text.open;
 
     const dateInput = document.getElementById("date");
@@ -349,6 +377,8 @@
     const latitudeInput = document.getElementById("latitude");
     const longitudeInput = document.getElementById("longitude");
     const placeSearchInput = document.getElementById("place-search");
+    const jerusalemTimeInput = document.getElementById("jerusalem-time");
+    const timezonePreview = document.getElementById("timezone-preview");
     const status = document.getElementById("status");
     let map;
     let marker;
@@ -403,25 +433,6 @@
       window.location.href = `${window.location.pathname}?${params.toString()}`;
     });
 
-    document.getElementById("current-location").addEventListener("click", () => {
-      status.className = "";
-      status.textContent = text.locating;
-
-      if (!navigator.geolocation) {
-        showLocationError();
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          updateLocation(position.coords.latitude, position.coords.longitude);
-          status.className = "";
-          status.textContent = text.locationReady;
-        },
-        showLocationError
-      );
-    });
-
     document.getElementById("jerusalem-location").addEventListener("click", () => {
       updateLocation(JERUSALEM.latitude, JERUSALEM.longitude);
       status.className = "";
@@ -442,19 +453,38 @@
       }
     });
 
+    [dateInput, timeInput, latitudeInput, longitudeInput].forEach(input => {
+      input.addEventListener("change", updateTimezonePreview);
+      input.addEventListener("input", updateTimezonePreview);
+    });
+
+    [latitudeInput, longitudeInput].forEach(input => {
+      input.addEventListener("change", syncMapToInputs);
+    });
+
     document.getElementById("schedule-form").addEventListener("submit", event => {
       event.preventDefault();
 
-      const selectedDate = new Date(`${dateInput.value}T00:00:00`);
-      const [hour, minute] = timeInput.value.split(":");
+      let timeInfo;
+      try {
+        timeInfo = getScheduleTimeInfo();
+      } catch (error) {
+        status.className = "error";
+        status.textContent = error.message || text.conversionError;
+        updateTimezonePreview();
+        return;
+      }
+
+      const jerusalemTime = timeInfo.jerusalem;
       const params = new URLSearchParams({
-        year: String(selectedDate.getFullYear()),
-        month: String(selectedDate.getMonth() + 1),
-        day: String(selectedDate.getDate()),
-        longitude: longitudeInput.value,
-        latitude: latitudeInput.value,
-        hour,
-        minute,
+        year: String(jerusalemTime.year),
+        month: String(jerusalemTime.month),
+        day: String(jerusalemTime.day),
+        longitude: JERUSALEM.longitude,
+        latitude: JERUSALEM.latitude,
+        hour: String(jerusalemTime.hour),
+        minute: String(jerusalemTime.minute),
+        gmt: String(timeInfo.jerusalemGmt),
         isSchedule: "true"
       });
 
@@ -484,10 +514,62 @@
       return `${hour}:${minute}`;
     }
 
-    function showLocationError() {
-      updateLocation(JERUSALEM.latitude, JERUSALEM.longitude);
-      status.className = "error";
-      status.textContent = text.locationUnavailable;
+    function parseSelectedDateTime() {
+      if (!dateInput.value || !timeInput.value) {
+        return null;
+      }
+
+      const [year, month, day] = dateInput.value.split("-").map(Number);
+      const [hour, minute] = timeInput.value.split(":").map(Number);
+      if (![year, month, day, hour, minute].every(Number.isFinite)) {
+        return null;
+      }
+
+      return { year, month, day, hour, minute };
+    }
+
+    function getScheduleTimeInfo() {
+      if (typeof BirthCalculatorTime === "undefined" || typeof tzlookup !== "function") {
+        throw new Error(text.timezoneUnavailable);
+      }
+
+      const dateTime = parseSelectedDateTime();
+      const sourceLocation = getSelectedLocation();
+      if (!dateTime || ![sourceLocation.lat, sourceLocation.lng].every(Number.isFinite)) {
+        throw new Error(text.conversionError);
+      }
+
+      return BirthCalculatorTime.convertLocalTimeToJerusalem({
+        latitude: sourceLocation.lat,
+        longitude: sourceLocation.lng,
+        year: dateTime.year,
+        month: dateTime.month,
+        day: dateTime.day,
+        hour: dateTime.hour,
+        minute: dateTime.minute,
+        lookupTimeZone: tzlookup
+      });
+    }
+
+    function updateTimezonePreview() {
+      if (!dateInput.value || !timeInput.value) {
+        jerusalemTimeInput.value = "";
+        timezonePreview.className = "timezone-hint";
+        timezonePreview.textContent = text.timezonePreviewEmpty;
+        return;
+      }
+
+      try {
+        const timeInfo = getScheduleTimeInfo();
+        const targetTimeZone = BirthCalculatorTime.JERUSALEM_TIME_ZONE || "Asia/Jerusalem";
+        jerusalemTimeInput.value = BirthCalculatorTime.formatJerusalemDateTime(timeInfo.jerusalem);
+        timezonePreview.className = "timezone-hint";
+        timezonePreview.textContent = `${timeInfo.timeZone} -> ${targetTimeZone} - ${BirthCalculatorTime.formatGmtOffset(timeInfo.jerusalemGmt)}`;
+      } catch (error) {
+        jerusalemTimeInput.value = "";
+        timezonePreview.className = "timezone-hint error";
+        timezonePreview.textContent = error.message || text.conversionError;
+      }
     }
 
     function searchPlace() {
@@ -548,23 +630,40 @@
     }
 
     function setSelectedLocation(location) {
-      latitudeInput.value = location.lat();
-      longitudeInput.value = location.lng();
+      updateLocation(location.lat(), location.lng());
+    }
+
+    function syncMapToInputs() {
+      const location = getSelectedLocation();
+      if (![location.lat, location.lng].every(Number.isFinite)) {
+        updateTimezonePreview();
+        return;
+      }
+
+      if (map && marker) {
+        marker.setPosition(location);
+        map.setCenter(location);
+        map.setZoom(15);
+      }
+
+      updateTimezonePreview();
     }
 
     function updateLocation(latitude, longitude) {
       latitudeInput.value = latitude;
       longitudeInput.value = longitude;
 
-      if (!map || !marker) {
-        return;
+      if (map && marker) {
+        const location = getSelectedLocation();
+        marker.setPosition(location);
+        map.setCenter(location);
+        map.setZoom(15);
       }
 
-      const location = getSelectedLocation();
-      marker.setPosition(location);
-      map.setCenter(location);
-      map.setZoom(15);
+      updateTimezonePreview();
     }
+
+    updateTimezonePreview();
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcXPNQH8H9c_xeTxH9yT1OKPoM5e_YU4I&libraries=places&callback=initMap"></script>
 </body>

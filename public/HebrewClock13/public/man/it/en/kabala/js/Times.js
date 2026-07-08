@@ -22,7 +22,7 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var date = getSelectedScheduleDate(new Date());
+    var date = getSelectedScheduleDate(typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date());
     var today = new Date(date.getTime());
     var yasterday = new Date(today.getTime());
     var tomorrow = new Date(today.getTime());
@@ -63,7 +63,7 @@ function doit() {
 
         //using current time in the computer to adjust the right secdule...
         //get the time right now
-        var date = getSelectedScheduleDate(new Date());
+        var date = getSelectedScheduleDate(typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date());
 
         var h = date.getHours();
         var minute = date.getMinutes();
@@ -333,15 +333,18 @@ function renderScheduleSegment(startRow, segment, mazalOrdered, mazalDay, mazalN
             continue;
         }
 
+        var rowStart = segment.start + (segment.hourLength * i);
         hourLabel.value = mazalOrdered[(mazalStart + i) % 7] + " prayer";
-        hourValue.value = timeadj(segment.start + (segment.hourLength * i), ampm);
+        hourValue.value = typeof formatScheduleTimeForDisplay == "function" ?
+            formatScheduleTimeForDisplay(rowStart, segment.date, ampm) :
+            timeadj(rowStart, ampm);
         if (hourIndex) {
             hourIndex.value = "(" + (i + 1) + ")";
         }
 
         setScheduleRowLearningLink(rowNumber, segment, i + 1);
 
-        if (isHourInScheduleRow(selectedHour, segment.start + (segment.hourLength * i), segment.hourLength)) {
+        if (isHourInScheduleRow(selectedHour, rowStart, segment.hourLength)) {
             highlightScheduleRow(rowNumber);
         }
     }
@@ -483,13 +486,17 @@ function getScheduleRowDate(baseDate, rowStart) {
 function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate, isGeneral) {
     var currentUrl = new URL(document.location.href);
     var learningUrl = new URL("../../../me/en/index.html", document.location.href);
-    var latitudeParam = currentUrl.searchParams.get("latitude") || localStorage.getItem("latitude") || "31.7768514";
-    var longitudeParam = currentUrl.searchParams.get("longitude") || localStorage.getItem("longitude") || "35.2331664";
-
     learningUrl.searchParams.set("hebrewDay", hebrewDay);
     learningUrl.searchParams.set("hebrewHour", hebrewHour);
-    learningUrl.searchParams.set("latitude", latitudeParam);
-    learningUrl.searchParams.set("longitude", longitudeParam);
+    learningUrl.searchParams.set("latitude", "31.7768514");
+    learningUrl.searchParams.set("longitude", "35.2331664");
+    learningUrl.searchParams.set("timeZone", "Asia/Jerusalem");
+    var displayTimeZoneParam = typeof displayTimeZone != "undefined" && displayTimeZone ?
+        displayTimeZone :
+        currentUrl.searchParams.get("displayTimeZone");
+    if (displayTimeZoneParam) {
+        learningUrl.searchParams.set("displayTimeZone", displayTimeZoneParam);
+    }
     if (isGeneral) {
         learningUrl.searchParams.set("general", "1");
     }
@@ -502,6 +509,10 @@ function buildScheduleLearningUrl(hebrewDay, hebrewHour, rowDate, isGeneral) {
 }
 
 function getSelectedScheduleDate(fallbackDate) {
+    if (typeof getCurrentClockDate == "function") {
+        return getCurrentClockDate();
+    }
+
     var url = new URL(document.location.href);
     var yearParam = parseInt(url.searchParams.get("year"), 10);
     var monthParam = parseInt(url.searchParams.get("month"), 10);

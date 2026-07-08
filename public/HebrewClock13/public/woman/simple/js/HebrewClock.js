@@ -24,26 +24,12 @@ function hebrewclock()
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
     
-    var date = new Date();
-
-	var h,m,s,milisec;
-	if(birthHour == null)
-    {
-		var h = date.getHours();
-		var m = date.getMinutes();
-		var s = date.getSeconds();
-		var milisec = date.getMilliseconds();
+    if (typeof getClockTimeAsHours == "function")
+		curr_hour = getClockTimeAsHours();
+	else {
+		var date = new Date();
+		curr_hour = (date.getMilliseconds() + (date.getSeconds()*1000) + (date.getMinutes()*60*1000) + (date.getHours()*60*60*1000))/(1000 * 3600);
 	}
-	else
-	{
-		var h = birthHour;
-		var m = birthMin;
-		var s = birthSec == null ? 0 : birthSec;
-		var milisec = birthMs == null ? 0 : birthMs;		
-	}
-	curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
-	
-	curr_hour = curr_hour/(1000 * 3600);
 
 	//console.log("sunset: " + sunset);
 	//console.log("sunrise: " + sunrise);
@@ -302,7 +288,7 @@ function getDigitalChazanDateForTefila(tefilaSunriseTime)
 function getDigitalChazanDate()
 {
 	if(birthYear == null || birthMonth == null || birthDay == null)
-		return new Date();
+		return typeof getClockDate == "function" ? getClockDate() : new Date();
 
 	return new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
 }
@@ -325,8 +311,24 @@ function isDigitalChazanMoed(date)
 function getDigitalChazanQueryString()
 {
 	var params = new URLSearchParams(window.location.search);
-	params.set("longitude", longitude || 35.2331664);
-	params.set("latitude", latitude || 31.7768514);
+	var fallbackLongitude = typeof JERUSALEM_LONGITUDE != "undefined" ? JERUSALEM_LONGITUDE : 35.2331664;
+	var fallbackLatitude = typeof JERUSALEM_LATITUDE != "undefined" ? JERUSALEM_LATITUDE : 31.7768514;
+	params.set("longitude", longitude || fallbackLongitude);
+	params.set("latitude", latitude || fallbackLatitude);
+	if(typeof displayLongitude != "undefined")
+		params.set("displayLongitude", displayLongitude);
+	if(typeof displayLatitude != "undefined")
+		params.set("displayLatitude", displayLatitude);
+	if(typeof clockGmt != "undefined")
+		params.set("gmt", clockGmt);
+	if(typeof clockTimeZone != "undefined")
+		params.set("timeZone", clockTimeZone);
+	if(typeof displayTimeZone != "undefined")
+		params.set("displayTimeZone", displayTimeZone);
+	if(typeof useProvidedLocationAsClock != "undefined" && useProvidedLocationAsClock)
+		params.set("ClockLocation", "Local");
+	else
+		params.delete("ClockLocation");
 	return "?" + params.toString();
 }
 
@@ -364,20 +366,20 @@ function display_time()
         document.getElementById("Hour").value = document.getElementById("Hour").value;
 
 	
-	var date = new Date();
-
+	var timeParts = typeof getDisplayTimeParts == "function" ? getDisplayTimeParts() : null;
 	var h,m,s
-	if(birthHour == null)
-    {
-		var h = date.getHours();
-		var m = date.getMinutes();
-		var s = date.getSeconds();
+	if(timeParts)
+	{
+		h = timeParts.hour;
+		m = timeParts.minute;
+		s = timeParts.second;
 	}
 	else
-	{
-		var h = birthHour;
-		var m = birthMin;
-		var s = birthSec == null ? 0 : birthSec;
+    {
+		var date = new Date();
+		h = date.getHours();
+		m = date.getMinutes();
+		s = date.getSeconds();
 	}
 	document.getElementById("ChirstianHour").value = h<10? "0" + h : h;
 	document.getElementById("ChirstianMinute").value = m<10? "0" + m : m ;

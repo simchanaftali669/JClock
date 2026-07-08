@@ -43,6 +43,32 @@ test("New York birth time on 1987-03-04 13:45 is 20:45 in Jerusalem", () => {
   assert.equal(time.formatJerusalemDateTime(result.jerusalem), "1987-03-04 20:45");
 });
 
+test("New York schedule time on 2026-07-07 19:00 is 02:00 next day in Jerusalem", () => {
+  const result = time.convertLocalTimeToJerusalem({
+    latitude: 40.7128,
+    longitude: -74.006,
+    year: 2026,
+    month: 7,
+    day: 7,
+    hour: 19,
+    minute: 0,
+    lookupTimeZone: tzlookup
+  });
+
+  assert.equal(result.timeZone, "America/New_York");
+  assert.equal(result.sourceGmt, -4);
+  assert.equal(result.jerusalemGmt, 3);
+  assert.deepEqual(result.jerusalem, {
+    year: 2026,
+    month: 7,
+    day: 8,
+    hour: 2,
+    minute: 0,
+    second: 0
+  });
+  assert.equal(time.formatJerusalemDateTime(result.jerusalem), "2026-07-08 02:00");
+});
+
 test("Jerusalem summer date keeps Israeli daylight saving GMT", () => {
   const result = time.convertLocalTimeToJerusalem({
     latitude: 31.7768514,
@@ -168,6 +194,29 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
       assert.doesNotMatch(html, /add to DB/);
     }
   });
+});
+
+test("schedule converts source time before sending Jerusalem coordinates onward", () => {
+  const html = fs.readFileSync(path.join(ROOT, "..", "HebrewSchedule13", "public", "index.html"), "utf8");
+
+  assert.match(html, /src="\.\.\/\.\.\/BirthCalculator\/public\/shared\/tz-lookup\.js"/);
+  assert.match(html, /src="\.\.\/\.\.\/BirthCalculator\/public\/shared\/timezone-converter\.js"/);
+  assert.match(html, /BirthCalculatorTime\.convertLocalTimeToJerusalem/);
+  assert.match(html, /const jerusalemTime = timeInfo\.jerusalem/);
+  assert.match(html, /longitude: JERUSALEM\.longitude/);
+  assert.match(html, /latitude: JERUSALEM\.latitude/);
+  assert.match(html, /year: String\(jerusalemTime\.year\)/);
+  assert.match(html, /month: String\(jerusalemTime\.month\)/);
+  assert.match(html, /day: String\(jerusalemTime\.day\)/);
+  assert.match(html, /hour: String\(jerusalemTime\.hour\)/);
+  assert.match(html, /minute: String\(jerusalemTime\.minute\)/);
+  assert.match(html, /gmt: String\(timeInfo\.jerusalemGmt\)/);
+  assert.match(html, /id="jerusalem-time"/);
+  assert.match(html, /id="timezone-preview"/);
+  assert.doesNotMatch(html, /id="current-location"/);
+  assert.doesNotMatch(html, /navigator\.geolocation/);
+  assert.doesNotMatch(html, /longitude: longitudeInput\.value/);
+  assert.doesNotMatch(html, /latitude: latitudeInput\.value/);
 });
 
 test("privacy policy explains the required phone number purpose", () => {

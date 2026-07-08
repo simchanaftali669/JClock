@@ -1,6 +1,6 @@
 ﻿//---get Date---
 function set_default_date() {
-    var date = getSelectedLearningDate(new Date());
+    var date = getSelectedLearningDate(typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date());
 
     var d = date.getDate();
     var m = date.getMonth();

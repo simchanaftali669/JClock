@@ -474,14 +474,19 @@ function hebrewDate(inputDateOrYear, inputMonth, inputDate, inputLang) {
 
     SdnToHebrew(GregorianToSdn(inputYear, inputMonth, inputDate));
 
-	var dateNow = new Date();
-
-	var h = birthHour == null ? dateNow.getHours() : Number(birthHour);
-	var m = birthHour == null ? dateNow.getMinutes() : Number(birthMin);
-	var s = birthHour == null ? dateNow.getSeconds() : 0;
-	var mili = birthHour == null ? dateNow.getMilliseconds() : 0;
-	var curr_hour = mili + (s*1000) + (m*60*1000) + (h*60*60*1000);
-	curr_hour = curr_hour/(1000 * 3600);
+	var curr_hour;
+	if(typeof getClockTimeAsHours == "function")
+		curr_hour = getClockTimeAsHours();
+	else
+	{
+		var dateNow = new Date();
+		var h = birthHour == null ? dateNow.getHours() : Number(birthHour);
+		var m = birthHour == null ? dateNow.getMinutes() : Number(birthMin);
+		var s = birthHour == null ? dateNow.getSeconds() : 0;
+		var mili = birthHour == null ? dateNow.getMilliseconds() : 0;
+		curr_hour = mili + (s*1000) + (m*60*1000) + (h*60*60*1000);
+		curr_hour = curr_hour/(1000 * 3600);
+	}
 		
 	if (curr_hour > tzeit)
 	{	

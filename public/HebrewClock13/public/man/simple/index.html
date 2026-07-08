@@ -490,16 +490,8 @@
         displayLatitude = parsedLatitude;
         displayLongitude = parsedLongitude;
 
-		if(useProvidedLocationAsClock)
-		{
-			latitude = displayLatitude;
-			longitude = displayLongitude;
-		}
-		else
-		{
-			latitude = JERUSALEM_LATITUDE;
-			longitude = JERUSALEM_LONGITUDE;
-		}
+		latitude = JERUSALEM_LATITUDE;
+		longitude = JERUSALEM_LONGITUDE;
 
 		setDisplayTimeZone();
 		setClockTimeZone();
@@ -679,7 +671,7 @@
 
 	function setClockTimeZone()
 	{
-		clockTimeZone = getTimeZoneForLocation(latitude, longitude);
+		clockTimeZone = DEFAULT_TIME_ZONE;
 		clockGmt = getTimeZoneOffset(clockTimeZone);
 		tz = clockGmt;
 	}

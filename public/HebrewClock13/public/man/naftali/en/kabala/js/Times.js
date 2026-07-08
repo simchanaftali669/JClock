@@ -22,9 +22,10 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var yasterday = new Date();
-    var today = new Date();
-    var tomorrow = new Date();
+    var date = typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date();
+    var yasterday = new Date(date.getTime());
+    var today = new Date(date.getTime());
+    var tomorrow = new Date(date.getTime());
 
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
@@ -62,8 +63,6 @@ function doit() {
 
         //using current time in the computer to adjust the right secdule...
         //get the time right now
-        var date = new Date();
-
         var h = date.getHours();
         var minute = date.getMinutes();
         var s = date.getSeconds();
@@ -112,7 +111,7 @@ function doit() {
 //		hour[30] = Math.floor(shaa_zmanit_day * 3600.0 * 1000);      //day
 
         //insert an array of shaot_zmaniot
-        var s1, s2,s3,s4,shaa_zmanit;
+        var s1, s2,s3,s4,shaa_zmanit,scheduleDate;
         if (curr_hour > sunset_hour) 
 				{
             s1 = sunset;
@@ -120,6 +119,7 @@ function doit() {
 						s3 = sunset_tommorow;
 						s4 = sunset;
 						shaa_zmanit = shaa_zmanit_night;
+                        scheduleDate = tomorrow;
         }
         else 
 				{
@@ -128,6 +128,7 @@ function doit() {
 						s3 = sunset;
 						s4 = sunset; 
 						shaa_zmanit = shaa_zmanit_day;
+                        scheduleDate = today;
         }
 
 		
@@ -147,27 +148,27 @@ function doit() {
 */
 //		if(gender == genders.MALE)
 //		{
-			document.getElementById("hour_10_idx").value = timeadj(s2 - shaa_zmanit_night*2, ampm);
-			document.getElementById("hour_11_idx").value = timeadj(s2 - shaa_zmanit_night*1, ampm);
+			setScheduleDisplayTime("hour_10_idx", s2 - shaa_zmanit_night*2, scheduleDate);
+			setScheduleDisplayTime("hour_11_idx", s2 - shaa_zmanit_night*1, scheduleDate);
 			
-			document.getElementById("hour_12_idx").value = timeadj(s2, ampm);
-			document.getElementById("hour_13_idx").value = timeadj(s2 + shaa_zmanit_day, ampm);
-			document.getElementById("hour_14_idx").value = timeadj(s2 + 2*shaa_zmanit_day, ampm);
+			setScheduleDisplayTime("hour_12_idx", s2, scheduleDate);
+			setScheduleDisplayTime("hour_13_idx", s2 + shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_14_idx", s2 + 2*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_15_idx").value = timeadj(s2 + 3*shaa_zmanit_day, ampm);
-			document.getElementById("hour_16_idx").value = timeadj(s2 + 4*shaa_zmanit_day, ampm);
-			document.getElementById("hour_17_idx").value = timeadj(s2 + 5*shaa_zmanit_day , ampm);
+			setScheduleDisplayTime("hour_15_idx", s2 + 3*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_16_idx", s2 + 4*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_17_idx", s2 + 5*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_18_idx").value = timeadj(s2 + 6*shaa_zmanit_day , ampm);
-			document.getElementById("hour_18-30_idx").value = timeadj(s2 + 6*shaa_zmanit_day + 0.5 , ampm);
-			document.getElementById("hour_19_idx").value = timeadj(s2 + 7*shaa_zmanit_day , ampm);
-			document.getElementById("hour_20_idx").value = timeadj(s2 + 8*shaa_zmanit_day , ampm);
+			setScheduleDisplayTime("hour_18_idx", s2 + 6*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_18-30_idx", s2 + 6*shaa_zmanit_day + 0.5, scheduleDate);
+			setScheduleDisplayTime("hour_19_idx", s2 + 7*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_20_idx", s2 + 8*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_21_idx").value = timeadj(s2 + 9*shaa_zmanit_day , ampm);
-			document.getElementById("hour_22_idx").value = timeadj(s2 + 10*shaa_zmanit_day , ampm);
-			document.getElementById("hour_23_idx").value = timeadj(s2 + 11*shaa_zmanit_day , ampm);
+			setScheduleDisplayTime("hour_21_idx", s2 + 9*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_22_idx", s2 + 10*shaa_zmanit_day, scheduleDate);
+			setScheduleDisplayTime("hour_23_idx", s2 + 11*shaa_zmanit_day, scheduleDate);
 			
-			document.getElementById("hour_00_idx").value = timeadj(s3 , ampm);
+			setScheduleDisplayTime("hour_00_idx", s3, scheduleDate);
 			document.getElementById("hour_together").value = "Together";
 			
 			var time;
@@ -197,7 +198,7 @@ function doit() {
 		 	time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 96, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
 		
 		 if (time[1] == 0)
-            document.getElementById("tziet").value = timeadj(time[3], ampm);
+            setScheduleDisplayTime("tziet", time[3], curr_hour > sunset_hour ? tomorrow : today);
         
     }
 
@@ -205,4 +206,15 @@ function doit() {
 
     return hour;
 
+}
+
+function setScheduleDisplayTime(elementId, clockHour, baseDate) {
+    var element = document.getElementById(elementId);
+    if (!element) {
+        return;
+    }
+
+    element.value = typeof formatScheduleTimeForDisplay == "function" ?
+        formatScheduleTimeForDisplay(clockHour, baseDate, ampm) :
+        timeadj(clockHour, ampm);
 }

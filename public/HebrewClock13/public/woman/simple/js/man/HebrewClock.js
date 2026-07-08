@@ -15,27 +15,13 @@ function hebrewclock_man()
 	
 	var shaa_zmanit_night, shaa_zmanit_day;
     
-    var date = new Date();
-
-	var h,m,s,milisec;
-
-	if(birthHour == null)
-    {
-		h = date.getHours();
-		m = date.getMinutes();
-		s = date.getSeconds();
-		milisec = date.getMilliseconds();
+	let curr_hour;
+    if (typeof getClockTimeAsHours == "function")
+		curr_hour = getClockTimeAsHours();
+	else {
+		var date = new Date();
+		curr_hour = (date.getMilliseconds() + (date.getSeconds()*1000) + (date.getMinutes()*60*1000) + (date.getHours()*60*60*1000))/(1000 * 3600);
 	}
-	else
-	{
-		h = birthHour;
-		m = birthMin;
-		s = 0;
-		milisec = 0;		
-	}
-	let curr_hour = milisec + (s*1000) + (m*60*1000) + ((h)*60*60*1000);
-	
-	curr_hour = parseFloat(curr_hour)/(1000 * 3600);
 
 	//console.log(curr_hour);
 	let hour;// = Math.floor(12* (curr_hour_offset/length));

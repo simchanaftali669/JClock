@@ -1,6 +1,6 @@
 ﻿//mazal of the hour
 function setmazal() {
-    var date = new Date();
+    var date = typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date();
 
     var h = date.getHours();
     var m = date.getMinutes();

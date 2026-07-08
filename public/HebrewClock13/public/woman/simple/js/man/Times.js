@@ -16,7 +16,7 @@ function doit_man() {
         ewi = 0;
 
     //console.log(tz);
-    var adj = -(12 - tz);
+    var adj = typeof clockGmt == "number" ? clockGmt : -(12 - tz);
     adj += dst;
 
     var /*sunrise = 0, sunset,*/ sunrise_tommorow, sunset_yasterdate;
@@ -24,19 +24,10 @@ function doit_man() {
     var hour = []; //29
 
 	var yasterday,today,tomorrow;
-	if(birthYear == null)
-	{
-		yasterday = new Date();
-		today = new Date();
-		tomorrow = new Date();
-	}
-	else
-	{
-		yasterday = new Date(birthYear,birthMonth-1,birthDay);
-		today = new Date(birthYear,birthMonth-1,birthDay);
-		tomorrow = new Date(birthYear,birthMonth-1,birthDay);
-		adj = birthGMT;
-	}
+	var baseDate = typeof getClockDate == "function" ? getClockDate() : new Date();
+	yasterday = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+	today = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+	tomorrow = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
 	
@@ -75,27 +66,18 @@ function doit_man() {
 
 
 
-        //using current time in the computer to adjust the right secdule...
-        //get the time right now
-        var date = new Date();
-
-		var h,minute,s,m;
-		if(birthHour == null)
-		{
-			h = date.getHours();
-			minute = date.getMinutes();
-			s = date.getSeconds();
-			m = date.getMilliseconds();
+        //using selected-location time to adjust the right schedule
+		var timeParts = typeof getClockTimeParts == "function" ? getClockTimeParts() : null;
+		if(!timeParts) {
+			var date = new Date();
+			timeParts = {
+				hour: date.getHours(),
+				minute: date.getMinutes(),
+				second: date.getSeconds(),
+				millisecond: date.getMilliseconds()
+			};
 		}
-		else
-		{
-			h = birthHour;
-			minute = birthMin;
-			s = 0;
-			m = 0;
-		}
-		
-		var curr_hour = m + (s*1000) + (minute*60*1000) + (h*60*60*1000); 
+		var curr_hour = timeParts.millisecond + (timeParts.second*1000) + (timeParts.minute*60*1000) + (timeParts.hour*60*60*1000);
 
         var str = timeadj1(sunset);
         var sunsetArray = str.split(":");
@@ -261,8 +243,9 @@ function doit_man() {
 
 // Function to format Date object to "HH:MM" format
 function formatTime(date) {
-    const hour = date.getHours();
-    const minute = date.getMinutes();
+    const parts = typeof getZonedPartsForClock == "function" ? getZonedPartsForClock(date) : null;
+    const hour = parts ? parts.hour : date.getHours();
+    const minute = parts ? parts.minute : date.getMinutes();
     return timeToFloat(`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`);
 }
 

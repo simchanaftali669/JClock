@@ -2,14 +2,24 @@
 function setmazal() 
 {
 	
-	var date;
-	if(birthYear == null)
-		date = new Date();
-	else
-		date = new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
+	var date = typeof getClockDate == "function" ? getClockDate() : null;
+	if(!date)
+	{
+		if(birthYear == null)
+			date = new Date();
+		else
+			date = new Date(Number(birthYear), Number(birthMonth) - 1, Number(birthDay));
+	}
 	
+	var timeParts = typeof getClockTimeParts == "function" ? getClockTimeParts() : null;
 	var h,m,s;
-	if(birthHour == null)
+	if(timeParts)
+	{
+		h = timeParts.hour;
+		m = timeParts.minute;
+		s = timeParts.second;
+	}
+	else if(birthHour == null)
 	{
 		h = date.getHours();
 		m = date.getMinutes();

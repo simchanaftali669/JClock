@@ -22,9 +22,10 @@ function doit() {
     var shaa_zmanit = 0;
     var hour = []; //29
 
-    var yasterday = new Date();
-    var today = new Date();
-    var tomorrow = new Date();
+    var date = getSelectedLearningDate(typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date());
+    var yasterday = new Date(date.getTime());
+    var today = new Date(date.getTime());
+    var tomorrow = new Date(date.getTime());
 
     yasterday.setDate(today.getDate() - 1);
     tomorrow.setDate(today.getDate() + 1);
@@ -62,8 +63,6 @@ function doit() {
 
         //using current time in the computer to adjust the right secdule...
         //get the time right now
-        var date = new Date();
-
         var h = date.getHours();
         var minute = date.getMinutes();
         var s = date.getSeconds();
@@ -110,16 +109,18 @@ function doit() {
 //		hour[30] = Math.floor(shaa_zmanit_day * 3600.0 * 1000);      //day
 
         //insert an array of shaot_zmaniot
-        var s1, s2,s3,s4;
+        var s1, s2,s3,s4,scheduleDate;
         if (curr_hour > sunset_hour) {
             s1 = sunset;
             s2 = sunrise_tommorow;
 			s3 = sunset_tommorow;
+            scheduleDate = tomorrow;
         }
         else {
             s1 = sunset_yasterdate;
             s2 = sunrise;
 			s3 = sunset
+            scheduleDate = today;
         }
 
 /*
@@ -136,49 +137,62 @@ function doit() {
         //------------------------------
 */
 
-		document.getElementById("dawn").value = timeadj(s2 - (72/60), ampm);
-		document.getElementById("misheyakir").value = timeadj(s2 - (50/60), ampm);
-		document.getElementById("sunrise").value = timeadj(s2, ampm);
-        document.getElementById("shema").value = timeadj(s2 + shaa_zmanit_day * 3, ampm);
-        document.getElementById("tefila").value = timeadj(s2 + shaa_zmanit_day * 4, ampm);
-        document.getElementById("chatzot_yom").value = timeadj(s2 + shaa_zmanit_day*6 , ampm);
-        document.getElementById("mincha_gedola").value = timeadj(s2 + shaa_zmanit_day*6.5 , ampm);
-        document.getElementById("mincha_ketana").value = timeadj(s2 + shaa_zmanit_day*9.5 , ampm);
-		document.getElementById("plag_mincha").value = timeadj(s2 + shaa_zmanit_day*10.75 , ampm);
-		document.getElementById("sunset").value = timeadj(s3, ampm);
-		document.getElementById("tziet").value = timeadj(s3 + (18/60), ampm);
-		document.getElementById("tziet_tam").value = timeadj(s3 + (72/60), ampm);
-		document.getElementById("chatzot_layla").value = timeadj(s3 + shaa_zmanit_night*6, ampm);		
+		setScheduleDisplayTime("dawn", s2 - (72/60), scheduleDate);
+		setScheduleDisplayTime("misheyakir", s2 - (50/60), scheduleDate);
+		setScheduleDisplayTime("sunrise", s2, scheduleDate);
+        setScheduleDisplayTime("shema", s2 + shaa_zmanit_day * 3, scheduleDate);
+        setScheduleDisplayTime("tefila", s2 + shaa_zmanit_day * 4, scheduleDate);
+        setScheduleDisplayTime("chatzot_yom", s2 + shaa_zmanit_day*6, scheduleDate);
+        setScheduleDisplayTime("mincha_gedola", s2 + shaa_zmanit_day*6.5, scheduleDate);
+        setScheduleDisplayTime("mincha_ketana", s2 + shaa_zmanit_day*9.5, scheduleDate);
+		setScheduleDisplayTime("plag_mincha", s2 + shaa_zmanit_day*10.75, scheduleDate);
+		setScheduleDisplayTime("sunset", s3, scheduleDate);
+		setScheduleDisplayTime("tziet", s3 + (18/60), scheduleDate);
+		setScheduleDisplayTime("tziet_tam", s3 + (72/60), scheduleDate);
+		setScheduleDisplayTime("chatzot_layla", s3 + shaa_zmanit_night*6, scheduleDate);
 
 
 		var time;
+        var timeDate;
 		
 		//עלות השחר
-		if( curr_hour > sunset_hour )
+		if( curr_hour > sunset_hour ) {
+            timeDate = tomorrow;
 			time = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 106, 6, lngd, lngm, ewi, latd, latm, nsi, adj);
-		else
+        }
+		else {
+            timeDate = today;
 			time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 106, 6, lngd, lngm, ewi, latd, latm, nsi, adj);
+        }
         
         if (time[1] == 0)
-			document.getElementById("dawn").value = timeadj(time[2], ampm);
+			setScheduleDisplayTime("dawn", time[2], timeDate);
 
 		//משיכיר
-		if( curr_hour > sunset_hour )
+		if( curr_hour > sunset_hour ) {
+            timeDate = tomorrow;
 			time = suntime(tomorrow.getDate(), tomorrow.getMonth() +1, tomorrow.getYear(), 101, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
-        else
+        }
+        else {
+            timeDate = today;
 			time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 101, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
+        }
 		
 		if (time[1] == 0)
-			document.getElementById("misheyakir").value = timeadj(time[2], ampm);
+			setScheduleDisplayTime("misheyakir", time[2], timeDate);
 
 		//צאת הכוכבים
-		if( curr_hour > sunset_hour )
+		if( curr_hour > sunset_hour ) {
+            timeDate = today;
 			time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 96, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
-        else
+        }
+        else {
+            timeDate = today;
 			time = suntime(today.getDate(), today.getMonth() +1, today.getYear(), 96, 0, lngd, lngm, ewi, latd, latm, nsi, adj);
+        }
 		
 		if (time[1] == 0)
-            document.getElementById("tziet").value = timeadj(time[3], ampm);
+            setScheduleDisplayTime("tziet", time[3], timeDate);
         
     }
 
@@ -186,4 +200,22 @@ function doit() {
 
     return hour;
 
+}
+
+function setScheduleDisplayTime(elementId, clockHour, baseDate) {
+    var element = document.getElementById(elementId);
+    if (!element) {
+        return;
+    }
+
+    var displayValue = typeof formatScheduleTimeForDisplay == "function" ?
+        formatScheduleTimeForDisplay(clockHour, baseDate, ampm) :
+        timeadj(clockHour, ampm);
+
+    if (elementId == "tziet" && typeof setTzietAlternatingValues == "function") {
+        setTzietAlternatingValues(displayValue, clockHour, baseDate, ampm);
+        return;
+    }
+
+    element.value = displayValue;
 }
