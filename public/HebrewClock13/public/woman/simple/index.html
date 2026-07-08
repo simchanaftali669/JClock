@@ -77,10 +77,10 @@
         </div>		
     </div>
 
-	<script type="text/javascript" src="js/suncalc.js?v=2"></script>
+	<script type="text/javascript" src="js/suncalc.js?v=20260708-local-moon"></script>
 	<script type="text/javascript" src="../../../../BirthCalculator/public/shared/tz-lookup.js"></script>
 	<script type="text/javascript" src="../../../../BirthCalculator/public/shared/timezone-converter.js"></script>
-	<script type="text/javascript" src="../../shared/js/jerusalem-woman-kabala-time.js?v=4"></script>
+	<script type="text/javascript" src="../../shared/js/jerusalem-woman-kabala-time.js?v=20260708-local-moon"></script>
  <!--   <script type="text/javascript" src="../../shared/he/js/Commercial.js"></script>-->
 	<script type="text/javascript" src="js/man/HebrewClock.js"></script>
 	<script type="text/javascript" src="js/man/Mazal.js?v=20260707-final-hebrew-day"></script>
@@ -90,12 +90,12 @@
     <script type="text/javascript" src="js/SunAlert.js"></script>
 	<script type="text/javascript" src="js/HebrewDate.js"></script>
     <script type="text/javascript" src="js/HebrewClock.js"></script>
-    <script type="text/javascript" src="js/Times.js?v=2"></script>
+    <script type="text/javascript" src="js/Times.js?v=20260708-local-moon"></script>
     <script type="text/javascript" src="js/SunTime.js"></script>
     <script type="text/javascript" src="js/TimeAdj.js"></script>
     <script type="text/javascript" src="js/Dst.js"></script>
     <script type="text/javascript" src="js/Dates.js"></script>
-    <script type="text/javascript" src="js/Location.js"></script>
+    <script type="text/javascript" src="js/Location.js?v=20260708-local-moon"></script>
     <script type="text/javascript" src="js/Mazal.js?v=20260707-final-hebrew-day"></script>
 	<script type="text/javascript" src="js/Tefila.js"></script>
 
@@ -131,7 +131,6 @@
     var displayTimeZone = DEFAULT_TIME_ZONE;
     var displayGmt = 2;
     var useProvidedLocationAsClock = false;
-    var forceJerusalemClock = true;
     var locationMode = "jerusalem";
     var CURRENT_LOCATION_STORAGE_KEY = "JClock.Simple.CurrentLocation";
     var JERUSALEM_TIME_API_URL = "https://timeapi.io/api/TimeZone/zone?timeZone=Asia/Jerusalem";
@@ -236,16 +235,27 @@
 
 	function shouldUseProvidedLocationAsClock(url)
 	{
-		if(forceJerusalemClock)
-			return false;
-
 		var clockLocation = (url.searchParams.get("ClockLocation") || "").toLowerCase();
 		if(clockLocation == "local" || clockLocation == "location" || clockLocation == "current" || clockLocation == "currentlocation" || clockLocation == "user")
 			return true;
 
+		if(isCurrentLocationRequested(url))
+			return true;
+
+		if(url.searchParams.get("latitude") && url.searchParams.get("longitude"))
+			return !isJerusalemLocation(Number(url.searchParams.get("latitude")), Number(url.searchParams.get("longitude")));
+
 		return isTruthyParam(url.searchParams.get("UseLocationAsClock")) ||
 			isTruthyParam(url.searchParams.get("LocalClock")) ||
 			isTruthyParam(url.searchParams.get("LocationClock"));
+	}
+
+	function isJerusalemLocation(latValue, lonValue)
+	{
+		var tolerance = 0.25;
+		return Number.isFinite(latValue) && Number.isFinite(lonValue) &&
+			Math.abs(latValue - JERUSALEM_LATITUDE) < tolerance &&
+			Math.abs(lonValue - JERUSALEM_LONGITUDE) < tolerance;
 	}
 
 	function setLocationModeFromUrl(url)
@@ -310,23 +320,23 @@
 	{
         var url = new URL(document.location.href);
 		readClockParams(url);
-		useProvidedLocationAsClock = false;
+		useProvidedLocationAsClock = true;
 		locationMode = "current";
 
 		if(rememberInUrl)
-			rememberCurrentLocationInUrl(url, false);
+			rememberCurrentLocationInUrl(url, true);
 
         startClockWithDisplayLocation(currentLatitude, currentLongitude, source);
 	}
 
 	function useCurrentLocation()
 	{
-		requestCurrentLocation(true, false, true);
+		requestCurrentLocation(true, true, true);
 	}
 
 	function useCurrentLocationAsLocalClock()
 	{
-		requestCurrentLocation(true, false, true);
+		requestCurrentLocation(true, true, true);
 	}
 
 	function saveCurrentPosition(position)
@@ -488,15 +498,21 @@
 			source = "jerusalem fallback";
 		}
 
-        displayLatitude = parsedLatitude;
+		displayLatitude = parsedLatitude;
         displayLongitude = parsedLongitude;
-
-		useProvidedLocationAsClock = false;
-		latitude = JERUSALEM_LATITUDE;
-		longitude = JERUSALEM_LONGITUDE;
 
 		setDisplayTimeZone();
 		setClockTimeZone();
+		if(useProvidedLocationAsClock)
+		{
+			latitude = parsedLatitude;
+			longitude = parsedLongitude;
+		}
+		else
+		{
+			latitude = JERUSALEM_LATITUDE;
+			longitude = JERUSALEM_LONGITUDE;
+		}
 
 		if(!skipNetworkSync && shouldSyncJerusalemNetworkTime())
 		{
@@ -530,7 +546,7 @@
 
 	function shouldSyncJerusalemNetworkTime()
 	{
-		return !hasExplicitClockDateTime();
+		return !useProvidedLocationAsClock && !hasExplicitClockDateTime();
 	}
 
 	function showJerusalemTimeSyncError()
@@ -732,8 +748,8 @@
 
 	function setClockTimeZone()
 	{
-		clockTimeZone = DEFAULT_TIME_ZONE;
-		clockGmt = getTimeZoneOffset(clockTimeZone);
+		clockTimeZone = useProvidedLocationAsClock ? displayTimeZone : DEFAULT_TIME_ZONE;
+		clockGmt = useProvidedLocationAsClock ? displayGmt : getTimeZoneOffset(clockTimeZone);
 		tz = clockGmt;
 	}
 

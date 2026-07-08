@@ -700,20 +700,28 @@
         return /\/he\//.test(root.location.pathname.replace(/\\/g, "/"));
     }
 
-    function getJerusalemMoonTimesForDate(date) {
+    function getJerusalemMoonTimesForDate(date, locationLatitude, locationLongitude, timeZone) {
+        var calculationLatitude = Number(locationLatitude);
+        var calculationLongitude = Number(locationLongitude);
+        if(!Number.isFinite(calculationLatitude))
+            calculationLatitude = JERUSALEM_LATITUDE;
+        if(!Number.isFinite(calculationLongitude))
+            calculationLongitude = JERUSALEM_LONGITUDE;
+
+        var calculationTimeZone = timeZone || root.clockTimeZone || JERUSALEM_TIME_ZONE;
         var civilDate = getCivilDatePartsFromWallDate(date);
-        var offsetHours = getJerusalemOffsetHoursForCivilDate(civilDate);
+        var offsetHours = getOffsetHoursForCivilDate(civilDate, calculationTimeZone);
         var start = julianFromLocalMidnight(civilDate, offsetHours);
         var hc = 0.133 * RAD;
-        var h0 = moonAltitude(start, JERUSALEM_LATITUDE, JERUSALEM_LONGITUDE) - hc;
+        var h0 = moonAltitude(start, calculationLatitude, calculationLongitude) - hc;
         var result = {
             hasRise: false,
             hasSet: false
         };
 
         for(var i = 1; i <= 25; i += 2) {
-            var h1 = moonAltitude(hoursLaterJulian(start, i), JERUSALEM_LATITUDE, JERUSALEM_LONGITUDE) - hc;
-            var h2 = moonAltitude(hoursLaterJulian(start, i + 1), JERUSALEM_LATITUDE, JERUSALEM_LONGITUDE) - hc;
+            var h1 = moonAltitude(hoursLaterJulian(start, i), calculationLatitude, calculationLongitude) - hc;
+            var h2 = moonAltitude(hoursLaterJulian(start, i + 1), calculationLatitude, calculationLongitude) - hc;
             var a = (h0 + h2) / 2 - h1;
             var b = (h2 - h0) / 2;
             if(a == 0) {
@@ -770,9 +778,9 @@
         if(!result.hasRise && !result.hasSet)
             result.alwaysDown = true;
 
-        result.timeZone = JERUSALEM_TIME_ZONE;
-        result.latitude = JERUSALEM_LATITUDE;
-        result.longitude = JERUSALEM_LONGITUDE;
+        result.timeZone = calculationTimeZone;
+        result.latitude = calculationLatitude;
+        result.longitude = calculationLongitude;
         result.utcOffsetHours = offsetHours;
         return result;
     }
@@ -811,16 +819,24 @@
     }
 
     function getJerusalemOffsetHoursForCivilDate(civilDate) {
+        return getOffsetHoursForCivilDate(civilDate, JERUSALEM_TIME_ZONE);
+    }
+
+    function getOffsetHoursForCivilDate(civilDate, timeZone) {
+        timeZone = timeZone || JERUSALEM_TIME_ZONE;
         if(root.BirthCalculatorTime &&
             typeof BirthCalculatorTime.zonedLocalTimeToUtc == "function" &&
             typeof BirthCalculatorTime.getTimeZoneOffsetHours == "function")
         {
-            var noonUtc = BirthCalculatorTime.zonedLocalTimeToUtc(civilDate.year, civilDate.month, civilDate.day, 12, 0, JERUSALEM_TIME_ZONE);
-            return BirthCalculatorTime.getTimeZoneOffsetHours(noonUtc, JERUSALEM_TIME_ZONE);
+            var noonUtc = BirthCalculatorTime.zonedLocalTimeToUtc(civilDate.year, civilDate.month, civilDate.day, 12, 0, timeZone);
+            return BirthCalculatorTime.getTimeZoneOffsetHours(noonUtc, timeZone);
         }
 
-        if(root.verifiedJerusalemTime && Number.isFinite(Number(root.verifiedJerusalemTime.offsetSeconds)))
+        if(timeZone == JERUSALEM_TIME_ZONE && root.verifiedJerusalemTime && Number.isFinite(Number(root.verifiedJerusalemTime.offsetSeconds)))
             return Number(root.verifiedJerusalemTime.offsetSeconds) / 3600;
+
+        if(timeZone == root.clockTimeZone && Number.isFinite(Number(root.clockGmt)))
+            return Number(root.clockGmt);
 
         if(Number.isFinite(Number(root.tz)))
             return Number(root.tz);

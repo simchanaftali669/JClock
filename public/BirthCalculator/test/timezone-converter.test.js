@@ -239,6 +239,25 @@ test("simple moon clock does not force the Hebrew day one day back", () => {
   assert.match(simpleHtml, /js\/HebrewDayOffset\.js\?v=20260708-moon-day-context/);
 });
 
+test("simple moon clock uses selected current location for local mode", () => {
+  const familyHtml = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "family", "index.html"), "utf8");
+  const simpleHtml = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "woman", "simple", "index.html"), "utf8");
+  const locationJs = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "woman", "simple", "js", "Location.js"), "utf8");
+  const sharedMoonJs = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "shared", "js", "jerusalem-woman-kabala-time.js"), "utf8");
+
+  assert.match(familyHtml, /ClockLocation=Local&LocalClock=1/);
+  assert.match(familyHtml, /v=20260708-local-moon-/);
+  assert.match(simpleHtml, /jerusalem-woman-kabala-time\.js\?v=20260708-local-moon/);
+  assert.match(simpleHtml, /js\/Location\.js\?v=20260708-local-moon/);
+  assert.doesNotMatch(simpleHtml, /forceJerusalemClock/);
+  assert.match(simpleHtml, /useProvidedLocationAsClock = true;/);
+  assert.match(simpleHtml, /clockTimeZone = useProvidedLocationAsClock \? displayTimeZone : DEFAULT_TIME_ZONE;/);
+  assert.doesNotMatch(locationJs, /function list_pos\(\) \{\s*latitude = 31\.7768514;/);
+  assert.match(locationJs, /if \(!Number\.isFinite\(latitude\)\)/);
+  assert.match(sharedMoonJs, /function getJerusalemMoonTimesForDate\(date, locationLatitude, locationLongitude, timeZone\)/);
+  assert.match(sharedMoonJs, /moonAltitude\(start, calculationLatitude, calculationLongitude\)/);
+});
+
 test("schedule converts source time before sending Jerusalem coordinates onward", () => {
   const html = fs.readFileSync(path.join(ROOT, "..", "HebrewSchedule13", "public", "index.html"), "utf8");
 

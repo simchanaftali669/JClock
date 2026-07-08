@@ -56,8 +56,12 @@
 				var womanIframe = document.getElementById("commercial_woman");
 				var manIframe = document.getElementById("commercial_man");
 
-				womanIframe.src = "../woman/simple/index.html?latitude=" + newLat + "&longitude=" + newLng;
-				manIframe.src = "../man/simple/index.html?latitude=" + newLat + "&longitude=" + newLng;
+				var localClockQuery = "?latitude=" + encodeURIComponent(newLat) +
+					"&longitude=" + encodeURIComponent(newLng) +
+					"&ClockLocation=Local&LocalClock=1&v=20260708-local-moon-" + Date.now();
+
+				womanIframe.src = "../woman/simple/index.html" + localClockQuery;
+				manIframe.src = "../man/simple/index.html" + localClockQuery;
 				
 			}, function(error) {
 				alert("שגיאה בקבלת מיקום: " + error.message);

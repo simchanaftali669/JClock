@@ -1,7 +1,12 @@
 ﻿//set the latitude and longtiude minutes and time zone for calculations
 function list_pos() {
-    latitude = 31.7768514;
-    longitude = 35.2331664;
+    latitude = Number(latitude);
+    longitude = Number(longitude);
+
+    if (!Number.isFinite(latitude))
+        latitude = 31.7768514;
+    if (!Number.isFinite(longitude))
+        longitude = 35.2331664;
 
     if (latitude > 0)
         ns = "N";
