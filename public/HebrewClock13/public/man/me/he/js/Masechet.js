@@ -23,100 +23,261 @@ function getSefariaMishnahUrl(ref)
 	return "https://www.sefaria.org/" + ref + "?lang=he";
 }
 
+var masechetRefs = {
+	"ברכות": "Mishnah_Berakhot",
+	"פאה": "Mishnah_Peah",
+	"דמאי": "Mishnah_Demai",
+	"כלאים": "Mishnah_Kilayim",
+	"שביעית": "Mishnah_Sheviit",
+	"תרומות": "Mishnah_Terumot",
+	"מעשרות": "Mishnah_Maasrot",
+	"מעשר שני": "Mishnah_Maaser_Sheni",
+	"חלה": "Mishnah_Challah",
+	"ערלה": "Mishnah_Orlah",
+	"ביכורים": "Mishnah_Bikkurim",
+	"שבת": "Mishnah_Shabbat",
+	"עירובין": "Mishnah_Eruvin",
+	"פסחים": "Mishnah_Pesachim",
+	"שקלים": "Mishnah_Shekalim",
+	"יומא": "Mishnah_Yoma",
+	"סוכה": "Mishnah_Sukkah",
+	"ביצה": "Mishnah_Beitzah",
+	"ראש השנה": "Mishnah_Rosh_Hashanah",
+	"תענית": "Mishnah_Taanit",
+	"מגילה": "Mishnah_Megillah",
+	"מועד קטן": "Mishnah_Moed_Katan",
+	"חגיגה": "Mishnah_Chagigah",
+	"יבמות": "Mishnah_Yevamot",
+	"כתובות": "Mishnah_Ketubot",
+	"נדרים": "Mishnah_Nedarim",
+	"נזיר": "Mishnah_Nazir",
+	"סוטה": "Mishnah_Sotah",
+	"גיטין": "Mishnah_Gittin",
+	"קידושין": "Mishnah_Kiddushin",
+	"בבא קמא": "Mishnah_Bava_Kamma",
+	"בבא מציעא": "Mishnah_Bava_Metzia",
+	"בבא בתרא": "Mishnah_Bava_Batra",
+	"סנהדרין": "Mishnah_Sanhedrin",
+	"מכות": "Mishnah_Makkot",
+	"שבועות": "Mishnah_Shevuot",
+	"עדיות": "Mishnah_Eduyot",
+	"עבודה זרה": "Mishnah_Avodah_Zarah",
+	"אבות": "Mishnah_Avot",
+	"הוריות": "Mishnah_Horayot",
+	"זבחים": "Mishnah_Zevachim",
+	"מנחות": "Mishnah_Menachot",
+	"חולין": "Mishnah_Chullin",
+	"בכורות": "Mishnah_Bekhorot",
+	"ערכין": "Mishnah_Arakhin",
+	"תמורה": "Mishnah_Temurah",
+	"כריתות": "Mishnah_Keritot",
+	"מעילה": "Mishnah_Meilah",
+	"תמיד": "Mishnah_Tamid",
+	"מדות": "Mishnah_Middot",
+	"מידות": "Mishnah_Middot",
+	"קנים": "Mishnah_Kinnim",
+	"כלים": "Mishnah_Kelim",
+	"אהלות": "Mishnah_Oholot",
+	"אוהלות": "Mishnah_Oholot",
+	"נגעים": "Mishnah_Negaim",
+	"פרה": "Mishnah_Parah",
+	"טהרות": "Mishnah_Tahorot",
+	"מקואות": "Mishnah_Mikvaot",
+	"נדה": "Mishnah_Niddah",
+	"נידה": "Mishnah_Niddah",
+	"מכשירין": "Mishnah_Makhshirin",
+	"זבים": "Mishnah_Zavim",
+	"טבול יום": "Mishnah_Tevul_Yom",
+	"ידים": "Mishnah_Yadayim",
+	"ידיים": "Mishnah_Yadayim",
+	"עוקצין": "Mishnah_Oktzin",
+	"1 - יציאות השבת": "Mishnah_Shabbat.1",
+	"2 - במה מדליקין": "Mishnah_Shabbat.2",
+	"3 - כירה": "Mishnah_Shabbat.3",
+	"4 - במה טומנין": "Mishnah_Shabbat.4",
+	"5 - במה בהמה": "Mishnah_Shabbat.5",
+	"6 - במה אשה": "Mishnah_Shabbat.6",
+	"7 - כלל גדול": "Mishnah_Shabbat.7",
+	"8 - המוציא יין": "Mishnah_Shabbat.8",
+	"9 - אמר רבי עקיבא": "Mishnah_Shabbat.9",
+	"10 - המצניע": "Mishnah_Shabbat.10",
+	"11 - הזורק": "Mishnah_Shabbat.11",
+	"12 - הבונה": "Mishnah_Shabbat.12",
+	"13 - האורג": "Mishnah_Shabbat.13",
+	"14 - שמנה שרצים": "Mishnah_Shabbat.14",
+	"15 - ואלו קשרים": "Mishnah_Shabbat.15",
+	"16 - כל כתבי": "Mishnah_Shabbat.16",
+	"17 - כל הכלים": "Mishnah_Shabbat.17",
+	"18 - מפנין": "Mishnah_Shabbat.18",
+	"רבי אליעזר דמילה19 - ": "Mishnah_Shabbat.19",
+	"20 - תולין": "Mishnah_Shabbat.20",
+	"21 - נוטל": "Mishnah_Shabbat.21",
+	"22 - חבית": "Mishnah_Shabbat.22",
+	"23 - שואל": "Mishnah_Shabbat.23",
+	"24 - מי שהחשיך": "Mishnah_Shabbat.24"
+};
+
+var masechetChapterCounts = {
+	"ברכות": 9,
+	"פאה": 8,
+	"דמאי": 7,
+	"כלאים": 9,
+	"שביעית": 10,
+	"תרומות": 11,
+	"מעשרות": 5,
+	"מעשר שני": 5,
+	"חלה": 4,
+	"ערלה": 3,
+	"ביכורים": 4,
+	"שבת": 24,
+	"עירובין": 10,
+	"פסחים": 10,
+	"שקלים": 8,
+	"יומא": 8,
+	"סוכה": 5,
+	"ביצה": 5,
+	"ראש השנה": 4,
+	"תענית": 4,
+	"מגילה": 4,
+	"מועד קטן": 3,
+	"חגיגה": 3,
+	"יבמות": 16,
+	"כתובות": 13,
+	"נדרים": 11,
+	"נזיר": 9,
+	"סוטה": 9,
+	"גיטין": 9,
+	"קידושין": 4,
+	"בבא קמא": 10,
+	"בבא מציעא": 10,
+	"בבא בתרא": 10,
+	"סנהדרין": 11,
+	"מכות": 3,
+	"שבועות": 8,
+	"עדיות": 8,
+	"עבודה זרה": 5,
+	"אבות": 6,
+	"הוריות": 3,
+	"זבחים": 14,
+	"מנחות": 13,
+	"חולין": 12,
+	"בכורות": 9,
+	"ערכין": 9,
+	"תמורה": 7,
+	"כריתות": 6,
+	"מעילה": 6,
+	"תמיד": 7,
+	"מדות": 5,
+	"מידות": 5,
+	"קנים": 3,
+	"כלים": 30,
+	"אהלות": 18,
+	"אוהלות": 18,
+	"נגעים": 14,
+	"פרה": 12,
+	"טהרות": 10,
+	"מקואות": 10,
+	"נדה": 10,
+	"נידה": 10,
+	"מכשירין": 6,
+	"זבים": 5,
+	"טבול יום": 4,
+	"ידים": 4,
+	"ידיים": 4,
+	"עוקצין": 3
+};
+
+var shabbatChapterMishnahCounts = {
+	1: 11,
+	2: 7,
+	3: 6,
+	4: 2,
+	5: 4,
+	6: 10,
+	7: 4,
+	8: 7,
+	9: 7,
+	10: 6,
+	11: 6,
+	12: 6,
+	13: 7,
+	14: 4,
+	15: 3,
+	16: 8,
+	17: 8,
+	18: 3,
+	19: 6,
+	20: 5,
+	21: 3,
+	22: 6,
+	23: 5,
+	24: 5
+};
+
+function isAfterSunsetForMasechet(date)
+{
+	if (typeof sunsetH === "undefined" || typeof sunsetM === "undefined" || typeof sunsetS === "undefined")
+		return false;
+
+	var hour = date.getHours();
+	var minute = date.getMinutes();
+	var second = date.getSeconds();
+
+	return (hour > sunsetH) ||
+		(hour == sunsetH && minute > sunsetM) ||
+		(hour == sunsetH && minute == sunsetM && second >= sunsetS);
+}
+
+function getHebrewDayInMonthForMasechet()
+{
+	var date = typeof getSelectedLearningDate == "function" ? getSelectedLearningDate(new Date()) : new Date();
+
+	if (isAfterSunsetForMasechet(date))
+	{
+		date = new Date(date.getTime());
+		date.setDate(date.getDate() + 1);
+	}
+
+	var hebrew = typeof hebrewDate == "function" ? hebrewDate(date, null, null, "English") : null;
+	var dayInMonth = hebrew ? parseInt(hebrew.date, 10) : NaN;
+
+	return isNaN(dayInMonth) ? 1 : dayInMonth;
+}
+
+function getMasechetChapterByHebrewDay(chapterCount)
+{
+	var dayInMonth = getHebrewDayInMonthForMasechet();
+	var chapter = dayInMonth % chapterCount;
+
+	return chapter == 0 ? chapterCount : chapter;
+}
+
+function getShabbatMishnahRefByHebrewDay(ref)
+{
+	var match = ref.match(/^Mishnah_Shabbat\.(\d+)$/);
+	if (!match)
+		return ref;
+
+	var chapter = parseInt(match[1], 10);
+	var mishnahCount = shabbatChapterMishnahCounts[chapter];
+	if (!mishnahCount)
+		return ref;
+
+	return ref + "." + getMasechetChapterByHebrewDay(mishnahCount);
+}
+
 function setMasechetUrl()
 {
 	var masechetName = document.getElementById("Masechet").value;
-	var masechtot = {
-		"ברכות": "Mishnah_Berakhot.1",
-		"פאה": "Mishnah_Peah.1",
-		"דמאי": "Mishnah_Demai.1",
-		"כלאים": "Mishnah_Kilayim.1",
-		"שביעית": "Mishnah_Sheviit.1",
-		"תרומות": "Mishnah_Terumot.1",
-		"מעשרות": "Mishnah_Maasrot.1",
-		"מעשר שני": "Mishnah_Maaser_Sheni.1",
-		"חלה": "Mishnah_Challah.1",
-		"ערלה": "Mishnah_Orlah.1",
-		"ביכורים": "Mishnah_Bikkurim.1",
-		"שבת": "Mishnah_Shabbat.1",
-		"עירובין": "Mishnah_Eruvin.1",
-		"פסחים": "Mishnah_Pesachim.1",
-		"שקלים": "Mishnah_Shekalim.1",
-		"יומא": "Mishnah_Yoma.1",
-		"סוכה": "Mishnah_Sukkah.1",
-		"ביצה": "Mishnah_Beitzah.1",
-		"ראש השנה": "Mishnah_Rosh_Hashanah.1",
-		"תענית": "Mishnah_Taanit.1",
-		"מגילה": "Mishnah_Megillah.1",
-		"מועד קטן": "Mishnah_Moed_Katan.1",
-		"חגיגה": "Mishnah_Chagigah.1",
-		"יבמות": "Mishnah_Yevamot.1",
-		"כתובות": "Mishnah_Ketubot.1",
-		"נדרים": "Mishnah_Nedarim.1",
-		"נזיר": "Mishnah_Nazir.1",
-		"סוטה": "Mishnah_Sotah.1",
-		"גיטין": "Mishnah_Gittin.1",
-		"קידושין": "Mishnah_Kiddushin.1",
-		"בבא קמא": "Mishnah_Bava_Kamma.1",
-		"בבא מציעא": "Mishnah_Bava_Metzia.1",
-		"בבא בתרא": "Mishnah_Bava_Batra.1",
-		"סנהדרין": "Mishnah_Sanhedrin.1",
-		"מכות": "Mishnah_Makkot.1",
-		"שבועות": "Mishnah_Shevuot.1",
-		"עדיות": "Mishnah_Eduyot.1",
-		"עבודה זרה": "Mishnah_Avodah_Zarah.1",
-		"אבות": "Mishnah_Avot.1",
-		"הוריות": "Mishnah_Horayot.1",
-		"זבחים": "Mishnah_Zevachim.1",
-		"מנחות": "Mishnah_Menachot.1",
-		"חולין": "Mishnah_Chullin.1",
-		"בכורות": "Mishnah_Bekhorot.1",
-		"ערכין": "Mishnah_Arakhin.1",
-		"תמורה": "Mishnah_Temurah.1",
-		"כריתות": "Mishnah_Keritot.1",
-		"מעילה": "Mishnah_Meilah.1",
-		"תמיד": "Mishnah_Tamid.1",
-		"מדות": "Mishnah_Middot.1",
-		"קנים": "Mishnah_Kinnim.1",
-		"כלים": "Mishnah_Kelim.1",
-		"אהלות": "Mishnah_Oholot.1",
-		"נגעים": "Mishnah_Negaim.1",
-		"פרה": "Mishnah_Parah.1",
-		"טהרות": "Mishnah_Tahorot.1",
-		"מקואות": "Mishnah_Mikvaot.1",
-		"נדה": "Mishnah_Niddah.1",
-		"מכשירין": "Mishnah_Makhshirin.1",
-		"זבים": "Mishnah_Zavim.1",
-		"טבול יום": "Mishnah_Tevul_Yom.1",
-		"ידים": "Mishnah_Yadayim.1",
-		"עוקצין": "Mishnah_Oktzin.1",
-		"1 - יציאות השבת": "Mishnah_Shabbat.1",
-		"2 - במה מדליקין": "Mishnah_Shabbat.2",
-		"3 - כירה": "Mishnah_Shabbat.3",
-		"4 - במה טומנין": "Mishnah_Shabbat.4",
-		"5 - במה בהמה": "Mishnah_Shabbat.5",
-		"6 - במה אשה": "Mishnah_Shabbat.6",
-		"7 - כלל גדול": "Mishnah_Shabbat.7",
-		"8 - המוציא יין": "Mishnah_Shabbat.8",
-		"9 - אמר רבי עקיבא": "Mishnah_Shabbat.9",
-		"10 - המצניע": "Mishnah_Shabbat.10",
-		"11 - הזורק": "Mishnah_Shabbat.11",
-		"12 - הבונה": "Mishnah_Shabbat.12",
-		"13 - האורג": "Mishnah_Shabbat.13",
-		"14 - שמנה שרצים": "Mishnah_Shabbat.14",
-		"15 - ואלו קשרים": "Mishnah_Shabbat.15",
-		"16 - כל כתבי": "Mishnah_Shabbat.16",
-		"17 - כל הכלים": "Mishnah_Shabbat.17",
-		"18 - מפנין": "Mishnah_Shabbat.18",
-		"רבי אליעזר דמילה19 - ": "Mishnah_Shabbat.19",
-		"20 - תולין": "Mishnah_Shabbat.20",
-		"21 - נוטל": "Mishnah_Shabbat.21",
-		"22 - חבית": "Mishnah_Shabbat.22",
-		"23 - שואל": "Mishnah_Shabbat.23",
-		"24 - מי שהחשיך": "Mishnah_Shabbat.24"
-	};
+	var ref = masechetRefs[masechetName] || "Mishnah_Berakhot";
+	var chapterCount = masechetChapterCounts[masechetName] || masechetChapterCounts["ברכות"];
 
-	masechet_url = getSefariaMishnahUrl(masechtot[masechetName] || "Mishnah_Berakhot.1");
+	if (ref.indexOf(".") == -1)
+		ref = ref + "." + getMasechetChapterByHebrewDay(chapterCount);
+
+	ref = getShabbatMishnahRefByHebrewDay(ref);
+
+	masechet_url = getSefariaMishnahUrl(ref);
 }
 
 
