@@ -145,19 +145,53 @@ test("color preview uses Jerusalem moon times for the known Jerusalem example", 
   assert.equal(result.sun.dayBaseColor, "#BA8D1A");
   assert.equal(result.sun.dayColor, "#382A08");
   assert.equal(result.sun.dayBrightness, 0.125);
-  assert.equal(result.moon.hebrewDay, 5);
+  assert.equal(result.moon.hebrewDay, 4);
   assert.equal(result.moon.hebrewHour, 23);
-  assert.equal(result.moon.mazalHour, 5);
-  assert.equal(result.moon.mazalTextEn, "Venus in Venus");
+  assert.equal(result.moon.mazalHour, 1);
+  assert.equal(result.moon.mazalTextEn, "Jupiter in Saturn");
   assert.equal(result.moon.parts, 645);
-  assert.equal(result.moon.baseColor, "#BA8D1A");
-  assert.equal(result.moon.color, "#E6BA4B");
+  assert.equal(result.moon.baseColor, "#2D8DA1");
+  assert.equal(result.moon.color, "#5EBED2");
   assert.equal(result.moon.brightness, 645 / 1080);
-  assert.equal(result.moon.dayTextEn, "Venus");
-  assert.equal(result.moon.dayMazalHour, 5);
-  assert.equal(result.moon.dayBaseColor, "#BA8D1A");
-  assert.equal(result.moon.dayColor, "#FAF1DA");
+  assert.equal(result.moon.dayTextEn, "Saturn");
+  assert.equal(result.moon.dayMazalHour, 4);
+  assert.equal(result.moon.dayBaseColor, "#84C45E");
+  assert.equal(result.moon.dayColor, "#E7F4E0");
   assert.equal(result.moon.dayBrightness, 22 / 24);
+});
+
+test("moon day moves back when its proportional hour is later than the sun hour", () => {
+  const result = preview.predict({
+    latitude: 31.7768514,
+    longitude: 35.2331664,
+    year: 2020,
+    month: 12,
+    day: 9,
+    hour: 10,
+    minute: 27,
+    gmt: 2
+  });
+
+  assert.equal(result.sun.hebrewDay, 4);
+  assert.equal(result.sun.clockHour, 16);
+  assert.equal(result.moon.clockHour, 21);
+  assert.equal(result.moon.hebrewDay, 3);
+});
+
+test("the base weekday changes at sunset, before nightfall", () => {
+  const input = {
+    latitude: 31.7768514,
+    longitude: 35.2331664,
+    year: 2020,
+    month: 12,
+    day: 9,
+    gmt: 2
+  };
+  const beforeSunset = preview.predict({ ...input, hour: 16, minute: 20 });
+  const afterSunset = preview.predict({ ...input, hour: 16, minute: 40 });
+
+  assert.equal(beforeSunset.sun.hebrewDay, 4);
+  assert.equal(afterSunset.sun.hebrewDay, 5);
 });
 
 test("calculator sends Jerusalem coordinates onward to JClock", () => {
@@ -173,7 +207,7 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
     assert.doesNotMatch(html, /\?latitude=" \+ latitude/);
     assert.doesNotMatch(html, /"&longitude=" \+ longitude/);
     assert.match(html, /jclock\.net\/HebrewClock13\/public\/woman\/simple\/js\/suncalc\.js\?v=20260707-final-hebrew-day/);
-    assert.match(html, /shared\/hebrew-clock-preview\.js\?v=20260708-moon-day-context/);
+    assert.match(html, /shared\/hebrew-clock-preview\.js\?v=20260710-dynamic-moon-offset/);
     assert.match(html, /id="color-preview"/);
     assert.match(html, /id="sun-color-swatch"/);
     assert.match(html, /id="sun-day-color-swatch"/);

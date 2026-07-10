@@ -316,6 +316,9 @@
   }
 
   function getSunHebrewDay(parts, solarClock) {
+    // Zodiac-day convention only: the next weekday starts at sunset. This must not
+    // be used for the Hebrew date, nightfall, or Shabbat times; those follow the
+    // relevant halachic boundary calculated for the local clock and location.
     var day = getDayOfWeekNumber(parts);
     if (isAfterSunset(parts, solarClock.sunset)) {
       day += 1;
@@ -529,6 +532,12 @@
     return DAY_MAZAL_INDEX_BY_HEBREW_DAY[normalizeHebrewDay(hebrewDay)];
   }
 
+  function getMoonDayOffset(solarClock, moonClock) {
+    var sunTime = (Number(solarClock.clockHour) * HALAKIM_PER_HOUR) + Number(solarClock.parts || 0);
+    var moonTime = (Number(moonClock.clockHour) * HALAKIM_PER_HOUR) + Number(moonClock.parts || 0);
+    return moonTime > sunTime ? -1 : 0;
+  }
+
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
   }
@@ -685,8 +694,8 @@
     var gmt = Number(input.gmt);
     var solarClock = getSunClockHour(parts, latitude, longitude, gmt);
     var sunDay = getSunHebrewDay(parts, solarClock);
-    var moonDay = sunDay;
     var moonClock = getMoonClockHour(parts, latitude, longitude, gmt);
+    var moonDay = normalizeHebrewDay(sunDay + getMoonDayOffset(solarClock, moonClock));
 
     return {
       sun: getResult("sun", sunDay, solarClock),
