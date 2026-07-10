@@ -7,6 +7,7 @@
     var JERUSALEM_TIME_TIMEOUT_MS = 4000;
     var JERUSALEM_TIME_RETRY_MS = 15000;
     var LOCAL_CLOCK_DRIFT_WARNING_MS = 60 * 1000;
+    var JERUSALEM_TIME_MAX_DRIFT_MS = 15 * 1000;
     var ASTRONOMY_DAY_MS = 1000 * 60 * 60 * 24;
     var J1970 = 2440588;
     var J2000 = 2451545;
@@ -120,7 +121,8 @@
             .then(function(data) {
                 if(timeoutId)
                     clearTimeout(timeoutId);
-                service.apply(data, requestStartedAt);
+                if(!service.apply(data, requestStartedAt))
+                    console.warn("Ignoring stale Jerusalem time from " + service.name);
                 if(jerusalemWomanTimeRetryTimer)
                     clearTimeout(jerusalemWomanTimeRetryTimer);
                 callback();
@@ -139,7 +141,7 @@
         if(!Number.isFinite(offsetSeconds) || !Number.isFinite(localMilliseconds))
             throw new Error("Invalid Jerusalem time response.");
 
-        storeVerifiedJerusalemTime(localMilliseconds - (offsetSeconds * 1000), offsetSeconds, requestStartedAt);
+        return storeVerifiedJerusalemTime(localMilliseconds - (offsetSeconds * 1000), offsetSeconds, requestStartedAt);
     }
 
     function applyWorldTimeApiJerusalemTime(data, requestStartedAt) {
@@ -151,24 +153,32 @@
         if(!Number.isFinite(utcMilliseconds) || !Number.isFinite(offsetSeconds))
             throw new Error("Invalid Jerusalem fallback time response.");
 
-        storeVerifiedJerusalemTime(utcMilliseconds, offsetSeconds, requestStartedAt);
+        return storeVerifiedJerusalemTime(utcMilliseconds, offsetSeconds, requestStartedAt);
     }
 
     function storeVerifiedJerusalemTime(serviceUtcMilliseconds, offsetSeconds, requestStartedAt) {
         var receivedAt = getSteadyNowMilliseconds();
         var roundTripMilliseconds = Math.max(0, receivedAt - requestStartedAt);
         var adjustedServiceUtcMilliseconds = serviceUtcMilliseconds + Math.round(roundTripMilliseconds / 2);
+        var localClockDriftMilliseconds = adjustedServiceUtcMilliseconds - Date.now();
+
+        root.tz = offsetSeconds / 3600;
+        if(Math.abs(localClockDriftMilliseconds) > JERUSALEM_TIME_MAX_DRIFT_MS) {
+            root.verifiedJerusalemTime = null;
+            console.warn("Ignoring stale Jerusalem time; drift is " + localClockDriftMilliseconds + "ms");
+            return false;
+        }
 
         root.verifiedJerusalemTime = {
             utcMilliseconds: adjustedServiceUtcMilliseconds,
             offsetSeconds: offsetSeconds,
             receivedAtMilliseconds: receivedAt,
-            localClockDriftMilliseconds: adjustedServiceUtcMilliseconds - Date.now()
+            localClockDriftMilliseconds: localClockDriftMilliseconds
         };
 
-        root.tz = offsetSeconds / 3600;
         if(Math.abs(root.verifiedJerusalemTime.localClockDriftMilliseconds) > LOCAL_CLOCK_DRIFT_WARNING_MS)
             console.warn("Local clock differs from verified Jerusalem time by " + root.verifiedJerusalemTime.localClockDriftMilliseconds + "ms");
+        return true;
     }
 
     function parseOffsetSecondsFromDateTime(value) {

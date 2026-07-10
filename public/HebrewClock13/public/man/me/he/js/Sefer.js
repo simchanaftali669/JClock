@@ -11,13 +11,48 @@
 
 function getSefariaUrl(ref)
 {
-	return "https://www.sefaria.org/" + ref + "?lang=he";
+	return "https://www.sefaria.org/" + ref.replace(/ ([0-9])/g, ".$1").replace(/ /g, "_").replace(/:/g, ".") + "?lang=he";
 }
 
 
 function get929Url(sefer)
 {
 	return sefer.link929;
+}
+
+function getSeferMidrashUrl(sefer)
+{
+	var midrashRabbahRefs = {
+		"בראשית": "Bereshit Rabbah",
+		"שמות": "Shemot Rabbah",
+		"ויקרא": "Vayikra Rabbah",
+		"במדבר": "Bamidbar Rabbah",
+		"דברים": "Devarim Rabbah"
+	};
+	var yalkutShimoniRefs = {
+		"יהושע": "Yalkut Shimoni on Nach 1:1-37:2",
+		"שופטים": "Yalkut Shimoni on Nach 37:3-76:7",
+		"שמואל": "Yalkut Shimoni on Nach 76:8-165:24",
+		"מלכים": "Yalkut Shimoni on Nach 166:1-252:4",
+		"ישעיהו": "Yalkut Shimoni on Nach 385:1-514:3",
+		"ירמיהו": "Yalkut Shimoni on Nach 253:1-335:7",
+		"יחזקאל": "Yalkut Shimoni on Nach 336:1-384:2",
+		"תרי עשר": "Yalkut Shimoni on Nach 515:1-595:3",
+		"תהילים": "Yalkut Shimoni on Nach 610:1-890:1",
+		"משלי": "Yalkut Shimoni on Nach 929:1-964:25",
+		"איוב": "Yalkut Shimoni on Nach 891:1-928:6",
+		"שיר השירים": "Yalkut Shimoni on Nach 980:1-994:11",
+		"רות": "Yalkut Shimoni on Nach 596:1-609:1",
+		"איכה": "Yalkut Shimoni on Nach 995:1-1043:4",
+		"קהלת": "Yalkut Shimoni on Nach 965:1-979:78",
+		"אסתר": "Yalkut Shimoni on Nach 1044:1-1059:19",
+		"דניאל": "Yalkut Shimoni on Nach 1059:20-1066:25",
+		"עזרא ונחמיה": "Yalkut Shimoni on Nach 1067:1-1071:18",
+		"דברי הימים": "Yalkut Shimoni on Nach 1072:1-1085:30"
+	};
+	var ref = midrashRabbahRefs[sefer.label] || yalkutShimoniRefs[sefer.label];
+
+	return getSefariaUrl(ref || "Yalkut Shimoni on Nach");
 }
 const sefarim = [
 	{ label: "בראשית", ref: "Genesis.1", link929: "https://www.929.org.il/page/1" },
@@ -60,4 +95,5 @@ function setSefer()
 	document.getElementById("Sefer").value = sefer.label;
 	sefer_929_url = get929Url(sefer);
 	sefer_url = getSefariaUrl(sefer.ref);
+	sefer_midrash_url = getSeferMidrashUrl(sefer);
 }

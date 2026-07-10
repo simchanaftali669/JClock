@@ -145,6 +145,7 @@
     var JERUSALEM_TIME_API_URL = "https://timeapi.io/api/TimeZone/zone?timeZone=Asia/Jerusalem";
     var JERUSALEM_TIME_REFRESH_MS = 5 * 60 * 1000;
     var JERUSALEM_TIME_TIMEOUT_MS = 4000;
+    var JERUSALEM_TIME_MAX_DRIFT_MS = 15 * 1000;
     var jerusalemNetworkTime = null;
     var jerusalemNetworkRefreshTimer = null;
     var pendingClockStartToken = 0;
@@ -563,8 +564,7 @@
 			.then(function(data) {
 				if(timeoutId)
 					clearTimeout(timeoutId);
-				applyJerusalemNetworkTime(data);
-				callback(true);
+				callback(applyJerusalemNetworkTime(data));
 			})
 			.catch(function(error) {
 				if(timeoutId)
@@ -581,15 +581,26 @@
 		if(!Number.isFinite(offsetSeconds) || !Number.isFinite(localMilliseconds))
 			throw new Error("Invalid Jerusalem time response.");
 
-		jerusalemNetworkTime = {
-			utcMilliseconds: localMilliseconds - (offsetSeconds * 1000),
-			offsetSeconds: offsetSeconds,
-			receivedAtMilliseconds: getSteadyNowMilliseconds()
-		};
+		var utcMilliseconds = localMilliseconds - (offsetSeconds * 1000);
+		var localClockDriftMilliseconds = utcMilliseconds - Date.now();
 
 		clockGmt = offsetSeconds / 3600;
 		if(clockTimeZone == DEFAULT_TIME_ZONE)
 			tz = clockGmt;
+
+		if(Math.abs(localClockDriftMilliseconds) > JERUSALEM_TIME_MAX_DRIFT_MS)
+		{
+			jerusalemNetworkTime = null;
+			console.warn("Ignoring stale Jerusalem network time; drift is " + localClockDriftMilliseconds + "ms");
+			return false;
+		}
+
+		jerusalemNetworkTime = {
+			utcMilliseconds: utcMilliseconds,
+			offsetSeconds: offsetSeconds,
+			receivedAtMilliseconds: getSteadyNowMilliseconds()
+		};
+		return true;
 	}
 
 	function parseLocalDateTimeAsUtcMilliseconds(value)

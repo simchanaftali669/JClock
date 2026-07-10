@@ -59,7 +59,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
             <input style="font-weight: bold;" class="year" id="Mazal_year" type="text" value="חסד שביסוד" onclick="openMidaInNewTab(1);" ondblclick="openMidaInNewTab(0);"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="year" id="Masechet_year" type="text" value="עוקצים" onclick="openMasechetInNewTab();"/>
+            <input class="year" id="Masechet_year" type="text" value="עוקצים" onclick="openMasechetInNewTab();" ondblclick="openMasechetInSefariaInNewTab();"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
             <input class="year" id="Sefer_year" type="text" value="יחזקאל" onclick="openSeferInNewTab();" ondblclick="openSeferInSefariaInNewTab();"/>
@@ -125,6 +125,7 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
 	<script type="text/javascript" src="../js/HebrewDate.js"></script>
     <script type="text/javascript" src="./js/Menu.js"></script>
     <script type="text/javascript" src="../js/HebrewClock.js"></script>
+    <script type="text/javascript" src="../js/Parasha.js"></script>
     <script type="text/javascript" src="../js/SederLimud.js"></script>
     <script type="text/javascript" src="../../../shared/he/js/Commercial.js"></script>
     <script type="text/javascript" src="./js/Sefer.js"></script>
@@ -239,22 +240,49 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
         win.focus();
     }
 
+    var masechetClickTimer;
     function openMasechetInNewTab()
     {
+        clearTimeout(masechetClickTimer);
+        masechetClickTimer = setTimeout(openKehatiAppInNewTab, 250);
+    }
+
+    function openMasechetInSefariaInNewTab()
+    {
+        clearTimeout(masechetClickTimer);
         var win = window.open('https://www.sefaria.org/Mishnah_Oktzin.1?lang=he', '_blank');
         win.focus();
     }
 
+    function openKehatiAppInNewTab()
+    {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera || '';
+        var isAndroid = /android/i.test(userAgent);
+        var isIOS = /iPad|iPhone|iPod/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var url = 'https://play.google.com/store/apps/details?id=com.nocker.kehati&hl=iw&gl=IL';
+
+        if (isAndroid) {
+            url = 'https://play.google.com/store/apps/details?id=com.nocker.kehati&hl=iw&gl=IL';
+        } else if (isIOS) {
+            url = 'https://apps.apple.com/il/app/kehati/id1059791961';
+        }
+
+        var win = window.open(url, '_blank');
+        win.focus();
+    }
+
+    var seferClickTimer;
     function openSeferInNewTab()
     {
-        var win;
-        //win = window.open('https://www.929.org.il/p/home', '_blank');
-        win = window.open('https://www.929.org.il/page/453', '_blank');
-		win.focus();
+        clearTimeout(seferClickTimer);
+        seferClickTimer = setTimeout(function() {
+            var win = window.open('https://www.929.org.il/page/453', '_blank');
+            win.focus();
+        }, 250);
     }
     function openSeferInSefariaInNewTab() {
-        var sefariaUrl = (typeof sefer_url !== 'undefined' && sefer_url) ? sefer_url : 'https://www.sefaria.org/Ezekiel.1?lang=he';
-        var win = window.open(sefariaUrl, '_blank');
+        clearTimeout(seferClickTimer);
+        var win = window.open('https://www.sefaria.org/Yalkut_Shimoni_on_Nach.336.1-384.2?lang=he', '_blank');
         win.focus();
     }
 
@@ -262,15 +290,21 @@ Sanctification of the Month,kidush hachodesh, pray,pray time,sun time,god,god ti
     function openParashaInNewTab() {
         clearTimeout(parashaClickTimer);
         parashaClickTimer = setTimeout(function() {
-            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
+            var elonUrl = (typeof parasha_elon_url !== 'undefined' && parasha_elon_url) ?
+                parasha_elon_url :
+                'https://haravelon.co.il/tag/%D7%95%D7%99%D7%97%D7%99/';
+            var win = window.open(elonUrl, '_blank');
             win.focus();
         }, 250);
     }
 
     function openParashaInSefariaInNewTab() {
         clearTimeout(parashaClickTimer);
-        var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.47.28?lang=he';
-        var win = window.open(sefariaUrl, '_blank');
+        var parashaName = document.getElementById("Parasha").value;
+        var zoharUrl = (typeof getSefariaZoharParashaUrl === "function") ?
+            getSefariaZoharParashaUrl(parashaName) :
+            'https://www.sefaria.org/Zohar,_Vayechi?vhe=Hebrew_Translation&lang=he';
+        var win = window.open(zoharUrl, '_blank');
         win.focus();
     }
 

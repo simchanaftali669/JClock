@@ -217,15 +217,21 @@
     function openParashaInNewTab() {
         clearTimeout(parashaClickTimer);
         parashaClickTimer = setTimeout(function() {
-            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
+            var elonUrl = (typeof parasha_elon_url !== 'undefined' && parasha_elon_url) ?
+                parasha_elon_url :
+                'http://ravoldsite.com/archives/archives_h.html';
+            var win = window.open(elonUrl, '_blank');
             win.focus();
         }, 250);
     }
 
     function openParashaInSefariaInNewTab() {
         clearTimeout(parashaClickTimer);
-        var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.1.1?lang=he';
-        var win = window.open(sefariaUrl, '_blank');
+        var parashaName = document.getElementById("Parasha").value;
+        var zoharUrl = (typeof getSefariaZoharParashaUrl === "function") ?
+            getSefariaZoharParashaUrl(parashaName) :
+            'https://www.sefaria.org/Zohar,_Bereshit?vhe=Hebrew_Translation&lang=he';
+        var win = window.open(zoharUrl, '_blank');
         win.focus();
     }
 

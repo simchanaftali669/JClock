@@ -23,6 +23,88 @@ function getSefariaParashaUrl(ref)
 	return "https://www.sefaria.org/" + ref + "?lang=he";
 }
 
+function getSefariaZoharUrl(ref)
+{
+	return "https://www.sefaria.org/" + ref.replace(/ /g, "_") + "?vhe=Hebrew_Translation&lang=he";
+}
+
+var zoharParashaRefs = {
+	"בראשית": "Zohar, Bereshit",
+	"נח": "Zohar, Noach",
+	"לך לך": "Zohar, Lech Lecha",
+	"וירא": "Zohar, Vayera",
+	"חיי שרה": "Zohar, Chayei Sara",
+	"תולדות": "Zohar, Toldot",
+	"ויצא": "Zohar, Vayetzei",
+	"וישלח": "Zohar, Vayishlach",
+	"וישב": "Zohar, Vayeshev",
+	"מקץ": "Zohar, Miketz",
+	"ויגש": "Zohar, Vayigash",
+	"ויחי": "Zohar, Vayechi",
+	"שמות": "Zohar, Shemot",
+	"וארא": "Zohar, Vaera",
+	"בא": "Zohar, Bo",
+	"בשלח": "Zohar, Beshalach",
+	"יתרו": "Zohar, Yitro",
+	"משפטים": "Zohar, Mishpatim",
+	"תרומה": "Zohar, Terumah",
+	"תצווה": "Zohar, Tetzaveh",
+	"תצוה": "Zohar, Tetzaveh",
+	"כי תשא": "Zohar, Ki Tisa",
+	"ויקהל": "Zohar, Vayakhel",
+	"פקודי": "Zohar, Pekudei",
+	"ויקרא": "Zohar, Vayikra",
+	"צו": "Zohar, Tzav",
+	"שמיני": "Zohar, Shmini",
+	"תזריע": "Zohar, Tazria",
+	"מצורע": "Zohar, Metzora",
+	"אחרי מות": "Zohar, Achrei Mot",
+	"אחרי": "Zohar, Achrei Mot",
+	"קדושים": "Zohar, Kedoshim",
+	"אמר": "Zohar, Emor",
+	"אמור": "Zohar, Emor",
+	"בהר": "Zohar, Behar",
+	"בחוקותי": "Zohar, Bechukotai",
+	"בחקותי": "Zohar, Bechukotai",
+	"במדבר": "Zohar, Bamidbar",
+	"נשא": "Zohar, Nasso",
+	"בהעלותך": "Zohar, Beha'alotcha",
+	"שלח": "Zohar, Sh'lach",
+	"שלח לך": "Zohar, Sh'lach",
+	"קורח": "Zohar, Korach",
+	"קרח": "Zohar, Korach",
+	"חוקת": "Zohar, Chukat",
+	"חקת": "Zohar, Chukat",
+	"בלק": "Zohar, Balak",
+	"פינחס": "Zohar, Pinchas",
+	"פנחס": "Zohar, Pinchas",
+	"מטות": "Zohar, Matot",
+	"מסעי": null,
+	"דברים": null,
+	"ואתחנן": "Zohar, Vaetchanan",
+	"עקב": "Zohar, Eikev",
+	"ראה": null,
+	"שופטים": "Zohar, Shoftim",
+	"כי תצא": "Zohar, Ki Teitzei",
+	"כי תבוא": null,
+	"כי תבא": null,
+	"נצבים": null,
+	"ניצבים": null,
+	"וילך": "Zohar, Vayeilech",
+	"האזינו": "Zohar, Ha'Azinu",
+	"וזאת הברכה": null
+};
+
+function getSefariaZoharParashaUrl(parashaName)
+{
+	var zoharRef = zoharParashaRefs[parashaName];
+
+	if (zoharRef)
+		return getSefariaZoharUrl(zoharRef);
+
+	return "https://www.sefaria.org/Zohar?vhe=Hebrew_Translation&lang=he";
+}
+
 function setParashaSefariaUrl()
 {
 	var parashaName = document.getElementById("Parasha").value;
@@ -91,6 +173,7 @@ function setParasha()
     var url = new URL(document.location.href);
     var marrigeHour = url.searchParams.get("hebrewHour");
     var marrigeDay = url.searchParams.get("hebrewDay");
+	parasha_url = "http://ravoldsite.com/archives/archives_h.html";
 
     hebrewday = marrigeDay ? parseInt(marrigeDay) : hebrewday;
 
@@ -512,5 +595,6 @@ function setParasha()
         default:
             break;
     }
+	parasha_elon_url = parasha_url;
 	setParashaSefariaUrl();
 }

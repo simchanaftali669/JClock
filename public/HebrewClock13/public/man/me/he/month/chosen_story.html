@@ -218,15 +218,14 @@
     function openParashaInNewTab() {
         clearTimeout(parashaClickTimer);
         parashaClickTimer = setTimeout(function() {
-            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
+            var win = window.open('https://haravelon.co.il/tag/%D7%95%D7%99%D7%A6%D7%90/', '_blank');
             win.focus();
         }, 250);
     }
 
     function openParashaInSefariaInNewTab() {
         clearTimeout(parashaClickTimer);
-        var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.28.10?lang=he';
-        var win = window.open(sefariaUrl, '_blank');
+        var win = window.open('https://www.sefaria.org/Zohar,_Vayetzei?vhe=Hebrew_Translation&lang=he', '_blank');
         win.focus();
     }
 

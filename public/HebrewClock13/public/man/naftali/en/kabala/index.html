@@ -208,8 +208,14 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     var JERUSALEM_LATITUDE = TEMPLE_MOUNT_LATITUDE;
     var JERUSALEM_TIME_ZONE = "Asia/Jerusalem";
     var JERUSALEM_TIME_API_URL = "https://timeapi.io/api/TimeZone/zone?timeZone=Asia/Jerusalem";
+    var JERUSALEM_TIME_FALLBACK_API_URL = "https://worldtimeapi.org/api/timezone/Asia/Jerusalem";
+    var JERUSALEM_TIME_SERVICES = [
+        { name: "timeapi.io", url: JERUSALEM_TIME_API_URL, apply: applyVerifiedJerusalemTime },
+        { name: "worldtimeapi.org", url: JERUSALEM_TIME_FALLBACK_API_URL, apply: applyWorldTimeApiJerusalemTime }
+    ];
     var JERUSALEM_TIME_TIMEOUT_MS = 4000;
     var LOCAL_CLOCK_DRIFT_WARNING_MS = 60 * 1000;
+    var JERUSALEM_TIME_MAX_DRIFT_MS = 15 * 1000;
     var clockTimeZone = JERUSALEM_TIME_ZONE;
     var displayTimeZone = JERUSALEM_TIME_ZONE;
     var verifiedJerusalemTime = null;
@@ -310,7 +316,7 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
     function readDisplayTimeParams(url)
     {
         clockTimeZone = JERUSALEM_TIME_ZONE;
-        displayTimeZone = getLocalDisplayTimeZone() || url.searchParams.get("displayTimeZone") || clockTimeZone;
+        displayTimeZone = url.searchParams.get("displayTimeZone") || clockTimeZone;
         if(window.BirthCalculatorTime && typeof BirthCalculatorTime.getTimeZoneOffsetHours == "function")
             tz = BirthCalculatorTime.getTimeZoneOffsetHours(new Date(), clockTimeZone);
         else
@@ -344,6 +350,18 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
             return;
         }
 
+        fetchJerusalemTimeService(0, callback);
+    }
+
+    function fetchJerusalemTimeService(serviceIndex, callback)
+    {
+        if(serviceIndex >= JERUSALEM_TIME_SERVICES.length)
+        {
+            callback();
+            return;
+        }
+
+        var service = JERUSALEM_TIME_SERVICES[serviceIndex];
         var timeoutId = null;
         var requestStartedAt = getSteadyNowMilliseconds();
         var fetchOptions = { cache: "no-store" };
@@ -356,23 +374,25 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
             }, JERUSALEM_TIME_TIMEOUT_MS);
         }
 
-        window.fetch(JERUSALEM_TIME_API_URL, fetchOptions)
+        window.fetch(service.url, fetchOptions)
             .then(function(response) {
                 if(!response.ok)
-                    throw new Error("Jerusalem time request failed: " + response.status);
+                    throw new Error(service.name + " Jerusalem time request failed: " + response.status);
                 return response.json();
             })
             .then(function(data) {
                 if(timeoutId)
                     clearTimeout(timeoutId);
-                applyVerifiedJerusalemTime(data, requestStartedAt);
-                callback();
+                if(service.apply(data, requestStartedAt))
+                    callback();
+                else
+                    callback();
             })
             .catch(function(error) {
                 if(timeoutId)
                     clearTimeout(timeoutId);
-                console.warn("Could not verify Jerusalem time from the network", error);
-                callback();
+                console.warn("Could not verify Jerusalem time from " + service.name, error);
+                fetchJerusalemTimeService(serviceIndex + 1, callback);
             });
     }
 
@@ -383,21 +403,59 @@ Sanctification of the Month,kidush hachodesh, שעון עברי, שעות זמנ
         if(!Number.isFinite(offsetSeconds) || !Number.isFinite(localMilliseconds))
             throw new Error("Invalid Jerusalem time response.");
 
+        return storeVerifiedJerusalemTime(localMilliseconds - (offsetSeconds * 1000), offsetSeconds, requestStartedAt);
+    }
+
+    function applyWorldTimeApiJerusalemTime(data, requestStartedAt)
+    {
+        var utcMilliseconds = Date.parse(data && data.utc_datetime);
+        var rawOffsetSeconds = Number(data && data.raw_offset);
+        var dstOffsetSeconds = Number(data && data.dst_offset);
+        var offsetSeconds = rawOffsetSeconds + dstOffsetSeconds;
+
+        if(!Number.isFinite(offsetSeconds))
+            offsetSeconds = parseOffsetSecondsFromDateTime(data && data.datetime);
+        if(!Number.isFinite(utcMilliseconds) || !Number.isFinite(offsetSeconds))
+            throw new Error("Invalid Jerusalem fallback time response.");
+
+        return storeVerifiedJerusalemTime(utcMilliseconds, offsetSeconds, requestStartedAt);
+    }
+
+    function storeVerifiedJerusalemTime(serviceUtcMilliseconds, offsetSeconds, requestStartedAt)
+    {
         var receivedAt = getSteadyNowMilliseconds();
-        var serviceUtcMilliseconds = localMilliseconds - (offsetSeconds * 1000);
         var roundTripMilliseconds = Math.max(0, receivedAt - requestStartedAt);
         var adjustedServiceUtcMilliseconds = serviceUtcMilliseconds + Math.round(roundTripMilliseconds / 2);
+        var localClockDriftMilliseconds = adjustedServiceUtcMilliseconds - Date.now();
+
+        tz = offsetSeconds / 3600;
+        if(Math.abs(localClockDriftMilliseconds) > JERUSALEM_TIME_MAX_DRIFT_MS)
+        {
+            verifiedJerusalemTime = null;
+            console.warn("Ignoring stale Jerusalem time; drift is " + localClockDriftMilliseconds + "ms");
+            return false;
+        }
 
         verifiedJerusalemTime = {
             utcMilliseconds: adjustedServiceUtcMilliseconds,
             offsetSeconds: offsetSeconds,
             receivedAtMilliseconds: receivedAt,
-            localClockDriftMilliseconds: adjustedServiceUtcMilliseconds - Date.now()
+            localClockDriftMilliseconds: localClockDriftMilliseconds
         };
 
-        tz = offsetSeconds / 3600;
         if(Math.abs(verifiedJerusalemTime.localClockDriftMilliseconds) > LOCAL_CLOCK_DRIFT_WARNING_MS)
             console.warn("Local clock differs from verified Jerusalem time by " + verifiedJerusalemTime.localClockDriftMilliseconds + "ms");
+        return true;
+    }
+
+    function parseOffsetSecondsFromDateTime(value)
+    {
+        var match = /([+-])(\d{2}):?(\d{2})$/.exec(value || "");
+        if(!match)
+            return NaN;
+
+        var totalSeconds = (Number(match[2]) * 3600) + (Number(match[3]) * 60);
+        return match[1] == "-" ? -totalSeconds : totalSeconds;
     }
 
     function parseLocalDateTimeAsUtcMilliseconds(value)

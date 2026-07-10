@@ -142,6 +142,7 @@
     var JERUSALEM_TIME_REFRESH_MS = 5 * 60 * 1000;
     var JERUSALEM_TIME_RETRY_MS = 15 * 1000;
     var JERUSALEM_TIME_TIMEOUT_MS = 4000;
+    var JERUSALEM_TIME_MAX_DRIFT_MS = 15 * 1000;
     var jerusalemNetworkTime = null;
     var jerusalemNetworkRefreshTimer = null;
     var pendingClockStartToken = 0;
@@ -611,7 +612,8 @@
 			.then(function(data) {
 				if(timeoutId)
 					clearTimeout(timeoutId);
-				service.apply(data);
+				if(!service.apply(data))
+					console.warn("Ignoring stale Jerusalem time from " + service.name);
 				callback(true);
 			})
 			.catch(function(error) {
@@ -629,7 +631,7 @@
 		if(!Number.isFinite(offsetSeconds) || !Number.isFinite(localMilliseconds))
 			throw new Error("Invalid Jerusalem time response.");
 
-		applyJerusalemNetworkTime(localMilliseconds - (offsetSeconds * 1000), offsetSeconds);
+		return applyJerusalemNetworkTime(localMilliseconds - (offsetSeconds * 1000), offsetSeconds);
 	}
 
 	function applyWorldTimeApiJerusalemTime(data)
@@ -642,20 +644,30 @@
 		if(!Number.isFinite(utcMilliseconds) || !Number.isFinite(offsetSeconds))
 			throw new Error("Invalid Jerusalem fallback time response.");
 
-		applyJerusalemNetworkTime(utcMilliseconds, offsetSeconds);
+		return applyJerusalemNetworkTime(utcMilliseconds, offsetSeconds);
 	}
 
 	function applyJerusalemNetworkTime(utcMilliseconds, offsetSeconds)
 	{
+		var localClockDriftMilliseconds = utcMilliseconds - Date.now();
+
+		clockGmt = offsetSeconds / 3600;
+		if(clockTimeZone == DEFAULT_TIME_ZONE)
+			tz = clockGmt;
+
+		if(Math.abs(localClockDriftMilliseconds) > JERUSALEM_TIME_MAX_DRIFT_MS)
+		{
+			jerusalemNetworkTime = null;
+			console.warn("Ignoring stale Jerusalem network time; drift is " + localClockDriftMilliseconds + "ms");
+			return false;
+		}
+
 		jerusalemNetworkTime = {
 			utcMilliseconds: utcMilliseconds,
 			offsetSeconds: offsetSeconds,
 			receivedAtMilliseconds: getSteadyNowMilliseconds()
 		};
-
-		clockGmt = offsetSeconds / 3600;
-		if(clockTimeZone == DEFAULT_TIME_ZONE)
-			tz = clockGmt;
+		return true;
 	}
 
 	function parseOffsetSecondsFromDateTime(value)
