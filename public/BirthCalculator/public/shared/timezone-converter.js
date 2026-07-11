@@ -87,11 +87,12 @@
     var day = Number(input.day);
     var hour = Number(input.hour);
     var minute = Number(input.minute);
-    if (![latitude, longitude, year, month, day, hour, minute].every(Number.isFinite)) {
-      throw new TypeError("Invalid date, time, or location.");
+    var explicitTimeZone = typeof input.timeZone === "string" ? input.timeZone.trim() : "";
+    if (![year, month, day, hour, minute].every(Number.isFinite)) {
+      throw new TypeError("Invalid date or time.");
     }
 
-    var timeZone = getSelectedTimeZone(latitude, longitude, input.lookupTimeZone);
+    var timeZone = explicitTimeZone || getSelectedTimeZone(latitude, longitude, input.lookupTimeZone);
     var utcDate = zonedLocalTimeToUtc(year, month, day, hour, minute, timeZone);
     var sourceGmt = getTimeZoneOffsetHours(utcDate, timeZone);
     var jerusalem = getZonedParts(utcDate, JERUSALEM_TIME_ZONE);

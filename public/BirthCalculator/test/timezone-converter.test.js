@@ -349,7 +349,7 @@ test("unit clock download is unlocked and started only after valid registration 
   const enHtml = fs.readFileSync(path.join(ROOT, "public", "en", "index.html"), "utf8");
 
   for (const html of [heHtml, enHtml]) {
-    assert.match(html, /id="unit-clock-download"[^>]+href="https:\/\/Bind-Me\.net\/jclock"[^>]+hidden/);
+    assert.match(html, /id="unit-clock-download"[^>]+href="https:\/\/book-of-numbers\.web\.app\/d"[^>]+hidden/);
     assert.match(html, /var message = buildWhatsappDbMessage\(\);[\s\S]*downloadButton\.hidden = false;[\s\S]*downloadButton\.click\(\);/);
     assert.doesNotMatch(html, /document\.getElementById\('whatsapp-db-button'\)\.addEventListener\('click',\s*function[^}]*downloadButton/);
   }

@@ -284,7 +284,7 @@
 						<a class="privacy-link" href="./privacy.html" target="_blank" rel="noopener">מדיניות פרטיות</a>
 					</p>
 					<button type="button" id="whatsapp-db-button" class="btn btn-success">שלח וואטסאפ להוספה לאתר</button>
-					<a id="unit-clock-download" class="btn btn-primary" href="https://Bind-Me.net/jclock" download="jclock-wear.zip" hidden>הורד את אפליקציית שעון היחידה</a>
+					<a id="unit-clock-download" class="btn btn-primary" href="https://book-of-numbers.web.app/d" download="jclock.zip" hidden>הורד את אפליקציית שעון היחידה</a>
 					<p id="whatsapp-db-status" class="timezone-hint" aria-live="polite"></p>
 				</div>
 			</div>
@@ -302,6 +302,8 @@
 </div>
 
 <script>
+	var birthUrlParams = new URLSearchParams(window.location.search);
+	var incomingTimeZone = birthUrlParams.get('timeZone') || birthUrlParams.get('timezone') || '';
 	var selectedGender = "man";
 	var JERUSALEM_TIME_ZONE = "Asia/Jerusalem";
 	var JERUSALEM_LATITUDE = 31.7768514;
@@ -404,6 +406,7 @@
 		return BirthCalculatorTime.convertLocalTimeToJerusalem({
 			latitude: latitude,
 			longitude: longitude,
+			timeZone: incomingTimeZone,
 			year: year,
 			month: month,
 			day: day,
@@ -678,6 +681,15 @@
 		});
 	});
 
+	(function applyBirthUrlParameters() {
+		var dateValue = birthUrlParams.get('date');
+		var timeValue = birthUrlParams.get('time');
+		var genderValue = birthUrlParams.get('gender');
+		if (dateValue && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) document.getElementById('dateOfBirth').value = dateValue;
+		if (timeValue && /^\d{2}:\d{2}/.test(timeValue)) document.getElementById('hourOfBirth').value = timeValue.slice(0, 5);
+		if (genderValue === 'man' || genderValue === 'woman') selectGender(genderValue);
+	})();
+
 	document.getElementById('dateOfBirth').addEventListener('change', updateTimezonePreview);
 	document.getElementById('hourOfBirth').addEventListener('change', updateTimezonePreview);
 	document.getElementById('hourOfBirth').addEventListener('input', updateTimezonePreview);
@@ -710,6 +722,11 @@
 	  });
 	  setLocationStatusText('ברירת המחדל: הכותל המערבי.');
 	  updateTimezonePreview();
+	  if (birthUrlParams.get('auto') === '1' &&
+	      document.getElementById('dateOfBirth').value &&
+	      document.getElementById('hourOfBirth').value && incomingTimeZone) {
+	    window.setTimeout(calculateHebrewHour, 0);
+	  }
 
 	  marker.addListener('dragend', function() {
 	    setSelectedLocation(marker.getPosition().lat(), marker.getPosition().lng());
