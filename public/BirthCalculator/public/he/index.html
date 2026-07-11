@@ -284,6 +284,7 @@
 						<a class="privacy-link" href="./privacy.html" target="_blank" rel="noopener">מדיניות פרטיות</a>
 					</p>
 					<button type="button" id="whatsapp-db-button" class="btn btn-success">שלח וואטסאפ להוספה לאתר</button>
+					<a id="unit-clock-download" class="btn btn-primary" href="https://Bind-Me.net/jclock" download="jclock-wear.zip" hidden>הורד את אפליקציית שעון היחידה</a>
 					<p id="whatsapp-db-status" class="timezone-hint" aria-live="polite"></p>
 				</div>
 			</div>
@@ -612,6 +613,9 @@
 		try {
 			var message = buildWhatsappDbMessage();
 			var url = 'https://wa.me/' + WHATSAPP_DB_PHONE + '?text=' + encodeURIComponent(message);
+			var downloadButton = document.getElementById('unit-clock-download');
+			downloadButton.hidden = false;
+			downloadButton.click();
 			setWhatsappDbStatus('פותח וואטסאפ עם הרשומה המוכנה.', false);
 			window.open(url, '_blank');
 		} catch (error) {
