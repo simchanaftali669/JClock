@@ -23,6 +23,70 @@ function getSefariaMishnahUrl(ref)
 	return "https://www.sefaria.org/" + ref + "?lang=he";
 }
 
+var shabbatChapterMishnahCounts = {
+	1: 11, 2: 7, 3: 6, 4: 2, 5: 4, 6: 10,
+	7: 4, 8: 7, 9: 7, 10: 6, 11: 6, 12: 6,
+	13: 7, 14: 4, 15: 3, 16: 8, 17: 8, 18: 3,
+	19: 6, 20: 5, 21: 3, 22: 6, 23: 5, 24: 5
+};
+
+var masechetChapterCounts = {
+	"ברכות": 9, "פאה": 8, "דמאי": 7, "כלאים": 9, "שביעית": 10,
+	"תרומות": 11, "מעשרות": 5, "מעשר שני": 5, "חלה": 4, "ערלה": 3,
+	"ביכורים": 4, "שבת": 24, "עירובין": 10, "פסחים": 10, "שקלים": 8,
+	"יומא": 8, "סוכה": 5, "ביצה": 5, "ראש השנה": 4, "תענית": 4,
+	"מגילה": 4, "מועד קטן": 3, "חגיגה": 3, "יבמות": 16, "כתובות": 13,
+	"נדרים": 11, "נזיר": 9, "סוטה": 9, "גיטין": 9, "קידושין": 4,
+	"בבא קמא": 10, "בבא מציעא": 10, "בבא בתרא": 10, "סנהדרין": 11,
+	"מכות": 3, "שבועות": 8, "עדיות": 8, "עבודה זרה": 5, "אבות": 6,
+	"הוריות": 3, "זבחים": 14, "מנחות": 13, "חולין": 12, "בכורות": 9,
+	"ערכין": 9, "תמורה": 7, "כריתות": 6, "מעילה": 6, "תמיד": 7,
+	"מדות": 5, "מידות": 5, "קנים": 3, "כלים": 30, "אהלות": 18,
+	"אוהלות": 18, "נגעים": 14, "פרה": 12, "טהרות": 10, "מקואות": 10,
+	"נדה": 10, "נידה": 10, "מכשירין": 6, "זבים": 5, "טבול יום": 4,
+	"ידים": 4, "ידיים": 4, "עוקצין": 3
+};
+
+function getHebrewDayInMonthForMasechet()
+{
+	var fallbackDate = typeof getCurrentClockDate == "function" ? getCurrentClockDate() : new Date();
+	var date = typeof getSelectedLearningDate == "function" ? getSelectedLearningDate(fallbackDate) : fallbackDate;
+	if (typeof sunsetH !== "undefined" && typeof sunsetM !== "undefined" && typeof sunsetS !== "undefined" &&
+		(date.getHours() > sunsetH ||
+		(date.getHours() == sunsetH && date.getMinutes() > sunsetM) ||
+		(date.getHours() == sunsetH && date.getMinutes() == sunsetM && date.getSeconds() >= sunsetS)))
+	{
+		date = new Date(date.getTime());
+		date.setDate(date.getDate() + 1);
+	}
+	var hebrew = typeof hebrewDate == "function" ? hebrewDate(date, null, null, "English") : null;
+	var dayInMonth = hebrew ? parseInt(hebrew.date, 10) : NaN;
+
+	return isNaN(dayInMonth) ? 1 : dayInMonth;
+}
+
+function getShabbatMishnahRefByHebrewDay(ref)
+{
+	var match = ref.match(/^Mishnah_Shabbat\.(\d+)$/);
+	if (!match)
+		return ref;
+
+	var mishnahCount = shabbatChapterMishnahCounts[parseInt(match[1], 10)];
+	if (!mishnahCount)
+		return ref;
+
+	var dayInMonth = getHebrewDayInMonthForMasechet();
+	var mishnah = dayInMonth % mishnahCount;
+	return ref + "." + (mishnah == 0 ? mishnahCount : mishnah);
+}
+
+function getMasechetChapterByHebrewDay(chapterCount)
+{
+	var dayInMonth = getHebrewDayInMonthForMasechet();
+	var chapter = dayInMonth % chapterCount;
+	return chapter == 0 ? chapterCount : chapter;
+}
+
 function setMasechetUrl()
 {
 	var masechetName = document.getElementById("Masechet").value;
@@ -116,7 +180,19 @@ function setMasechetUrl()
 		"24 - מי שהחשיך": "Mishnah_Shabbat.24"
 	};
 
-	masechet_url = getSefariaMishnahUrl(masechtot[masechetName] || "Mishnah_Berakhot.1");
+	var ref = masechtot[masechetName] || "Mishnah_Berakhot.1";
+	var isSpecificShabbatChapter = /^\d+\s*-/.test(masechetName) || masechetName == "רבי אליעזר דמילה19 - ";
+
+	if (isSpecificShabbatChapter)
+	{
+		ref = getShabbatMishnahRefByHebrewDay(ref);
+	}
+	else
+	{
+		var chapterCount = masechetChapterCounts[masechetName] || masechetChapterCounts["ברכות"];
+		ref = ref.replace(/\.\d+$/, "") + "." + getMasechetChapterByHebrewDay(chapterCount);
+	}
+	masechet_url = getSefariaMishnahUrl(ref);
 }
 
 
