@@ -178,6 +178,22 @@ test("moon day moves back when its proportional hour is later than the sun hour"
   assert.equal(result.moon.hebrewDay, 3);
 });
 
+test("Jerusalem moon clock keeps 4 March 1987 at 20:45 on Wednesday", () => {
+  const result = preview.predict({
+    latitude: 31.7768514,
+    longitude: 35.2331664,
+    year: 1987,
+    month: 3,
+    day: 4,
+    hour: 20,
+    minute: 45,
+    gmt: 2
+  });
+
+  assert.equal(result.sun.hebrewDay, 5);
+  assert.equal(result.moon.hebrewDay, 4);
+});
+
 test("the base weekday changes at sunset, before nightfall", () => {
   const input = {
     latitude: 31.7768514,
@@ -202,6 +218,7 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
     assert.match(html, /var JERUSALEM_LONGITUDE = 35\.2331664;/);
     assert.match(html, /var clockLatitude = JERUSALEM_LATITUDE;/);
     assert.match(html, /var clockLongitude = JERUSALEM_LONGITUDE;/);
+	assert.match(html, /var clockUrl = "https:\/\/JClock\.net\/HebrewClock13\/public\/" \+ gender \+ "\/simple\/index\.html";/);
     assert.match(html, /\?latitude=" \+ clockLatitude/);
     assert.match(html, /"&longitude=" \+ clockLongitude/);
     assert.doesNotMatch(html, /\?latitude=" \+ latitude/);
@@ -264,13 +281,12 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
   });
 });
 
-test("simple moon clock does not force the Hebrew day one day back", () => {
+test("simple moon clock moves the Hebrew day back when its proportional hour is later than the sun hour", () => {
   const offsetJs = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "woman", "simple", "js", "HebrewDayOffset.js"), "utf8");
   const simpleHtml = fs.readFileSync(path.join(ROOT, "..", "HebrewClock13", "public", "woman", "simple", "index.html"), "utf8");
 
-  assert.match(offsetJs, /return 0;/);
-  assert.doesNotMatch(offsetJs, /return -1;/);
-  assert.match(simpleHtml, /js\/HebrewDayOffset\.js\?v=20260708-moon-day-context/);
+  assert.match(offsetJs, /womanMoonTime > manSunTime \? -1 : 0/);
+  assert.match(simpleHtml, /js\/HebrewDayOffset\.js\?v=20260713-moon-day-offset/);
 });
 
 test("simple moon clock uses selected current location for local mode", () => {

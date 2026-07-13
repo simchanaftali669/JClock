@@ -2,7 +2,11 @@ function hebrewDayOffset()
 {
 	hebrewclock_man();
 	setmazal_man();
-	return 0;
+
+	var womanMoonTime = (Number(lbHour) * 1080) + Number(lbMinute);
+	var manSunTime = (Number(lbHour4Man) * 1080) + Number(lbMinute4Man);
+
+	return womanMoonTime > manSunTime ? -1 : 0;
 }
 
 function hasFullBirthCalculationParams()

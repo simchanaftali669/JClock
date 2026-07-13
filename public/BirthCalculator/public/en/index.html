@@ -289,6 +289,7 @@
 						<a class="privacy-link" href="./privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
 					</p>
 					<button type="button" id="whatsapp-db-button" class="btn btn-success"><img class="whatsapp-icon" src="../shared/whatsapp.svg" width="20" height="20" alt="">Send WhatsApp to add to website</button>
+					<a id="tuning-war-link" class="btn btn-primary" href="https://tuning-mg.com/" target="_blank" rel="noopener noreferrer">Tuning War</a>
 					<a id="unit-clock-download" class="btn btn-primary" href="https://Tuning-Mg.com/d" download="jclock.zip" hidden>Download the unit clock app</a>
 					<p id="whatsapp-db-status" class="timezone-hint" aria-live="polite"></p>
 				</div>
@@ -380,7 +381,7 @@
 		document.getElementById('GMT').value = String(gmt);
 		document.getElementById('jerusalem-time').value = formatJerusalemDateTime(jerusalemTime);
 
-		var clockUrl = "../../../HebrewClock13/public/" + gender + "/simple/index.html";
+		var clockUrl = "https://JClock.net/HebrewClock13/public/" + gender + "/simple/index.html";
 			
 		document.location.href = clockUrl + "?latitude=" + clockLatitude + 
 																					"&longitude=" + clockLongitude +
