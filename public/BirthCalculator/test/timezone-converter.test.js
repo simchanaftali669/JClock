@@ -344,12 +344,16 @@ test("privacy policy explains the required phone number purpose", () => {
   assert.doesNotMatch(enPrivacy, /without a number/);
 });
 
-test("unit clock download is unlocked and started only after valid registration submission", () => {
+test("unit clock download is available in Hebrew and unlocked after registration in English", () => {
   const heHtml = fs.readFileSync(path.join(ROOT, "public", "he", "index.html"), "utf8");
   const enHtml = fs.readFileSync(path.join(ROOT, "public", "en", "index.html"), "utf8");
 
+  assert.match(heHtml, /id="unit-clock-download"[^>]+href="https:\/\/Tuning-Mg\.com\/d"/);
+  assert.doesNotMatch(heHtml, /id="unit-clock-download"[^>]+hidden/);
+  assert.match(heHtml, /הורד את שעון היחידה בעברית/);
+  assert.match(enHtml, /id="unit-clock-download"[^>]+href="https:\/\/Tuning-Mg\.com\/d"[^>]+hidden/);
+
   for (const html of [heHtml, enHtml]) {
-    assert.match(html, /id="unit-clock-download"[^>]+href="https:\/\/book-of-numbers\.web\.app\/d"[^>]+hidden/);
     assert.match(html, /var message = buildWhatsappDbMessage\(\);[\s\S]*downloadButton\.hidden = false;[\s\S]*downloadButton\.click\(\);/);
     assert.doesNotMatch(html, /document\.getElementById\('whatsapp-db-button'\)\.addEventListener\('click',\s*function[^}]*downloadButton/);
   }

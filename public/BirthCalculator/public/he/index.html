@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>מחשבון המרה לשעה עברית</title>
+  <title>יצ"ל - יחידה צבאית לומדת</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../shared/style.css">
+  <link rel="stylesheet" href="../shared/style.css?v=20260713-action-layout-fix">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -43,13 +43,29 @@
 	cursor: pointer;
   }
   .gender-option.male {
-	background: #5dbcd2;
+	background: #6c757d;
   }
   .gender-option.female {
-	background: #CA2C92;
+	background: #6c757d;
   }
   .gender-option.selected {
 	border: 2px dashed #000;
+  }
+  body.color-pending {
+	color: #555;
+  }
+  body.color-pending .btn:not(#whatsapp-db-button),
+  body.color-pending .gender-option {
+	background: #6c757d;
+	border-color: #5a6268;
+	color: #f2f2f2;
+  }
+  body.color-pending #map,
+  body.color-pending .color-preview-swatch {
+	filter: grayscale(1);
+  }
+  body.color-pending a:not(#whatsapp-db-button):not(.btn) {
+	color: #666;
   }
   #location-status {
 	min-height: 20px;
@@ -180,13 +196,13 @@
   }
   </style>
 </head>
-<body >
+<body class="color-pending">
 
 <div class="container mt-3">
   <!-- Button to Open the Modal -->
 <center>
 	<button id="btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-   		מחשבון המרה לשעה עברית
+		הרשמה ליחידה
   	</button>
 </center>
 
@@ -198,7 +214,7 @@
         <!-- Modal Header -->
         <div class="modal-header">
           	<button type="button" class="close" data-dismiss="modal">×</button>
-            <h4 class="modal-title">מחשבון המרה לשעה עברית</h4>
+            <h4 class="modal-title">הרשמה ליחידה</h4>
         </div>
         
         <!-- Modal body -->
@@ -208,12 +224,7 @@
 			<label class="radio-inline"><input type="radio" checked name="gender" value="Male" data-toggle="toggle"> זכר </label>
 			<label class="radio-inline"><input type="radio" name="gender" value="Female" data-toggle="toggle"> נקבה </label> 
 		   <hr/>-->
-			<p href="#" data-toggle="tooltip" title="בחירת סוג השעון" style="display: inline-block; width: 248px;">סוג השעון</p>
-			<div class="gender-toggle" role="group" aria-label="בחירת סוג השעון">
-				<button type="button" class="gender-option male selected" data-gender="man" aria-pressed="true">חמה</button>
-				<button type="button" class="gender-option female" data-gender="woman" aria-pressed="false">לבנה</button>
-			</div>
-			<p href="#" data-toggle="tooltip" title="בחירת המיקום"  style="display: inline-block; width: 248px;">בחירת המיקום</p>
+			<p href="#" data-toggle="tooltip" title="מקום הלידה"  style="display: inline-block; width: 248px;">מקום הלידה</p>
 			<div class="map-panel">
 				<input id="place-search" type="text" class="form-control" placeholder="לדוגמה: הכותל המערבי">
 				<div class="map-actions">
@@ -283,8 +294,8 @@
 						מספר טלפון נדרש כדי לשלוח בקשה להוספה לאתר. הוא נועד לשמש כספר טלפונים עבור כל העולם, זה הכל. מי שרוצה להצטרף נותן, ומי שלא לא חייב לשלוח.
 						<a class="privacy-link" href="./privacy.html" target="_blank" rel="noopener">מדיניות פרטיות</a>
 					</p>
-					<button type="button" id="whatsapp-db-button" class="btn btn-success">שלח וואטסאפ להוספה לאתר</button>
-					<a id="unit-clock-download" class="btn btn-primary" href="https://book-of-numbers.web.app/d" download="jclock.zip" hidden>הורד את אפליקציית שעון היחידה</a>
+					<button type="button" id="whatsapp-db-button" class="btn btn-success"><img class="whatsapp-icon" src="../shared/whatsapp.svg" width="20" height="20" alt="">שלח וואטסאפ להוספה לאתר</button>
+					<a id="unit-clock-download" class="btn btn-primary" href="https://Tuning-Mg.com/d" download="jclock.zip">הורד את שעון היחידה בעברית</a>
 					<p id="whatsapp-db-status" class="timezone-hint" aria-live="polite"></p>
 				</div>
 			</div>
@@ -292,7 +303,10 @@
         
         <!-- Modal footer -->
         <div class="modal-footer">
-		  <div type="button" class="btn btn-success" onclick="calculateHebrewHour();">חשב</div>
+		  <div class="gender-toggle calculation-actions" role="group" aria-label="בחירת החישוב">
+		    <button type="button" id="sun-calculation-button" class="btn btn-success gender-option male" onclick="calculateHebrewHour('man');">התיקון שלי</button>
+		    <button type="button" id="moon-calculation-button" class="btn btn-success gender-option female" onclick="calculateHebrewHour('woman');">חלקי בתורה</button>
+		  </div>
         </div>
         
       </div>
@@ -321,9 +335,9 @@
 
 	document.getElementById('btn').click();
 
-	function calculateHebrewHour()
+	function calculateHebrewHour(requestedGender)
 	{		
-		var gender = selectedGender;
+		var gender = requestedGender || selectedGender;
 		if (gender !== "man" && gender !== "woman") {
 			alert("נא לבחור חמה או לבנה.");
 			return;
@@ -442,6 +456,7 @@
 		var label = document.getElementById(kind + '-color-label');
 		var daySwatch = document.getElementById(kind + '-day-color-swatch');
 		var dayLabel = document.getElementById(kind + '-day-color-label');
+		var calculationButton = document.getElementById(kind + '-calculation-button');
 		if (!swatch || !label) {
 			return;
 		}
@@ -454,12 +469,22 @@
 		}
 	}
 
+	function applyMoonColorsToButtons(result) {
+		document.querySelectorAll('.btn:not(#whatsapp-db-button), .gender-option').forEach(function(button) {
+			button.style.backgroundColor = result.color;
+			button.style.borderColor = result.color;
+			button.style.color = result.dayColor;
+		});
+	}
+
 	function clearColorPreview(message) {
+		document.body.classList.add('color-pending');
 		['sun', 'moon'].forEach(function(kind) {
 			var swatch = document.getElementById(kind + '-color-swatch');
 			var label = document.getElementById(kind + '-color-label');
 			var daySwatch = document.getElementById(kind + '-day-color-swatch');
 			var dayLabel = document.getElementById(kind + '-day-color-label');
+			var calculationButton = document.getElementById(kind + '-calculation-button');
 			if (swatch) {
 				swatch.style.backgroundColor = 'transparent';
 			}
@@ -472,6 +497,15 @@
 			if (dayLabel) {
 				dayLabel.textContent = message;
 			}
+			if (calculationButton) {
+				calculationButton.style.color = '';
+				calculationButton.style.backgroundColor = '';
+			}
+		});
+		document.querySelectorAll('.btn, .gender-option').forEach(function(button) {
+			button.style.backgroundColor = '';
+			button.style.borderColor = '';
+			button.style.color = '';
 		});
 	}
 
@@ -509,6 +543,8 @@
 			var prediction = getJerusalemHebrewPrediction(timeInfo);
 			setColorPreviewResult('sun', prediction.sun);
 			setColorPreviewResult('moon', prediction.moon);
+			applyMoonColorsToButtons(prediction.moon);
+			document.body.classList.remove('color-pending');
 		} catch (error) {
 			clearColorPreview('חיזוי הצבעים לא נטען. נא לרענן את הדף.');
 		}
