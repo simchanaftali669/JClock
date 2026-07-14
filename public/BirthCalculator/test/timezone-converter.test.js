@@ -230,6 +230,15 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
     assert.match(html, /id="sun-day-color-swatch"/);
     assert.match(html, /id="moon-color-swatch"/);
     assert.match(html, /id="moon-day-color-swatch"/);
+    assert.match(html, /id="umid-value"/);
+    assert.match(html, /id="copy-umid-button"/);
+    assert.match(html, /UniqueMeaningfulID \(UMID\)/);
+    assert.match(html, /prediction\.moon\.color,[\s\S]*prediction\.moon\.dayColor,[\s\S]*prediction\.sun\.color,[\s\S]*prediction\.sun\.dayColor/);
+    assert.match(html, /return \[/);
+    assert.match(html, /\.join\(''\);/);
+    assert.doesNotMatch(html, /return 'UMID-' \+ \[/);
+    assert.doesNotMatch(html, /\.join\('-'\) \+ '-00'/);
+    assert.match(html, /navigator\.clipboard\.writeText\(input\.value\)/);
     assert.match(html, /id="whatsapp-db-button"/);
     assert.match(html, /id="child-name-he"/);
     assert.match(html, /id="child-name-en"/);
@@ -360,7 +369,7 @@ test("privacy policy explains the required phone number purpose", () => {
   assert.doesNotMatch(enPrivacy, /without a number/);
 });
 
-test("unit clock download is available in Hebrew and unlocked after registration in English", () => {
+test("WhatsApp submission does not trigger the unit clock download", () => {
   const heHtml = fs.readFileSync(path.join(ROOT, "public", "he", "index.html"), "utf8");
   const enHtml = fs.readFileSync(path.join(ROOT, "public", "en", "index.html"), "utf8");
 
@@ -370,7 +379,9 @@ test("unit clock download is available in Hebrew and unlocked after registration
   assert.match(enHtml, /id="unit-clock-download"[^>]+href="https:\/\/Tuning-Mg\.com\/d"[^>]+hidden/);
 
   for (const html of [heHtml, enHtml]) {
-    assert.match(html, /var message = buildWhatsappDbMessage\(\);[\s\S]*downloadButton\.hidden = false;[\s\S]*downloadButton\.click\(\);/);
+    assert.match(html, /var message = buildWhatsappDbMessage\(\);[\s\S]*window\.open\(url, '_blank'\);/);
+    assert.doesNotMatch(html, /downloadButton\.hidden = false;/);
+    assert.doesNotMatch(html, /downloadButton\.click\(\);/);
     assert.doesNotMatch(html, /document\.getElementById\('whatsapp-db-button'\)\.addEventListener\('click',\s*function[^}]*downloadButton/);
   }
 });

@@ -139,6 +139,35 @@
 	font-size: 13px;
 	color: #555;
   }
+  .umid-panel {
+	display: grid;
+	gap: 8px;
+	margin-top: 8px;
+	padding: 10px;
+	border: 1px solid #d8dde3;
+	border-radius: 6px;
+	background: #f8f9fa;
+  }
+  .umid-title {
+	margin: 0;
+	font-weight: bold;
+	color: #444;
+  }
+  .umid-row {
+	display: flex;
+	gap: 8px;
+  }
+  .timezone-preview .umid-row input {
+	width: 100%;
+	max-width: none;
+	font-family: monospace;
+	direction: ltr;
+	text-align: left;
+	cursor: text;
+  }
+  .umid-copy-button {
+	flex: 0 0 auto;
+  }
   .db-share {
 	display: grid;
 	gap: 8px;
@@ -188,6 +217,10 @@
 	  grid-template-columns: 1fr;
 	}
 	.color-preview-items {
+	  grid-template-columns: 1fr;
+	}
+	.umid-row {
+	  display: grid;
 	  grid-template-columns: 1fr;
 	}
 	.db-share-grid {
@@ -277,6 +310,14 @@
 							</span>
 						</div>
 					</div>
+				</div>
+				<div class="umid-panel">
+					<label class="umid-title" for="umid-value">UniqueMeaningfulID (UMID)</label>
+					<div class="umid-row">
+						<input type="text" id="umid-value" class="form-control" value="" placeholder="Waiting for color calculation" readonly>
+						<button type="button" id="copy-umid-button" class="btn btn-secondary umid-copy-button" disabled>Copy</button>
+					</div>
+					<p id="umid-status" class="timezone-hint" aria-live="polite">Moon hour · Moon day · Sun hour · Sun day</p>
 				</div>
 				<div class="db-share">
 					<p class="db-share-title">Send to add to website</p>
@@ -462,6 +503,52 @@
 		}
 	}
 
+	function buildUmid(prediction) {
+		return [
+			prediction.moon.color,
+			prediction.moon.dayColor,
+			prediction.sun.color,
+			prediction.sun.dayColor
+		].map(function(color) {
+			return String(color || '').replace('#', '').toUpperCase();
+		}).join('');
+	}
+
+	function setUmid(prediction) {
+		var input = document.getElementById('umid-value');
+		var button = document.getElementById('copy-umid-button');
+		if (!input || !button) {
+			return;
+		}
+		input.value = prediction ? buildUmid(prediction) : '';
+		button.disabled = !input.value;
+	}
+
+	function copyUmid() {
+		var input = document.getElementById('umid-value');
+		var status = document.getElementById('umid-status');
+		if (!input || !input.value) {
+			return;
+		}
+
+		function showCopied() {
+			if (status) status.textContent = 'UMID copied to the clipboard.';
+		}
+
+		if (navigator.clipboard && window.isSecureContext) {
+			navigator.clipboard.writeText(input.value).then(showCopied).catch(function() {
+				input.select();
+				document.execCommand('copy');
+				showCopied();
+			});
+			return;
+		}
+
+		input.select();
+		document.execCommand('copy');
+		showCopied();
+	}
+
 	function applyMoonColorsToButtons(result) {
 		document.querySelectorAll('.btn:not(#whatsapp-db-button), .gender-option').forEach(function(button) {
 			button.style.backgroundColor = result.color;
@@ -471,6 +558,7 @@
 	}
 
 	function clearColorPreview(message) {
+		setUmid(null);
 		document.body.classList.add('color-pending');
 		['sun', 'moon'].forEach(function(kind) {
 			var swatch = document.getElementById(kind + '-color-swatch');
@@ -536,6 +624,7 @@
 			var prediction = getJerusalemHebrewPrediction(timeInfo);
 			setColorPreviewResult('sun', prediction.sun);
 			setColorPreviewResult('moon', prediction.moon);
+			setUmid(prediction);
 			applyMoonColorsToButtons(prediction.moon);
 			document.body.classList.remove('color-pending');
 		} catch (error) {
@@ -645,9 +734,6 @@
 		try {
 			var message = buildWhatsappDbMessage();
 			var url = 'https://wa.me/' + WHATSAPP_DB_PHONE + '?text=' + encodeURIComponent(message);
-			var downloadButton = document.getElementById('unit-clock-download');
-			downloadButton.hidden = false;
-			downloadButton.click();
 			setWhatsappDbStatus('Opening WhatsApp with the prepared record.', false);
 			window.open(url, '_blank');
 		} catch (error) {
@@ -714,6 +800,7 @@
 	document.getElementById('hourOfBirth').addEventListener('change', updateTimezonePreview);
 	document.getElementById('hourOfBirth').addEventListener('input', updateTimezonePreview);
 	document.getElementById('whatsapp-db-button').addEventListener('click', openWhatsappDbMessage);
+	document.getElementById('copy-umid-button').addEventListener('click', copyUmid);
 
 	var marker;
 	var map;

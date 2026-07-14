@@ -2,6 +2,76 @@
   "hosting": {
     "site": "jclock126",
     "public": "public",
+    "rewrites": [
+      {
+        "source": "/man/now",
+        "destination": "/man-now.html"
+      },
+      {
+        "source": "/woman/now",
+        "destination": "/woman-now.html"
+      },
+      {
+        "source": "/man/app",
+        "destination": "/man-now.html"
+      },
+      {
+        "source": "/woman/app",
+        "destination": "/woman-now.html"
+      },
+      {
+        "source": "/man/חצות",
+        "destination": "/learning-shortcut.html"
+      },
+      {
+        "source": "/man/בוקר",
+        "destination": "/learning-shortcut.html"
+      },
+      {
+        "source": "/man/צהריים",
+        "destination": "/learning-shortcut.html"
+      },
+      {
+        "source": "/man/ערב",
+        "destination": "/learning-shortcut.html"
+      },
+      {
+        "source": "/woman/חצות",
+        "destination": "/learning-shortcut.html"
+      },
+      {
+        "source": "/woman/בוקר",
+        "destination": "/learning-shortcut.html"
+      },
+      {
+        "source": "/woman/צהריים",
+        "destination": "/learning-shortcut.html"
+      },
+      {
+        "source": "/woman/ערב",
+        "destination": "/learning-shortcut.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/{man,woman}/{now,app}",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "/js/now-app.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",

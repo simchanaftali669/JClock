@@ -111,13 +111,13 @@
             <input style="display: none; font-weight: bold;" class="day" id="Aluf__mida_12"  type="text" value = "" onclick="window.open('tel:+972587401735')" ondblclick = "window.open('tel:+972543517530')"/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <div class="masechet-split"><input class="day" id="Masechet"  type="text" value="" onclick="openMasechetInNewTab();" ondblclick="openMasechetInSefariaInNewTab();" /><button type="button" class="masechet-indigo-area" onclick="openKehatiAppInNewTab();" aria-label=""></button></div>
+            <div class="masechet-split"><input class="day" id="Masechet"  type="text" value="" /><button type="button" class="masechet-indigo-area" onclick="openKehatiAppInNewTab();" aria-label=""></button></div>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="day" id="Sefer"  type="text" value="" onclick="openSeferInNewTab();" ondblclick="openSeferInSefariaInNewTab();" />
+            <input class="day" id="Sefer"  type="text" value="" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <input class="day" id="Parasha" type="text" value="" onclick="openParashaInNewTab();" ondblclick="openParashaInSefariaInNewTab();" />
+            <input class="day" id="Parasha" type="text" value="" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
             <input class="day" id="Laws" type="text" value="חוקים" onclick="openLawsInNewTab();" />
@@ -342,6 +342,22 @@
         return "Jubilee";
     }
 
+    function redirectToCurrentLearningShortcut(learningMethod)
+    {
+        var url = new URL(document.location.href);
+        if (url.searchParams.get("shortcut") !== "now")
+            return false;
+
+        var shortcutNames = {
+            Dovid: "חצות",
+            Month: "בוקר",
+            Year: "צהריים",
+            Jubilee: "ערב"
+        };
+        window.location.replace("/man/" + shortcutNames[learningMethod]);
+        return true;
+    }
+
     function setDefaultHebrewDateParams(url)
     {
         if (url.searchParams.get("hebrewDay") && url.searchParams.get("hebrewHour"))
@@ -375,7 +391,9 @@
             defaultHebrewHour = defaultHebrewHour - 24;
 
         clearDirectDefaultLearningRequest();
-        sederLimud(getDefaultSunLearningPeriod());
+        var learningMethod = getDefaultSunLearningPeriod();
+        if (!redirectToCurrentLearningShortcut(learningMethod))
+            sederLimud(learningMethod);
         return true;
     }
 
@@ -428,18 +446,58 @@
         win.focus();
     }
 
-    var masechetClickTimer;
-    function openMasechetInNewTab()
+    function bindLearningLinkGestures(elementId, openInSefaria, openInApp)
     {
-        clearTimeout(masechetClickTimer);
-        masechetClickTimer = setTimeout(openKehatiAppInNewTab, 250);
+        var element = document.getElementById(elementId);
+        var clickTimer;
+        var longPressTimer;
+        var longPressTriggered = false;
+
+        element.addEventListener('click', function(event) {
+            if (longPressTriggered) {
+                longPressTriggered = false;
+                return;
+            }
+            if (event.detail > 1)
+                return;
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(openInSefaria, 250);
+        });
+
+        element.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+            clearTimeout(clickTimer);
+            clearTimeout(longPressTimer);
+            openInApp();
+        });
+
+        element.addEventListener('pointerdown', function(event) {
+            if (event.button !== 0)
+                return;
+            longPressTriggered = false;
+            clearTimeout(longPressTimer);
+            longPressTimer = setTimeout(function() {
+                clearTimeout(clickTimer);
+                longPressTriggered = true;
+                openInApp();
+            }, 600);
+        });
+
+        ['pointerup', 'pointercancel', 'pointerleave'].forEach(function(eventName) {
+            element.addEventListener(eventName, function() {
+                clearTimeout(longPressTimer);
+            });
+        });
+
+        element.addEventListener('contextmenu', function(event) {
+            if (longPressTriggered)
+                event.preventDefault();
+        });
     }
 
     function openMasechetInSefariaInNewTab()
-    {
-        clearTimeout(masechetClickTimer);
-        var win = window.open(masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=he', '_blank');
-        win.focus();
+	{
+        window.location.href = masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=he';
     }
 
     function openKehatiAppInNewTab()
@@ -455,48 +513,37 @@
             url = 'https://apps.apple.com/il/app/kehati/id1059791961';
         }
 
-        var win = window.open(url, '_blank');
-        win.focus();
+        window.location.href = url;
     }
 
-    var seferClickTimer;
-    function openSeferInNewTab()
+    function open929AppInNewTab()
     {
-        clearTimeout(seferClickTimer);
-        seferClickTimer = setTimeout(function() {
-            var win = window.open(sefer_929_url || 'https://www.929.org.il/page/1', '_blank');
-            win.focus();
-        }, 250);
+        window.location.href = sefer_929_url || 'https://www.929.org.il/page/1';
     }
 
     function openSeferInSefariaInNewTab()
     {
-        clearTimeout(seferClickTimer);
-        var win = window.open(sefer_midrash_url || 'https://www.sefaria.org/Bereshit_Rabbah?lang=he', '_blank');
-        win.focus();
+        window.location.href = sefer_midrash_url || 'https://www.sefaria.org/Bereshit_Rabbah?lang=he';
     }
 
-    var parashaClickTimer;
-    function openParashaInNewTab() {
-        clearTimeout(parashaClickTimer);
-        parashaClickTimer = setTimeout(function() {
-            var elonUrl = (typeof parasha_elon_url !== 'undefined' && parasha_elon_url) ?
-                parasha_elon_url :
-                'http://ravoldsite.com/archives/archives_h.html';
-            var win = window.open(elonUrl, '_blank');
-            win.focus();
-        }, 250);
+    function openRabbiElonAppInNewTab() {
+        var elonUrl = (typeof parasha_elon_url !== 'undefined' && parasha_elon_url) ?
+            parasha_elon_url :
+            'http://ravoldsite.com/archives/archives_h.html';
+        window.location.href = elonUrl;
     }
 
     function openParashaInSefariaInNewTab() {
-        clearTimeout(parashaClickTimer);
         var parashaName = document.getElementById("Parasha").value;
         var zoharUrl = (typeof getSefariaZoharParashaUrl === "function") ?
             getSefariaZoharParashaUrl(parashaName) :
             'https://www.sefaria.org/Zohar,_Bereshit?vhe=Hebrew_Translation&lang=he';
-        var win = window.open(zoharUrl, '_blank');
-        win.focus();
+        window.location.href = zoharUrl;
     }
+
+    bindLearningLinkGestures('Masechet', openMasechetInSefariaInNewTab, openKehatiAppInNewTab);
+    bindLearningLinkGestures('Sefer', openSeferInSefariaInNewTab, open929AppInNewTab);
+    bindLearningLinkGestures('Parasha', openParashaInSefariaInNewTab, openRabbiElonAppInNewTab);
 
     //pause the background music
     function pause() {
