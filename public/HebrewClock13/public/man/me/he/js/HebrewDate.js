@@ -168,6 +168,12 @@ function getHebrewMonthForCount(hebrew) {
 	function getCurrentMazal(period)
 	{
 		let today = new Date();
+		if (typeof sunsetH !== "undefined" && typeof sunsetM !== "undefined" && typeof sunsetS !== "undefined") {
+			let sunset = new Date(today);
+			sunset.setHours(sunsetH, sunsetM, sunsetS, 0);
+			if (today >= sunset)
+				today.setDate(today.getDate() + 1);
+		}
 		let tishrei5780 = new Date('2019-10-01'); // Approximate Gregorian date for Tishrei 5780
 
 		let monthsDifference = countHebrewMonths(tishrei5780,today,period);
