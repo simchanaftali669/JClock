@@ -190,13 +190,6 @@ function getHebrewMonthForCount(hebrew) {
 		currentMoladHour = currentMoladHour+1;
 		if(currentMoladHour == 0)
 			currentMoladHour = 24;
-		// Molad hours begin at 18:00. During the first six molad hours,
-		// show the civil weekday on which the evening actually occurs.
-		if (currentMoladHour <= 6) {
-			currentMoladDay--;
-			if (currentMoladDay == 0)
-				currentMoladDay = 7;
-		}
 		
 		var currentMoladChelek = (tishrei5780Molad[2]+793*monthsDifference)%1080;
 		

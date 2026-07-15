@@ -658,6 +658,11 @@
     var dayIndex = getDayMazalIndex(hebrewDay);
     var hourBrightness = clamp(parts / HALAKIM_PER_HOUR, 0, 1);
     var dayBrightness = clamp(clockHour / 24, 0, 1);
+    // The sun clock uses an inverse light model: the start of the range (0)
+    // is brightest and the end of the range (1) is darkest. The moon keeps
+    // its existing direct light model.
+    var hourColorBrightness = kind === "sun" ? 1 - hourBrightness : hourBrightness;
+    var dayColorBrightness = kind === "sun" ? 1 - dayBrightness : dayBrightness;
     var hourBaseColor = WOMAN_SIMPLE_COLORS_BY_INDEX[index];
     var dayBaseColor = WOMAN_SIMPLE_COLORS_BY_INDEX[dayIndex];
 
@@ -670,12 +675,12 @@
       mazalIndex: index,
       mazalHour: COMMERCIAL_MAZAL_BY_INDEX[index],
       baseColor: hourBaseColor,
-      color: applyBrightnessToHex(hourBaseColor, hourBrightness),
+      color: applyBrightnessToHex(hourBaseColor, hourColorBrightness),
       brightness: hourBrightness,
       dayMazalIndex: dayIndex,
       dayMazalHour: COMMERCIAL_MAZAL_BY_INDEX[dayIndex],
       dayBaseColor: dayBaseColor,
-      dayColor: applyBrightnessToHex(dayBaseColor, dayBrightness),
+      dayColor: applyBrightnessToHex(dayBaseColor, dayColorBrightness),
       dayBrightness: dayBrightness,
       dayTextHe: DAY_MIDA_HE[hebrewDay - 1],
       dayTextEn: DAY_MIDA_EN[hebrewDay - 1],

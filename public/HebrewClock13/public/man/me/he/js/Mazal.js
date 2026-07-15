@@ -60,7 +60,7 @@ function setmazal() {
     //lbHourClock
     var Hour; // = masechet_offset();
     if (lbHour < 12)
-		clockHour = lbHour + 1;
+		Hour = lbHour + 1;
 	else
 		Hour = lbHour - 12 + 1;
     Hour = marrigeHour ? (parseInt(marrigeHour)-1) : Hour; // = sefer_offset();

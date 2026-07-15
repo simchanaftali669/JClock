@@ -122,7 +122,7 @@ test("London winter birth time keeps winter GMT and moon day context", () => {
   assert.equal(result.moon.dayTextEn, "Mercury");
 });
 
-test("color preview uses Jerusalem moon times for the known Jerusalem example", () => {
+test("color preview uses inverse sun brightness and direct moon brightness", () => {
   const result = preview.predict({
     latitude: 31.7768514,
     longitude: 35.2331664,
@@ -138,12 +138,12 @@ test("color preview uses Jerusalem moon times for the known Jerusalem example", 
   assert.equal(result.sun.hebrewHour, 4);
   assert.equal(result.sun.mazalHour, 7);
   assert.equal(result.sun.baseColor, "#808080");
-  assert.equal(result.sun.color, "#000000");
+  assert.equal(result.sun.color, "#FFFFFF");
   assert.equal(result.sun.brightness, 0);
   assert.equal(result.sun.dayTextEn, "Venus");
   assert.equal(result.sun.dayMazalHour, 5);
   assert.equal(result.sun.dayBaseColor, "#BA8D1A");
-  assert.equal(result.sun.dayColor, "#382A08");
+  assert.equal(result.sun.dayColor, "#F7EAC7");
   assert.equal(result.sun.dayBrightness, 0.125);
   assert.equal(result.moon.hebrewDay, 4);
   assert.equal(result.moon.hebrewHour, 23);
@@ -218,13 +218,13 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
     assert.match(html, /var JERUSALEM_LONGITUDE = 35\.2331664;/);
     assert.match(html, /var clockLatitude = JERUSALEM_LATITUDE;/);
     assert.match(html, /var clockLongitude = JERUSALEM_LONGITUDE;/);
-	assert.match(html, /var clockUrl = "https:\/\/JClock\.net\/HebrewClock13\/public\/" \+ gender \+ "\/simple\/index\.html";/);
+	assert.match(html, /var clockUrl = "https:\/\/jclock126\.web\.app\/HebrewClock13\/public\/" \+ gender \+ "\/simple\/index\.html";/);
     assert.match(html, /\?latitude=" \+ clockLatitude/);
     assert.match(html, /"&longitude=" \+ clockLongitude/);
     assert.doesNotMatch(html, /\?latitude=" \+ latitude/);
     assert.doesNotMatch(html, /"&longitude=" \+ longitude/);
-    assert.match(html, /jclock\.net\/HebrewClock13\/public\/woman\/simple\/js\/suncalc\.js\?v=20260707-final-hebrew-day/);
-    assert.match(html, /shared\/hebrew-clock-preview\.js\?v=20260710-dynamic-moon-offset/);
+    assert.match(html, /jclock126\.web\.app\/HebrewClock13\/public\/woman\/simple\/js\/suncalc\.js\?v=20260707-final-hebrew-day/);
+    assert.match(html, /shared\/hebrew-clock-preview\.js\?v=20260714-inverse-sun-brightness/);
     assert.match(html, /id="color-preview"/);
     assert.match(html, /id="sun-color-swatch"/);
     assert.match(html, /id="sun-day-color-swatch"/);

@@ -11,8 +11,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
    <script src="../shared/tz-lookup.js"></script>
   <script src="../shared/timezone-converter.js"></script>
-  <script src="https://jclock.net/HebrewClock13/public/woman/simple/js/suncalc.js?v=20260707-final-hebrew-day"></script>
-  <script src="../shared/hebrew-clock-preview.js?v=20260710-dynamic-moon-offset"></script>
+  <script src="https://jclock126.web.app/HebrewClock13/public/woman/simple/js/suncalc.js?v=20260707-final-hebrew-day"></script>
+  <script src="../shared/hebrew-clock-preview.js?v=20260714-inverse-sun-brightness"></script>
    <style>
   /* Set the size of the div element that contains the map */
   #map {
@@ -422,7 +422,7 @@
 		document.getElementById('GMT').value = String(gmt);
 		document.getElementById('jerusalem-time').value = formatJerusalemDateTime(jerusalemTime);
 
-		var clockUrl = "https://JClock.net/HebrewClock13/public/" + gender + "/simple/index.html";
+		var clockUrl = "https://jclock126.web.app/HebrewClock13/public/" + gender + "/simple/index.html";
 			
 		document.location.href = clockUrl + "?latitude=" + clockLatitude + 
 																					"&longitude=" + clockLongitude +
