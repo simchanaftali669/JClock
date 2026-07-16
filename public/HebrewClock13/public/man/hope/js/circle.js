@@ -193,10 +193,10 @@ function drawCircle()
     ctx.beginPath();
     ctx.arc(400, 320, 300, 0, 2 * Math.PI);
     ctx.stroke();
-    ctx.font = "20px Arial";
+    ctx.font = "bold 24px Arial";
 
     ctx.fillStyle = "black";
-    ctx.fillText("תקווה\u200E:", 720, 320);
+    ctx.fillText("תקווה", 720, 320);
 
    setTimeout(drawQurater1, 500);
    setTimeout(drawQurater2, 1000);
