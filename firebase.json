@@ -4,6 +4,11 @@
     "public": "public",
     "redirects": [
       {
+        "source": "/HebrewGiving",
+        "destination": "/HebrewClock13/public/woman/mahasrot/index.html",
+        "type": 302
+      },
+      {
         "source": "/08/now",
         "destination": "/#08",
         "type": 302

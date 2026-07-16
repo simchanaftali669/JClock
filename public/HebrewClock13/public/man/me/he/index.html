@@ -55,7 +55,7 @@
 			<table/>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
-            <button id="stop" onclick="stop()" />עצור
+            <button type="button" id="stop" onclick="stopAndOpenMahasrot()">עצור</button>
         </div>
         <div style="text-align:center; margin-bottom:10px;">
             <input style="display: none; font-weight: bold;" class="day" id="Mazal"  type="text" value = "" onclick="openMidaInNewTab(1);"/>
@@ -557,7 +557,7 @@
     }
 
     //kidush hachodesh on specific hour
-    function stop() {
+    function stopAndOpenMahasrot() {
         clearInterval(oTimer);
 
         localStorage.setItem("hebrewday", hebrewday);
@@ -572,8 +572,10 @@
         localStorage.setItem("laws", document.getElementById("Laws").value);
 
 
-        var win = window.open("./moon.html", '_blank');
-        win.focus();
+        var browserLanguage = (navigator.languages && navigator.languages[0]) || navigator.language || "en";
+        var mahasrotLanguage = browserLanguage.toLowerCase().startsWith("he") ? "he" : "en";
+        var mahasrotUrl = "/HebrewClock13/public/man/mahasrot/" + mahasrotLanguage + "/index.html";
+        window.top.location.href = mahasrotUrl;
     }
 
 

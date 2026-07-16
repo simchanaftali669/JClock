@@ -11,7 +11,7 @@ function drawQurater1()
     //תקווה ישראלית - סרט של השולחנות העגולים
     ctx.fillStyle = "#a6230e";  //red
     ctx.fill();
-    ctx.fillStyle = "white";  
+    ctx.fillStyle = "white";
     //ctx.fillText("שמעון", 580, 160);
     //ctx.fillText("גד", 580, 160);
 }
@@ -22,7 +22,7 @@ function drawQurater2()
     var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
     ctx.font = "20px Arial";
-  
+
     ctx.beginPath();
     ctx.moveTo(400,320);
     ctx.arc(400,320,300,2*Math.PI,((2/4)*Math.PI),false);
@@ -31,7 +31,7 @@ function drawQurater2()
     //israeli hope של בית הנשיא
     ctx.fillStyle = "#BA8D1A";  //yellow
     ctx.fill();
-    ctx.fillStyle = "white";  
+    ctx.fillStyle = "white";
     //ctx.fillText("אוניברסלי", 560, 480);
 }
 
@@ -48,7 +48,7 @@ function drawQurater3()
     // תקווה יהודית - שעון
     ctx.fillStyle = "#2D8DA1";  //blue
     ctx.fill();
-    ctx.fillStyle = "white";  
+    ctx.fillStyle = "white";
     //ctx.fillText("יהודי", 160, 480);
 }
 
@@ -65,7 +65,7 @@ function drawQurater4()
     //e-zone -- תקווה עברית
     ctx.fillStyle = "#84C45E";  //green
     ctx.fill();
-    ctx.fillStyle = "white";  
+    ctx.fillStyle = "white";
     //ctx.fillText("עברי", 160, 160);
 }
 
@@ -75,13 +75,17 @@ function drawSmallCircle()
     var ctx = c.getContext("2d");
     ctx.font = "20px Arial";
 
-    //לינק של הכינור  נמצא באימייל ונקרא קשתי
     ctx.beginPath();
     ctx.arc(400, 320, 30, 0 , 2 * Math.PI);
     ctx.stroke();
 
     ctx.fillStyle = "black";  //red
-    ctx.fill(); 
+    ctx.fill();
+    ctx.fillStyle = "white";
+    ctx.font = "bold 13px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("לימוד", 400, 325);
+    ctx.textAlign = "start";
 }
 
 function drawline1()
@@ -122,7 +126,6 @@ function drawline2()
     ctx.fillText("בנימין", 470, 580);
 }
 
-
 function drawline3()
 {
     var c = document.getElementById("myCanvas");
@@ -141,7 +144,6 @@ function drawline3()
     ctx.fillText("אשר", 180, 520);
     ctx.fillText("נפתלי", 120, 400);
 }
-
 
 function drawline4()
 {
@@ -162,14 +164,12 @@ function drawline4()
     ctx.fillText("יהודה", 120, 240);
 }
 
-
 function drawMiddleCircle()
 {
     var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
     ctx.font = "20px Arial";
 
-    //לינק של הכינור  נמצא באימייל ונקרא קשתי
     ctx.beginPath();
     ctx.arc(400, 320, 150, 0 , 2 * Math.PI);
     ctx.setLineDash([1]);
@@ -184,14 +184,7 @@ function drawMiddleCircle()
     ctx.fillText("ציון", 505, 450);
     ctx.fillText("יפו", 390, 490);
     ctx.fillText("החדש", 240, 450);
-
-
-
-    //ctx.fillStyle = "black";  //red
-    //ctx.fill(); 
 }
-
-
 
 function drawCircle()
 {
@@ -202,9 +195,8 @@ function drawCircle()
     ctx.stroke();
     ctx.font = "20px Arial";
 
-    ctx.fillStyle = "black";  
-    ctx.fillText(":תקווה", 720, 320);
-
+    ctx.fillStyle = "black";
+    ctx.fillText("תקווה\u200E:", 720, 320);
 
    setTimeout(drawQurater1, 500);
    setTimeout(drawQurater2, 1000);
@@ -216,7 +208,4 @@ function drawCircle()
 //   setTimeout(drawline3, 4000);
 //   setTimeout(drawline4, 4500);
    setTimeout(drawMiddleCircle, 3000);
-
-
-
 }

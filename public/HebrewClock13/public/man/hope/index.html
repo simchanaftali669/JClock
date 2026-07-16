@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>E-zone</title>  
 </head>
 <body>
@@ -30,38 +31,13 @@
             var mouseRadius = Math.sqrt(Math.pow((mouseX - 400), 2) + Math.pow((mouseY - 320), 2));
 
             if( mouseRadius <= 30){
-                window.location = "https://youtu.be/O6gM51TxJws";
+                window.location = "https://ceves.net/";
                 return;
             }
 
-            if( mouseRadius >= 300)
-                return;
-
-
-                
-            //quarter 1
-
-            if( mouseY > 20 && mouseY < 320 && mouseX > 400 && mouseX < 700 ){
-                window.location = "https://shellygilad.wixsite.com/e-zone/1";  
+            if( mouseRadius < 300){
+                window.location = "/HebrewGiving";
             }
-
-            //quarter 2
-            if( mouseY > 320 && mouseY < 620 && mouseX > 400 && mouseX < 700 ){
-                window.location = "https://www.israeli-hope.gov.il/";
-            }
-
-            //quarter 3
-            if( mouseY > 320 && mouseY < 620 && mouseX < 400 && mouseX > 100 ){
-                window.location = "../index.html";
-
-            }
-
-            //quarter 4
-            if( mouseY > 20 && mouseY < 320 && mouseX < 400 && mouseX > 100 ){
-                window.location = "http://shellygilad.wix.com/e-zone";
-            }
-
-
 
 }, false );
     </script> 

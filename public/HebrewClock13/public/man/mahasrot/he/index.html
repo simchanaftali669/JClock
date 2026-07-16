@@ -4,10 +4,23 @@
   <title>מחשבון צדקה מבוסס מעשרות</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="מחשבון צדקה מבוסס מעשרות">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="מחשבון צדקה מבוסס מעשרות">
+  <meta property="og:description" content="חישוב תרומה גדולה, מעשר ראשון ומעשר עני">
+  <meta property="og:image" content="https://jclock126.web.app/assets/hebrew-giving.png?v=2">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://jclock126.web.app/assets/hebrew-giving.png?v=2">
+  <link rel="icon" type="image/png" href="/assets/hebrew-giving.png">
+  <link rel="apple-touch-icon" href="/assets/hebrew-giving.png">
   <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <style>
+    body { min-height: 100vh; background: #000 url('/assets/hebrew-giving.png') center center / cover no-repeat fixed; }
+    .modal-content { background: rgba(255, 255, 255, 0.96); }
+  </style>
 </head>
 <body >
 
@@ -39,13 +52,21 @@
           <hr>
           <p style="display: inline-block; width: 248px;">חיסכון</p><input readonly id="savings" onclick="calculateSavings();"/>          
           <hr>
+          <div role="note" style="color: #000; background-color: #fff; border: 1px solid #000; padding: 12px; margin-bottom: 16px; font-weight: bold;">
+            <div>תרומה גדולה - ליהודי בלבד</div>
+            <div>מעשר ראשון - למשוגע/נביא בלבד</div>
+            <div>מעשר עני - למוסלמי בלבד</div>
+            <div><a href="https://www.youtube.com/shorts/krcQ6ilKonU" target="_blank" rel="noopener noreferrer">לצפייה בסרטון הסברה</a></div>
+          </div>
           <p href="#" data-toggle="tooltip" title="מיועד לכהן" style="display: inline-block; width: 248px;" >תרומה גדולה</p><input readonly id="truma" />
           <br/>
           <p href="#" data-toggle="tooltip" title="מיועד ללוי" style="display: inline-block; width: 248px;" >מעשר ראשון</p><input readonly  id="mahaser_01"/>
 		  <br/>
           <p href="#" data-toggle="tooltip" title="לוי מחויב להביא לכהן" style="display: inline-block; width: 248px;" >תרומת מעשר</p><input readonly id="mahaser_01__truma" />
           <br/>
-          <p href="#" data-toggle="tooltip" title="מעשר שני מוציאים בירושלים בלבד בשנים אבד''ה לשמיטה / מעשר עני מוציאים בכל מקום בשנים ג''ו לשמיטה" style="display: inline-block; width: 248px;" >מעשר שני/עני</p><input readonly id="mahaser_02"/>          
+          <p href="#" data-toggle="tooltip" title="מעשר שני מוציאים בירושלים בלבד בשנים אבד''ה לשמיטה / מעשר עני מוציאים בכל מקום בשנים ג''ו לשמיטה" style="display: inline-block; width: 248px;" >מעשר שני/עני</p><input readonly id="mahaser_02"/>
+          <div style="margin-top: 16px;"><a href="/HebrewClock13/public/man/yovelMazalCalculator/he/index.html" target="_blank" rel="noopener noreferrer">מחשבון השנים/יובל</a></div>
+          <div style="margin-top: 16px;"><a class="btn btn-primary" href="/HebrewClock13/public/man/hope/index.html">חזרה לשער העיר</a></div>
         </div>
         
         <!-- Modal footer -->
