@@ -385,3 +385,32 @@ test("WhatsApp submission does not trigger the unit clock download", () => {
     assert.doesNotMatch(html, /document\.getElementById\('whatsapp-db-button'\)\.addEventListener\('click',\s*function[^}]*downloadButton/);
   }
 });
+
+test("place search offers Google autocomplete and keeps the selected address visible", () => {
+  const heHtml = fs.readFileSync(path.join(ROOT, "public", "he", "index.html"), "utf8");
+  const enHtml = fs.readFileSync(path.join(ROOT, "public", "en", "index.html"), "utf8");
+
+  for (const html of [heHtml, enHtml]) {
+    assert.match(html, /id="place-search"[^>]+autocomplete="off"/);
+    assert.match(html, /new google\.maps\.places\.Autocomplete\(placeSearchInput/);
+    assert.match(html, /if \(label\) placeSearchInput\.value = label;/);
+    assert.match(html, /geocoder\.geocode\(\{ location: location \}/);
+    assert.match(html, /libraries=places[^\"]+callback=initMap/);
+  }
+
+  assert.match(heHtml, /libraries=places&language=he&region=IL&callback=initMap/);
+  assert.match(enHtml, /libraries=places&language=en&region=IL&callback=initMap/);
+});
+
+test("calculator refreshes bypass browser and Firebase caches", () => {
+  const pages = ["index.html", path.join("he", "index.html"), path.join("en", "index.html")];
+
+  for (const page of pages) {
+    const html = fs.readFileSync(path.join(ROOT, "public", page), "utf8");
+    assert.match(html, /http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/);
+    assert.match(html, /http-equiv="Pragma" content="no-cache"/);
+  }
+
+  const firebase = fs.readFileSync(path.join(ROOT, "firebase.json"), "utf8");
+  assert.match(firebase, /"Cache-Control"[\s\S]*"no-cache, no-store, must-revalidate"/);
+});

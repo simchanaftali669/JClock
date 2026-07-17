@@ -4,15 +4,18 @@
   <title>JNF - JerusalemNForce</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../shared/style.css?v=20260713-action-layout-fix">
+  <link rel="stylesheet" href="../shared/style.css?v=20260716-place-autocomplete">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-   <script src="../shared/tz-lookup.js"></script>
-  <script src="../shared/timezone-converter.js"></script>
+   <script src="../shared/tz-lookup.js?v=20260716-place-autocomplete"></script>
+  <script src="../shared/timezone-converter.js?v=20260716-place-autocomplete"></script>
   <script src="https://jclock126.web.app/HebrewClock13/public/woman/simple/js/suncalc.js?v=20260707-final-hebrew-day"></script>
-  <script src="../shared/hebrew-clock-preview.js?v=20260714-inverse-sun-brightness"></script>
+  <script src="../shared/hebrew-clock-preview.js?v=20260716-place-autocomplete"></script>
    <style>
   /* Set the size of the div element that contains the map */
   #map {
@@ -50,6 +53,14 @@
   }
   .gender-option.selected {
 	border: 2px dashed #000;
+  }
+  #moon-calculation-button {
+	padding-right: 6px;
+	padding-left: 6px;
+	line-height: 1.2;
+  }
+  #moon-calculation-button.showing-question {
+	font-size: 13px;
   }
   body.color-pending {
 	color: #555;
@@ -259,7 +270,7 @@
 			<hr/>-->
 			<p href="#" data-toggle="tooltip" title="choose location"  style="display: inline-block; width: 248px;">Choose birth location</p>
 			<div class="map-panel">
-				<input id="place-search" type="text" class="form-control" placeholder="For example: Western Wall">
+				<input id="place-search" type="text" class="form-control" placeholder="For example: Western Wall" autocomplete="off" aria-label="Search for a place or Google address">
 				<div class="map-actions">
 					<button type="button" id="place-search-button" class="btn btn-info">Search map</button>
 					<button type="button" id="default-location" class="btn btn-primary">Jerusalem</button>
@@ -331,7 +342,7 @@
 					</p>
 					<button type="button" id="whatsapp-db-button" class="btn btn-success"><img class="whatsapp-icon" src="../shared/whatsapp.svg" width="20" height="20" alt="">Send WhatsApp to add to website</button>
 					<a id="tuning-war-link" class="btn btn-primary" href="https://tuning-mg.com/" target="_blank" rel="noopener noreferrer">Tuning War</a>
-					<a id="unit-clock-download" class="btn btn-primary" href="https://Tuning-Mg.com/d" download="jclock.zip" hidden>Download the unit clock app</a>
+					<a id="unit-clock-download" class="btn btn-primary" href="https://drive.google.com/drive/folders/1JNRCKN0FNxszhOzYt7MQ8E6SwMTnL-do?usp=drive_link" type="file" hidden>Download the unit clock app</a>
 					<p id="whatsapp-db-status" class="timezone-hint" aria-live="polite"></p>
 				</div>
 			</div>
@@ -342,7 +353,7 @@
         <div class="modal-footer">
           <div class="gender-toggle calculation-actions" role="group" aria-label="Choose calculation">
             <button type="button" id="sun-calculation-button" class="btn btn-success gender-option male" onclick="calculateHebrewHour('man');">My Tikkun</button>
-            <button type="button" id="moon-calculation-button" class="btn btn-success gender-option female" onclick="calculateHebrewHour('woman');">My Portion in the Torah</button>
+            <button type="button" id="moon-calculation-button" class="btn btn-success gender-option female" onclick="calculateHebrewHour('woman');" data-primary-label="My Portion in the Torah" data-alternate-label="What made me stop the clock?">My Portion in the Torah</button>
           </div>
         </div>
         
@@ -369,6 +380,16 @@
 	}
 	
 	document.getElementById('btn').click();
+
+	(function rotateMoonCalculationButtonLabel() {
+		var button = document.getElementById('moon-calculation-button');
+		var showingQuestion = false;
+		setInterval(function() {
+			showingQuestion = !showingQuestion;
+			button.textContent = button.getAttribute(showingQuestion ? 'data-alternate-label' : 'data-primary-label');
+			button.classList.toggle('showing-question', showingQuestion);
+		}, 6000);
+	})();
 
 	function calculateHebrewHour(requestedGender)
 	{		
@@ -826,13 +847,13 @@
 
 	  marker.addListener('dragend', function() {
 	    setSelectedLocation(marker.getPosition().lat(), marker.getPosition().lng());
-	    setLocationStatusText('Map point selected.');
+	    resolveSelectedLocation(marker.getPosition());
 	    updateTimezonePreview();
 	  });
 
 	  map.addListener('click', function(event) {
 	    updateLocation(event.latLng.lat(), event.latLng.lng());
-	    setLocationStatusText('Map point selected.');
+	    resolveSelectedLocation(event.latLng);
 	  });
 
 	  placeAutocomplete = new google.maps.places.Autocomplete(placeSearchInput, {
@@ -911,7 +932,19 @@
 
 	function applyGoogleLocation(location, label) {
 	  updateLocation(location.lat(), location.lng());
+	  if (label) placeSearchInput.value = label;
 	  setLocationStatusText(label || 'Location selected.');
+	}
+
+	function resolveSelectedLocation(location) {
+	  geocoder.geocode({ location: location }, function(results, geocodeStatus) {
+	    if (geocodeStatus === 'OK' && results[0]) {
+	      placeSearchInput.value = results[0].formatted_address;
+	      setLocationStatusText(results[0].formatted_address);
+	      return;
+	    }
+	    setLocationStatusText('Map point selected.');
+	  });
 	}
 
 	function setSelectedLocation(selectedLatitude, selectedLongitude) {
@@ -935,7 +968,7 @@
 
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcXPNQH8H9c_xeTxH9yT1OKPoM5e_YU4I&libraries=places&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcXPNQH8H9c_xeTxH9yT1OKPoM5e_YU4I&libraries=places&language=en&region=IL&callback=initMap">
     
     </script>
 
