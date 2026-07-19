@@ -1,5 +1,5 @@
-import { copyFile, mkdir, rm, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { cp, copyFile, mkdir, rm, writeFile } from "node:fs/promises";
+import { basename, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const dist = resolve(root, "dist");
@@ -21,6 +21,14 @@ await copyFile(resolve(root, "public", "man-now.webmanifest"), resolve(client, "
 await copyFile(resolve(root, "public", "woman-now.webmanifest"), resolve(client, "woman-now.webmanifest"));
 await copyFile(resolve(root, "public", "css", "now-app.css"), resolve(client, "css", "now-app.css"));
 await copyFile(resolve(root, "public", "js", "now-app.js"), resolve(client, "js", "now-app.js"));
+await cp(
+  resolve(root, "public", "HebrewCommercial13", "public", "Need-Me"),
+  resolve(client, "Need-Me"),
+  {
+    recursive: true,
+    filter: (source) => !basename(source).startsWith("."),
+  },
+);
 
 const worker = `const appRoutes = new Map([
   ["/man/app", "/man-now/"],
@@ -62,6 +70,11 @@ const regionNowRoutes = new Map([
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.hostname.toLowerCase() === "need-me.net") {
+      url.pathname = "/Need-Me" + (url.pathname === "/" ? "/index.html" : url.pathname);
+      return env.ASSETS.fetch(new Request(url, request));
+    }
+
     const regionNowShortcut = url.pathname.match(new RegExp("^/(0[1-9])/now/?$"));
     if (regionNowShortcut) {
       const regionAsset = regionNowRoutes.get(regionNowShortcut[1]);
