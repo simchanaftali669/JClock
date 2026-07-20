@@ -32,11 +32,10 @@
 // 	}
 //   });
 
-var userLang = navigator.language || navigator.userLanguage; 
-if (userLang = "he") 
-	window.location.href = "./he/index.html";
-else
-	window.location.href = "./he/index.html";
+var calculatorTarget = new URL("./he/index.html", window.location.href);
+calculatorTarget.search = window.location.search;
+calculatorTarget.hash = window.location.hash;
+window.location.replace(calculatorTarget.href);
 
 //debug
 //if (userLang = "he") 

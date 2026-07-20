@@ -247,8 +247,11 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
 	assert.match(html, /id="sun-color-swatch"/);
 	assert.match(html, /id="moon-day-color-swatch"/);
 	assert.match(html, /id="moon-color-swatch"/);
-	assert.match(html, /function applyMoonColorsToButtons\(result\)/);
-	assert.match(html, /applyMoonColorsToButtons\(prediction\.moon\)/);
+	assert.match(html, /function applyThemeColors\(colors\)/);
+	assert.match(html, /backgroundColor = colors\.sunDayColor/);
+	assert.match(html, /element\.style\.color = colors\.sunHourColor/);
+	assert.match(html, /backgroundColor = colors\.moonDayColor/);
+	assert.match(html, /button\.style\.color = colors\.moonHourColor/);
 	assert.doesNotMatch(html, /classList\.add\('umid-theme'\)/);
     assert.match(html, /id="whatsapp-db-button"/);
     assert.match(html, /id="child-name-he"/);
@@ -410,6 +413,34 @@ test("place search offers open autocomplete and keeps the selected address visib
     assert.match(html, /L\.map\('map'\)/);
     assert.doesNotMatch(html, /maps\.googleapis\.com\/maps\/api\/js/);
   }
+});
+
+test("root redirect preserves calculator URL parameters", () => {
+  const html = fs.readFileSync(path.join(ROOT, "public", "index.html"), "utf8");
+  assert.match(html, /calculatorTarget\.search = window\.location\.search/);
+  assert.match(html, /calculatorTarget\.hash = window\.location\.hash/);
+  assert.match(html, /window\.location\.replace\(calculatorTarget\.href\)/);
+});
+
+test("Hebrew calculator fills URL input, applies UMID, and waits for clock choice", () => {
+  const html = fs.readFileSync(path.join(ROOT, "public", "he", "index.html"), "utf8");
+  assert.match(html, /birthUrlParams\.get\('name'\)/);
+  assert.match(html, /document\.getElementById\('child-name-he'\)\.value = nameValue/);
+  assert.match(html, /document\.getElementById\('child-name-en'\)\.value = nameValue/);
+  assert.match(html, /function applyUmidTheme\(umid\)/);
+  assert.match(html, /normalized\.slice\(0, 6\)/);
+  assert.match(html, /normalized\.slice\(6, 12\)/);
+  assert.match(html, /normalized\.slice\(12, 18\)/);
+  assert.match(html, /normalized\.slice\(18, 24\)/);
+  assert.match(html, /moonHourColor: '#' \+ normalized\.slice\(0, 6\)/);
+  assert.match(html, /moonDayColor: '#' \+ normalized\.slice\(6, 12\)/);
+  assert.match(html, /sunHourColor: '#' \+ normalized\.slice\(12, 18\)/);
+  assert.match(html, /sunDayColor: '#' \+ normalized\.slice\(18, 24\)/);
+  assert.match(html, /panel\.style\.backgroundColor = colors\.sunDayColor/);
+  assert.match(html, /element\.style\.color = colors\.sunHourColor/);
+  assert.match(html, /button\.style\.backgroundColor = colors\.moonDayColor/);
+  assert.match(html, /button\.style\.color = colors\.moonHourColor/);
+  assert.doesNotMatch(html, /window\.setTimeout\(calculateHebrewHour, 0\)/);
 });
 
 test("calculator refreshes bypass browser and Firebase caches", () => {

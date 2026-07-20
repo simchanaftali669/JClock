@@ -399,6 +399,33 @@
 		}
 	}
 
+	function applyUmidTheme(umid) {
+		var normalized = normalizeUmid(umid);
+		if (!normalized) return;
+		applyThemeColors({
+			moonHourColor: '#' + normalized.slice(0, 6),
+			moonDayColor: '#' + normalized.slice(6, 12),
+			sunHourColor: '#' + normalized.slice(12, 18),
+			sunDayColor: '#' + normalized.slice(18, 24)
+		});
+	}
+
+	function applyThemeColors(colors) {
+		var panel = document.querySelector('.modal-content');
+		if (panel) {
+			panel.style.backgroundColor = colors.sunDayColor;
+			panel.style.color = colors.sunHourColor;
+			panel.querySelectorAll('p, label, h4, span, input, a:not(.btn)').forEach(function(element) {
+				element.style.color = colors.sunHourColor;
+			});
+		}
+		panel.querySelectorAll('.btn, .gender-option').forEach(function(button) {
+			button.style.backgroundColor = colors.moonDayColor;
+			button.style.borderColor = colors.moonDayColor;
+			button.style.color = colors.moonHourColor;
+		});
+	}
+
 	function selectGender(gender) {
 		selectedGender = gender;
 		document.querySelectorAll('.gender-option').forEach(function(button) {
@@ -602,14 +629,6 @@
 		showCopied();
 	}
 
-	function applyMoonColorsToButtons(result) {
-		document.querySelectorAll('.btn:not(#whatsapp-db-button), .gender-option').forEach(function(button) {
-			button.style.backgroundColor = result.color;
-			button.style.borderColor = result.color;
-			button.style.color = result.dayColor;
-		});
-	}
-
 	function clearColorPreview(message) {
 		setUmid(null);
 		document.body.classList.add('color-pending');
@@ -678,7 +697,12 @@
 			setColorPreviewResult('sun', prediction.sun);
 			setColorPreviewResult('moon', prediction.moon);
 			setUmid(prediction);
-			applyMoonColorsToButtons(prediction.moon);
+			applyThemeColors({
+				moonHourColor: prediction.moon.color,
+				moonDayColor: prediction.moon.dayColor,
+				sunHourColor: prediction.sun.color,
+				sunDayColor: prediction.sun.dayColor
+			});
 			document.body.classList.remove('color-pending');
 		} catch (error) {
 			clearColorPreview('חיזוי הצבעים לא נטען. נא לרענן את הדף.');
@@ -853,9 +877,15 @@
 		var dateValue = birthUrlParams.get('date');
 		var timeValue = birthUrlParams.get('time');
 		var genderValue = birthUrlParams.get('gender');
+		var nameValue = (birthUrlParams.get('name') || '').trim();
 		if (dateValue && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) document.getElementById('dateOfBirth').value = dateValue;
 		if (timeValue && /^\d{2}:\d{2}/.test(timeValue)) document.getElementById('hourOfBirth').value = timeValue.slice(0, 5);
+		if (nameValue) {
+			document.getElementById('child-name-he').value = nameValue;
+			document.getElementById('child-name-en').value = nameValue;
+		}
 		if (genderValue === 'man' || genderValue === 'woman') selectGender(genderValue);
+		applyUmidTheme(activeThemeUmid);
 	})();
 
 	document.getElementById('dateOfBirth').addEventListener('change', updateTimezonePreview);
