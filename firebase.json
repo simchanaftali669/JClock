@@ -1,8 +1,21 @@
 {
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "hosting": {
     "site": "jclock126",
     "public": "public",
     "redirects": [
+      {
+        "source": "/HebrewClock13/public/man/me",
+        "destination": "/HebrewClock13/public/man/me/he/index.html",
+        "type": 302
+      },
+      {
+        "source": "/HebrewClock13/public/woman/me",
+        "destination": "/HebrewClock13/public/woman/me/he/index.html",
+        "type": 302
+      },
       {
         "source": "/HebrewGiving",
         "destination": "/HebrewClock13/public/woman/mahasrot/index.html",
@@ -109,6 +122,33 @@
       },
       {
         "source": "/js/now-app.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "/HebrewClock13/public/{man,woman}/me/{he,en}/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "/HebrewClock13/public/{man,woman}/me/{he,en}/js/SederLimud.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "/HebrewClock13/public/woman/me/he/js/Laws.js",
         "headers": [
           {
             "key": "Cache-Control",

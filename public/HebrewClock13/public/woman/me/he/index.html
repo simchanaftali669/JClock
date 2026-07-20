@@ -37,11 +37,11 @@
                 <a href="./jewish/index.html" id="Jubilee__learning">לימוד עם יהודי/ה</a>-->
 				<a href="./kabala/index.html">לו"ז תפילה</a>
 				<a href="../../marrige/he/index.html" id="hourly__learning">לימוד אישי</a>
-				<a onclick="sederLimud('Automate');" id="Automate__learning">לימוד על פי הלוז</a>
-				<a onclick="sederLimud('Dovid');" id="hourly__learning">סדר חצות</a>
-				<a onclick="sederLimud('Month');" id="yearly__learning">סדר בוקר</a>
-				<a onclick="sederLimud('Year');" id="monthly__learning">סדר צהריים</a>
-				<a onclick="sederLimud('Jubilee');" id="Jubilee__learning">סדר ערב</a>
+				<a href="#" onclick="sederLimud('Automate'); return false;" id="Automate__learning">לימוד על פי הלוז</a>
+				<a href="#" onclick="sederLimud('Dovid'); return false;" id="hourly__learning">סדר חצות</a>
+				<a href="#" onclick="sederLimud('Month'); return false;" id="yearly__learning">סדר בוקר</a>
+				<a href="#" onclick="sederLimud('Year'); return false;" id="monthly__learning">סדר צהריים</a>
+				<a href="#" onclick="sederLimud('Jubilee'); return false;" id="Jubilee__learning">סדר ערב</a>
 				<a href="../../../../../BirthCalculator/public/he/index.html" id="hourly__learning">חישוב הלימוד האישי</a>
 <!--                <a href="./guide.html">מדריך למשתמש</a>-->
 			</div>
@@ -148,7 +148,7 @@
     <script type="text/javascript" src="../../shared/he/js/Geolocation.js"></script>
     <script type="text/javascript" src="./js/Menu.js"></script>
     <script type="text/javascript" src="./js/HebrewClock.js?v=2"></script>
-    <script type="text/javascript" src="./js/SederLimud.js"></script>
+    <script type="text/javascript" src="./js/SederLimud.js?v=20260719-study-buttons"></script>
     <script type="text/javascript" src="../../shared/he/js/Commercial.js?v=4"></script>
 	<script type="text/javascript" src="./js/Mazal.js"></script>
 	<script type="text/javascript" src="./js/Gender.js"></script>
@@ -156,7 +156,7 @@
     <script type="text/javascript" src="./js/Masechet.js"></script>
     <script type="text/javascript" src="./js/Parasha.js"></script>
     <script type="text/javascript" src="./js/LawsData.js"></script>
-    <script type="text/javascript" src="./js/Laws.js"></script>
+    <script type="text/javascript" src="./js/Laws.js?v=20260719-study-buttons"></script>
     <script type="text/javascript" src="./js/Shevet.js"></script>
 	<script type="text/javascript" src="./js/Times.js?v=2"></script>
     <script type="text/javascript" src="./js/SunTime.js"></script>
@@ -436,12 +436,9 @@
 
      //link to mazal information
      function openMidaInNewTab(x) {
-        var win;
-        if (x == 1)
-            win = window.open(mazal_url, '_blank');
-        else if(x == 0)
-            win = window.open(mida_url, '_blank');
-        win.focus();
+        var targetUrl = x == 1 ? mazal_url : mida_url;
+        if (targetUrl)
+            window.location.href = targetUrl;
     }
 
     function bindLearningLinkGestures(elementId, openInSefaria, openInApp)

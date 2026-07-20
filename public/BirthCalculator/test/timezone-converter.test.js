@@ -239,6 +239,17 @@ test("calculator sends Jerusalem coordinates onward to JClock", () => {
     assert.doesNotMatch(html, /return 'UMID-' \+ \[/);
     assert.doesNotMatch(html, /\.join\('-'\) \+ '-00'/);
     assert.match(html, /navigator\.clipboard\.writeText\(input\.value\)/);
+	assert.match(html, /\^\[0-9A-F\]\{24\}\$/);
+	assert.match(html, /localStorage\.setItem\(UMID_STORAGE_KEY, incomingUmid\)/);
+	assert.match(html, /localStorage\.getItem\(UMID_STORAGE_KEY\)/);
+	assert.match(html, /currentUmid \? "&umid=" \+ currentUmid/);
+	assert.match(html, /id="sun-day-color-swatch"/);
+	assert.match(html, /id="sun-color-swatch"/);
+	assert.match(html, /id="moon-day-color-swatch"/);
+	assert.match(html, /id="moon-color-swatch"/);
+	assert.match(html, /function applyMoonColorsToButtons\(result\)/);
+	assert.match(html, /applyMoonColorsToButtons\(prediction\.moon\)/);
+	assert.doesNotMatch(html, /classList\.add\('umid-theme'\)/);
     assert.match(html, /id="whatsapp-db-button"/);
     assert.match(html, /id="child-name-he"/);
     assert.match(html, /id="child-name-en"/);
@@ -386,20 +397,19 @@ test("WhatsApp submission does not trigger the unit clock download", () => {
   }
 });
 
-test("place search offers Google autocomplete and keeps the selected address visible", () => {
+test("place search offers open autocomplete and keeps the selected address visible", () => {
   const heHtml = fs.readFileSync(path.join(ROOT, "public", "he", "index.html"), "utf8");
   const enHtml = fs.readFileSync(path.join(ROOT, "public", "en", "index.html"), "utf8");
 
   for (const html of [heHtml, enHtml]) {
     assert.match(html, /id="place-search"[^>]+autocomplete="off"/);
-    assert.match(html, /new google\.maps\.places\.Autocomplete\(placeSearchInput/);
+    assert.match(html, /id="place-suggestions"/);
+    assert.match(html, /photon\.komoot\.io\/api/);
+    assert.match(html, /searchOpenPlaces\(address, true\)/);
     assert.match(html, /if \(label\) placeSearchInput\.value = label;/);
-    assert.match(html, /geocoder\.geocode\(\{ location: location \}/);
-    assert.match(html, /libraries=places[^\"]+callback=initMap/);
+    assert.match(html, /L\.map\('map'\)/);
+    assert.doesNotMatch(html, /maps\.googleapis\.com\/maps\/api\/js/);
   }
-
-  assert.match(heHtml, /libraries=places&language=he&region=IL&callback=initMap/);
-  assert.match(enHtml, /libraries=places&language=en&region=IL&callback=initMap/);
 });
 
 test("calculator refreshes bypass browser and Firebase caches", () => {

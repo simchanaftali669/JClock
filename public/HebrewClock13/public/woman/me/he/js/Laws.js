@@ -144,8 +144,7 @@ function openLawsInNewTab()
 	if(period)
 		params.set("period", period);
 
-	var win = window.open("laws/index.html?" + params.toString(), "_blank");
-	win.focus();
+	window.location.href = "laws/index.html?" + params.toString();
 }
 
 function renderLawsPage()

@@ -69,9 +69,6 @@ function sederLimud(learningMethod)
 {
 	//sederLimudIsraelLeg();
 	var url = document.location.href; 
-	if(url.includes("personal"))
-		learningMethod = "Dummy";
-	
 	if(url.includes("jewish") || url.includes("christian") || url.includes("islam"))
 		learningMethod = "Dummy";
 	
@@ -190,7 +187,7 @@ function sederLimud(learningMethod)
 		{
 			document.location.href = "../../marrige/en/index.html?dummy=1" + religionOnlyParm + location;
 		}				
-		else if(learningMethod == "Yovel" || period.includes("Jubilee"))
+		else if(learningMethod == "Jubilee" || learningMethod == "Yovel" || period.includes("Jubilee"))
 		{
 			let yovelMazal = getCurrentMazal("yovel");
 			document.location.href = "./index.html?period=yovel&hebrewDay=" + yovelMazal[0] + "&hebrewHour=" + yovelMazal[1] + "&hebrewChelek=" + yovelMazal[2] + location + religionAndParm;			

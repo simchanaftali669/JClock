@@ -36,10 +36,11 @@
 				<a href="./jewish/index.html" id="Jubilee__learning">Learning with Jew</a>-->
 				<a href="./kabala/index.html">Pray Schedule</a>
 				<a href="../../marrige/en/index.html" id="hourly__learning">Married learning</a>
-				<a onclick="sederLimud('Dovid');" id="hourly__learning">Chaztot Limud</a>
-				<a onclick="sederLimud('Month');" id="yearly__learning">Morning learning</a>
-				<a onclick="sederLimud('Year');" id="monthly__learning">AfterNoon learning</a>
-				<a onclick="sederLimud('Jubilee');" id="yovel__learning">Night learning</a>
+				<a href="#" onclick="sederLimud('Automate'); return false;" id="Automate__learning">Ha'Schedule Limud</a>
+				<a href="#" onclick="sederLimud('Dovid'); return false;" id="hourly__learning">Chaztot Limud</a>
+				<a href="#" onclick="sederLimud('Month'); return false;" id="yearly__learning">Morning learning</a>
+				<a href="#" onclick="sederLimud('Year'); return false;" id="monthly__learning">AfterNoon learning</a>
+				<a href="#" onclick="sederLimud('Jubilee'); return false;" id="yovel__learning">Night learning</a>
 				<a href="../../../../../BirthCalculator/public/en/index.html" id="hourly__learning">Calculate Personal learning</a>
 
 <!--				<a href="./guide.html">Manual</a>-->
@@ -107,7 +108,7 @@
     <script type="text/javascript" src="../../shared/en/js/Geolocation.js"></script>
     <script type="text/javascript" src="./js/Menu.js"></script>
     <script type="text/javascript" src="./js/HebrewClock.js?v=2"></script>
-    <script type="text/javascript" src="./js/SederLimud.js"></script>
+    <script type="text/javascript" src="./js/SederLimud.js?v=20260719-study-buttons"></script>
     <script type="text/javascript" src="../../shared/en/js/Commercial.js?v=4"></script>
     <script type="text/javascript" src="./js/Mazal.js?v=2"></script>
 	<script type="text/javascript" src="./js/Gender.js"></script>
@@ -374,19 +375,14 @@
 
     //link to mazal information
     function openMidaInNewTab(x) {
-        var win;
-        if (x == 1)
-            win = window.open(mazal_url, '_blank');
-        else if(x == 0)
-            win = window.open(mida_url, '_blank');
-        win.focus();
+        var targetUrl = x == 1 ? mazal_url : mida_url;
+        if (targetUrl)
+            window.location.href = targetUrl;
     }
 
     function openMasechetInNewTab()
     {
-        var win;
-        win = window.open(masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=bi', '_blank');
-        win.focus();
+        window.location.href = masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=bi';
     }
 
     function openKehatiAppInNewTab()
@@ -402,8 +398,7 @@
             url = 'https://apps.apple.com/us/search?term=%D7%9E%D7%A9%D7%A0%D7%94%20%D7%A7%D7%94%D7%AA%D7%99';
         }
 
-        var win = window.open(url, '_blank');
-        win.focus();
+        window.location.href = url;
     }
 
     var seferClickTimer;
@@ -411,32 +406,28 @@
     {
         clearTimeout(seferClickTimer);
         seferClickTimer = setTimeout(function() {
-            var win = window.open(sefer_929_url || 'https://www.929.org.il/lang/en/page/1', '_blank');
-            win.focus();
+            window.location.href = sefer_929_url || 'https://www.929.org.il/lang/en/page/1';
         }, 250);
     }
 
     function openSeferInSefariaInNewTab()
     {
         clearTimeout(seferClickTimer);
-        var win = window.open(sefer_url || 'https://www.sefaria.org/Genesis.1?lang=bi', '_blank');
-        win.focus();
+        window.location.href = sefer_url || 'https://www.sefaria.org/Genesis.1?lang=bi';
     }
 
     var parashaClickTimer;
     function openParashaInNewTab() {
         clearTimeout(parashaClickTimer);
         parashaClickTimer = setTimeout(function() {
-            var win = window.open('http://ravoldsite.com/archives/archives_h.html', '_blank');
-            win.focus();
+            window.location.href = 'http://ravoldsite.com/archives/archives_h.html';
         }, 250);
     }
 
     function openParashaInSefariaInNewTab() {
         clearTimeout(parashaClickTimer);
         var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.1.1?lang=bi';
-        var win = window.open(sefariaUrl, '_blank');
-        win.focus();
+        window.location.href = sefariaUrl;
     }
 
     //pause the background music

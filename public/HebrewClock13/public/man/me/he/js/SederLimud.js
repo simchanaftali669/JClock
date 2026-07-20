@@ -70,9 +70,6 @@ function sederLimud(learningMethod)
 	
 	//sederLimudIsraelLeg();
 	var url = document.location.href; 
-	if(url.includes("personal"))
-		learningMethod = "Dummy";
-
 	if(url.includes("jewish") || url.includes("christian") || url.includes("islam"))
 		learningMethod = "Dummy";
 	//var isAlreadyLearning = url.includes("yovel") || url.includes("year") || url.includes("month") || url.includes("personal");

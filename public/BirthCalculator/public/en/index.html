@@ -8,7 +8,8 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../shared/style.css?v=20260716-place-autocomplete">
+  <link rel="stylesheet" href="../shared/style.css?v=20260719-original-colors">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -21,6 +22,9 @@
   #map {
 	height: 400px;  /* The height is 400 pixels */
 	width: 100%;  /* The width is the width of the web page */
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
    }
   .map-panel {
 	display: grid;
@@ -270,7 +274,8 @@
 			<hr/>-->
 			<p href="#" data-toggle="tooltip" title="choose location"  style="display: inline-block; width: 248px;">Choose birth location</p>
 			<div class="map-panel">
-				<input id="place-search" type="text" class="form-control" placeholder="For example: Western Wall" autocomplete="off" aria-label="Search for a place or Google address">
+				<input id="place-search" type="text" class="form-control" placeholder="For example: Western Wall" autocomplete="off" list="place-suggestions" aria-label="Search for a place or address">
+				<datalist id="place-suggestions"></datalist>
 				<div class="map-actions">
 					<button type="button" id="place-search-button" class="btn btn-info">Search map</button>
 					<button type="button" id="default-location" class="btn btn-primary">Jerusalem</button>
@@ -369,6 +374,23 @@
 	var JERUSALEM_LATITUDE = 31.7768514;
 	var JERUSALEM_LONGITUDE = 35.2331664;
 	var WHATSAPP_DB_PHONE = "972587401735";
+	var UMID_STORAGE_KEY = "birthCalculatorUmid";
+	var activeThemeUmid = loadThemeUmid();
+
+	function normalizeUmid(value) {
+		var normalized = String(value || '').trim().toUpperCase();
+		return /^[0-9A-F]{24}$/.test(normalized) ? normalized : '';
+	}
+
+	function loadThemeUmid() {
+		var incomingUmid = normalizeUmid(birthUrlParams.get('umid'));
+		try {
+			if (incomingUmid) localStorage.setItem(UMID_STORAGE_KEY, incomingUmid);
+			return incomingUmid || normalizeUmid(localStorage.getItem(UMID_STORAGE_KEY));
+		} catch (error) {
+			return incomingUmid;
+		}
+	}
 
 	function selectGender(gender) {
 		selectedGender = gender;
@@ -445,6 +467,7 @@
 
 		var clockUrl = "https://jclock126.web.app/HebrewClock13/public/" + gender + "/simple/index.html";
 			
+		var currentUmid = normalizeUmid(document.getElementById('umid-value').value);
 		document.location.href = clockUrl + "?latitude=" + clockLatitude + 
 																					"&longitude=" + clockLongitude +
 																					"&hour=" + hour + 
@@ -452,7 +475,8 @@
 																					"&year=" + year + 
 																					"&month=" + month + 
 																					"&day=" + day + 
-																					"&gmt=" + encodeURIComponent(gmt);
+																			"&gmt=" + encodeURIComponent(gmt) +
+																			(currentUmid ? "&umid=" + currentUmid : "");
 	}
 
 	function getHistoricalGmtInfo() {
@@ -541,7 +565,7 @@
 		if (!input || !button) {
 			return;
 		}
-		input.value = prediction ? buildUmid(prediction) : '';
+		input.value = prediction ? buildUmid(prediction) : activeThemeUmid;
 		button.disabled = !input.value;
 	}
 
@@ -834,42 +858,40 @@
 	var longitude = defaultLongitude;
 	var placeSearchInput = document.getElementById('place-search');
 	var locationStatus = document.getElementById('location-status');
+	var openPlaceResults = [];
+	var openPlaceSearchTimer;
 
 	function initMap() {
-	  var initialLocation = {lat: latitude, lng: longitude};
-
-	  geocoder = new google.maps.Geocoder();
-	  map = new google.maps.Map(document.getElementById('map'), {zoom: 13, center: initialLocation});
-	  placesService = new google.maps.places.PlacesService(map);
-	  marker = new google.maps.Marker({draggable: true, position: initialLocation, map: map});
+	  map = L.map('map').setView([latitude, longitude], 13);
+	  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+	  marker = L.marker([latitude, longitude], { draggable: true }).addTo(map);
+	  syncMarkerPosition();
+	  $('#myModal').on('shown.bs.modal', function() {
+	    map.invalidateSize();
+	    map.setView([latitude, longitude], map.getZoom());
+	  });
+	  setTimeout(function() { map.invalidateSize(); }, 350);
 	  setLocationStatusText('Default location selected: Jerusalem.');
 	  updateTimezonePreview();
 
-	  marker.addListener('dragend', function() {
-	    setSelectedLocation(marker.getPosition().lat(), marker.getPosition().lng());
-	    resolveSelectedLocation(marker.getPosition());
+	  marker.on('dragend', function() {
+	    var position = marker.getLatLng();
+	    setSelectedLocation(position.lat, position.lng);
+	    syncMarkerPosition();
+	    resolveSelectedLocation(position);
 	    updateTimezonePreview();
 	  });
 
-	  map.addListener('click', function(event) {
-	    updateLocation(event.latLng.lat(), event.latLng.lng());
-	    resolveSelectedLocation(event.latLng);
+	  map.on('click', function(event) {
+	    updateLocation(event.latlng.lat, event.latlng.lng);
+	    resolveSelectedLocation(event.latlng);
 	  });
 
-	  placeAutocomplete = new google.maps.places.Autocomplete(placeSearchInput, {
-	    fields: ['formatted_address', 'geometry', 'name']
-	  });
-	  placeAutocomplete.bindTo('bounds', map);
-	  placeAutocomplete.addListener('place_changed', function() {
-	    var place = placeAutocomplete.getPlace();
-	    if (!place.geometry || !place.geometry.location) {
-	      searchPlace();
-	      return;
-	    }
+	}
 
-	    applyGoogleLocation(place.geometry.location, place.formatted_address || place.name);
-	  });
-
+	function syncMarkerPosition() {
+	  var position = marker.getLatLng();
+	  marker.position = { lat: function() { return position.lat; }, lng: function() { return position.lng; } };
 	}
 
 
@@ -885,6 +907,20 @@
 	    searchPlace();
 	  }
 	});
+	placeSearchInput.addEventListener('input', function() {
+	  clearTimeout(openPlaceSearchTimer);
+	  var query = placeSearchInput.value.trim();
+	  if (query.length < 3) return;
+	  openPlaceSearchTimer = setTimeout(function() {
+	    searchOpenPlaces(query, false);
+	  }, 300);
+	});
+	placeSearchInput.addEventListener('change', function() {
+	  var selected = openPlaceResults.find(function(result) {
+	    return result.label === placeSearchInput.value;
+	  });
+	  if (selected) applyOpenPlace(selected);
+	});
 
 	function searchPlace() {
 	  var address = placeSearchInput.value.trim();
@@ -892,25 +928,7 @@
 	    return;
 	  }
 
-	  if (placesService) {
-	    placesService.findPlaceFromQuery(
-	      {
-	        query: address,
-	        fields: ['formatted_address', 'geometry', 'name']
-	      },
-	      function(results, placesStatus) {
-	        if (placesStatus === google.maps.places.PlacesServiceStatus.OK && results[0] && results[0].geometry) {
-	          applyGoogleLocation(results[0].geometry.location, results[0].formatted_address || results[0].name);
-	          return;
-	        }
-
-	        geocodeAddress(address);
-	      }
-	    );
-	    return;
-	  }
-
-	  geocodeAddress(address);
+	  searchOpenPlaces(address, true);
 	}
 
 	function geocodeAddress(address) {
@@ -922,7 +940,7 @@
 	    if (geocodeStatus !== 'OK' || !results[0]) {
 	      locationStatus.className = 'error';
 	      locationStatus.textContent = 'No matching place was found.';
-	      updateTimezonePreview();
+	      searchOpenPlaces(address, true);
 	      return;
 	    }
 
@@ -936,15 +954,55 @@
 	  setLocationStatusText(label || 'Location selected.');
 	}
 
+	function formatOpenPlace(feature) {
+	  var properties = feature.properties || {};
+	  return [properties.name, properties.street, properties.city || properties.locality, properties.country]
+	    .filter(function(value, index, values) { return value && values.indexOf(value) === index; })
+	    .join(', ');
+	}
+
+	function searchOpenPlaces(query, selectFirst) {
+	  fetch('https://photon.komoot.io/api/?limit=5&q=' + encodeURIComponent(query))
+	    .then(function(response) {
+	      if (!response.ok) throw new Error('Address search failed');
+	      return response.json();
+	    })
+	    .then(function(data) {
+	      openPlaceResults = (data.features || []).map(function(feature) {
+	        return { label: formatOpenPlace(feature), coordinates: feature.geometry.coordinates };
+	      }).filter(function(result) { return result.label && result.coordinates; });
+	      var suggestions = document.getElementById('place-suggestions');
+	      suggestions.innerHTML = '';
+	      openPlaceResults.forEach(function(result) {
+	        var option = document.createElement('option');
+	        option.value = result.label;
+	        suggestions.appendChild(option);
+	      });
+	      if (selectFirst && openPlaceResults[0]) applyOpenPlace(openPlaceResults[0]);
+	      if (selectFirst && !openPlaceResults.length) {
+	        locationStatus.className = 'error';
+	        locationStatus.textContent = 'No matching place was found.';
+	      }
+	    })
+	    .catch(function() {
+	      if (selectFirst) {
+	        locationStatus.className = 'error';
+	        locationStatus.textContent = 'Address search is currently unavailable.';
+	      }
+	    });
+	}
+
+	function applyOpenPlace(result) {
+	  var longitudeValue = Number(result.coordinates[0]);
+	  var latitudeValue = Number(result.coordinates[1]);
+	  applyGoogleLocation({
+	    lat: function() { return latitudeValue; },
+	    lng: function() { return longitudeValue; }
+	  }, result.label);
+	}
+
 	function resolveSelectedLocation(location) {
-	  geocoder.geocode({ location: location }, function(results, geocodeStatus) {
-	    if (geocodeStatus === 'OK' && results[0]) {
-	      placeSearchInput.value = results[0].formatted_address;
-	      setLocationStatusText(results[0].formatted_address);
-	      return;
-	    }
-	    setLocationStatusText('Map point selected.');
-	  });
+	  setLocationStatusText('Map point selected: ' + Number(location.lat).toFixed(5) + ', ' + Number(location.lng).toFixed(5));
 	}
 
 	function setSelectedLocation(selectedLatitude, selectedLongitude) {
@@ -959,18 +1017,15 @@
 	    return;
 	  }
 
-	  var location = {lat: Number(latitude), lng: Number(longitude)};
-	  marker.setPosition(location);
-	  map.setCenter(location);
-	  map.setZoom(15);
+	  marker.setLatLng([Number(latitude), Number(longitude)]);
+	  syncMarkerPosition();
+	  map.setView([Number(latitude), Number(longitude)], 15);
 	  updateTimezonePreview();
 	}
 
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcXPNQH8H9c_xeTxH9yT1OKPoM5e_YU4I&libraries=places&language=en&region=IL&callback=initMap">
-    
-    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>initMap();</script>
 
 </body>
 </html>

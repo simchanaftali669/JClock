@@ -38,6 +38,11 @@ const regionNowRoutes = new Map([
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.hostname.toLowerCase() === "need-me.net") {
+      url.pathname = "/Need-Me" + (url.pathname === "/" ? "/index.html" : url.pathname);
+      return env.ASSETS.fetch(new Request(url, request));
+    }
+
     const regionNowShortcut = url.pathname.match(new RegExp("^/(0[1-9])/now/?$"));
     if (regionNowShortcut) {
       const regionAsset = regionNowRoutes.get(regionNowShortcut[1]);
