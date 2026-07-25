@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-    <title>חוקים לפי שעה עברית</title>
+    <title>Laws by Hebrew time</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -152,7 +152,7 @@
 </head>
 <body>
     <main>
-        <h1 id="lawsTitle">חוקים</h1>
+        <h1 id="lawsTitle">Laws</h1>
         <div id="lawsMeta"></div>
         <section id="lawsList"></section>
     </main>
@@ -162,6 +162,29 @@
     <script type="text/javascript" src="../../../../shared/laws-open-word.js?v=web08-20260723"></script>
     <script type="text/javascript">
         renderLawsPage();
+        (function localizeLawsPage() {
+            var day = getLawHebrewDay();
+            var hour = getLawHebrewHour();
+            var laws = getMatchingLaws(day, hour);
+            document.getElementById("lawsTitle").innerText = "Laws";
+            document.getElementById("lawsMeta").innerText =
+                "Hebrew day " + (day || "-") + ", Hebrew hour " + (hour || "-") +
+                " - " + laws.length + " laws";
+            document.querySelectorAll(".law-details").forEach(function(details) {
+                details.innerText = details.innerText
+                    .replace(" | יום ", " | Day ")
+                    .replace(" | שעה ", " | Hour ");
+            });
+            document.querySelectorAll(".law-actions a").forEach(function(link) {
+                if(link.innerText === "פתח חוק")
+                    link.innerText = "Open law";
+                else if(link.innerText === "פתח בשעון")
+                    link.innerText = "Open in clock";
+            });
+            var empty = document.querySelector(".law-empty");
+            if(empty)
+                empty.innerText = "No laws were found for this Hebrew day and hour.";
+        })();
         addOpenInWordButtons();
     </script>
 </body>

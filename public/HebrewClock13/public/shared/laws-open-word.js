@@ -15,8 +15,10 @@
         "https://jclock.net/HebrewClock13/public/man/me/he/laws/": true,
         "https://jclock.net/HebrewClock13/public/man/me/he/laws/index.html": true,
         "https://jclock.net/HebrewClock13/public/woman/me/he/laws/": true,
+        "https://jclock.net/HebrewClock13/public/man/me/en/laws/": true,
         "https://jclock.net/HebrewClock13/public/man/me/en/laws/index.html": true,
         "https://jclock.net/HebrewClock13/public/woman/me/he/laws/index.html": true,
+        "https://jclock.net/HebrewClock13/public/woman/me/en/laws/": true,
         "https://jclock.net/HebrewClock13/public/woman/me/en/laws/index.html": true
     });
     var WEB02_pdf_contexts = new Map();
@@ -157,7 +159,7 @@
         var close = document.createElement("button");
         close.type = "button";
         close.className = "wordakn4il-close";
-        close.innerText = "סגור";
+        close.innerText = document.documentElement.lang === "en" ? "Close" : "סגור";
         close.addEventListener("click", WEB02_close_wordakn4il_overlay);
         var iframe = document.createElement("iframe");
         iframe.className = "wordakn4il-frame";
@@ -287,7 +289,8 @@
 
             var title = card.querySelector("h2");
             var serviceUrl = new URL(WEB01_OPEN_IN_WORD_SERVICE);
-            serviceUrl.searchParams.set("title", title ? title.innerText : "חוק");
+            serviceUrl.searchParams.set("title", title ? title.innerText :
+                (document.documentElement.lang === "en" ? "Law" : "חוק"));
 
             var sourceUrl = new URL(openLaw.href);
             var sourceName = decodeURIComponent(sourceUrl.pathname.split("/").pop() || "law.pdf");
@@ -297,7 +300,7 @@
             downloadPdf.download = sourceName;
             downloadPdf.target = "_blank";
             downloadPdf.rel = "noopener";
-            downloadPdf.innerText = "הורד PDF";
+            downloadPdf.innerText = document.documentElement.lang === "en" ? "Download PDF" : "הורד PDF";
 
             var openWord = document.createElement("a");
             openWord.className = "open-in-word wordakn4il";
