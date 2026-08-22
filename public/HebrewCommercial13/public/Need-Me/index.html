@@ -5,41 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Need-Me</title>
   <link rel="stylesheet" href="./styles.css">
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://apis.google.com/js/api.js" async defer></script>
 </head>
-<body class="auth-pending">
-  <section id="authGate" class="auth-gate" aria-labelledby="auth-title">
-    <div class="auth-card">
-      <p class="eyebrow">Need-Me</p>
-      <h1 id="auth-title">כניסה מאובטחת</h1>
-      <p>יש להזין UMID רשום ולאמת את הבעלות באמצעות Gmail או SMS.</p>
-
-      <label class="auth-field" for="authUmidInput">
-        <span>UMID</span>
-        <input id="authUmidInput" type="text" inputmode="text" maxlength="24" autocomplete="off" placeholder="24 תווי HEX">
-      </label>
-
-      <div class="auth-actions">
-        <button id="authEmailButton" class="primary-button" type="button">שלח קישור ל־Gmail</button>
-        <button id="authSmsButton" class="secondary-button" type="button">שלח קוד SMS</button>
-      </div>
-
-      <div id="authSmsCodeArea" class="auth-code-area" hidden>
-        <label class="auth-field" for="authSmsCodeInput">
-          <span>קוד שהתקבל ב־SMS</span>
-          <input id="authSmsCodeInput" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
-        </label>
-        <button id="authSmsConfirmButton" class="primary-button" type="button">אמת קוד</button>
-      </div>
-
-      <div id="authRecaptcha"></div>
-      <p id="authStatus" class="auth-status" aria-live="polite"></p>
-    </div>
-  </section>
+<body>
   <main class="app-shell">
     <section class="workspace" aria-labelledby="page-title">
       <div class="masthead">
@@ -189,7 +158,6 @@
   <script src="../woman/js/suncalc.js"></script>
   <script src="commercial-time-anchors.js"></script>
   <script src="it-adapter.js"></script>
-  <script src="auth-gate.js?v=20260719"></script>
   <script src="app.js?v=20260624-period-start-top"></script>
 </body>
 </html>
