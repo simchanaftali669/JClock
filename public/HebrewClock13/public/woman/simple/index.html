@@ -1060,6 +1060,44 @@
 				window.location.href = "../me/en/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1);		
 		}
 	}
+
+	function isSederLimudHebrewLeapYear(year)
+	{
+		var yearInCycle = Number(year) % 19;
+		return yearInCycle == 0 || yearInCycle == 3 || yearInCycle == 6 ||
+			yearInCycle == 8 || yearInCycle == 11 || yearInCycle == 14 || yearInCycle == 17;
+	}
+
+	function getSederLimudHebrewMonth()
+	{
+		var dateParts = getClockDateParts();
+		var timeParts = getClockTimeParts();
+		var hebrewMonthDate = new Date(dateParts.year, dateParts.month - 1, dateParts.day);
+
+		if ((timeParts.hour > sunsetH) ||
+			(timeParts.hour == sunsetH && timeParts.minute > sunsetM) ||
+			(timeParts.hour == sunsetH && timeParts.minute == sunsetM && timeParts.second >= sunsetS))
+		{
+			hebrewMonthDate.setDate(hebrewMonthDate.getDate() + 1);
+		}
+
+		var hebrew = hebrewDate(hebrewMonthDate, null, null, "English");
+		var rawMonth = Number(hebrew.month);
+		var normalizedMonth;
+
+		if (rawMonth >= 8 && rawMonth <= 13)
+			normalizedMonth = rawMonth - 7; // Nisan (01) through Elul (06)
+		else if (rawMonth >= 1 && rawMonth <= 5)
+			normalizedMonth = rawMonth + 6; // Tishri (07) through Shevat (11)
+		else if (rawMonth == 6)
+			normalizedMonth = isSederLimudHebrewLeapYear(hebrew.year) ? 13 : 12;
+		else if (rawMonth == 7)
+			normalizedMonth = 12; // Adar II
+		else
+			return "";
+
+		return normalizedMonth < 10 ? "0" + normalizedMonth : String(normalizedMonth);
+	}
 	
 	function openSederLimud()
 	{
@@ -1067,6 +1105,8 @@
 		var url = new URL(document.location.href);
 		if(url.searchParams.get("hour") == null)
 			isPersonalMazal = "";
+		var hebrewMonth = getSederLimudHebrewMonth();
+		var hebrewMonthParam = hebrewMonth ? "&hebrewMonth=" + encodeURIComponent(hebrewMonth) : "";
 
         var lon = longitude;
         var lat = latitude;
@@ -1075,9 +1115,9 @@
 		var mazalHebrewDay = getMazalHebrewDay();
         var userLang = navigator.language || navigator.userLanguage; 
         if (userLang.includes("he")) 
-            window.location.href = "../me/he/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;
+            window.location.href = "../me/he/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + hebrewMonthParam + location;
         else
-            window.location.href = "../me/en/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + location;	
+            window.location.href = "../me/en/index.html?hebrewDay="+ mazalHebrewDay +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + hebrewMonthParam + location;
 	}
     </script>
 

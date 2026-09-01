@@ -13,9 +13,80 @@
 	return real_day;
 }
 
+function getShevet2ByHebrewMonth(date, period, hebrewMonth)
+{
+	var shevet2 = ["Dummy", "Yehuda", "Yissachar", "Zevulun", "Reuven", "Shimon", "Gad", "Ephraim", "Menashe", "Benjamin", "Dan", "Asher", "Naftali", "Levi"];
+
+	if (/^(?:0[1-9]|1[0-3])$/.test(hebrewMonth || ""))
+		return shevet2[Number(hebrewMonth)];
+
+	var normalizedPeriod = (period || "").toLowerCase();
+
+	if (normalizedPeriod == "dovid")
+		return shevet2[1]; // Nisan
+
+	if (normalizedPeriod == "year" || normalizedPeriod == "yovel" || normalizedPeriod == "jubilee")
+		return shevet2[7]; // Tishri
+
+	var hebrewMonthDate = new Date(date.getTime());
+	var h = hebrewMonthDate.getHours();
+	var m = hebrewMonthDate.getMinutes();
+	var s = hebrewMonthDate.getSeconds();
+
+	// getHebrewDate() converts a civil date, so advance it after sunset.
+	if ((h > sunsetH) ||
+		(h == sunsetH && m > sunsetM) ||
+		(h == sunsetH && m == sunsetM && s >= sunsetS))
+	{
+		hebrewMonthDate.setDate(hebrewMonthDate.getDate() + 1);
+	}
+
+	// Mazal.js is also used by pages that do not load HebrewDate.js.
+	if (typeof getHebrewDate != "function" || typeof isHebrewLeapYear != "function")
+	{
+		var hebrewMonthName = new Intl.DateTimeFormat("en-u-ca-hebrew", { month: "long" }).format(hebrewMonthDate);
+		var shevet2ByMonthName = {
+			"Nisan": "Yehuda",
+			"Iyar": "Yissachar",
+			"Iyyar": "Yissachar",
+			"Sivan": "Zevulun",
+			"Tamuz": "Reuven",
+			"Tammuz": "Reuven",
+			"Av": "Shimon",
+			"Elul": "Gad",
+			"Tishri": "Ephraim",
+			"Tishrei": "Ephraim",
+			"Heshvan": "Menashe",
+			"Cheshvan": "Menashe",
+			"Kislev": "Benjamin",
+			"Tevet": "Dan",
+			"Shevat": "Asher",
+			"Adar I": "Levi",
+			"Adar II": "Naftali",
+			"Adar": "Naftali"
+		};
+		return shevet2ByMonthName[hebrewMonthName];
+	}
+
+	var hebrew = getHebrewDate(hebrewMonthDate);
+	var calculatedHebrewMonth = Number(hebrew.month);
+	var monthFromNisan;
+
+	if (calculatedHebrewMonth >= 8)
+		monthFromNisan = calculatedHebrewMonth - 7; // Nisan (1) through Elul (6)
+	else if (calculatedHebrewMonth <= 5)
+		monthFromNisan = calculatedHebrewMonth + 6; // Tishri (7) through Shevat (11)
+	else if (calculatedHebrewMonth == 6)
+		monthFromNisan = isHebrewLeapYear(Number(hebrew.year)) ? 13 : 12;
+	else
+		monthFromNisan = 12; // Adar II
+
+	return shevet2[monthFromNisan];
+}
+
 //mazal of the hour
 function setmazal() {
-    var date = new Date();
+    var date = getSelectedLearningDate(typeof getCurrentClockWallDate == "function" ? getCurrentClockWallDate() : new Date());
 
     var h = date.getHours();
     var m = date.getMinutes();
@@ -196,10 +267,10 @@ function setmazal() {
 
 		var shevet__mida2 = ["Dummy","Thought", "Confidence", "Surrender", "Faith", "Willingness", "Self_Control", "Relationship(give)","Relationship(receive)","Majesty", "Connection","Truth-Balance","Love(Wisdom)"];
         var shevet__mida1 = ["Dummy","Faith", "Willingness", "Wisdom","Thought","connection","Love", "Self_Control","Truth-Balance", "Confidence", "Surrender","Relationship","Majesty",];
-        var shevet2 = ["Dummy","Yehuda", "Yissachar", "Zevulun", "Reuven", "Shimon", "Gad", "Ephraim","Menashe","Benjamin","Dan","Asher","Naftali(Levi)"];
+        var shevet2 = getShevet2ByHebrewMonth(date, url.searchParams.get("period"), url.searchParams.get("hebrewMonth"));
         var shevet1 = ["Dummy","Reuven", "Shimon", "Levi","Yehuda","Dan","Naftali","Gad","Asher","Yissachar", "Zevulun","Yosef","Benjamin"];
   
-		document.getElementById("Shevet_" + shevetHour_str).value = shevet1[shevetHour] + " in " + shevet2[shevetHour];
+		document.getElementById("Shevet_" + shevetHour_str).value = shevet2 + " in " + shevet1[shevetHour];
         document.getElementById("Shevet_" + shevetHour_str).style.display = "unset";
 		//document.getElementById("Shevet__mida_" + shevetHour_str).value = shevet__mida1[x] + " in " + shevet__mida2[x];
         //document.getElementById("Shevet__mida_" + shevetHour_str).style.display = "unset"

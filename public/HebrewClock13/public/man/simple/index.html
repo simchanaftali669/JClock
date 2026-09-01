@@ -104,6 +104,7 @@
     <script type="text/javascript" src="js/TimeAdj.js"></script>
     <script type="text/javascript" src="js/Dst.js"></script>
     <script type="text/javascript" src="js/Dates.js"></script>
+    <script type="text/javascript" src="../me/he/js/HebrewDate.js?v=20260901-herbew-month"></script>
     <script type="text/javascript" src="js/Location.js"></script>
     <script type="text/javascript" src="js/Mazal.js?v=20260707-final-hebrew-day"></script>
 	<script type="text/javascript" src="js/Tefila.js"></script>
@@ -980,6 +981,37 @@
 				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1);		
 		}
 	}
+
+	function getSederLimudHebrewMonth()
+	{
+		var dateParts = getClockDateParts();
+		var timeParts = getClockTimeParts();
+		var hebrewMonthDate = new Date(dateParts.year, dateParts.month - 1, dateParts.day);
+
+		if ((timeParts.hour > sunsetH) ||
+			(timeParts.hour == sunsetH && timeParts.minute > sunsetM) ||
+			(timeParts.hour == sunsetH && timeParts.minute == sunsetM && timeParts.second >= sunsetS))
+		{
+			hebrewMonthDate.setDate(hebrewMonthDate.getDate() + 1);
+		}
+
+		var hebrew = getHebrewDate(hebrewMonthDate);
+		var rawMonth = Number(hebrew.month);
+		var normalizedMonth;
+
+		if (rawMonth >= 8 && rawMonth <= 13)
+			normalizedMonth = rawMonth - 7; // Nisan (01) through Elul (06)
+		else if (rawMonth >= 1 && rawMonth <= 5)
+			normalizedMonth = rawMonth + 6; // Tishri (07) through Shevat (11)
+		else if (rawMonth == 6)
+			normalizedMonth = isHebrewLeapYear(Number(hebrew.year)) ? 13 : 12; // Adar I or plain Adar
+		else if (rawMonth == 7)
+			normalizedMonth = 12; // Adar II
+		else
+			return "";
+
+		return normalizedMonth < 10 ? "0" + normalizedMonth : String(normalizedMonth);
+	}
 	
 	function openSederLimud()
 	{
@@ -987,6 +1019,8 @@
 		var url = new URL(document.location.href);
 		if(url.searchParams.get("hour") == null)
 			isPersonalMazal = "";
+		var herbewMonth = getSederLimudHebrewMonth();
+		var herbewMonthParam = herbewMonth ? "&herbewMonth=" + encodeURIComponent(herbewMonth) : "";
 
         var url = new URL(document.location.href);
         var lon = longitude;
@@ -995,20 +1029,20 @@
         var userLang = navigator.language || navigator.userLanguage; 
 		var hasLocation = lat != null && lon != null && lat !== "" && lon !== "";
 
-        if (userLang = "he") 
+        if (userLang.includes("he"))
 		{
 			if(hasLocation)
-				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + "&latitude=" + lat + "&longitude="+ lon;
+				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + herbewMonthParam + "&latitude=" + lat + "&longitude="+ lon;
 			else
-				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal;
+				window.location.href = "../me/he/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + herbewMonthParam;
 
         }
 		else
 		{
 			if(hasLocation)
-				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + "&latitude=" + lat + "&longitude=" + lon;
+				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + herbewMonthParam + "&latitude=" + lat + "&longitude=" + lon;
 			else
-				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal;
+				window.location.href = "../me/en/index.html?hebrewDay="+ hebrewday +"&hebrewHour=" + Number(lbHour+1) + isPersonalMazal + herbewMonthParam;
             	
 		}
 	}
