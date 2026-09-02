@@ -495,7 +495,7 @@
 
     function openMasechetInSefariaInNewTab()
 	{
-        window.location.href = masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=he';
+        window.open(masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=he', '_blank', 'noopener,noreferrer');
     }
 
     function openKehatiAppInNewTab()
@@ -511,24 +511,24 @@
             url = 'https://apps.apple.com/il/app/kehati/id1059791961';
         }
 
-        window.location.href = url;
+        window.open(url, '_blank', 'noopener,noreferrer');
     }
 
     function open929AppInNewTab()
     {
-        window.location.href = sefer_929_url || 'https://www.929.org.il/page/1';
+        window.open(sefer_929_url || 'https://www.929.org.il/page/1', '_blank', 'noopener,noreferrer');
     }
 
     function openSeferInSefariaInNewTab()
     {
-        window.location.href = sefer_midrash_url || 'https://www.sefaria.org/Bereshit_Rabbah?lang=he';
+        window.open(sefer_midrash_url || 'https://www.sefaria.org/Bereshit_Rabbah?lang=he', '_blank', 'noopener,noreferrer');
     }
 
     function openRabbiElonAppInNewTab() {
         var elonUrl = (typeof parasha_elon_url !== 'undefined' && parasha_elon_url) ?
             parasha_elon_url :
             'http://ravoldsite.com/archives/archives_h.html';
-        window.location.href = elonUrl;
+        window.open(elonUrl, '_blank', 'noopener,noreferrer');
     }
 
     function openParashaInSefariaInNewTab() {
@@ -536,7 +536,7 @@
         var zoharUrl = (typeof getSefariaZoharParashaUrl === "function") ?
             getSefariaZoharParashaUrl(parashaName) :
             'https://www.sefaria.org/Zohar,_Bereshit?vhe=Hebrew_Translation&lang=he';
-        window.location.href = zoharUrl;
+        window.open(zoharUrl, '_blank', 'noopener,noreferrer');
     }
 
     bindLearningLinkGestures('Masechet', openMasechetInSefariaInNewTab, openKehatiAppInNewTab);

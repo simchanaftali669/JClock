@@ -492,7 +492,7 @@
 
     function openMasechetInSefariaInNewTab()
     {
-        window.location.href = masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=he';
+        window.open(masechet_url || 'https://www.sefaria.org/Mishnah_Berakhot.1?lang=he', '_blank', 'noopener,noreferrer');
     }
 
     function openKehatiAppInNewTab()
@@ -508,26 +508,26 @@
             url = 'https://apps.apple.com/us/search?term=%D7%9E%D7%A9%D7%A0%D7%94%20%D7%A7%D7%94%D7%AA%D7%99';
         }
 
-        window.location.href = url;
+        window.open(url, '_blank', 'noopener,noreferrer');
     }
 
     function open929AppInNewTab()
     {
-        window.location.href = sefer_929_url || 'https://www.929.org.il/page/1';
+        window.open(sefer_929_url || 'https://www.929.org.il/page/1', '_blank', 'noopener,noreferrer');
     }
 
     function openSeferInSefariaInNewTab()
     {
-        window.location.href = sefer_url || 'https://www.sefaria.org/Genesis.1?lang=he';
+        window.open(sefer_url || 'https://www.sefaria.org/Genesis.1?lang=he', '_blank', 'noopener,noreferrer');
     }
 
     function openRabbiElonAppInNewTab() {
-        window.location.href = 'http://ravoldsite.com/archives/archives_h.html';
+        window.open('http://ravoldsite.com/archives/archives_h.html', '_blank', 'noopener,noreferrer');
     }
 
     function openParashaInSefariaInNewTab() {
         var sefariaUrl = (typeof parasha_url !== 'undefined' && parasha_url) ? parasha_url : 'https://www.sefaria.org/Genesis.1.1?lang=he';
-        window.location.href = sefariaUrl;
+        window.open(sefariaUrl, '_blank', 'noopener,noreferrer');
     }
 
     bindLearningLinkGestures('Masechet', openMasechetInSefariaInNewTab, openKehatiAppInNewTab);
