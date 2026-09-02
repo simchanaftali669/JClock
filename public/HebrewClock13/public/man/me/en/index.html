@@ -94,6 +94,9 @@
             <input class="day" id="Sefer"  type="text" value="" onclick="openSeferInNewTab();" ondblclick="openSeferInSefariaInNewTab();" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
+            <input class="day" id="Quran"  type="text" value="Quran" onclick="openQuranInNewTab();" />
+        </div>
+        <div style="text-align:center; margin-bottom:10px;">
             <input class="day" id="Parasha" type="text" value="" onclick="openParashaInNewTab();" ondblclick="openParashaInSefariaInNewTab();" />
         </div>
         <div id="commercial" style="text-align:center; margin-bottom:10px; margin-top: 10px; display:flex !important; justify-content:center !important; width:100% !important; margin-left:0 !important; margin-right:0 !important;">
@@ -414,6 +417,25 @@
     {
         clearTimeout(seferClickTimer);
         window.open(sefer_url || 'https://www.sefaria.org/Genesis.1?lang=bi', '_blank', 'noopener,noreferrer');
+    }
+
+    function openQuranInNewTab()
+    {
+        let quranSora = 1;
+        let herbewWeekDay = hebrewday;
+        if (hebrewday == 7)
+            herbewWeekDay = 8;
+
+        quranSora = birthHour;
+        if (birthHour == 19)
+            quranSora = 19;
+        else
+            quranSora = birthHour % 19;
+
+        quranSora = ((herbewWeekDay % 7) - 1) * 19 + quranSora;
+
+        const url = 'https://quranenc.com/en/browse/english_saheeh/' + quranSora;
+        window.open(url, '_blank', 'noopener,noreferrer');
     }
 
     var parashaClickTimer;

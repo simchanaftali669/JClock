@@ -118,6 +118,9 @@
             <input class="day" id="Sefer"  type="text" value="" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
+            <input class="day" id="Quran"  type="text" value="קוראן" />
+        </div>
+        <div style="text-align:center; margin-bottom:10px;">
             <input class="day" id="Parasha" type="text" value="" />
         </div>
         <div style="text-align:center; margin-bottom:10px;">
@@ -524,6 +527,25 @@
         window.open(sefer_midrash_url || 'https://www.sefaria.org/Bereshit_Rabbah?lang=he', '_blank', 'noopener,noreferrer');
     }
 
+    function openQuranInNewTab()
+    {
+        let quranSora = 1;
+        let herbewWeekDay = hebrewday;
+        if (hebrewday == 7)
+            herbewWeekDay = 8;
+
+        quranSora = birthHour;
+        if (birthHour == 19)
+            quranSora = 19;
+        else
+            quranSora = birthHour % 19;
+
+        quranSora = ((herbewWeekDay % 7) - 1) * 19 + quranSora;
+
+        const url = 'https://quranenc.com/en/browse/hebrew_darussalam/' + quranSora;
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
     function openRabbiElonAppInNewTab() {
         var elonUrl = (typeof parasha_elon_url !== 'undefined' && parasha_elon_url) ?
             parasha_elon_url :
@@ -541,6 +563,7 @@
 
     bindLearningLinkGestures('Masechet', openMasechetInSefariaInNewTab, openKehatiAppInNewTab);
     bindLearningLinkGestures('Sefer', openSeferInSefariaInNewTab, open929AppInNewTab);
+    bindLearningLinkGestures('Quran', openQuranInNewTab, openQuranInNewTab);
     bindLearningLinkGestures('Parasha', openParashaInSefariaInNewTab, openRabbiElonAppInNewTab);
 
     //pause the background music
